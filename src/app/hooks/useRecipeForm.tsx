@@ -75,14 +75,6 @@ const useRecipeForm = ({mode, recipe, recipeIngredients, userId}: RecipeFormProp
   },[mode, setValue, reset, router, dispatch]); 
 
   const onSubmit = useCallback( async (data: FormFields) => {
-    
-    if (mode === 'create' && tempIngredients.length === 0) {
-      raiseNotification({
-        success: false,
-        message: 'Please add at least one ingredient to your recipe.',
-        error: { message: 'No ingredients provided' },
-      });
-    }
 
     const {newCost, newMargin, newPrice, foodCost} = calculateRecipeData(data, recipe, tempIngredients);
     
