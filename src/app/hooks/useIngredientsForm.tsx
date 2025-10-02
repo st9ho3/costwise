@@ -15,66 +15,49 @@ import { Unit, Ingredient, IngredientSchema } from '@/shemas/recipe';
 import { normalizePrice } from '@/app/services/helpers';
 import { sendIngredient, updateIngredient } from '../services/services';
 import useHelpers from './useHelpers';
-type IngredientErrors = string[];
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import z from 'zod';
+
+export type FormFields = z.infer<typeof IngredientSchema>
+
 type UseIngredientFormProps = {
   mode: 'create' | 'edit';
   ingredient: Ingredient | undefined;
   userId: string;
 };
+
+
 export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFormProps) => {
-  const [quantity, setQuantity] = useState<number>(
+  /* const [quantity, setQuantity] = useState<number>(
     mode === 'edit' && ingredient ? ingredient.quantity : 0,
-  );
-  const [name, setName] = useState<string>(
-    mode === 'edit' && ingredient ? ingredient.name : '',
-  );
-  const [unit, setUnit] = useState<Unit>(
-    mode === 'edit' && ingredient ? (ingredient.unit as Unit) : '',
-  );
-  const [price, setPrice] = useState<string>(
-    mode === 'edit' && ingredient ? ingredient.unitPrice.toString() : '0',
-  );
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [errors, setErrors] = useState<IngredientErrors>([]);
+  ); */
+
+  const {register, handleSubmit, formState, watch} = useForm({
+    resolver: zodResolver(IngredientSchema),
+    defaultValues: mode === 'edit' 
+    ? ingredient 
+    : {
+      id: uuidv4(),
+      name: '',
+      unit: '',
+      unitPrice: 0,
+      quantity: 1,
+      usage: 'low',
+      userId: userId,
+      icon: ''
+    }
+  })
+  
+  const {isDirty} = formState
   const router = useRouter();
   const { raiseNotification } = useHelpers();
 
-  const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    // For create mode, convert to lowercase; for edit mode, keep as is
-    setName(mode === 'create' ? value.toLowerCase() : value);
-    setErrors([]);
-  };
-
-  const handlePrice = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-
-    const { value } = e.target;
-    if (value === '' || /^\d*\.?\d*$/.test(value)) {
-      setPrice(value);
-    }
-    setErrors([]);
-  },[]);
-
-  const handleFocus = useCallback(() => setIsEditing(true),[]);
-  const handleBlur = useCallback(() => setIsEditing(false),[]);
+ 
 
   // Logic to show an empty input when editing and the price is "0"
-  const displayedPrice = isEditing && price === '0' ? '' : price;
-  const handleUnit = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = e.target;
-    if (value === 'g' || value === 'ml' || value === 'kg' || value === 'L' || value === 'piece') {
-      setUnit(value as Unit);
-      setErrors([]);
-    }
-  },[]);
-  const resetForm = useCallback(() => {
-    setQuantity(0);
-    setName('');
-    setUnit('');
-    setPrice('0');
-    setErrors([]);
-    setIsEditing(false);
-  }, []);
+  const displayedPrice = isDirty && price === '0' ? '' : price;
+  
   const addIngredient = useCallback(async (
     e:
       | React.MouseEvent<HTMLButtonElement>
