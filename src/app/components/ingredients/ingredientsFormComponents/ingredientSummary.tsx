@@ -2,7 +2,7 @@ type IngredientSummaryProps = {
   quantity: number;
   unit: string;
   name: string;
-  price: string;
+  price: number;
 };
 
 const IngredientSummary = ({ quantity, unit, name, price }: IngredientSummaryProps) => (

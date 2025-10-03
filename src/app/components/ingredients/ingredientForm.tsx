@@ -15,27 +15,23 @@ type AddIngredientProps = {
 
 const IngredientForm = ({ ingredient, mode, userId }: AddIngredientProps) => {
   const {
-    quantity, name, unit, price, displayedPrice, errors,
-    setQuantity, setErrors, handleName, handlePrice, handleFocus,
-    handleBlur, handleUnit, addIngredient, handleKeyDown,
+     price, displayedPrice, errors, register, quantity, unit, name,
+     setErrors, isDirty, handleKeyDown, handleSubmit, onSubmit, setQuantity
   } = useIngredientForm({ ingredient, mode, userId });
 
   return (
-    <form className="p-2">
+    <form className="p-2" onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-wrap items-center justify-center gap-4 rounded-lg">
-        <IngredientNameInput value={name} onChange={handleName} onKeyDown={handleKeyDown} />
+        <IngredientNameInput register={register} onKeyDown={handleKeyDown} />
         <IngredientPriceInput
-          value={displayedPrice}
-          onChange={handlePrice}
-          onKeyDown={handleKeyDown}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
+          register={register}
+          
         />
         <Incremental onChange={setQuantity} count={quantity} onKeyDown={handleKeyDown} setErrors={setErrors} />
-        <IngredientUnitSelect value={unit} onChange={handleUnit} onKeyDown={handleKeyDown} />
+        <IngredientUnitSelect register={register}  onKeyDown={handleKeyDown}  />
       </div>
 
-      <AddIngredientButton onClick={addIngredient} mode={mode} />
+      <AddIngredientButton /* onClick={addIngredient} */ mode={mode} />
       <IngredientSummary quantity={quantity} unit={unit} name={name} price={price} />
       <FormErrors errors={errors} />
     </form>

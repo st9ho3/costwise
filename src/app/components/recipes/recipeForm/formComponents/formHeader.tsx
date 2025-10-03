@@ -8,6 +8,7 @@ interface FormHeaderProps {
 }
 
 const FormHeader = ({register}: FormHeaderProps) => {
+  console.log("formheader")
   return (
     <div className='flex items-center border-1 border-gray-300 border-dashed rounded-lg p-1'>
         <NotepadText color='gray' />

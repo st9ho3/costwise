@@ -1,34 +1,24 @@
+import { IngredientFormFields } from '@/app/hooks/useIngredientsForm';
 import { Euro } from 'lucide-react';
-import { memo } from 'react';
+import {  UseFormRegister } from 'react-hook-form';
 
 type IngredientPriceInputProps = {
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  onFocus: () => void;
-  onBlur: () => void;
+  register: UseFormRegister<IngredientFormFields>
 };
 
-const IngredientPriceInput = memo(({ value, onChange, onKeyDown, onFocus, onBlur }: IngredientPriceInputProps) => {
+const IngredientPriceInput = ({ register }: IngredientPriceInputProps) => {
   console.log("IngredientPriceInput")
   return (
   <div className='flex items-center p-1 space-x-3 border-dashed rounded-lg border-1 border-gray-300'>
     <Euro />
     <input
-      name='price'
-      type="text"
-      value={value}
+      type="number"
       className="p-1 text-lg placeholder:text-gray-500 w-20 focus:outline-none"
       placeholder="Price"
-      onKeyDown={onKeyDown}
-      onChange={onChange}
-      onFocus={onFocus}
-      onBlur={onBlur}
-      pattern="[0-9]*[.]?[0-9]*"
+      {...register('unitPrice', {valueAsNumber: true})}
     />
   </div>
-)});
+)};
 
-IngredientPriceInput.displayName = "IngredientPriceInput"
 
 export default IngredientPriceInput

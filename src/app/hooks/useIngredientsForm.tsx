@@ -8,7 +8,7 @@
  * - Supports keyboard-driven submission (Enter key) and dynamic price input handling.
  */
 "use client"
-import { useCallback, useState } from 'react';
+import {  useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
 import { Ingredient, IngredientSchema } from '@/shemas/recipe';
@@ -29,11 +29,11 @@ type UseIngredientFormProps = {
 
 
 export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFormProps) => {
-  /* const [quantity, setQuantity] = useState<number>(
+  const [quantity, setQuantity] = useState<number>(
     mode === 'edit' && ingredient ? ingredient.quantity : 0,
-  ); */
+  );
 
-  const {register, handleSubmit, reset, formState, watch} = useForm({
+  const {register, handleSubmit, reset, formState, watch, setValue} = useForm({
     resolver: zodResolver(IngredientSchema),
     defaultValues: mode === 'edit' 
     ? ingredient 
@@ -48,18 +48,24 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
       icon: ''
     }
   })
+
+  useEffect(() => {setValue('quantity', quantity)}, [quantity, setValue])
   
   const {isDirty} = formState
   const router = useRouter();
   const { raiseNotification } = useHelpers();
   const [errors, setErrors] = useState<string[]>([])
-  const price = watch('unitPrice')
- 
 
+  const price = watch('unitPrice')
+  const hookQuantity = watch('quantity')
+  const name = watch('name')
+  const unit = watch('unit')
+ 
+console.log(`price: ${price}, quantity: ${hookQuantity}, name: ${name}, unit: ${unit}`)
   // Logic to show an empty input when editing and the price is "0"
   const displayedPrice = isDirty && price === 0 ? '' : price;
   
-  const onSubmit = useCallback(async (data: IngredientFormFields) => {
+  const onSubmit = async (data: IngredientFormFields) => {
 
     if (mode === 'create') {
       // Create mode logic
@@ -85,7 +91,6 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
 
       const validatedIngredient = IngredientSchema.safeParse(updatedIngredient);
 
-      console.log('Validated ingredient on the form: ', validatedIngredient);
       if (!validatedIngredient.success) {
         setErrors([]);
         const zodErrors = validatedIngredient.error.errors;
@@ -99,19 +104,34 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
         }
       }
     }
-  }, [ingredient, mode, raiseNotification, router, userId, reset, ]);
+  }
+
+  const handleKeyDown = (
+    e:
+      | React.KeyboardEvent<HTMLInputElement>
+      | React.KeyboardEvent<HTMLSelectElement>,
+  ) => {
+    if (e.key === 'Enter') {
+      handleSubmit(onSubmit);
+    }
+  };
 
 
   // Return all the state and functions the component will need
   return {
     price,
+    quantity,
+    unit,
+    name,
     displayedPrice,
     errors,
     setErrors,
     register,
     onSubmit,
-    handleSubmit
-    
-    
+    handleSubmit,
+    isDirty,
+    handleKeyDown,
+    setQuantity
+  
   };
 };
