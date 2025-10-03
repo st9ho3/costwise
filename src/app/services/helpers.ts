@@ -15,6 +15,7 @@
 import { DBIngredient, DBRecipe, Ingredient, Recipe, RecipeIngredients, Unit } from "@/shemas/recipe";
 import { RecipeIngredientFromDB } from "@/types/specialTypes";
 import { FormFields } from "../hooks/useRecipeForm";
+import { IngredientFormFields } from "../hooks/useIngredientsForm";
 
 
 export const paginate = <T>(itemsPerPage: number, page: number, items: T[] ): T[]=> {
@@ -47,10 +48,10 @@ export const getTotalPrice = (ingredients: RecipeIngredients[]): number => {
 
 }
 
-export const normalizePrice = (price: string, unit: Unit, quantity: number): number => {
-  const numericPrice = parseFloat(price);
+export const normalizePrice = (price: number, unit: Unit, quantity: number): number => {
+  
 
-  if (isNaN(numericPrice) || quantity === 0) {
+  if (isNaN(price) || quantity === 0) {
     return 0;
   }
 
@@ -58,19 +59,19 @@ export const normalizePrice = (price: string, unit: Unit, quantity: number): num
   switch (unit) {
     case 'kg':
       // For kilograms, convert to grams (1kg = 1000g) and find the price per gram.
-      return numericPrice / (quantity * 1000);
+      return price / (quantity * 1000);
     case 'g':
       // For grams, calculate the price per gram directly.
-      return numericPrice / quantity;
+      return price / quantity;
     case 'L':
       // For liters, convert to milliliters (1L = 1000ml) and find the price per ml.
-      return numericPrice / (quantity * 1000);
+      return price / (quantity * 1000);
     case 'ml':
       // For milliliters, calculate the price per ml directly.
-      return numericPrice / quantity;
+      return price / quantity;
     case 'piece':
       // For pieces, calculate the price per piece.
-      return numericPrice / quantity;
+      return price / quantity;
     default:
       // If the unit is not recognized, return 0.
       return 0;
@@ -180,6 +181,48 @@ export const transformRecipeIngredentFromDB = (
   };
 };
 
+
+////////////////
+
+export const createIngredientPrototype = (data: IngredientFormFields, userId: string) => {
+
+  if (data) {
+    const normalizedUnitPrice = normalizePrice(data.unitPrice, data.unit as Unit, data.quantity);
+
+      const ingredientPrototype: Ingredient = {
+        id: data.id,
+        icon: '🥑',
+        name: data.name,
+        unit: data.unit === 'g' || data.unit === 'kg' ? 'g' : data.unit === 'L' || data.unit === 'ml' ? 'ml' : 'piece',
+        unitPrice: normalizedUnitPrice,
+        quantity: data.quantity,
+        usage: '0',
+        userId: userId,
+      };
+      return ingredientPrototype
+  }
+  
+
+      
+}
+
+export const createEditIngredientPrototype = (data: IngredientFormFields, ingredient: Ingredient, userId: string) => {
+
+  const normalizedUnitPrice = normalizePrice(data.unitPrice, data.unit as Unit, data.quantity);
+      // Edit mode logic
+      const updatedIngredient: Ingredient = {
+        id: ingredient.id,
+        icon: ingredient.icon || '🥑',
+        name: data.name,
+        unit: data.unit === 'g' || data.unit === 'kg' ? 'g' : data.unit === 'L' || data.unit === 'ml' ? 'ml' : 'piece',
+        unitPrice: normalizedUnitPrice,
+        quantity: data.quantity,
+        usage: ingredient.usage || '0',
+        userId: userId,
+      };
+
+      return updatedIngredient
+}
 
 
 
