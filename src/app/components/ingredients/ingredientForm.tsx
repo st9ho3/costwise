@@ -15,8 +15,8 @@ type AddIngredientProps = {
 
 const IngredientForm = ({ ingredient, mode, userId }: AddIngredientProps) => {
   const {
-     price, displayedPrice, errors, register, quantity, unit, name,
-     setErrors, isDirty, handleKeyDown, handleSubmit, onSubmit, setQuantity
+     price, errors, register, quantity, unit, name, isDirty,
+     setErrors, handleKeyDown, handleSubmit, onSubmit, setQuantity, priceType, displayedPrice, setPriceEditing
   } = useIngredientForm({ ingredient, mode, userId });
 
   return (
@@ -24,6 +24,10 @@ const IngredientForm = ({ ingredient, mode, userId }: AddIngredientProps) => {
       <div className="flex flex-wrap items-center justify-center gap-4 rounded-lg">
         <IngredientNameInput register={register} onKeyDown={handleKeyDown} />
         <IngredientPriceInput
+          type={priceType}
+          price={displayedPrice}
+          isDirty={isDirty}
+          onFocus={setPriceEditing}
           register={register}
           
         />
@@ -31,7 +35,7 @@ const IngredientForm = ({ ingredient, mode, userId }: AddIngredientProps) => {
         <IngredientUnitSelect register={register}  onKeyDown={handleKeyDown}  />
       </div>
 
-      <AddIngredientButton /* onClick={addIngredient} */ mode={mode} />
+      <AddIngredientButton mode={mode} />
       <IngredientSummary quantity={quantity} unit={unit} name={name} price={price} />
       <FormErrors errors={errors} />
     </form>

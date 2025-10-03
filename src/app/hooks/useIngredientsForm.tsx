@@ -33,7 +33,7 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
     mode === 'edit' && ingredient ? ingredient.quantity : 0,
   );
 
-  const {register, handleSubmit, reset, formState, watch, setValue} = useForm({
+  const {register, handleSubmit, reset, formState: {isDirty}, watch, setValue} = useForm({
     resolver: zodResolver(IngredientSchema),
     defaultValues: mode === 'edit' 
     ? ingredient 
@@ -51,20 +51,20 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
 
   useEffect(() => {setValue('quantity', quantity)}, [quantity, setValue])
   
-  const {isDirty} = formState
   const router = useRouter();
   const { raiseNotification } = useHelpers();
   const [errors, setErrors] = useState<string[]>([])
 
   const price = watch('unitPrice')
-  const hookQuantity = watch('quantity')
   const name = watch('name')
   const unit = watch('unit')
- 
-console.log(`price: ${price}, quantity: ${hookQuantity}, name: ${name}, unit: ${unit}`)
+
   // Logic to show an empty input when editing and the price is "0"
-  const displayedPrice = isDirty && price === 0 ? '' : price;
+  const [priceEditing, setPriceEditing] = useState(false)
+  const priceType: 'text' | 'number' = priceEditing && price === 0 ? 'text' : 'number'
+  const displayedPrice = priceEditing && price === 0 ? '' : price;
   
+   
   const onSubmit = async (data: IngredientFormFields) => {
 
     if (mode === 'create') {
@@ -131,7 +131,9 @@ console.log(`price: ${price}, quantity: ${hookQuantity}, name: ${name}, unit: ${
     handleSubmit,
     isDirty,
     handleKeyDown,
-    setQuantity
+    setQuantity,
+    priceType,
+    setPriceEditing
   
   };
 };
