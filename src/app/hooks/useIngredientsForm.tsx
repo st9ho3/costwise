@@ -8,7 +8,7 @@
  * - Supports keyboard-driven submission (Enter key) and dynamic price input handling.
  */
 "use client"
-import {  useEffect, useState } from 'react';
+import {  useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
 import { Ingredient, IngredientSchema } from '@/shemas/recipe';
@@ -29,11 +29,8 @@ type UseIngredientFormProps = {
 
 
 export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFormProps) => {
-  const [quantity, setQuantity] = useState<number>(
-    mode === 'edit' && ingredient ? ingredient.quantity : 0,
-  );
 
-  const {register, handleSubmit, reset, formState: {isDirty}, watch, setValue} = useForm({
+  const {register, handleSubmit, reset, formState: {isSubmitting}, watch, setValue} = useForm({
     resolver: zodResolver(IngredientSchema),
     defaultValues: mode === 'edit' 
     ? ingredient 
@@ -49,7 +46,6 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
     }
   })
 
-  useEffect(() => {setValue('quantity', quantity)}, [quantity, setValue])
   
   const router = useRouter();
   const { raiseNotification } = useHelpers();
@@ -58,11 +54,7 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
   const price = watch('unitPrice')
   const name = watch('name')
   const unit = watch('unit')
-
-  // Logic to show an empty input when editing and the price is "0"
-  const [priceEditing, setPriceEditing] = useState(false)
-  const priceType: 'text' | 'number' = priceEditing && price === 0 ? 'text' : 'number'
-  const displayedPrice = priceEditing && price === 0 ? '' : price;
+  const quantity = watch('quantity')
   
    
   const onSubmit = async (data: IngredientFormFields) => {
@@ -123,17 +115,14 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
     quantity,
     unit,
     name,
-    displayedPrice,
     errors,
     setErrors,
     register,
     onSubmit,
     handleSubmit,
-    isDirty,
     handleKeyDown,
-    setQuantity,
-    priceType,
-    setPriceEditing
+    setValue,
+    isSubmitting
   
   };
 };

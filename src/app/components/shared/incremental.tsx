@@ -1,9 +1,11 @@
 "use client"
 import React, { useCallback, useState } from 'react'
 import { Plus, Minus } from 'lucide-react'
+import { UseFormSetValue } from 'react-hook-form'
+import { IngredientFormFields } from '@/app/hooks/useIngredientsForm'
 
 type IncrementalProps = {
-  onChange: (value: number) => void
+  onChange: UseFormSetValue<IngredientFormFields>
   count: number,
   onKeyDown: (value: React.KeyboardEvent<HTMLInputElement>) => void,
   setErrors:  (value: React.SetStateAction<string[]>) => void
@@ -15,16 +17,16 @@ const Incremental = ({onChange, count, onKeyDown, setErrors}: IncrementalProps) 
   const handleClick = useCallback((action: 'minus' | 'plus') => {
     setIsEditing(false)             
     if (action === 'plus') {
-      onChange(count + 1)
+      onChange("quantity", count + 1)
     } else if (count > 0) {
-      onChange(count - 1)
+      onChange("quantity", count - 1)
     }
     setErrors([])
   },[count, onChange, setErrors])
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>): void => {
     const value = e.target.value === '' ? 0 : Number(e.target.value)
-    onChange(value)
+    onChange("quantity", value)
     setErrors([])
   },[onChange, setErrors])
 
