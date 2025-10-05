@@ -26,7 +26,7 @@ const IngredientForm = ({ ingredient, mode, userId }: AddIngredientProps) => {
         <IngredientPriceInput
           register={register}
         />
-        <Incremental onChange={setValue} count={quantity} onKeyDown={handleKeyDown} setErrors={setErrors} />
+        <Incremental onIngredientChange={setValue} count={quantity} onKeyDown={handleKeyDown} setErrors={setErrors} />
         <IngredientUnitSelect register={register}  onKeyDown={handleKeyDown}  />
       </div>
 

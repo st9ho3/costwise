@@ -5,30 +5,50 @@ import { UseFormSetValue } from 'react-hook-form'
 import { IngredientFormFields } from '@/app/hooks/useIngredientsForm'
 
 type IncrementalProps = {
-  onChange: UseFormSetValue<IngredientFormFields>
+  onIngredientChange?: UseFormSetValue<IngredientFormFields>
+  onRecipeIngredientChange?: ((value: number) => void)
   count: number,
   onKeyDown: (value: React.KeyboardEvent<HTMLInputElement>) => void,
   setErrors:  (value: React.SetStateAction<string[]>) => void
 }
 
-const Incremental = ({onChange, count, onKeyDown, setErrors}: IncrementalProps) => {
+const Incremental = ({onIngredientChange, onRecipeIngredientChange, count, onKeyDown, setErrors}: IncrementalProps) => {
   const [isEditing, setIsEditing] = useState<boolean>(false)
 
+  
   const handleClick = useCallback((action: 'minus' | 'plus') => {
-    setIsEditing(false)             
-    if (action === 'plus') {
-      onChange("quantity", count + 1)
+    setIsEditing(false)  
+    if (onIngredientChange) {
+      if (action === 'plus') {
+      onIngredientChange("quantity", count + 1)
     } else if (count > 0) {
-      onChange("quantity", count - 1)
+      onIngredientChange("quantity", count - 1)
     }
     setErrors([])
-  },[count, onChange, setErrors])
+    } 
+    if (onRecipeIngredientChange) {
+      
+      if (action === 'plus') {
+      onRecipeIngredientChange(count + 1)
+    } else if (count > 0) {
+      onRecipeIngredientChange( count - 1)
+    }
+    setErrors([])
+    }             
+  },[count, onRecipeIngredientChange, onIngredientChange, setErrors])
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>): void => {
     const value = e.target.value === '' ? 0 : Number(e.target.value)
-    onChange("quantity", value)
-    setErrors([])
-  },[onChange, setErrors])
+    if (onIngredientChange) {
+      onIngredientChange("quantity", value)
+      setErrors([])
+    }
+    if (onRecipeIngredientChange) {
+      onRecipeIngredientChange(value)
+      setErrors([])
+    }
+    
+  },[ onIngredientChange,onRecipeIngredientChange,setErrors])
 
   const handleFocus = useCallback(() => {
     setIsEditing(true)
