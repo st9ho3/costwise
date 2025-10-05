@@ -1,20 +1,19 @@
-"use client";
+import React from 'react'
 import { Plus, Pencil } from 'lucide-react';
-import React, { memo } from 'react';
 
-type AddIngredientButtonProps = {
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  mode: 'create' | 'edit';
-};
 
-const AddIngredientButton = memo(({ onClick, mode }: AddIngredientButtonProps) => {
-  const isEditMode = mode === 'edit';
 
+interface ButtonProps {
+    isEditMode: boolean
+    text: string
+}
+
+const Button = ({isEditMode, text}: ButtonProps) => {
   return (
     <div className="flex justify-center mt-4">
       <button
-        type='button'
-        onClick={onClick}
+        type='submit'
+        
         className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-white transition-colors w-full sm:w-auto flex-shrink-0 ${
           isEditMode
             ? 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50'
@@ -22,12 +21,10 @@ const AddIngredientButton = memo(({ onClick, mode }: AddIngredientButtonProps) =
         }`}
       >
         {isEditMode ? <Pencil size={20} /> : <Plus size={20} />}
-        {isEditMode ? 'Update' : 'Add'}
+        {text}
       </button>
     </div>
-  );
-});
+  )
+}
 
-AddIngredientButton.displayName = "AddIngredientButton"
-
-export default AddIngredientButton;
+export default Button

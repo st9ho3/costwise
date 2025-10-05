@@ -8,94 +8,61 @@
  * - Supports keyboard-driven submission (Enter key) and dynamic price input handling.
  */
 "use client"
-import { useCallback, useState } from 'react';
+import {  useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
-import { Unit, Ingredient, IngredientSchema } from '@/shemas/recipe';
-import { normalizePrice } from '@/app/services/helpers';
+import { Ingredient, IngredientSchema } from '@/shemas/recipe';
+import { createEditIngredientPrototype, createIngredientPrototype } from '@/app/services/helpers';
 import { sendIngredient, updateIngredient } from '../services/services';
 import useHelpers from './useHelpers';
-type IngredientErrors = string[];
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import z from 'zod';
+
+export type IngredientFormFields = z.infer<typeof IngredientSchema>
+
 type UseIngredientFormProps = {
   mode: 'create' | 'edit';
   ingredient: Ingredient | undefined;
   userId: string;
 };
+
+
 export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFormProps) => {
-  const [quantity, setQuantity] = useState<number>(
-    mode === 'edit' && ingredient ? ingredient.quantity : 0,
-  );
-  const [name, setName] = useState<string>(
-    mode === 'edit' && ingredient ? ingredient.name : '',
-  );
-  const [unit, setUnit] = useState<Unit>(
-    mode === 'edit' && ingredient ? (ingredient.unit as Unit) : '',
-  );
-  const [price, setPrice] = useState<string>(
-    mode === 'edit' && ingredient ? ingredient.unitPrice.toString() : '0',
-  );
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [errors, setErrors] = useState<IngredientErrors>([]);
+
+  const {register, handleSubmit, reset, formState: {isSubmitting}, watch, setValue} = useForm({
+    resolver: zodResolver(IngredientSchema),
+    defaultValues: mode === 'edit' 
+    ? ingredient 
+    : {
+      id: uuidv4(),
+      name: '',
+      unit: '',
+      unitPrice: 0,
+      quantity: 0,
+      usage: 'low',
+      userId: userId,
+      icon: ''
+    }
+  })
+
+  
   const router = useRouter();
   const { raiseNotification } = useHelpers();
+  const [errors, setErrors] = useState<string[]>([])
 
-  const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    // For create mode, convert to lowercase; for edit mode, keep as is
-    setName(mode === 'create' ? value.toLowerCase() : value);
-    setErrors([]);
-  };
+  const price = watch('unitPrice')
+  const name = watch('name')
+  const unit = watch('unit')
+  const quantity = watch('quantity')
+  
+   
+  const onSubmit = async (data: IngredientFormFields) => {
 
-  const handlePrice = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-
-    const { value } = e.target;
-    if (value === '' || /^\d*\.?\d*$/.test(value)) {
-      setPrice(value);
-    }
-    setErrors([]);
-  },[]);
-
-  const handleFocus = useCallback(() => setIsEditing(true),[]);
-  const handleBlur = useCallback(() => setIsEditing(false),[]);
-
-  // Logic to show an empty input when editing and the price is "0"
-  const displayedPrice = isEditing && price === '0' ? '' : price;
-  const handleUnit = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = e.target;
-    if (value === 'g' || value === 'ml' || value === 'kg' || value === 'L' || value === 'piece') {
-      setUnit(value as Unit);
-      setErrors([]);
-    }
-  },[]);
-  const resetForm = useCallback(() => {
-    setQuantity(0);
-    setName('');
-    setUnit('');
-    setPrice('0');
-    setErrors([]);
-    setIsEditing(false);
-  }, []);
-  const addIngredient = useCallback(async (
-    e:
-      | React.MouseEvent<HTMLButtonElement>
-      | React.KeyboardEvent<HTMLInputElement>
-      | React.KeyboardEvent<HTMLSelectElement>,
-  ) => {
-    e.preventDefault();
     if (mode === 'create') {
       // Create mode logic
-      const id = uuidv4();
-      const normalizedUnitPrice = normalizePrice(price, unit, quantity);
-      const ingredientPrototype: Ingredient = {
-        id: id,
-        icon: '🥑',
-        name: name,
-        unit: unit === 'g' || unit === 'kg' ? 'g' : unit === 'L' || unit === 'ml' ? 'ml' : 'piece',
-        unitPrice: normalizedUnitPrice,
-        quantity: quantity,
-        usage: '0',
-        userId: userId,
-      };
+      const ingredientPrototype = createIngredientPrototype(data, userId)
+
       const validatedIngredient = IngredientSchema.safeParse(ingredientPrototype);
       console.log(validatedIngredient);
       if (!validatedIngredient.success) {
@@ -105,26 +72,17 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
       } else {
         const response = await sendIngredient(validatedIngredient.data);
         raiseNotification(response); // Pass the entire response
-        resetForm();
+        reset();
         if (router) {
           router.replace('/ingredients');
         }
       }
     } else if (mode === 'edit' && ingredient) {
-      const normalizedUnitPrice = normalizePrice(price, unit, quantity);
-      // Edit mode logic
-      const updatedIngredient: Ingredient = {
-        id: ingredient.id,
-        icon: ingredient.icon || '🥑',
-        name: name,
-        unit: unit === 'g' || unit === 'kg' ? 'g' : unit === 'L' || unit === 'ml' ? 'ml' : 'piece',
-        unitPrice: normalizedUnitPrice,
-        quantity: quantity,
-        usage: ingredient.usage || '0',
-        userId: userId,
-      };
+
+      const updatedIngredient = createEditIngredientPrototype(data, ingredient, userId)
+
       const validatedIngredient = IngredientSchema.safeParse(updatedIngredient);
-      console.log('Validated ingredient on the form: ', validatedIngredient);
+
       if (!validatedIngredient.success) {
         setErrors([]);
         const zodErrors = validatedIngredient.error.errors;
@@ -132,13 +90,13 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
       } else {
         const response = await updateIngredient(validatedIngredient.data);
         raiseNotification(response); // Pass the entire response
-        resetForm();
+        reset();
         if (router) {
           router.replace('/ingredients');
         }
       }
     }
-  }, [ingredient, mode, name, price, quantity, raiseNotification,resetForm, router, unit, userId]);
+  }
 
   const handleKeyDown = (
     e:
@@ -146,25 +104,25 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
       | React.KeyboardEvent<HTMLSelectElement>,
   ) => {
     if (e.key === 'Enter') {
-      addIngredient(e);
+      handleSubmit(onSubmit);
     }
   };
+
+
   // Return all the state and functions the component will need
   return {
-    quantity,
-    name,
-    unit,
     price,
-    displayedPrice,
+    quantity,
+    unit,
+    name,
     errors,
-    setQuantity,
     setErrors,
-    handleName,
-    handlePrice,
-    handleFocus,
-    handleBlur,
-    handleUnit,
-    addIngredient,
+    register,
+    onSubmit,
+    handleSubmit,
     handleKeyDown,
+    setValue,
+    isSubmitting
+  
   };
 };

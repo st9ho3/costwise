@@ -69,7 +69,7 @@ const RecipeForm = ({ingredients, recipe, recipeIngredients, mode, userId}: Reci
 
           <UploadFiles />
           
-          <RecipeIngredientForm ingredients={ingredients} recipeId={mode === 'edit' && recipe ? recipe.id : newId} onAddIngredient={handleAddIngredient} tempIngredients={tempIngredients} mode={mode}  />
+          <RecipeIngredientForm ingredients={ingredients} recipeId={mode === 'edit' && recipe ? recipe.id : newId} onAddIngredient={handleAddIngredient} tempIngredients={tempIngredients}  />
 
           {/* The Pricing component now handles its own inputs */}
           <Pricing register={register} errors={errors} setValue={setValue} getValues={getValues} ingredients={tempIngredients} watch={watch}>

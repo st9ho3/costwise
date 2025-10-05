@@ -1,21 +1,20 @@
+import { IngredientFormFields } from '@/app/hooks/useIngredientsForm';
 import { Scale } from 'lucide-react';
 import { memo } from 'react';
+import { UseFormRegister } from 'react-hook-form';
 
 type IngredientUnitSelectProps = {
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  register: UseFormRegister<IngredientFormFields>
   onKeyDown: (e: React.KeyboardEvent<HTMLSelectElement>) => void;
 };
 
-const IngredientUnitSelect = memo(({ value, onChange, onKeyDown }: IngredientUnitSelectProps) => (
+const IngredientUnitSelect = memo(({ register, onKeyDown }: IngredientUnitSelectProps) => (
   <div className='flex items-center p-1 space-x-3 border-dashed rounded-lg border-1 border-gray-300'>
     <Scale />
     <select
-      name="unit"
       id="unit"
-      value={value}
+      {...register('unit')}
       className="block w-20 p-2 text-lg bg-white text-gray-800 focus:outline-none"
-      onChange={onChange}
       onKeyDown={onKeyDown}
     >
       <option value="">Unit</option>

@@ -15,7 +15,7 @@ import RecipeForm from "../components/recipes/recipeForm/recipeForm";
 import IngredientNameInput  from '../components/ingredients/ingredientsFormComponents/ingredientNameInput';
 import IngredientPriceInput  from '../components/ingredients/ingredientsFormComponents/ingredientpriceInput';
 import IngredientUnitSelect  from '../components/ingredients/ingredientsFormComponents/ingredientUnitSelect';
-import AddIngredientButton  from '../components/ingredients/ingredientsFormComponents/submitIngredientButton';
+import AddIngredientButton  from '../components/ingredients/ingredientsFormComponents/button/submitIngredientButton';
 import IngredientSummary  from '../components/ingredients/ingredientsFormComponents/ingredientSummary';
 import FormErrors  from '../components/ingredients/ingredientsFormComponents/formErrors';
 import IngredientModal from '@/app/components/ingredients/ingredientModal'

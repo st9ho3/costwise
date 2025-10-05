@@ -7,7 +7,6 @@ import { useRecipeIngredientsForm } from '@/app/hooks/useRecipeIngredientsForm';
 import { 
     IngredientSelector,
     UnitSelector,
-    AddIngredientButton,
     ErrorDisplay
  } from '@/app/constants/components';
 
@@ -17,7 +16,6 @@ interface FormProps {
   ingredients: Ingredient[];
   onAddIngredient: (ing: RecipeIngredients) => void;
   tempIngredients: RecipeIngredients[];
-  mode: "create" | "edit"
 }
 
 const RecipeIngredientForm = ({
@@ -25,7 +23,6 @@ const RecipeIngredientForm = ({
   ingredients,
   onAddIngredient,
   tempIngredients,
-  mode
 }: FormProps) => {
   const {
     quantity,
@@ -68,7 +65,7 @@ const RecipeIngredientForm = ({
           {/* Quantity */}
           <div className="border-l border-dashed border-gray-300 pl-2">
             <Incremental
-              onChange={handleQuantityChange}
+              onRecipeIngredientChange={handleQuantityChange}
               count={quantity}
               onKeyDown={handleKeyDown}
               setErrors={() => {}}
@@ -76,7 +73,13 @@ const RecipeIngredientForm = ({
           </div>
         </div>
 
-        <AddIngredientButton onClick={addIngredient} mode={mode} />
+        <button
+         type='button' 
+         className='flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-white transition-colors w-full sm:w-auto flex-shrink-0 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50' 
+         onClick={addIngredient}
+         >
+          Add
+        </button>
       </div>
 
       <ErrorDisplay errors={errors} error='' pricingErrors={{}}/>
