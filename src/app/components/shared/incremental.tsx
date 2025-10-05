@@ -9,33 +9,32 @@ type IncrementalProps = {
   onRecipeIngredientChange?: ((value: number) => void)
   count: number,
   onKeyDown: (value: React.KeyboardEvent<HTMLInputElement>) => void,
-  setErrors:  (value: React.SetStateAction<string[]>) => void
+  setErrors: (value: React.SetStateAction<string[]>) => void
 }
 
-const Incremental = ({onIngredientChange, onRecipeIngredientChange, count, onKeyDown, setErrors}: IncrementalProps) => {
+const Incremental = ({ onIngredientChange, onRecipeIngredientChange, count, onKeyDown, setErrors }: IncrementalProps) => {
   const [isEditing, setIsEditing] = useState<boolean>(false)
 
-  
   const handleClick = useCallback((action: 'minus' | 'plus') => {
-    setIsEditing(false)  
+    setIsEditing(false)
+    
     if (onIngredientChange) {
       if (action === 'plus') {
-      onIngredientChange("quantity", count + 1)
-    } else if (count > 0) {
-      onIngredientChange("quantity", count - 1)
+        onIngredientChange("quantity", count + 1)
+      } else if (count > 0) {
+        onIngredientChange("quantity", count - 1)
+      }
+      setErrors([])
     }
-    setErrors([])
-    } 
     if (onRecipeIngredientChange) {
-      
       if (action === 'plus') {
-      onRecipeIngredientChange(count + 1)
-    } else if (count > 0) {
-      onRecipeIngredientChange( count - 1)
+        onRecipeIngredientChange(count + 1)
+      } else if (count > 0) {
+        onRecipeIngredientChange(count - 1)
+      }
+      setErrors([])
     }
-    setErrors([])
-    }             
-  },[count, onRecipeIngredientChange, onIngredientChange, setErrors])
+  }, [count, onRecipeIngredientChange, onIngredientChange, setErrors])
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>): void => {
     const value = e.target.value === '' ? 0 : Number(e.target.value)
@@ -47,20 +46,19 @@ const Incremental = ({onIngredientChange, onRecipeIngredientChange, count, onKey
       onRecipeIngredientChange(value)
       setErrors([])
     }
-    
-  },[ onIngredientChange,onRecipeIngredientChange,setErrors])
+
+  }, [onIngredientChange, onRecipeIngredientChange, setErrors])
 
   const handleFocus = useCallback(() => {
     setIsEditing(true)
-  },[])
+  }, [])
 
   const handleBlur = useCallback(() => {
     if (count === 0) {
       setIsEditing(false)
     }
-  },[count])
+  }, [count])
 
-  
   const displayValue = isEditing && count === 0
     ? ''
     : count

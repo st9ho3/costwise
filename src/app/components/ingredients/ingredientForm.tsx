@@ -24,7 +24,8 @@ const IngredientForm = ({ ingredient, mode, userId }: AddIngredientProps) => {
       <div className="flex flex-wrap items-center justify-center gap-4 rounded-lg">
         <IngredientNameInput register={register} onKeyDown={handleKeyDown} />
         <IngredientPriceInput
-          register={register}
+          onChange={setValue}
+          price={price}
         />
         <Incremental onIngredientChange={setValue} count={quantity} onKeyDown={handleKeyDown} setErrors={setErrors} />
         <IngredientUnitSelect register={register}  onKeyDown={handleKeyDown}  />
