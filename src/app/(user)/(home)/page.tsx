@@ -32,6 +32,7 @@ const page = async() => {
   const avgProfitMargin = recipeAnalytics && recipeAnalytics.avgProfitMargin !== null ? Number(recipeAnalytics.avgProfitMargin) : 0
   const totalIngredients = ingredientAnalytics ? ingredientAnalytics.totalIngredients : 0
 
+  console.log(recipeAnalytics)
   return (
     <div className=' m-2'>
       <Header session={session} />
