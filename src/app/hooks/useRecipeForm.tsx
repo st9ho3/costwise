@@ -117,7 +117,7 @@ const useRecipeForm = ({mode, recipe, recipeIngredients, userId}: RecipeFormProp
           userId: userId,
           imgPath: url || data.imgPath,
           profitMargin: data.profitMargin ? data.profitMargin : 0,
-          foodCost: foodCost * 100
+          foodCost: foodCost
         };
 
         const response = await sendRecipe(updatedData, tempIngredients);
