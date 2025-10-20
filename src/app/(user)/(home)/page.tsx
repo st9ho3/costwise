@@ -37,10 +37,10 @@ const page = async() => {
     <div className=' m-2'>
       <Header session={session} />
       <div className='m-1 p-3 flex justify-between rounded-2xl bg-white h-full'>
-        <Card title='Recipes' value={totalRecipes} Icon={ShoppingBasket} color='bg-amber-100' />
-        <Card title='Ingredients' value={totalIngredients} Icon={Carrot} color='bg-red-100' />
-        <Card title='Avg Food Cost' value={avgfoodCost} Icon={Percent} color='bg-green-100' />
-        <Card title='Avg Profit Margin' value={avgProfitMargin} Icon={Percent} color='bg-purple-100' />
+        <Card title='Recipes' value={totalRecipes} Icon={ShoppingBasket} color='border-1 border-amber-600' />
+        <Card title='Ingredients' value={totalIngredients} Icon={Carrot} color='border-1  border-red-600' />
+        <Card title='Avg Food Cost' value={avgfoodCost} Icon={Percent} color='border-1  border-green-600' />
+        <Card title='Avg Profit Margin' value={avgProfitMargin} Icon={Percent} color='border-1  border-purple-600' />
       </div>
     </div>
   )

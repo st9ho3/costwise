@@ -25,7 +25,7 @@ const Pagination = ({ items }: { items: Recipe[] | Ingredient[] }) => {
   if (pages.length <= 1) {
     return null; // Don't render pagination if there's only one page or less
   }
-
+console.log(state.currentPage)
   return (
     <div className='absolute bottom-5 left-0 right-0 flex justify-center items-center mx-auto w-full max-w-md px-4'>
       <Button 

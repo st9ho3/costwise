@@ -27,8 +27,7 @@ const IngredientsTable = ({items}: {items: Ingredient[]}) => {
     router.replace("ingredients")
   },[raiseNotification, router])
 
-  console.log("Ingredients: ")
-
+  
   return (
     <div>
       <table className="w-full table-fixed mb-4 ">

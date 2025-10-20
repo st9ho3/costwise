@@ -101,6 +101,7 @@ export const sendIngredient = async (ingredient: Ingredient) => {
     body: JSON.stringify(ingredient)
   })
   const response = await res.json()
+  
   return response
 }
 
