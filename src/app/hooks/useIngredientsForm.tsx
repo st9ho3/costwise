@@ -8,7 +8,7 @@
  * - Supports keyboard-driven submission (Enter key) and dynamic price input handling.
  */
 "use client"
-import {  useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
 import { Ingredient, IngredientSchema } from '@/shemas/recipe';
