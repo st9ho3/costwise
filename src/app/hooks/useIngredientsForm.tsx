@@ -8,7 +8,7 @@
  * - Supports keyboard-driven submission (Enter key) and dynamic price input handling.
  */
 "use client"
-import {  useState } from 'react';
+import {  useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
 import { Ingredient, IngredientSchema } from '@/shemas/recipe';
@@ -18,6 +18,7 @@ import useHelpers from './useHelpers';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
+import { IngredientService } from '../services/ingredientService';
 
 export type IngredientFormFields = z.infer<typeof IngredientSchema>
 
@@ -45,6 +46,117 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
       icon: ''
     }
   })
+
+  const ingredientsData = [
+  {
+    id: uuidv4(),
+    icon: '🍅',
+    name: 'Tomatoes (Canned, Diced)',
+    unit: 'can',
+    unitPrice: 1.29,
+    quantity: 3,
+    usage: '1',
+    userId: userId,
+  },
+  {
+    id: uuidv4(),
+    icon: '🧅',
+    name: 'Onion (Yellow)',
+    unit: 'kg',
+    unitPrice: 1.10,
+    quantity: 2,
+    usage: '1',
+    userId: userId,
+  },
+  {
+    id: uuidv4(),
+    icon: '🧄',
+    name: 'Garlic',
+    unit: 'head',
+    unitPrice: 0.85,
+    quantity: 4,
+    usage: '1',
+    userId: userId,
+  },
+  {
+    id: uuidv4(),
+    icon: '🫒',
+    name: 'Olive Oil (Extra Virgin)',
+    unit: 'bottle',
+    unitPrice: 12.99,
+    quantity: 1,
+    usage: '1',
+    userId: userId,
+  },
+  {
+    id: uuidv4(),
+    icon: '🍝',
+    name: 'Spaghetti',
+    unit: 'box',
+    unitPrice: 1.99,
+    quantity: 2,
+    usage: '1',
+    userId: userId,
+  },
+  {
+    id: uuidv4(),
+    icon: '🍗',
+    name: 'Chicken Breast (Boneless)',
+    unit: 'kg',
+    unitPrice: 10.50,
+    quantity: 1.5,
+    usage: '1',
+    userId: userId,
+  },
+  {
+    id: uuidv4(),
+    icon: '🥚',
+    name: 'Eggs (Large)',
+    unit: 'dozen',
+    unitPrice: 4.75,
+    quantity: 1,
+    usage: '1',
+    userId: userId,
+  },
+  {
+    id: uuidv4(),
+    icon: null,
+    name: 'All-Purpose Flour',
+    unit: 'kg',
+    unitPrice: 2.50,
+    quantity: 1,
+    usage: '1',
+    userId: userId,
+  },
+  {
+    id: uuidv4(),
+    icon: '🧂',
+    name: 'Kosher Salt',
+    unit: 'box',
+    unitPrice: 3.15,
+    quantity: 1,
+    usage: '1',
+    userId: userId,
+  },
+  {
+    id: uuidv4(),
+    icon: '🌶️',
+    name: 'Red Pepper Flakes',
+    unit: 'shaker',
+    unitPrice: 2.89,
+    quantity: 1,
+    usage: '1',
+    userId: userId,
+  },
+];
+
+
+useEffect(() => {
+  const newArray = ingredientsData.map((ing) => {return createIngredientPrototype(ing, userId)})
+ 
+    newArray.forEach(async(ing) => await sendIngredient(ing))
+    console.log(newArray)
+}, [])
 
   
   const router = useRouter();

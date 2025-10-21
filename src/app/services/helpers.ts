@@ -43,7 +43,7 @@ export const paginate = <T>(itemsPerPage: number, page: number, items: T[] ): T[
 export const getTotalPrice = (ingredients: RecipeIngredients[]): number => {
   
   return ingredients.reduce((sum, item) => {
-    return sum + item.unitPrice * item.quantity;
+    return item.unit === "kg" || item.unit === "L" ? sum + item.unitPrice * item.quantity*1000 : sum + item.unitPrice* item.quantity
   }, 0);
 
 }
@@ -69,12 +69,12 @@ export const normalizePrice = (price: number, unit: Unit, quantity: number): num
     case 'ml':
       // For milliliters, calculate the price per ml directly.
       return price / quantity;
-    case 'piece':
+  /*   case 'piece':
       // For pieces, calculate the price per piece.
-      return price / quantity;
+      return price / quantity; */
     default:
       // If the unit is not recognized, return 0.
-      return 0;
+      return price/quantity;
   }
 };
 
@@ -191,7 +191,7 @@ export const createIngredientPrototype = (data: IngredientFormFields, userId: st
 
       const ingredientPrototype: Ingredient = {
         id: data.id,
-        icon: '🥑',
+        icon: data.icon,
         name: data.name,
         unit: data.unit === 'g' || data.unit === 'kg' ? 'g' : data.unit === 'L' || data.unit === 'ml' ? 'ml' : 'piece',
         unitPrice: normalizedUnitPrice,

@@ -11,6 +11,7 @@ import StatItem from './statItem';
 const OrderTotal = ({ ingredients, watch }: { ingredients: RecipeIngredients[], getValues: UseFormGetValues<FormFields> , setValue: UseFormSetValue<FormFields>, watch: UseFormWatch<FormFields>}) => {
 
   const totalCost = useMemo(() => getTotalPrice(ingredients),[ingredients] )
+  console.log(ingredients)
   const sellingPrice = watch('sellingPrice');
   const profitMargin = watch('profitMargin');
   const foodCost = sellingPrice ? (totalCost / sellingPrice) * 100 : 0;

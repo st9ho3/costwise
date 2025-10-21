@@ -27,6 +27,7 @@ const ingredientsPage = async () => {
     const ingredients = rawIngredients ? rawIngredients.map((ingredient) => {
         return ingredient;
     }) : [];
+    
 
     return (
         <div className="relative w-full h-screen px-2 md:px-5 bg-white">
