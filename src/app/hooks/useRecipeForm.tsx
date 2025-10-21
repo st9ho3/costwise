@@ -11,6 +11,7 @@
  * submitting data to the appropriate backend service. It uses a separate `useFileUpload`
  * hook and a context (`useHomeContext`) to manage file upload state and notifications.
  */
+"use client"
 import { useCallback, useState } from 'react';
 import { RecipeIngredients, RecipeSchema } from '@/shemas/recipe';
 import { v4 as uuidv4 } from "uuid";

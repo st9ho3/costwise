@@ -13,7 +13,7 @@ export const recipeCategoryEnum = pgEnum("recipe_category", ["starter", "main", 
 // Defines the 'recipes' table schema.
 export const recipesTable = pgTable("recipes", {
   id: uuid("id").primaryKey(),
-  title: varchar("name", {length: 200}).notNull().unique(),
+  title: varchar("name", {length: 200}).notNull(),
   totalCost: numeric("total_cost", { precision: 5, scale: 2 }).notNull(),
   createdBy: varchar("created_by").notNull(),
   dateCreated: date("date").notNull(),

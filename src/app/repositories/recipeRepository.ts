@@ -27,7 +27,6 @@ import { db } from "@/db/db";
 import { eq, and, avg, countDistinct } from "drizzle-orm";
 import { Database, recipesTable, recipeIngredientsTable } from "@/db/schema";
 import { transformRecipeFromDB } from "../services/helpers";
-import { checkIfRecipeExists } from "@/db/helpers";
 import { transformRecipeToDB } from "../services/helpers";
 import { revalidatePath } from "next/cache";
 import { checkIfIngredientExists } from "@/db/helpers";
@@ -89,26 +88,18 @@ export class RecipeRepository implements IRecipeRepository {
     }
 
     
-    async create(recipe: Recipe, tx: Database): Promise<string | undefined> {
+    async create(recipe: DBRecipe, tx: Database): Promise<string | undefined> {
+
         try {
-            const foundRecipe = await checkIfRecipeExists(recipe.title, recipe.userId);
-            
-            if (foundRecipe) {
-                if (foundRecipe.length === 0) {
-                    const transformedRecipe = transformRecipeToDB(recipe);
                     const [recipeReceipt] = await tx
                         .insert(recipesTable)
-                        .values(transformedRecipe)
+                        .values(recipe)
                         .returning({
                             returnedId: recipesTable.id
                         });
-
+                    console.log("recipeReceipt",recipeReceipt)
                     return recipeReceipt.returnedId;
-                } else {
-                    console.log("Recipe already exists with title:", recipe.title);
-                    return undefined;
-                }
-            }
+                
         } catch (err) {
             console.error("Failed to create recipe:", err);
             throw new Error(`RecipeRepository.create: Failed to create recipe '${recipe.title}': ${err}`);

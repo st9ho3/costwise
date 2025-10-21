@@ -23,9 +23,10 @@ import { IngredientRepository } from "../repositories/ingredientRepository";
 import { zodValidateDataBeforeAddThemToDatabase } from "./services";
 import { RecipeUpdatePayload } from "@/types/context";
 import { RecipeWithQuery } from "@/types/specialTypes";
-import { calculateProfitMargin, getTotalPrice, transformRecipeFromDB, transformRecipeIngredentFromDB } from "./helpers";
+import { calculateProfitMargin, getTotalPrice, transformRecipeFromDB, transformRecipeIngredentFromDB, transformRecipeToDB } from "./helpers";
 import { Database } from "@/db/schema";
 import { RecipeAnalytics } from "@/types/repositories";
+import { checkIfRecipeExists } from "@/db/helpers";
 
 
 export class RecipeService implements IRecipeService {
@@ -60,20 +61,26 @@ export class RecipeService implements IRecipeService {
 
     async create(requestData: CreateRequest): Promise<CreateResponse | undefined> {
         
+        const recipeExists = await checkIfRecipeExists(requestData.recipe.title, requestData.recipe.userId)
         const { validatedRecipe, validatedRecipeAddedIngredients } = zodValidateDataBeforeAddThemToDatabase(requestData)
         
         if (validatedRecipeAddedIngredients.length === 0) {
             throw Error("Ingredients required in order to create a recipe.")
         }
         
+        if (recipeExists) {
+            throw new Error("Recipe already exists")
+        }
         
         try {
             const transactionResponse = await db.transaction(async (tx) => {
-
-                const recipeResponse = await this.recipeRepository.create(validatedRecipe, tx);
+                
+                const transformedRecipe = transformRecipeToDB(validatedRecipe);
+                const recipeResponse = await this.recipeRepository.create(transformedRecipe, tx);
 
                     await Promise.all(
                     validatedRecipeAddedIngredients.map(async (ingredient) => {
+                        console.log("Iteraye ingredients ")
                         const newIngredient = await this.recipeIngredientsRepository.create(ingredient, validatedRecipe.userId, tx);
                         await this.ingredientRepository.updateUsage(ingredient.ingredientId, tx, "+");
                         return newIngredient;
