@@ -9,7 +9,7 @@ const Card = ({ title, value, Icon, color }: {title: string, value: number, Icon
   return (
     <div
       className={`
-        text-black ${color} rounded-2xl p-5 w-60 max-w-xs
+        text-black bg-none ${color} rounded-2xl p-5 w-60 max-w-xs
         flex flex-col justify-between h-35
       `}
     >

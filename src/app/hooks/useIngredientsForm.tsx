@@ -55,7 +55,7 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
   const name = watch('name')
   const unit = watch('unit')
   const quantity = watch('quantity')
-  
+
    
   const onSubmit = async (data: IngredientFormFields) => {
 
@@ -71,6 +71,7 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
         zodErrors.forEach(error => setErrors(prev => [...prev, error.message]));
       } else {
         const response = await sendIngredient(validatedIngredient.data);
+        
         raiseNotification(response); // Pass the entire response
         reset();
         if (router) {

@@ -29,6 +29,7 @@ export const POST = async (req: NextRequest) => {
         }
         return sendSuccess('Ingredient successfully created', response, 201);
     } catch (err) {
+        console.log('error on the route: ',err)
         return sendError(`${err}`, 500);
     }
 };
