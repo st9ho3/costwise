@@ -21,6 +21,7 @@ const RecipesPage = async () => {
     if (!session?.user) {
         redirect('/signin');
     }
+    
 
     const service = new RecipeService();
 

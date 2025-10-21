@@ -20,7 +20,7 @@ const ingredientsPage = async () => {
     if (!session?.user) {
         redirect('/signin');
     }
-
+    
     const service = new IngredientService();
 
     const rawIngredients = session.user.id && await service.findAll(session.user.id);

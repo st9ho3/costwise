@@ -25,7 +25,7 @@ import { NotificationType } from "@/types/context";
 const initialState: HomeState = {
     dialogExists: false,
     chatOpen: false,
-    messages: [], // getInitialMessages(),
+    messages: [],
     currentPage: 1,
     isModalOpen: false,
     isProfileOpen: false,
@@ -36,7 +36,6 @@ const initialState: HomeState = {
     file: null
 };
 
-// The reducer function
 const homeReducer = (state: HomeState, action: Action): HomeState => {
     switch (action.type) {
         case 'TOGGLE_CHAT':
@@ -77,6 +76,8 @@ const homeReducer = (state: HomeState, action: Action): HomeState => {
                 ...state,
                 isProfileOpen: false
             };
+        case "RESET_STATE":
+            return initialState
         case 'HANDLE_NOTIFICATION':
             return {
                 ...state,
