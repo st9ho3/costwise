@@ -11,15 +11,16 @@ import Notification from '@/app/components/shared/notification'
 import Link from "next/link";
 import Label from "../shared/label";
 import useHelpers from "@/app/hooks/useHelpers";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 
 
 const RecipesTable = ({items}: {items: Recipe[]}) => {
-  const { state } = useHomeContext();
+  const { state, dispatch } = useHomeContext();
   const { raiseNotification } = useHelpers()
   const router = useRouter()
   const paginateItems = useMemo(() => paginate(10, state.currentPage, items),[state.currentPage, items]);
   const itemsToDisplay = paginateItems ? paginateItems : [];
+  useEffect(()=> {dispatch({type: 'RESET_STATE'})}, [])
 
   const handleDelete = useCallback(async(rec: Recipe) => {
     const response = await deleteRecipesFromServer(rec.id)

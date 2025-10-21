@@ -1,31 +1,17 @@
 "use client";
-import React, { useCallback, useMemo } from 'react';
+import usePagination from '@/app/hooks/usePagination';
 import Button from '../shared/sharedButton';
-import { paginationPages } from '@/app/services/helpers';
-import { useHomeContext } from '@/app/context/homeContext/homeContext';
 import { Ingredient, Recipe } from '@/shemas/recipe';
 
 
 const Pagination = ({ items }: { items: Recipe[] | Ingredient[] }) => {
-  const { state, dispatch } = useHomeContext();
-  const pages = useMemo( () => paginationPages(items, 10), [items]);
 
-  const handlePrev = useCallback((): void => {
-    if (state.currentPage > 1) {
-      dispatch({ type: "CHOOSE_PAGE", payload: state.currentPage - 1 });
-    }
-  },[dispatch, state.currentPage]);
+  const  {handleNext, handlePrev, state, dispatch, pages} = usePagination({items})
 
-  const handleNext = useCallback((): void => {
-    if (state.currentPage < pages.length) {
-      dispatch({ type: "CHOOSE_PAGE", payload: state.currentPage + 1 });
-    }
-  },[state.currentPage, dispatch, pages]);
-
-  if (pages.length <= 1) {
-    return null; // Don't render pagination if there's only one page or less
-  }
-console.log(state.currentPage)
+  if (pages.length <= 0) {
+        return null;
+      }
+      
   return (
     <div className='absolute bottom-5 left-0 right-0 flex justify-center items-center mx-auto w-full max-w-md px-4'>
       <Button 

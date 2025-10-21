@@ -11,10 +11,10 @@ import Link from "next/link";
 import Label from "../shared/label";
 import { deleteIngredient } from "@/app/services/services";
 import useHelpers from "@/app/hooks/useHelpers";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 
 const IngredientsTable = ({items}: {items: Ingredient[]}) => {
-  const { state } = useHomeContext();
+  const { state, dispatch } = useHomeContext();
   const {raiseNotification} = useHelpers()
   const router = useRouter()
   const paginateItems= useMemo( () => paginate(10, state.currentPage, items),[state.currentPage, items]);
@@ -27,6 +27,7 @@ const IngredientsTable = ({items}: {items: Ingredient[]}) => {
     router.replace("ingredients")
   },[raiseNotification, router])
 
+  useEffect(()=> {dispatch({type: 'RESET_STATE'})}, [])
   
   return (
     <div>

@@ -45,6 +45,7 @@ export interface HomeState {
   | { type: "CLOSE_MODAL";}
   | { type: "OPEN_PROFILE"; }
   | { type: "CLOSE_PROFILE" }
+  | { type: "RESET_STATE"}
   | { type: "HANDLE_NOTIFICATION";  payload: Notification}
   | { type: "SET_FILE"; payload: File | null}
   | { type: "RESET_FILE"}
