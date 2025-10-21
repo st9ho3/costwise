@@ -17,7 +17,7 @@ export interface IRecipeRepository {
   findById(id: string): Promise<RecipeWithQuery | undefined>;
   findAllByIngredientId(id: string): Promise<DBRecipe[] | undefined>;
   findAll(userId: string): Promise<Recipe[] | undefined>;
-  create(recipe: Recipe, tx: Database): Promise<string | undefined>;
+  create(recipe: DBRecipe, tx: Database): Promise<string | undefined>;
   update(id: string, recipe: Recipe, tx?: Database): Promise<{id: string} | undefined>;
   delete(id: string, tx: Database): Promise<{id: string} | undefined>;
 

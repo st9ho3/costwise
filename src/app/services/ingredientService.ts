@@ -61,7 +61,7 @@ export class IngredientService implements IIngredientService {
           const ingredientExists = await checkIfIngredientExists(ingredient.name, ingredient.userId);
           const validatedIngredient = await zodValidateIngredientBeforeAddItToDatabase(ingredient)
           const DBIngredient = validatedIngredient ? transformIngredientToDB(validatedIngredient) : undefined
-        
+          
           if (!ingredientExists && DBIngredient) {
             const ingredientId = this.ingredientRepository.create(DBIngredient)
             return ingredientId
