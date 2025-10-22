@@ -2,15 +2,10 @@ import { MessageType } from "@/shemas/chat";
 import { initialState } from "@/app/context/homeContext/homeReducer";
 import { ReactNode } from "react";
 import { RecipeIngredients } from "@/shemas/recipe";
-import { INITIAL_STATE } from "@/app/context/ingredietsContext/ingredientsReducer";
 
 export interface HomeContextProps {
     state: typeof initialState,
-    dispatch: React.Dispatch<HomeAction>;
-}
-export interface IngredientsContextProps {
-    state: typeof INITIAL_STATE,
-    dispatch: React.Dispatch<IngredientsAction>;
+    dispatch: React.Dispatch<Action>;
 }
 
 export enum NotificationType {
@@ -42,7 +37,7 @@ export interface HomeState {
 }
 
 // Discriminated union for actions for better type safety
- export type HomeAction =
+ export type Action =
   | { type: "TOGGLE_CHAT" }
   | { type: "UPDATE_MESSAGES"; payload: MessageType }
   | { type: "CHOOSE_PAGE"; payload: number }
