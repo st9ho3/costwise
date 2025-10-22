@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { ingredientColumns } from "../constants/data"
+import { ingredientColumns, recipesColumns } from "../constants/data"
 
 interface SortingProps<T> {
     data: T[]
@@ -18,8 +18,8 @@ const useSorting = <T,>({data}: SortingProps<T>) => {
     useEffect(() => {setSortedData(data)},[data])
     const sortData = (value: string) => {
         setSortStatus(prev => ({...prev, isFiltering: true}))
-
-        const column = ingredientColumns.find((col) => col.header === value)
+        const columnsToLook = [...ingredientColumns, ...recipesColumns]
+        const column = columnsToLook.find((col) => col.header === value)
 
         if (!column) return;
 
