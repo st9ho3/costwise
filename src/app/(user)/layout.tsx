@@ -16,6 +16,7 @@ import Sidebar from "../components/layout/sideBar"; // Import the new component
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import IngredientsContextProvider from "../context/ingredietsContext/ingredientsContext";
 
 
 export const metadata: Metadata = {
@@ -38,6 +39,7 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         <SessionProvider session={session}>
+        <IngredientsContextProvider>
         <HomeContextProvider>
           <div className="flex h-screen bg-[rgb(252,252,252)]">
             <Sidebar /> {/* Use the Sidebar component */}
@@ -50,6 +52,7 @@ export default async function RootLayout({
           <Chat />
           
         </HomeContextProvider>
+        </IngredientsContextProvider>
         </SessionProvider>
       </body>
     </html>

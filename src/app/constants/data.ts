@@ -42,7 +42,7 @@ export const ingredientColumns: Column[] = [
     },
     {
         header: 'Price per Unit',
-        accessor: 'pricePerUnit',
+        accessor: 'unitPrice',
         className: "text-gray-500 w-1/6 md:w-2/10 text-sm text-center md: text-start pl-4"
     },
     {

@@ -2,10 +2,15 @@ import { MessageType } from "@/shemas/chat";
 import { initialState } from "@/app/context/homeContext/homeReducer";
 import { ReactNode } from "react";
 import { RecipeIngredients } from "@/shemas/recipe";
+import { INITIAL_STATE } from "@/app/context/ingredietsContext/ingredientsReducer";
 
 export interface HomeContextProps {
     state: typeof initialState,
-    dispatch: React.Dispatch<Action>;
+    dispatch: React.Dispatch<HomeAction>;
+}
+export interface IngredientsContextProps {
+    state: typeof INITIAL_STATE,
+    dispatch: React.Dispatch<IngredientsAction>;
 }
 
 export enum NotificationType {
@@ -37,7 +42,7 @@ export interface HomeState {
 }
 
 // Discriminated union for actions for better type safety
- export type Action =
+ export type HomeAction =
   | { type: "TOGGLE_CHAT" }
   | { type: "UPDATE_MESSAGES"; payload: MessageType }
   | { type: "CHOOSE_PAGE"; payload: number }
@@ -49,6 +54,14 @@ export interface HomeState {
   | { type: "HANDLE_NOTIFICATION";  payload: Notification}
   | { type: "SET_FILE"; payload: File | null}
   | { type: "RESET_FILE"}
+
+export interface IngredientState {
+  data: Ingredient[]
+}
+
+export type IngredientsAction =
+
+| {type: 'SET_DATA'; payload: Ingredient[]}
 
 export interface ModalProps {
   isOpen: boolean;

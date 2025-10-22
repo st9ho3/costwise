@@ -19,11 +19,11 @@
 
 import { createContext, useContext, useReducer, PropsWithChildren } from 'react';
 import { initialState, homeReducer } from './homeReducer';
-import { Action } from '@/types/context';
+import { HomeAction } from '@/types/context';
 
 interface HomeContextProps {
     state: typeof initialState;
-    dispatch: React.Dispatch<Action>;
+    dispatch: React.Dispatch<HomeAction>;
 }
 
 const homeContext = createContext<HomeContextProps | undefined>(undefined);
