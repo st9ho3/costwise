@@ -30,6 +30,8 @@ const IngredientsTable = ({items}: {items: Ingredient[]}) => {
     router.replace("ingredients")
   },[raiseNotification, router])
 
+  console.log(sortedData)
+  console.log(items)
   useEffect(()=> {dispatch({type: 'RESET_STATE'})}, [dispatch])
   
   return (

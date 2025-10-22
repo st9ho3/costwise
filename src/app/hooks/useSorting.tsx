@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ingredientColumns } from "../constants/data"
 
 interface SortingProps<T> {
@@ -15,7 +15,7 @@ const useSorting = <T,>({data}: SortingProps<T>) => {
 
     const [sortedData, setSortedData] = useState<T[]>(data)
     const [sortStatus, setSortStatus] = useState({isFiltering: false, isAscending: false, value: ''})
-
+    useEffect(() => {setSortedData(data)},[data])
     const sortData = (value: string) => {
         setSortStatus(prev => ({...prev, isFiltering: true}))
 

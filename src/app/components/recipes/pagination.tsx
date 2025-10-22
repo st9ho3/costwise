@@ -7,8 +7,9 @@ import { Ingredient, Recipe } from '@/shemas/recipe';
 const Pagination = ({ items }: { items: Recipe[] | Ingredient[] }) => {
 
   const  {handleNext, handlePrev, state, dispatch, pages} = usePagination({items})
+  console.log(pages)
 
-  if (pages.length <= 0) {
+  if (pages.length <= 1) {
         return null;
       }
       
