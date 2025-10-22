@@ -12,13 +12,16 @@ import Link from "next/link";
 import Label from "../shared/label";
 import useHelpers from "@/app/hooks/useHelpers";
 import { useCallback, useEffect, useMemo } from "react";
+import SortedLink from "../shared/sortedLink";
+import useSorting from "@/app/hooks/useSorting";
 
 
 const RecipesTable = ({items}: {items: Recipe[]}) => {
   const { state, dispatch } = useHomeContext();
   const { raiseNotification } = useHelpers()
   const router = useRouter()
-  const paginateItems = useMemo(() => paginate(10, state.currentPage, items),[state.currentPage, items]);
+  const {sortData, sortStatus, sortedData} = useSorting({data: items})
+  const paginateItems = useMemo(() => paginate(10, state.currentPage, sortedData),[state.currentPage, sortedData]);
   const itemsToDisplay = paginateItems ? paginateItems : [];
   
   useEffect(()=> {dispatch({type: 'RESET_STATE'})}, [dispatch])
@@ -37,7 +40,13 @@ const RecipesTable = ({items}: {items: Recipe[]}) => {
           <tr className="border-b-1 border-gray-200">
             {recipesColumns.map((column) => (
               <th key={column.accessor} className={column.className}>
+                {column.accessor === 'tax' || column.accessor === 'sellingPrice' || column.accessor === 'profitMargin' || column.accessor === 'totalCost'
+                ? 
+                <SortedLink onSort={sortData} sortStatus={sortStatus}>
                 {column.header}
+                </SortedLink>
+                : column.header
+                 }
               </th>
             ))}
           </tr>
