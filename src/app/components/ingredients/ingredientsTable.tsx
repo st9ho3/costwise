@@ -20,7 +20,7 @@ const IngredientsTable = ({items}: {items: Ingredient[]}) => {
   const {raiseNotification} = useHelpers()
   const {sortData, sortStatus, sortedData} = useSorting({data: items})
   const router = useRouter()
-  const paginateItems= useMemo(() => paginate(10, state.currentPage, sortedData ),[ sortedData,state.currentPage, items]);
+  const paginateItems= useMemo(() => paginate(10, state.currentPage, sortedData ),[sortedData, state.currentPage]);
   
   const itemsToDisplay=  paginateItems  ? paginateItems : [];
 
@@ -30,7 +30,7 @@ const IngredientsTable = ({items}: {items: Ingredient[]}) => {
     router.replace("ingredients")
   },[raiseNotification, router])
 
-  useEffect(()=> {dispatch({type: 'RESET_STATE'})}, [])
+  useEffect(()=> {dispatch({type: 'RESET_STATE'})}, [dispatch])
   
   return (
     <div>
