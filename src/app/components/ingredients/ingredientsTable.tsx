@@ -18,9 +18,9 @@ import useSorting from "@/app/hooks/useSorting";
 const IngredientsTable = ({items}: {items: Ingredient[]}) => {
   const { state, dispatch } = useHomeContext();
   const {raiseNotification} = useHelpers()
-  const {sortData, sortStatus} = useSorting({data: items, sortBy: ['unitPrice', 'usage']})
+  const {sortData, sortStatus, sortedData} = useSorting({data: items})
   const router = useRouter()
-  const paginateItems= useMemo(() => paginate(10, state.currentPage, items ),[ state.currentPage, items]);
+  const paginateItems= useMemo(() => paginate(10, state.currentPage, sortedData ),[ sortedData,state.currentPage, items]);
   
   const itemsToDisplay=  paginateItems  ? paginateItems : [];
 
