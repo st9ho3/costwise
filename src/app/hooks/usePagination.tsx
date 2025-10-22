@@ -18,7 +18,7 @@ const usePagination = ({items}: UsePaginationProps) => {
         if (state.currentPage > pages.length) {
         dispatch({ type: "CHOOSE_PAGE", payload: pages.length });
       }
-      }, [pages])
+      }, [pages, dispatch, state.currentPage])
         
       const handlePrev = useCallback((): void => {
         if (state.currentPage > 1) {

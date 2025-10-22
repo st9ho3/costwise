@@ -50,6 +50,14 @@ export interface HomeState {
   | { type: "SET_FILE"; payload: File | null}
   | { type: "RESET_FILE"}
 
+export interface IngredientState {
+  data: Ingredient[]
+}
+
+export type IngredientsAction =
+
+| {type: 'SET_DATA'; payload: Ingredient[]}
+
 export interface ModalProps {
   isOpen: boolean;
   onClose: () => void;

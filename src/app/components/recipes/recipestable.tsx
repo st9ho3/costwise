@@ -20,7 +20,8 @@ const RecipesTable = ({items}: {items: Recipe[]}) => {
   const router = useRouter()
   const paginateItems = useMemo(() => paginate(10, state.currentPage, items),[state.currentPage, items]);
   const itemsToDisplay = paginateItems ? paginateItems : [];
-  useEffect(()=> {dispatch({type: 'RESET_STATE'})}, [])
+  
+  useEffect(()=> {dispatch({type: 'RESET_STATE'})}, [dispatch])
 
   const handleDelete = useCallback(async(rec: Recipe) => {
     const response = await deleteRecipesFromServer(rec.id)

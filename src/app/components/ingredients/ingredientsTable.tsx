@@ -12,14 +12,17 @@ import Label from "../shared/label";
 import { deleteIngredient } from "@/app/services/services";
 import useHelpers from "@/app/hooks/useHelpers";
 import { useCallback, useEffect, useMemo } from "react";
+import SortedLink from "../shared/sortedLink";
+import useSorting from "@/app/hooks/useSorting";
 
 const IngredientsTable = ({items}: {items: Ingredient[]}) => {
   const { state, dispatch } = useHomeContext();
   const {raiseNotification} = useHelpers()
+  const {sortData, sortStatus, sortedData} = useSorting({data: items})
   const router = useRouter()
-  const paginateItems= useMemo( () => paginate(10, state.currentPage, items),[state.currentPage, items]);
+  const paginateItems= useMemo(() => paginate(10, state.currentPage, sortedData ),[sortedData, state.currentPage]);
   
-  const itemsToDisplay =  paginateItems  ? paginateItems : [];
+  const itemsToDisplay=  paginateItems  ? paginateItems : [];
 
   const handleDelete = useCallback(async(id: string) => {
     const response = await deleteIngredient(id)
@@ -27,19 +30,30 @@ const IngredientsTable = ({items}: {items: Ingredient[]}) => {
     router.replace("ingredients")
   },[raiseNotification, router])
 
-  useEffect(()=> {dispatch({type: 'RESET_STATE'})}, [])
+  useEffect(()=> {dispatch({type: 'RESET_STATE'})}, [dispatch])
   
   return (
     <div>
       <table className="w-full table-fixed mb-4 ">
         <thead>
+         
           <tr className="border-b-1 border-gray-200">
             {ingredientColumns.map((column) => (
+              
               <th key={column.accessor} className={column.className}>
+                {column.accessor === 'unitPrice' || column.accessor === 'usage' 
+                ? 
+                <SortedLink onSort={sortData} sortStatus={sortStatus}>
                 {column.header}
+                </SortedLink>
+                : column.header
+                 }
+                
               </th>
+              
             ))}
           </tr>
+          
         </thead>
         <tbody className="text-gray-500 text-md">
           {itemsToDisplay.map((item) => (
