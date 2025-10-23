@@ -45,7 +45,6 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
       icon: ''
     }
   })
-
   
   const router = useRouter();
   const { raiseNotification } = useHelpers();

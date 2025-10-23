@@ -8,9 +8,9 @@ import { Session } from 'next-auth'
 const Header = ({session}: {session: Session}) => {
 
   const {dispatch} = useHomeContext()
-
+  
   return (
-    <header className="flex items-center justify-between p-4 border-b border-gray-200">
+    <header className="flex items-center justify-between p-2 border-b border-gray-200">
       <div>
         {/* You can add a title or breadcrumbs here later */}
       </div>

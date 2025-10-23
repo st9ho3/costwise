@@ -39,7 +39,7 @@ const IngredientsTable = ({items}: {items: Ingredient[]}) => {
       <table className="w-full table-fixed mb-4 ">
         <thead>
          
-          <tr className="border-b-1 border-gray-200">
+          <tr className="border-b-1 h-8 border-gray-200">
             {ingredientColumns.map((column) => (
               
               <th key={column.accessor} className={column.className}>
