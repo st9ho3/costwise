@@ -17,6 +17,7 @@ import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { Poppins } from 'next/font/google'
+import Header from "../components/layout/header";
 
 export const metadata: Metadata = {
   title: "Recipes App",
@@ -46,11 +47,14 @@ export default async function RootLayout({
         <HomeContextProvider>
           <div className="flex h-screen bg-[rgb(252,252,252)]">
             <Sidebar /> {/* Use the Sidebar component */}
+            <div className="flex-col w-full">
+            <Header session={session} />
             <main className="flex-1 overflow-y-hidden">
               {/* <Header /> */}
               {children}
               <Analytics/>
             </main>
+            </div>
           </div>
           <Chat />
           

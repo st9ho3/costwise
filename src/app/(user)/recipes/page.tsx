@@ -12,7 +12,6 @@ import RecipesTable from '@/app/components/recipes/recipestable';
 import { RecipeService } from '@/app/services/recipeService';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
-import Header from '@/app/components/layout/header';
 
 export const dynamic = 'force-dynamic';
 
@@ -33,7 +32,6 @@ const RecipesPage = async () => {
 
     return (
         <div className="relative w-full h-screen px-2 md:px-5 bg-white">
-            <Header session={session} />
             <RecipesTable items={recipes} />
             <Pagination items={recipes} />
         </div>
