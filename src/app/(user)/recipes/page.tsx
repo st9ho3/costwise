@@ -31,7 +31,7 @@ const RecipesPage = async () => {
     }) : [];
 
     return (
-        <div className="relative w-full h-screen px-2 md:px-5 bg-white">
+        <div className="relative w-full h-full px px-2 md:px-5 bg-white">
             <RecipesTable items={recipes} />
             <Pagination items={recipes} />
         </div>

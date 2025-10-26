@@ -47,14 +47,16 @@ export default async function RootLayout({
         <HomeContextProvider>
           <div className="flex h-screen bg-[rgb(252,252,252)]">
             <Sidebar /> {/* Use the Sidebar component */}
-            <div className="flex-col w-full">
-            <Header session={session} />
-            <main className="flex-1 overflow-y-hidden">
-              {/* <Header /> */}
+            <div className="w-full" >
+              <header className="h-1/12">
+                <Header session={session} />
+              </header>
+              <main className="flex-1">
               {children}
               <Analytics/>
             </main>
             </div>
+           
           </div>
           <Chat />
           

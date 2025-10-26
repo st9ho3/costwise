@@ -35,7 +35,7 @@ const RecipesTable = ({items}: {items: Recipe[]}) => {
 
   return (
     <div>
-      <table className="w-full table-fixed mb-4 ">
+      <table className="w-full table-fixed mb-2">
         <thead>
           <tr className="border-b-1 h-8 border-gray-200">
             {recipesColumns.map((column) => (

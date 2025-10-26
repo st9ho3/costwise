@@ -9,7 +9,6 @@ import { Carrot, Percent, ShoppingBasket } from 'lucide-react'
 import { redirect } from 'next/navigation'
 import React from 'react'
 import Card from '@/app/components/home/card'
-import Header from '@/app/components/layout/header'
 import { RecipeService } from '@/app/services/recipeService'
 import { IngredientService } from '@/app/services/ingredientService'
 
@@ -35,7 +34,6 @@ const page = async() => {
   console.log(recipeAnalytics)
   return (
     <div className=' m-2'>
-      <Header session={session} />
       <div className='m-1 p-3 flex justify-between rounded-2xl bg-white h-full'>
         <Card title='Recipes' value={totalRecipes} Icon={ShoppingBasket} color='border-1 border-amber-600' />
         <Card title='Ingredients' value={totalIngredients} Icon={Carrot} color='border-1  border-red-600' />
