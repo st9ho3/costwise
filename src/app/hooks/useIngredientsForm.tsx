@@ -55,7 +55,17 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
   const unit = watch('unit')
   const quantity = watch('quantity')
 
-   
+
+
+
+/* const ingredientsToSend = ingredients.map((ing) => createIngredientPrototype(ing, userId))
+   ingredientsToSend.forEach(async(ing) => {
+    if (!ing) {
+      return
+    }
+    await sendIngredient(ing)
+   }) */
+
   const onSubmit = async (data: IngredientFormFields) => {
 
     if (mode === 'create') {
