@@ -30,7 +30,7 @@ const ingredientsPage = async () => {
     
 
     return (
-        <div className="relative w-full h-screen px-2 md:px-5 bg-white">
+        <div className="relative w-full flex-1 px-2 md:px-5 bg-white">
             <IngredientsTable items={ingredients} />
             <Pagination items={ingredients} />
         </div>

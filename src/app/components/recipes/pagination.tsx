@@ -14,7 +14,7 @@ const Pagination = ({ items }: { items: Recipe[] | Ingredient[] }) => {
       }
       
   return (
-    <div className='absolute bottom-3 left-0 right-0 flex justify-center items-center mx-auto w-full max-w-md px-4'>
+    <div className='flex absolute left-0 right-0 justify-center items-center mx-auto w-full max-w-md px-4'>
       <Button 
         text='Prev' 
         action={handlePrev}
