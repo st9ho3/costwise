@@ -2,25 +2,27 @@
 "use client";
 import { ingredientColumns } from "@/app/constants/data";
 import { paginate } from "@/app/services/helpers";
-import { useHomeContext } from "@/app/context/homeContext/homeContext";
 import { Pencil, Trash2 } from "lucide-react";
 import { Ingredient} from "@/shemas/recipe";
 import { useRouter } from "next/navigation";
-import Notification from '@/app/components/shared/notification'
-import Link from "next/link";
+/* import Notification from '@/app/components/shared/notification'
+ */import Link from "next/link";
 import Label from "../shared/label";
 import { deleteIngredient } from "@/app/services/services";
 import useHelpers from "@/app/hooks/useHelpers";
 import { useCallback, useEffect, useMemo } from "react";
 import SortedLink from "../shared/sortedLink";
 import useSorting from "@/app/hooks/useSorting";
+import { usePaginationStore } from "@/app/stores/paginationStore";
 
 const IngredientsTable = ({items}: {items: Ingredient[]}) => {
-  const { state, dispatch } = useHomeContext();
+
+  const page = usePaginationStore((state) => state.currentPage)
+  const reset = usePaginationStore((state) => state.resetPage)
   const {raiseNotification} = useHelpers()
   const {sortData, sortStatus, sortedData} = useSorting({data: items})
   const router = useRouter()
-  const paginateItems= useMemo(() => paginate(10, state.currentPage, sortedData ),[sortedData, state.currentPage]);
+  const paginateItems= useMemo(() => paginate(10, page, sortedData ),[sortedData, page]);
   
   const itemsToDisplay=  paginateItems  ? paginateItems : [];
 
@@ -30,9 +32,7 @@ const IngredientsTable = ({items}: {items: Ingredient[]}) => {
     router.replace("ingredients")
   },[raiseNotification, router])
 
-  console.log(sortedData)
-  console.log(items)
-  useEffect(()=> {dispatch({type: 'RESET_STATE'})}, [dispatch])
+  useEffect(() => {reset()}, [reset])
   
   return (
     <div>
@@ -111,7 +111,7 @@ const IngredientsTable = ({items}: {items: Ingredient[]}) => {
           ))}
         </tbody>
       </table>
-      {state.notification.isOpen && <Notification />}
+      {/* {state.notification.isOpen && <Notification />} */}
     </div>
   );
 };
