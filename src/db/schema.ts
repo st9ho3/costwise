@@ -10,6 +10,8 @@ export type Transaction = PgTransaction<NodePgQueryResultHKT, typeof schema>;
 // Defines an enum for recipe categories.
 export const recipeCategoryEnum = pgEnum("recipe_category", ["starter", "main", "dessert"])
 
+export const unitEnum = pgEnum('unit', ['' , 'g', 'ml', 'kg', 'L', 'piece'])
+
 // Defines the 'recipes' table schema.
 export const recipesTable = pgTable("recipes", {
   id: uuid("id").primaryKey(),
@@ -31,7 +33,7 @@ export const ingredientsTable = pgTable('ingredients', {
   id: uuid('id').primaryKey(), 
   icon: varchar('icon'), 
   name: varchar('name', { length: 255 }).notNull(), 
-  unit: varchar('unit', { length: 50 }).notNull(), 
+  unit: unitEnum('unit').notNull(), 
   unitPrice: numeric('unit_price', { precision: 10, scale: 5 }).notNull(),
   quantity: numeric('quantity').notNull(),
   usage: numeric('usage').notNull().default('1'),

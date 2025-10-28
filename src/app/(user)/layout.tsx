@@ -1,18 +1,9 @@
-/**
- * - Requires an active user session; redirects to "/signin" if the user is not authenticated.
- * - Serves as the root layout for authenticated routes, wrapping all child pages in essential providers and UI components.
- * - Integrates `SessionProvider` to make the session available to client components using NextAuth.
- * - Provides global state via `HomeContextProvider`.
- * - Renders a persistent sidebar navigation (`Sidebar`) and a main content area for child pages.
- * - Includes a floating chat interface (`Chat`) outside the main layout flow.
- * - Applies global styles from `../globals.css` and sets page metadata (title and description).
- */
 import { Analytics } from "@vercel/analytics/next"
 import type { Metadata } from "next";
 import "../globals.css";
 import HomeContextProvider from "../context/homeContext/homeContext";
 import Chat from "../components/chatUI/chat";
-import Sidebar from "../components/layout/sideBar"; // Import the new component
+import Sidebar from "../components/layout/sideBar";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
@@ -34,33 +25,29 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   const session = await auth()
-    
+  
   if(!session?.user) {
     redirect("/signin")
   }
+  
   return (
     <html lang="en" className={poppins.className}>
       <body>
         <SessionProvider session={session}>
-        <HomeContextProvider>
-          <div className="flex h-screen bg-[rgb(252,252,252)]">
-            <Sidebar /> {/* Use the Sidebar component */}
-            <div className="w-full" >
-              <header className="h-1/12">
+          <HomeContextProvider>
+            <div className="flex h-screen bg-[rgb(252,252,252)]">
+              <Sidebar />
+              <div className="flex flex-col flex-1 w-full overflow-hidden">
                 <Header session={session} />
-              </header>
-              <main className="flex-1">
-              {children}
-              <Analytics/>
-            </main>
+                <main className="flex-1 overflow-auto flex flex-col">
+                  {children}
+                  <Analytics/>
+                </main>
+              </div>
             </div>
-           
-          </div>
-          <Chat />
-          
-        </HomeContextProvider>
+            <Chat />
+          </HomeContextProvider>
         </SessionProvider>
       </body>
     </html>
