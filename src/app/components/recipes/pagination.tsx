@@ -1,13 +1,25 @@
 "use client";
-import usePagination from '@/app/hooks/usePagination';
 import Button from '../shared/sharedButton';
 import { Ingredient, Recipe } from '@/shemas/recipe';
+import { useEffect, useMemo } from 'react';
+import { paginationPages } from '@/app/services/helpers';
+import { usePaginationStore } from '@/app/stores/paginationStore';
 
 
 const Pagination = ({ items }: { items: Recipe[] | Ingredient[] }) => {
+  
+  const currentPage = usePaginationStore((state) => state.currentPage)
+  const choosePage = usePaginationStore((state) => state.choosePage)
+  const handleNext = usePaginationStore((state) => state.handleNext)
+  const handlePrev = usePaginationStore((state) => state.handlePrev)
+  
+  const pages = useMemo(() => paginationPages(items, 10), [items])
 
-  const  {handleNext, handlePrev, currentPage, choosePage, pages} = usePagination({items})
-  console.log(pages)
+      useEffect(() => {
+        if (currentPage > pages.length) {
+        choosePage(pages.length)
+      }
+      }, [pages, choosePage, currentPage])
 
   if (pages.length <= 1) {
         return null;
