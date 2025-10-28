@@ -1,8 +1,8 @@
 "use client";
-import { useCallback, useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { paginationPages } from '@/app/services/helpers';
-import { useHomeContext } from '@/app/context/homeContext/homeContext';
 import { Ingredient, Recipe } from '@/shemas/recipe';
+import { usePaginationStore } from '../stores/paginationStore';
 
 
 interface UsePaginationProps {
@@ -11,32 +11,24 @@ interface UsePaginationProps {
 
 const usePagination = ({items}: UsePaginationProps) => {
 
-    const { state, dispatch } = useHomeContext();
-      const pages = useMemo( () => paginationPages(items, 10), [items]);
+    const {currentPage, handleNext, handlePrev, choosePage, resetPage} = usePaginationStore((state) => state)
+
+    const pages = useMemo( () => paginationPages(items, 10), [items]);
 
       useEffect(() => {
-        if (state.currentPage > pages.length) {
-        dispatch({ type: "CHOOSE_PAGE", payload: pages.length });
+        if (currentPage > pages.length) {
+        choosePage(pages.length)
       }
-      }, [pages, dispatch, state.currentPage])
+      }, [pages,choosePage, currentPage])
         
-      const handlePrev = useCallback((): void => {
-        if (state.currentPage > 1) {
-          dispatch({ type: "CHOOSE_PAGE", payload: state.currentPage - 1 });
-        }
-      },[dispatch, state.currentPage]);
     
-      const handleNext = useCallback((): void => {
-        if (state.currentPage < pages.length) {
-          dispatch({ type: "CHOOSE_PAGE", payload: state.currentPage + 1 });
-        }
-      },[state.currentPage, dispatch, pages]);
     
   return {
     handlePrev,
     handleNext,
-    state,
-    dispatch,
+    currentPage,
+    choosePage,
+    resetPage,
     pages
   }
 }

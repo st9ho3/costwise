@@ -6,7 +6,7 @@ import { Ingredient, Recipe } from '@/shemas/recipe';
 
 const Pagination = ({ items }: { items: Recipe[] | Ingredient[] }) => {
 
-  const  {handleNext, handlePrev, state, dispatch, pages} = usePagination({items})
+  const  {handleNext, handlePrev, currentPage, choosePage, pages} = usePagination({items})
   console.log(pages)
 
   if (pages.length <= 1) {
@@ -23,7 +23,7 @@ const Pagination = ({ items }: { items: Recipe[] | Ingredient[] }) => {
         {pages.map((page) => (
           <button 
             key={page} 
-            onClick={() => dispatch({ type: "CHOOSE_PAGE", payload: page })} 
+            onClick={() => choosePage(page)} 
             className={`
               w-6 h-6 mx-1 
               cursor-pointer 
@@ -31,7 +31,7 @@ const Pagination = ({ items }: { items: Recipe[] | Ingredient[] }) => {
               rounded-md 
               flex items-center justify-center
               transition-colors duration-200
-              ${state.currentPage === page 
+              ${currentPage === page 
                 ? 'border-gray-400 border-1' 
                 : 'border-gray-200 hover:bg-gray-300'
               }
