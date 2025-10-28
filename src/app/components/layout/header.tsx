@@ -1,9 +1,10 @@
 "use client"
 import React from 'react'
 import Image from 'next/image'
-import { CircleUserRound } from 'lucide-react'
+import { Bell, CircleUserRound } from 'lucide-react'
 import { useHomeContext } from '@/app/context/homeContext/homeContext'
 import { Session } from 'next-auth'
+import NotificationsNumber from '../shared/notificationsNumber'
 
 const Header = ({session}: {session: Session}) => {
 
@@ -12,10 +13,15 @@ const Header = ({session}: {session: Session}) => {
   return (
     <header className="flex items-center justify-between p-2 border-b border-gray-200">
       <div>
-        {/* You can add a title or breadcrumbs here later */}
+        
       </div>
       <div className="flex items-center">
-        <span className="text-gray-600 mr-2">
+        <div className='relative cursor-pointer'>
+          <Bell color='gray' size={20} />
+          <NotificationsNumber />
+        </div>
+        
+        <span className="text-gray-600 mr-2 ml-3">
           Hello, {session?.user?.email} 
         </span>
         {session.user?.image 
