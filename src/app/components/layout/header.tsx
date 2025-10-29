@@ -2,14 +2,14 @@
 import React from 'react'
 import Image from 'next/image'
 import { Bell, CircleUserRound } from 'lucide-react'
-import { useHomeContext } from '@/app/context/homeContext/homeContext'
 import { Session } from 'next-auth'
 import NotificationsNumber from '../shared/notificationsNumber'
 import SearchBar from '../shared/searchBar'
+import { useUIStore } from '@/app/stores/uiStore'
 
 const Header = ({session}: {session: Session}) => {
 
-  const {dispatch} = useHomeContext()
+  const openProfile = useUIStore((state) => state.openProfile)
   
   return (
     <header className="flex items-center justify-between p-2 border-b border-gray-200">
@@ -29,18 +29,14 @@ const Header = ({session}: {session: Session}) => {
           Hello, {session?.user?.email} 
         </span>
         {session.user?.image 
-          ? <Image onClick={() => {
-              dispatch({ type: 'OPEN_PROFILE' });
-            }}
+          ? <Image onClick={() => openProfile()}
             alt='profile pic'
             src={session?.user?.image}
             width={30}
             height={30}
             className='rounded-full cursor-pointer'
           /> 
-          : <CircleUserRound onClick={() => {
-              dispatch({ type: 'OPEN_PROFILE' });
-            }}
+          : <CircleUserRound onClick={() => openProfile()}
             className="w-9 h-9 text-gray-300"
             strokeWidth={1.5}
           />
