@@ -1,13 +1,12 @@
 "use client"
 import React from 'react'
 import { UtensilsCrossed, Carrot } from 'lucide-react';
-import { useHomeContext } from '@/app/context/homeContext/homeContext';
 import Link from 'next/link';
+import { useUIStore } from '@/app/stores/uiStore';
 
 const OptionsModal = () => {
-    const { dispatch } = useHomeContext()
 
-   
+    const closeModal = useUIStore((state) => state.closeModal)
 
     return (
         // Main container with dashed border and padding, similar to the reference
@@ -16,14 +15,11 @@ const OptionsModal = () => {
 
                 <h3 className="px-2 py-1 text-sm font-semibold text-gray-500">Create New</h3>
 
-                {/* Option 1: Create Recipe 
-                NOTE: Replace <a> with Next.js <Link> component for client-side navigation.
-                */}
                 <Link href="/recipes/create">
                     <div
                         onClick={((e) => {
                             setTimeout(() => {
-                                dispatch({ type: "CLOSE_MODAL" });
+                                closeModal()
                             }, 1000);
                             e.stopPropagation();
                         })}
@@ -39,7 +35,7 @@ const OptionsModal = () => {
                         className="flex items-center gap-x-3 rounded-lg p-2 border-1 border-dashed border-gray-300 transition-colors duration-200 hover:bg-gray-100 cursor-default"
                         onClick={((e) => {
                             setTimeout(() => {
-                                dispatch({ type: "CLOSE_MODAL" });
+                                closeModal()
                             }, 1000);
                             e.stopPropagation();
                         })}>

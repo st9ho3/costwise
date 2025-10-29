@@ -12,10 +12,11 @@ import {
   PanelLeftOpen,
   Carrot
 } from 'lucide-react';
-import { useHomeContext } from '@/app/context/homeContext/homeContext';
 import Modal from '../shared/modal';
 import { useSession } from 'next-auth/react';
 import UserProfile from '../shared/profileModal';
+import { useUIStore } from '@/app/stores/uiStore';
+import { useFileStore } from '@/app/stores/fileStore';
 
 function SidebarLink({
   icon: Icon,
@@ -28,8 +29,7 @@ function SidebarLink({
   isCollapsed: boolean;
   href: string;
 }) {
-  const { dispatch } = useHomeContext();
-
+  const openModal = useUIStore((state) => state.openModal)
 
 
   // Use a conditional to render either a Link or a div that opens a modal
@@ -56,9 +56,7 @@ function SidebarLink({
 
   return (
     <div
-      onClick={() => {
-        dispatch({ type: 'OPEN_MODAL', payload: { type: "create" } });
-      }}
+      onClick={() => openModal('create')}
       className="flex relative group items-center p-2 text-gray-700 rounded-lg hover:bg-gray-100 group cursor-pointer"
     >
       <Icon className="w-6 h-6 stroke-1 shrink-0" />
@@ -81,7 +79,11 @@ function SidebarLink({
  */
 export default function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(true);
-  const { state, dispatch } = useHomeContext();
+  const isModalOpen = useUIStore((state) => state.isModalOpen)
+  const modalType = useUIStore((state) => state.modalType)
+  const closeModal = useUIStore((state) => state.closeModal)
+  const isProfileOpen = useUIStore((state) => state.isProfileOpen)
+  const resetFile = useFileStore((state) => state.reset)
   const {data} = useSession()
   
 
@@ -136,18 +138,18 @@ export default function Sidebar() {
 
       {/* Modal for 'create' action */}
       <Modal
-        isOpen={state.isModalOpen}
+        isOpen={isModalOpen}
         onClose={() => {
-          dispatch({ type: 'CLOSE_MODAL' });
-          dispatch({ type: 'RESET_FILE' });
+          closeModal()
+          resetFile()
         }}
       >
-        {state.modalType.type === 'create' 
+        {modalType.type === 'create' 
         && <OptionsModal />
         }
       </Modal>
 
-      {state.isProfileOpen && <UserProfile name={data?.user?.name || "Unknown name"} email={data?.user?.email || "Unknown email"} avatar={data?.user?.image} />}
+      {isProfileOpen && <UserProfile name={data?.user?.name || "Unknown name"} email={data?.user?.email || "Unknown email"} avatar={data?.user?.image} />}
     </>
   );
 }

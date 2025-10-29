@@ -14,7 +14,7 @@ export enum NotificationType {
   Info = 'info'
 }
 
-interface Notification {
+export interface Notification {
   isOpen: boolean,
   message: string,
   notificationType: NotificationType

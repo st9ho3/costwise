@@ -1,7 +1,6 @@
 "use client";
 import { recipesColumns } from "@/app/constants/data";
 import { paginate } from "@/app/services/helpers";
-import { useHomeContext } from "@/app/context/homeContext/homeContext";
 import { Pencil, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { Recipe } from "@/shemas/recipe";
@@ -14,17 +13,31 @@ import useHelpers from "@/app/hooks/useHelpers";
 import { useCallback, useEffect, useMemo } from "react";
 import SortedLink from "../shared/sortedLink";
 import useSorting from "@/app/hooks/useSorting";
+import { usePaginationStore } from "@/app/stores/paginationStore";
+import { useNotificationStore } from "@/app/stores/notificationStore";
 
 
 const RecipesTable = ({items}: {items: Recipe[]}) => {
-  const { state, dispatch } = useHomeContext();
+  const currentPage = usePaginationStore((state) => state.currentPage)
+  const notification = useNotificationStore((state) => state.notification)
+  const resetPage = usePaginationStore((state) => state.resetPage)
+  const resetNotification = useNotificationStore((state) => state.reset)
   const { raiseNotification } = useHelpers()
   const router = useRouter()
   const {sortData, sortStatus, sortedData} = useSorting({data: items})
-  const paginateItems = useMemo(() => paginate(10, state.currentPage, sortedData),[state.currentPage, sortedData]);
+  const paginateItems = useMemo(() => paginate(10, currentPage, sortedData),[currentPage, sortedData]);
   const itemsToDisplay = paginateItems ? paginateItems : [];
+
   
-  useEffect(()=> {dispatch({type: 'RESET_STATE'})}, [dispatch])
+  useEffect(()=> {
+
+    const reset = () => {
+    resetNotification()
+    resetPage()
+  }
+    reset()
+
+  }, [resetNotification, resetPage])
 
   const handleDelete = useCallback(async(rec: Recipe) => {
     const response = await deleteRecipesFromServer(rec.id)
@@ -110,7 +123,7 @@ const RecipesTable = ({items}: {items: Recipe[]}) => {
           ))}
         </tbody>
       </table>
-      {state.notification.isOpen && <Notification />}
+      {notification.isOpen && <Notification />}
     </div>
   );
 };

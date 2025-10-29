@@ -4,8 +4,8 @@
  * - Dispatches a "show notification" action after a 1.5s delay and auto-hides it after 4s.
  * - Uses `NotificationType` for type-safe notification categorization.
  */
-import { useHomeContext } from '../context/homeContext/homeContext';
 import { NotificationType } from '@/types/context';
+import { useNotificationStore } from '../stores/notificationStore';
 
 type ApiResponse<T> = {
   success: boolean;
@@ -15,21 +15,16 @@ type ApiResponse<T> = {
 };
 
 const useHelpers = () => {
-  const { dispatch } = useHomeContext();
+  const handleNotification = useNotificationStore((state) => state.handleNotification)
+  
   const raiseNotification = <T,>(response: ApiResponse<T>) => {
     const message = response.success ? response.message : response.error?.message || 'An unknown error occurred.';
     const type = response.success ? NotificationType.Success : NotificationType.Failure;
     setTimeout(() => {
-      dispatch({
-        type: "HANDLE_NOTIFICATION",
-        payload: { isOpen: true, message, notificationType: type },
-      });
+      handleNotification({isOpen: true, message: message, notificationType: type})
     }, 1500);
     setTimeout(() => {
-      dispatch({
-        type: "HANDLE_NOTIFICATION",
-        payload: { isOpen: false, message: "", notificationType: NotificationType.Info },
-      });
+      handleNotification({ isOpen: false, message: "", notificationType: NotificationType.Info})
     }, 4000);
   };
   return { raiseNotification };
