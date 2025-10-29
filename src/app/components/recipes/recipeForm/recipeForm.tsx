@@ -48,8 +48,9 @@ const RecipeForm = ({ingredients, recipe, recipeIngredients, mode, userId}: Reci
     onSubmit, 
     tempIngredients, 
     error, 
-    state,
-    watch
+    watch,
+    file,
+    notification
    } = useRecipeForm({ingredients, recipe, recipeIngredients, mode, userId});
 
     
@@ -81,7 +82,7 @@ const RecipeForm = ({ingredients, recipe, recipeIngredients, mode, userId}: Reci
           {/* --- Button to show ingredients on mobile --- */}
           <ViewIngredientsButtonMobile onToggleList={setIsListVisible} ingredients={tempIngredients} /> 
 
-          {state.file && <SelectedFileBadge /> }
+          {file && <SelectedFileBadge /> }
 
           <SubmitButton isSubmitting={isSubmitting} mode={mode} />
 
@@ -107,7 +108,7 @@ const RecipeForm = ({ingredients, recipe, recipeIngredients, mode, userId}: Reci
           onToggle={setIsListVisible}
           watch ={watch} 
         />}
-        {state.notification.isOpen && <Notification />}
+        {notification.isOpen && <Notification />}
     </>
   );
 };
