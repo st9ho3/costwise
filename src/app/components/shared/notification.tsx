@@ -1,14 +1,14 @@
 "use client";
 
-import { useHomeContext } from '@/app/context/homeContext/homeContext';
 import { notificationVariants } from '@/app/constants/data';
+import { useNotificationStore } from '@/app/stores/notificationStore';
 
 const Notification = () => {
 
-  const {state} = useHomeContext()
-  const type = state.notification.notificationType
+  const notification = useNotificationStore((state) => state.notification)
   
-  const variant = notificationVariants[type] || notificationVariants.info;
+  
+  const variant = notificationVariants[notification.notificationType] || notificationVariants.info;
   const { Icon, iconClass, borderClass, bgClass, title: defaultTitle } = variant;
 
   return (
@@ -21,8 +21,8 @@ const Notification = () => {
           <p className="font-semibold text-gray-800">
             {variant.title || defaultTitle}
           </p>
-          {state.notification.message && (
-            <p className="text-sm text-gray-600">{state.notification.message}</p>
+          {notification.message && (
+            <p className="text-sm text-gray-600">{notification.message}</p>
           )}
         </div>
       </div>
