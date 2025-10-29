@@ -20,20 +20,22 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { calculateRecipeData, getTotalPrice } from '@/app/services/helpers';
 import { sendRecipe, sendRecipeToUpdate } from '@/app/services/services';
-import { useHomeContext } from '../context/homeContext/homeContext';
 import { useRouter } from 'next/navigation';
 import { useFileUpload } from './useFileUpload';
 import useHelpers from './useHelpers';
 import { defaultValues } from '../constants/recipeFormDefaultValues';
 import { RecipeFormProps } from '../components/recipes/recipeForm/recipeForm';
+import { useFileStore } from '../stores/fileStore';
+import { useNotificationStore } from '../stores/notificationStore';
 
 export type FormFields = z.infer<typeof RecipeSchema>;
 
 const useRecipeForm = ({mode, recipe, recipeIngredients, userId}: RecipeFormProps) => {
   const [newId, setNewId] = useState<string>(() => uuidv4());
   const [tempIngredients, setTempIngredients] = useState<RecipeIngredients[]>(mode === 'edit' && recipeIngredients ? recipeIngredients : []);
-
-  const { state, dispatch } = useHomeContext();
+  const resetFile = useFileStore((state) => state.reset)
+  const file = useFileStore((state) => state.file)
+  const notification = useNotificationStore((state) => state.notification)
   const router = useRouter();
   const { handleFileUpload, error } = useFileUpload();
   const { raiseNotification } = useHelpers();
@@ -68,12 +70,12 @@ const useRecipeForm = ({mode, recipe, recipeIngredients, userId}: RecipeFormProp
       setValue("id", nextRecipeId);
     }
     setTimeout(() => {
-      dispatch({ type: "RESET_FILE" });
+      resetFile()
       reset();
       setTempIngredients([]);
     }, 1000);
     router.replace("/recipes");
-  },[mode, setValue, reset, router, dispatch]); 
+  },[mode, setValue, reset, router, resetFile]); 
 
   const onSubmit = useCallback( async (data: FormFields) => {
 
@@ -91,8 +93,8 @@ const useRecipeForm = ({mode, recipe, recipeIngredients, userId}: RecipeFormProp
     try {
       let url: string | undefined;
 
-      if (state.file) {
-        url = await handleFileUpload(state.file);
+      if (file) {
+        url = await handleFileUpload(file);
       }
 
       if (mode === 'edit') {
@@ -138,7 +140,7 @@ const useRecipeForm = ({mode, recipe, recipeIngredients, userId}: RecipeFormProp
         resetForm();
       }
     }
-  }, [mode, tempIngredients, recipeIngredients, handleFileUpload, raiseNotification, state.file, userId, recipe, newId, resetForm]);
+  }, [mode, tempIngredients, recipeIngredients, handleFileUpload, raiseNotification,file, userId, recipe, newId, resetForm]);
 
   return {
     newId,
@@ -156,7 +158,8 @@ const useRecipeForm = ({mode, recipe, recipeIngredients, userId}: RecipeFormProp
     onSubmit,
     error,
     tempIngredients,
-    state
+    file,
+    notification
   }
 }
 

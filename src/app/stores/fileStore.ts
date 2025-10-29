@@ -1,9 +1,9 @@
 import { create } from "zustand"
 
 interface State {
-    file: string | null
+    file: File | null
 
-    setFile: (file: string) => void
+    setFile: (file: File) => void
 
     reset: () => void
 }

@@ -1,17 +1,16 @@
 "use client"
 import { useRef } from 'react';
 import { UploadCloudIcon } from 'lucide-react'
-import { useHomeContext } from '@/app/context/homeContext/homeContext';
-
+import { useFileStore } from '@/app/stores/fileStore';
 
 const UploadFiles = () => {
-const {dispatch} = useHomeContext()
+const setFile = useFileStore((state) => state.setFile)
 const inputFileRef = useRef<HTMLInputElement>(null);
 
 const handleInputChange = () => {
     const files = inputFileRef.current?.files
     if (files) {
-        dispatch({ type: "SET_FILE", payload: files[0] });
+        setFile(files[0])
     }
 }
 
