@@ -5,6 +5,7 @@ import { Bell, CircleUserRound } from 'lucide-react'
 import { Session } from 'next-auth'
 import NotificationsNumber from '../shared/notificationsNumber'
 import SearchBoard from '../shared/search/searchBoard'
+import { useUIStore } from '@/app/stores/uiStore'
 
 const Header = ({session}: {session: Session}) => {
 
