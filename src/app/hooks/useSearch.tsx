@@ -15,10 +15,14 @@ const useSearch = () => {
     const [results, setResults] = useState<Results | undefined>(undefined)
     const [loading, setLoading] = useState(false)  
     const [resultsBoardOpen, setResultsBoardOpen] = useState(false) 
+    
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const searchTerm = e.target.value
         setSearchTerm(searchTerm)
+    }
+     const handleClose = () => {
+        setResultsBoardOpen(false)
     }
 
     useEffect(() => {
@@ -30,7 +34,7 @@ const useSearch = () => {
         }
     }, [searchTerm])
     
-    console.log(resultsBoardOpen)
+   
 
     useEffect(() => {
         
@@ -61,7 +65,9 @@ const useSearch = () => {
         handleSearch,
         loading,
         results,
-        resultsBoardOpen
+        resultsBoardOpen,
+        handleClose,
+        
     }
 }
 

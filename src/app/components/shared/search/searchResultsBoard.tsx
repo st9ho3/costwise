@@ -3,25 +3,42 @@ import React from 'react'
 import RecipeSearchResult from './recipeSearchResult'
 import IngredientSearchResult from './ingredientSearchresult'
 import SearchResultsDisplay from './searchResultsDisplay'
+import { Carrot, Loader } from 'lucide-react'
 
 interface SearchResultsBoardProps {
     results: Results | undefined
+    loading: boolean
+    
 }
 
-const SearchResultsBoard = ({results}: SearchResultsBoardProps) => {
+const SearchResultsBoard = ({results, loading}: SearchResultsBoardProps) => {
 
-    if (!results) {
-      return 
-    }
+  if (!results || loading) {
+    return (
+      <div className='absolute flex justify-center items-center gap-2 z-1 top-10 w-100 h-100 border bg-white rounded-b-2xl border-gray-200 shadow-md'>
+        <Loader className='animate-spin' size={30} />
+        Loading...
+      </div>
+    )
+  }
 
-    const {recipes, ingredients} = results 
-   
+  const {recipes, ingredients} = results 
+
+  if (recipes?.length === 0 && ingredients?.length === 0) {
+    return (
+      <div className='absolute flex justify-center items-center gap-2 z-1 top-10 w-100 h-100 border bg-white rounded-b-2xl border-gray-200 shadow-md'>
+        <Carrot size={30} />
+        No Items
+      </div>
+    )
+  }
+   console.log(results)
   return (
-    <div className='absolute z-1 top-10 w-100 h-fit h-max-100 border bg-white rounded-b-md border-gray-200 shadow-xl'>
+    <div className='absolute z-1 top-10 w-100 h-fit h-max-100 border bg-white rounded-b-2xl border-gray-200 shadow-md'>
       {recipes && recipes?.length > 0 && 
         <SearchResultsDisplay title='Recipes' total={recipes?.length}>
         {recipes && recipes.map((recipe) => <RecipeSearchResult key={recipe.id} item={recipe} /> )}
-        </SearchResultsDisplay>
+        </SearchResultsDisplay> 
       }
       {ingredients && ingredients?.length > 0 &&  
         <SearchResultsDisplay title='Ingredients' total={ingredients?.length}>

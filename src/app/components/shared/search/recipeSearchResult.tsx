@@ -1,5 +1,6 @@
 import { Recipe } from '@/shemas/recipe'
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 
 interface RecipeSearchResultProps {
@@ -9,6 +10,9 @@ interface RecipeSearchResultProps {
 const RecipeSearchResult = ({item}: RecipeSearchResultProps) => {
   
     return (
+      <Link href={`/recipes/${item.id}`}>
+
+      
         <div className="flex items-center gap-2 mb-2">
                 <Image
                   className="w-9 h-9 rounded-full object-cover"
@@ -21,6 +25,7 @@ const RecipeSearchResult = ({item}: RecipeSearchResultProps) => {
                   {item.title}
                 </p>
             </div>
+            </Link>
     )
 }
 
