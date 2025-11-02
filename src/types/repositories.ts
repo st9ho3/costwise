@@ -24,6 +24,7 @@ export interface IRecipeRepository {
   getRecipesAnalytics(userId: string): Promise<RecipeAnalytics | undefined>;
   
 }
+
 export interface IRecipeIngredientsRepository {
 
   create(recipeIngredient: RecipeIngredients, userId: string, tx: Database): Promise<{id: string | null} >;
@@ -41,4 +42,9 @@ export interface IIngredientRepository {
   updateUsage(id: string, tx: Database, action: "+" | "-"): Promise<undefined>
   getIngredientAnalytics(userId: string): Promise<IngredientAnalytics | undefined>;
 
+}
+
+export interface ISearchRepository {
+  findRecipe() : Promise<DBRecipe[] | undefined>;
+  findIngredient() : Promise<DBIngredient[] | undefined>;
 }
