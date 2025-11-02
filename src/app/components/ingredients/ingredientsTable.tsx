@@ -32,7 +32,9 @@ const IngredientsTable = ({items}: {items: Ingredient[]}) => {
     router.replace("ingredients")
   },[raiseNotification, router])
 
-  useEffect(() => {reset()}, [reset])
+  useEffect(() => {
+    reset()
+  }, [reset])
   
   return (
     <div>

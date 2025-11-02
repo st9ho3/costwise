@@ -2,7 +2,6 @@
 import { recipesColumns } from "@/app/constants/data";
 import { paginate } from "@/app/services/helpers";
 import { Pencil, Trash2 } from "lucide-react";
-import Image from "next/image";
 import { Recipe } from "@/shemas/recipe";
 import { deleteRecipesFromServer } from "@/app/services/services";
 import { useRouter } from "next/navigation";
@@ -15,6 +14,7 @@ import SortedLink from "../shared/sortedLink";
 import useSorting from "@/app/hooks/useSorting";
 import { usePaginationStore } from "@/app/stores/paginationStore";
 import { useNotificationStore } from "@/app/stores/notificationStore";
+import RecipeClickableTitle from "../shared/recipeClickableTitle";
 
 
 const RecipesTable = ({items}: {items: Recipe[]}) => {
@@ -73,18 +73,7 @@ const RecipesTable = ({items}: {items: Recipe[]}) => {
 
               <td className="pl-4 md:pl-0 pt-2">
                 <Link href={`/recipes/${item.id}`}>
-                  <div className="flex items-center gap-2">
-                    <Image
-                      className="w-9 h-9 rounded-full object-cover"
-                      src={item.imgPath || '/images/placeholder-image.png'}
-                      alt={item.title}
-                      width={1200}
-                      height={800}
-                    />
-                    <p className="text-sm break-words transition-colors duration-300 ease-in-out hover:text-gray-400">
-                      {item.title}
-                    </p>
-                  </div>
+                    <RecipeClickableTitle item={item} />
                 </Link>
               </td>
 

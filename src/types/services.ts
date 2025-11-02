@@ -32,3 +32,8 @@ export interface IIngredientService {
 
     getIngredientAnalytics(userId: string): Promise<IngredientAnalytics | undefined>;
 }
+
+export interface ISearchService {
+  findRecipe(searchTerm: string, userId: string) : Promise<Recipe[] | undefined>;
+  findIngredient(searchTerm: string, userId: string) : Promise<Ingredient[] | undefined>;
+}

@@ -187,3 +187,19 @@ export const zodValidateIngredientBeforeAddItToDatabase = async (request: Ingred
       return validatedIngredient;
     }
 };
+
+export const search = async(searchTerm: string) => {
+
+    const res = await fetch(`api/search?q=${searchTerm}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  
+  if (!res) {
+    throw new Error('Something happened on searching...')
+  }
+  const response = await res.json()
+  return response  
+}
