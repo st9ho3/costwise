@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 /* import Notification from '@/app/components/shared/notification'
  */import Link from "next/link";
 import Label from "../shared/label";
-import { deleteIngredient, search } from "@/app/services/services";
+import { deleteIngredient } from "@/app/services/services";
 import useHelpers from "@/app/hooks/useHelpers";
 import { useCallback, useEffect, useMemo } from "react";
 import SortedLink from "../shared/sortedLink";
@@ -33,8 +33,8 @@ const IngredientsTable = ({items}: {items: Ingredient[]}) => {
   },[raiseNotification, router])
 
   useEffect(() => {
-    search()
-    reset()}, [reset])
+    reset()
+  }, [reset])
   
   return (
     <div>
