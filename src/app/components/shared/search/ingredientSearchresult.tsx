@@ -1,4 +1,5 @@
 import { Ingredient } from '@/shemas/recipe'
+import Link from 'next/link'
 import React from 'react'
 
 interface IngredientSearchResultProps {
@@ -8,6 +9,7 @@ interface IngredientSearchResultProps {
 const IngredientSearchResult = ({item}: IngredientSearchResultProps) => {
 
   return (
+    <Link href={`/ingredients/${item.id}`}>
     <div className="flex items-center gap-2 mb-2">
         <div
           className="flex justify-center items-center w-9 h-9 text-xl bg-yellow-100 rounded-full object-cover"
@@ -16,6 +18,7 @@ const IngredientSearchResult = ({item}: IngredientSearchResultProps) => {
           {item.name ? item.name : "NaN"}
         </p>
     </div>
+    </Link>
   )
 }
 
