@@ -7,17 +7,22 @@ import SearchResultsBoard from './searchResultsBoard'
 
 const SearchBoard = () => {
 
-  const {searchTerm, handleSearch, results} = useSearch() 
+  const {searchTerm, handleSearch, results, resultsBoardOpen} = useSearch()
+  
 
   return (
-    <div>
+    <div className='relative'>
       <SearchBar
       searchTerm={searchTerm}
       onChange={handleSearch}
        />
-  <SearchResultsBoard
-  results={results}
-   />
+      {
+      resultsBoardOpen &&
+      <SearchResultsBoard
+        results={results}
+      />
+      }
+     
     </div>
   )
 }

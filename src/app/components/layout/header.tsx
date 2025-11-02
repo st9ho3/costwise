@@ -5,7 +5,7 @@ import { Bell, CircleUserRound } from 'lucide-react'
 import { useHomeContext } from '@/app/context/homeContext/homeContext'
 import { Session } from 'next-auth'
 import NotificationsNumber from '../shared/notificationsNumber'
-import SearchBar from '../shared/searchBar'
+import SearchBoard from '../shared/search/searchBoard'
 
 const Header = ({session}: {session: Session}) => {
 
@@ -18,7 +18,7 @@ const Header = ({session}: {session: Session}) => {
       </div>
       <div className="flex items-center">
         <div className='mr-4'>
-          <SearchBar />
+          <SearchBoard />
         </div>
         <div className='relative cursor-pointer mr-4'>
           <Bell color='gray' size={20} />

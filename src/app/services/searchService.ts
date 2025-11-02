@@ -22,7 +22,7 @@ export class SearchService implements ISearchService {
         try {
             const dbRecipes = await this.repository.findRecipe();
             const recipes = dbRecipes?.map((dbrecipe) => transformRecipeFromDB(dbrecipe));
-        
+            
             return recipes;
         } catch(error) {
             console.error('SearchService.findRecipes: ', error);

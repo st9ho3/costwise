@@ -14,6 +14,7 @@ const useSearch = () => {
     const {debouncedValue} = useDebounce({searchTerm, delay: 500})
     const [results, setResults] = useState<Results | undefined>(undefined)
     const [loading, setLoading] = useState(false)  
+    const [resultsBoardOpen, setResultsBoardOpen] = useState(false) 
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const searchTerm = e.target.value
@@ -22,10 +23,15 @@ const useSearch = () => {
 
     useEffect(() => {
         if (searchTerm.trim() !== '') {
+            setResultsBoardOpen(true)
             setLoading(true);
+        } else {
+            setResultsBoardOpen(false)
         }
     }, [searchTerm])
     
+    console.log(resultsBoardOpen)
+
     useEffect(() => {
         
         const searchResults = async() => {
@@ -54,7 +60,8 @@ const useSearch = () => {
         searchTerm,
         handleSearch,
         loading,
-        results
+        results,
+        resultsBoardOpen
     }
 }
 

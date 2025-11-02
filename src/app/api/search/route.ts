@@ -24,7 +24,7 @@ export const GET = async(req: NextRequest) => {
 
         const ingredients = await service.findIngredient()
         const recipes = await service.findRecipe()
-
+        
         const searcResults = {ingredients: ingredients, recipes: recipes}
 
         return sendSuccess('Your data: ', searcResults)
