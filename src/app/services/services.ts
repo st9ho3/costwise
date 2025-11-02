@@ -190,7 +190,7 @@ export const zodValidateIngredientBeforeAddItToDatabase = async (request: Ingred
 
 export const search = async(searchTerm: string) => {
 
-    const res = await fetch(`api/search?q=${searchTerm}`, {
+    const res = await fetch(`/api/search?q=${searchTerm}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
