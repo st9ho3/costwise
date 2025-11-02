@@ -2,17 +2,16 @@
 import React from 'react';
 import { LogOut, CircleUserRound, X } from 'lucide-react';
 import Image from 'next/image';
-import { useHomeContext } from '@/app/context/homeContext/homeContext';
 import { signOut } from 'next-auth/react';
+import { useUIStore } from '@/app/stores/uiStore';
 
 
 const UserProfile = ({ name, email, avatar }: {name: string, email: string, avatar: string | null | undefined}) => {
 
-  const {dispatch} = useHomeContext()
-
+  const closeProfile = useUIStore((state) => state.closeProfile)
   return (
     <div className=" absolute top-13 right-8 z-50 w-72 font-sans bg-white rounded-xl shadow-lg border border-gray-200/50">
-      <X onClick={() => dispatch({type: 'CLOSE_PROFILE'})} className='flex justify-self-end m-1 cursor-pointer' />
+      <X onClick={() => closeProfile()} className='flex justify-self-end m-1 cursor-pointer' />
       <div className="p-2">
         <button
           onClick={() => signOut()}
