@@ -32,8 +32,17 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
 
   const {register, handleSubmit, reset, formState: {isSubmitting}, watch, setValue} = useForm({
     resolver: zodResolver(IngredientSchema),
-    defaultValues: mode === 'edit' 
-    ? ingredient 
+    defaultValues: mode === 'edit'
+    ? {
+      id: ingredient?.id,
+      name: ingredient?.name,
+      unit: ingredient?.unit,
+      unitPrice: ingredient?.unitPrice,
+      quantity: 1, // Here I insert manually the 1 value because the quantity on the db is the initial quantity that used to measure. the db ingredient has the unitPrice based on 1 but as quantity has the quantity we used to measure it.
+      usage: ingredient?.usage,
+      userId: ingredient?.userId,
+      icon: ingredient?.icon
+      }
     : {
       id: uuidv4(),
       name: '',

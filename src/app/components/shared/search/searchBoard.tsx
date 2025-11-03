@@ -33,6 +33,7 @@ const searchRef = useRef<HTMLDivElement>(null)
       {
         resultsBoardOpen &&
         <SearchResultsBoard
+        onClose={handleClose}
         loading={loading}
         results={results}
         

@@ -11,7 +11,7 @@ export interface Results {
 const useSearch = () => {
     
     const [searchTerm, setSearchTerm] = useState<string>('')
-    const {debouncedValue} = useDebounce({searchTerm, delay: 500})
+    const {debouncedValue} = useDebounce({searchTerm, delay: 300})
     const [results, setResults] = useState<Results | undefined>(undefined)
     const [loading, setLoading] = useState(false)  
     const [resultsBoardOpen, setResultsBoardOpen] = useState(false) 
@@ -22,6 +22,7 @@ const useSearch = () => {
         setSearchTerm(searchTerm)
     }
      const handleClose = () => {
+        setSearchTerm('')
         setResultsBoardOpen(false)
     }
 

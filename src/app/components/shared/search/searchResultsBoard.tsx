@@ -8,10 +8,11 @@ import { Carrot, Loader } from 'lucide-react'
 interface SearchResultsBoardProps {
     results: Results | undefined
     loading: boolean
+    onClose: () => void
     
 }
 
-const SearchResultsBoard = ({results, loading}: SearchResultsBoardProps) => {
+const SearchResultsBoard = ({results, loading, onClose}: SearchResultsBoardProps) => {
 
   if (!results || loading) {
     return (
@@ -37,12 +38,12 @@ const SearchResultsBoard = ({results, loading}: SearchResultsBoardProps) => {
     <div className='absolute z-1 top-10 w-100 h-fit h-max-100 border bg-white rounded-b-2xl border-gray-200 shadow-md'>
       {recipes && recipes?.length > 0 && 
         <SearchResultsDisplay title='Recipes' total={recipes?.length}>
-        {recipes && recipes.map((recipe) => <RecipeSearchResult key={recipe.id} item={recipe} /> )}
+        {recipes && recipes.map((recipe) => <RecipeSearchResult onClose={onClose} key={recipe.id} item={recipe} /> )}
         </SearchResultsDisplay> 
       }
       {ingredients && ingredients?.length > 0 &&  
         <SearchResultsDisplay title='Ingredients' total={ingredients?.length}>
-        {ingredients && ingredients.map((ingredient) => <IngredientSearchResult key={ingredient.id} item={ingredient} /> )}
+        {ingredients && ingredients.map((ingredient) => <IngredientSearchResult onClose={onClose} key={ingredient.id} item={ingredient} /> )}
       </SearchResultsDisplay>
       }
       
