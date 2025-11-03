@@ -5,12 +5,13 @@ import React from 'react'
 
 interface RecipeSearchResultProps {
     item: Recipe
+    onClose: () => void
 }
 
-const RecipeSearchResult = ({item}: RecipeSearchResultProps) => {
+const RecipeSearchResult = ({item, onClose}: RecipeSearchResultProps) => {
   
     return (
-      <Link href={`/recipes/${item.id}`}>
+      <Link onClick={onClose} href={`/recipes/${item.id}`}>
         <div className="flex items-center gap-2 mb-2">
           <Image
             className="w-9 h-9 rounded-full object-cover"
