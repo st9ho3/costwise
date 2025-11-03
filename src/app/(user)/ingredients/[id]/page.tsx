@@ -6,9 +6,17 @@
 import React from 'react'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
+import { IngredientService } from '@/app/services/ingredientService'
+import IngredientHeader from '@/app/components/ingredients/ingredientPage/ingredientHeader'
+
+
+
 const page = async ({params}: {params: Promise<{id: string}>}) => {
   const {id} = await params
+  const service = new IngredientService()
+  const ingredient = await service.findById(id)
 
+  console.log(ingredient)
   const session = await auth()
     
     if (!session?.user) {
@@ -17,7 +25,10 @@ const page = async ({params}: {params: Promise<{id: string}>}) => {
   
   return (
     <div>
-      Ingredient {id} 
+      <IngredientHeader
+      name={ingredient?.name}
+      icon={ingredient?.icon}
+      />
     </div>
   )
 }
