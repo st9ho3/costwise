@@ -1,0 +1,15 @@
+import React from 'react'
+
+interface IngredientDetailsProps {
+    children: React.ReactNode
+}
+
+const IngredientDetails = ({children}: IngredientDetailsProps) => {
+  return (
+    <div className='border w-60 p-5 border-gray-200 rounded-xl'>
+      {children}
+    </div>
+  )
+}
+
+export default IngredientDetails

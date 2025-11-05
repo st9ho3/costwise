@@ -10,11 +10,11 @@ interface IngredientHeaderProps {
 const IngredientHeader = ({name, icon}: IngredientHeaderProps) => {
 
   return (
-    <div className='flex items-center gap-3'>
-      <Title title={name} />
-      <div className='w-15 h-15 flex justify-center items-center rounded-full bg-amber-100 text-3xl'>
+    <div className='flex flex-col items-center gap-3'>
+      <div className='w-25 h-25 flex justify-center items-center rounded-full bg-amber-100 text-5xl'>
       {icon}
       </div>
+      <Title title={name} />
     </div>
   )
 }
