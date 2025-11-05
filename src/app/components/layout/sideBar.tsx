@@ -10,7 +10,8 @@ import {
   PlusSquare,
   PanelLeftClose,
   PanelLeftOpen,
-  Carrot
+  Carrot,
+  Users
 } from 'lucide-react';
 import Modal from '../shared/modal';
 import { useSession } from 'next-auth/react';
@@ -120,6 +121,12 @@ export default function Sidebar() {
             text="Ingredients"
             isCollapsed={isCollapsed}
             href="/ingredients"
+          />
+          <SidebarLink
+            icon={Users}
+            text="Suppliers"
+            isCollapsed={isCollapsed}
+            href="/suppliers"
           />
         </nav>
 
