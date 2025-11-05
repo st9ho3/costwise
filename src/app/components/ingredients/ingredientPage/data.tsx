@@ -5,8 +5,8 @@ interface DataProps {
     text: string | number | undefined
 }
 const classNameTypes = {
-    low: 'bg-red-200 text-red-700',
-    high: 'bg-green-200 text-green-700'
+    low: 'bg-red-200 text-red-600',
+    high: 'bg-green-200 text-green-600'
 }
 
 const Data = ({label, text}: DataProps) => {
