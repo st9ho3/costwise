@@ -43,3 +43,15 @@ export type RecipeWithQuery = {
         };
     }[];
 };
+
+export interface TableHeadColumn {
+  header: string;
+  accessor: string;
+  className?: string | undefined;
+} 
+
+export interface SortStatus {
+    isFiltering: boolean;
+    isAscending: boolean;
+    value: string;
+}
