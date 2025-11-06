@@ -1,7 +1,6 @@
-"use client";
-import { recipesColumns } from "@/app/constants/data";
+"use client"
+import { recipesColumns, recipeSortedLinks } from "@/app/constants/data";
 import { paginate } from "@/app/services/helpers";
-import { Pencil, Trash2 } from "lucide-react";
 import { Recipe } from "@/shemas/recipe";
 import { deleteRecipesFromServer } from "@/app/services/services";
 import { useRouter } from "next/navigation";
@@ -10,11 +9,12 @@ import Link from "next/link";
 import Label from "../shared/label";
 import useHelpers from "@/app/hooks/useHelpers";
 import { useCallback, useEffect, useMemo } from "react";
-import SortedLink from "../shared/sortedLink";
 import useSorting from "@/app/hooks/useSorting";
 import { usePaginationStore } from "@/app/stores/paginationStore";
 import { useNotificationStore } from "@/app/stores/notificationStore";
-import RecipeClickableTitle from "../shared/recipeClickableTitle";
+import TableHead from "../shared/table/tableHead";
+import TableActions from "../shared/table/tableActions";
+import TableClickableTitle from "../shared/table/tableClickableTitle";
 
 
 const RecipesTable = ({items}: {items: Recipe[]}) => {
@@ -28,42 +28,32 @@ const RecipesTable = ({items}: {items: Recipe[]}) => {
   const paginateItems = useMemo(() => paginate(10, currentPage, sortedData),[currentPage, sortedData]);
   const itemsToDisplay = paginateItems ? paginateItems : [];
 
-  
-  useEffect(()=> {
 
+  useEffect(()=> {
     const reset = () => {
-    resetNotification()
-    resetPage()
-  }
+      resetNotification()
+      resetPage()
+    }
     reset()
 
   }, [resetNotification, resetPage])
 
-  const handleDelete = useCallback(async(rec: Recipe) => {
-    const response = await deleteRecipesFromServer(rec.id)
+  const handleDelete = useCallback(async(id: string) => {
+    const response = await deleteRecipesFromServer(id)
     raiseNotification(response)
     router.replace("recipes")
   },[raiseNotification, router])
- 
+
 
   return (
     <div>
       <table className="w-full table-fixed mb-2">
-        <thead>
-          <tr className="border-b-1 h-8 border-gray-200">
-            {recipesColumns.map((column) => (
-              <th key={column.accessor} className={column.className}>
-                {column.accessor === 'tax' || column.accessor === 'sellingPrice' || column.accessor === 'profitMargin' || column.accessor === 'totalCost'
-                ? 
-                <SortedLink onSort={sortData} sortStatus={sortStatus}>
-                {column.header}
-                </SortedLink>
-                : column.header
-                 }
-              </th>
-            ))}
-          </tr>
-        </thead>
+        <TableHead
+          columns={recipesColumns}
+          sortStatus={sortStatus}
+          sortedLinks={recipeSortedLinks}
+          onSort={sortData}
+        />
         <tbody className="text-gray-500 text-md">
           {itemsToDisplay.map((item) => (
             <tr
@@ -73,7 +63,10 @@ const RecipesTable = ({items}: {items: Recipe[]}) => {
 
               <td className="pl-4 md:pl-0 pt-2">
                 <Link href={`/recipes/${item.id}`}>
-                    <RecipeClickableTitle item={item} />
+                  <TableClickableTitle
+                    imgPath={item.imgPath}
+                    title={item.title}
+                  />
                 </Link>
               </td>
 
@@ -84,28 +77,20 @@ const RecipesTable = ({items}: {items: Recipe[]}) => {
               <td className="hidden md:table-cell pl-4">€ {item.sellingPrice}</td>
 
               <td className="hidden md:table-cell pl-4">
-                <Label text={`${String(item.profitMargin)} %`} type={ item.profitMargin && item.profitMargin > 60 ? 'high' : item.profitMargin && item.profitMargin > 50 ? 'medium' : 'low' } />
-                 
-                </td>
+                <Label
+                  text={`${String(item.profitMargin)} %`}
+                  type={ item.profitMargin && item.profitMargin > 60 ? 'high' : item.profitMargin && item.profitMargin > 50 ? 'medium' : 'low' }
+                />
+              </td>
 
               <td className="hidden md:table-cell align-middle text-center md:text-start md:pl-4">
                 € {item.totalCost}
               </td>
               <td className="align-middle text-center gap-5 flex justify-center md:text-start md:justify-start mt-4 md:pl-4">
-                <Link href={`/recipes/edit/${item.id}`}>
-                  <Pencil
-                    size="18px"
-                    strokeWidth="1.5px"
-                    className="cursor-pointer"
-                  />
-                </Link>
-
-                <Trash2
-                  onClick={() => handleDelete(item)}
-                  size="18px"
-                  strokeWidth="1.5px"
-                  color="red"
-                  className="cursor-pointer"
+                <TableActions
+                  id={item.id}
+                  onDelete={handleDelete}
+                  path="recipes"
                 />
               </td>
             </tr>
