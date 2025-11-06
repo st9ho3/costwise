@@ -1,6 +1,6 @@
 "use client"
 import { recipesColumns, recipeSortedLinks } from "@/app/constants/data";
-import { paginate } from "@/app/services/helpers";
+import { getProfitMarginType, paginate } from "@/app/services/helpers";
 import { Recipe } from "@/shemas/recipe";
 import { deleteRecipesFromServer } from "@/app/services/services";
 import { useRouter } from "next/navigation";
@@ -15,6 +15,8 @@ import { useNotificationStore } from "@/app/stores/notificationStore";
 import TableHead from "../shared/table/tableHead";
 import TableActions from "../shared/table/tableActions";
 import TableClickableTitle from "../shared/table/tableClickableTitle";
+import MonetaryCell from "../shared/table/monetaryCell";
+import PercentilleCell from "../shared/table/percentilleCell";
 
 
 const RecipesTable = ({items}: {items: Recipe[]}) => {
@@ -71,20 +73,30 @@ const RecipesTable = ({items}: {items: Recipe[]}) => {
               </td>
 
               <td className="hidden md:table-cell pl-4">
-                {item.tax * 100} %
+                <PercentilleCell
+                  percentage={item.tax}
+                 />
               </td>
 
-              <td className="hidden md:table-cell pl-4">€ {item.sellingPrice}</td>
+              <td className="hidden md:table-cell pl-4">
+                <MonetaryCell
+                  type="absolute"
+                  price={item.sellingPrice}
+                 />
+              </td>
 
               <td className="hidden md:table-cell pl-4">
                 <Label
-                  text={`${String(item.profitMargin)} %`}
-                  type={ item.profitMargin && item.profitMargin > 60 ? 'high' : item.profitMargin && item.profitMargin > 50 ? 'medium' : 'low' }
+                  text={`${String(item.profitMargin)}%`}
+                  type={getProfitMarginType(item.profitMargin)}
                 />
               </td>
 
-              <td className="hidden md:table-cell align-middle text-center md:text-start md:pl-4">
-                € {item.totalCost}
+              <td className="hidden md:table-cell pl-4">
+                <MonetaryCell
+                  type="absolute"
+                  price={item.totalCost}
+                 />
               </td>
               <td className="align-middle text-center gap-5 flex justify-center md:text-start md:justify-start mt-4 md:pl-4">
                 <TableActions

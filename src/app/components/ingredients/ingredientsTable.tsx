@@ -1,6 +1,6 @@
 "use client";
 import { ingredientColumns, ingredientSortedLinks } from "@/app/constants/data";
-import { paginate } from "@/app/services/helpers";
+import { getUsageCategory, paginate } from "@/app/services/helpers";
 import { Ingredient} from "@/shemas/recipe";
 import { useRouter } from "next/navigation";
 /* import Notification from '@/app/components/shared/notification'
@@ -16,6 +16,7 @@ import TableActions from "../shared/table/tableActions";
 import TableClickableTitle from "../shared/table/tableClickableTitle";
 import Notification from "../shared/notification";
 import { useNotificationStore } from "@/app/stores/notificationStore";
+import MonetaryCell from "../shared/table/monetaryCell";
 
 const IngredientsTable = ({items}: {items: Ingredient[]}) => {
 
@@ -54,7 +55,7 @@ const IngredientsTable = ({items}: {items: Ingredient[]}) => {
               key={item.id}
               className="border-b h-12.5 border-gray-200 text-sm"
             >
-              {/* Cell 1: Name and Image */}
+
               <td className="pl-4 md:pl-0 pt-2">
                 <Link href={`/ingredients/${item.id}`}>
                   <TableClickableTitle
@@ -64,21 +65,21 @@ const IngredientsTable = ({items}: {items: Ingredient[]}) => {
                 </Link>
               </td>
 
-              {/* Cell 2: Price */}
               <td className="hidden md:table-cell align-middle text-center md:text-start md:pl-4">
-                € { Number(item.unitPrice) < 1 ? Number(item.unitPrice).toFixed(3) : Number(item.unitPrice).toFixed(1) } / <span className="font-bold">{item.unit === 'kg' || item.unit === 'g' ? 'g': item.unit === 'ml' || item.unit === 'L' ? 'ml' : 'piece'}</span>
+                <MonetaryCell
+                price={item.unitPrice}
+                type="per_unit"
+                unit={item.unit}
+                 />
               </td>
 
-
-              {/* Cell 3: Usage */}
               <td className="hidden md:table-cell pl-4">
                 <Label
-                  text={Number(item.usage) < 4 ? "low" : 'medium' }
-                  type={Number(item.usage) < 4 ? "low" : 'medium' }
+                  text={getUsageCategory(Number(item.usage)) }
+                  type={getUsageCategory(Number(item.usage))}
                 />
               </td>
 
-              {/* Cell 4: Actions */}
               <td className="align-middle text-center gap-5 flex justify-center md:text-start md:justify-start mt-4 md:pl-4">
                 <TableActions
                   id={item.id}
