@@ -34,6 +34,9 @@ export const recipesColumns: Column[] = [
   }
 ];
 
+export const recipeSortedLinks = recipesColumns.slice(0,5).map((column) => column.accessor)
+
+
 export const ingredientColumns: Column[] = [
     {
         header: 'Name',
@@ -56,6 +59,7 @@ export const ingredientColumns: Column[] = [
         className: "text-gray-500 w-2/6 md:w-2/10 text-sm text-center md:text-start pl-4"
     }
 ];
+export const ingredientSortedLinks = ingredientColumns.slice(0,3).map((column) => column.accessor)
 
 // Configuration object for different notification variants
 export const notificationVariants = {
