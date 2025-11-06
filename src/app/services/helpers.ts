@@ -38,7 +38,7 @@ export const paginate = <T>(itemsPerPage: number, page: number, items: T[] ): T[
 
 }
 
-//////////
+/////////////////////////////////////////////////
 
 export const getTotalPrice = (ingredients: RecipeIngredients[]): number => {
   
@@ -46,6 +46,58 @@ export const getTotalPrice = (ingredients: RecipeIngredients[]): number => {
     return item.unit === "kg" || item.unit === "L" ? sum + item.unitPrice * item.quantity*1000 : sum + item.unitPrice* item.quantity
   }, 0);
 
+}
+
+
+export const getProfitMarginType = (margin: number | undefined): 'high' | 'medium' | 'low' | 'very_low' => {
+  if (margin === undefined || margin <= 40) {
+    return 'very_low'; // Treat undefined or margin <= 40 as the lowest category
+  }
+
+  if (margin > 60) {
+    return 'high';
+  }
+
+  if (margin > 50) {
+    return 'medium';
+  }
+  
+  return 'low';
+};
+
+export const getUsageCategory = (usagePercentage: number): 'high' | 'medium' | 'low' => {
+
+  if (usagePercentage > 15) {
+    return 'high';
+  }
+
+  if (usagePercentage > 8) {
+    return 'medium';
+  }
+
+  return 'low'
+};
+
+export const formatPrice = (priceValue: string | number | undefined): string => {
+  if (!priceValue) {
+    return 'Unavailable'
+  }
+  const unitPrice = Number(priceValue) || 0; 
+ 
+  if (unitPrice < 1) {
+    return unitPrice.toFixed(3);
+  } else {
+    return unitPrice.toFixed(1);
+  }
+};
+
+export const getDisplayUnit = (unit: string | undefined): string => {
+  if (!unit) {
+    return 'undefined'
+  }
+  if (unit === 'kg' || unit === 'g') return 'g';
+  if (unit === 'ml' || unit === 'L') return 'ml';
+  return 'piece';
 }
 
 export const normalizePrice = (price: number, unit: Unit, quantity: number): number => {
