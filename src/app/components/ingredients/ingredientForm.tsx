@@ -4,6 +4,7 @@ import { IngredientNameInput, IngredientPriceInput, IngredientSummary, Ingredien
 import Incremental from '../shared/incremental';
 import { Ingredient } from '@/shemas/recipe';
 import { useIngredientForm } from '../../hooks/useIngredientsForm'; // Adjust path
+import IngredientCatSelect from './ingredientsFormComponents/ingredientCatSelect';
 
 
 type AddIngredientProps = {
@@ -29,6 +30,7 @@ const IngredientForm = ({ ingredient, mode, userId }: AddIngredientProps) => {
         />
         <Incremental onIngredientChange={setValue} count={quantity} onKeyDown={handleKeyDown} setErrors={setErrors} />
         <IngredientUnitSelect register={register}  onKeyDown={handleKeyDown}  />
+        <IngredientCatSelect register={register} onKeyDown={handleKeyDown} />
       </div>
 
       <AddIngredientButton mode={mode} isSubmitting={isSubmitting} />

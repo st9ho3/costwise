@@ -235,7 +235,65 @@ export const transformRecipeIngredentFromDB = (
 
 
 ////////////////
-
+const createIngredientIcon = (category: string | undefined): string => {
+  switch (category) {
+    case 'Produce':
+      return '🥕';
+    case 'Meat & Poultry':
+      return '🥩';
+    case 'Fish & Seafood':
+      return '🐟';
+    case 'Dairy & Alternatives':
+      return '🧀';
+    case 'Dry Goods':
+      return '🌾';
+    case 'Spices & Seasonings':
+      return '🧂';
+    case 'Oils, Vinegars, & Condiments':
+      return '🫙';
+    case 'Frozen':
+      return '❄️';
+    case 'Coffee & Tea':
+      return '☕';
+    case 'Beverages (Other)':
+      return '🧃';
+    case 'Bakery':
+      return '🍞';
+    case 'Other':
+      return '📦';
+    default:
+      return '🧾'; // A generic receipt/item icon as a fallback
+  }
+};
+export const getIconColor = (category: string | undefined): string => {
+  switch (category) {
+    case 'Produce':
+      return 'bg-green-200';
+    case 'Meat & Poultry':
+      return 'bg-red-200';
+    case 'Fish & Seafood':
+      return 'bg-blue-200';
+    case 'Dairy & Alternatives':
+      return 'bg-yellow-200';
+    case 'Dry Goods':
+      return 'bg-orange-200';
+    case 'Spices & Seasonings':
+      return 'bg-amber-200';
+    case 'Oils, Vinegars, & Condiments':
+      return 'bg-indigo-200';
+    case 'Frozen':
+      return 'bg-sky-200';
+    case 'Coffee & Tea':
+      return 'bg-stone-200';
+    case 'Beverages (Other)':
+      return 'bg-cyan-200';
+    case 'Bakery':
+      return 'bg-rose-200';
+    case 'Other':
+    default:
+      return 'bg-gray-200';
+  }
+};
 export const createIngredientPrototype = (data: IngredientFormFields, userId: string) => {
 
   if (data) {
@@ -243,7 +301,7 @@ export const createIngredientPrototype = (data: IngredientFormFields, userId: st
 
       const ingredientPrototype: Ingredient = {
         id: data.id,
-        icon: data.icon,
+        icon: createIngredientIcon(data.category),
         name: data.name,
         unit: data.unit === 'g' || data.unit === 'kg' ? 'g' : data.unit === 'L' || data.unit === 'ml' ? 'ml' : 'piece',
         unitPrice: normalizedUnitPrice,
@@ -265,7 +323,7 @@ export const createEditIngredientPrototype = (data: IngredientFormFields, ingred
       // Edit mode logic
       const updatedIngredient: Ingredient = {
         id: ingredient.id,
-        icon: ingredient.icon || '🥑',
+        icon: ingredient.icon,
         name: data.name,
         unit: data.unit === 'g' || data.unit === 'kg' ? 'g' : data.unit === 'L' || data.unit === 'ml' ? 'ml' : 'piece',
         unitPrice: normalizedUnitPrice,

@@ -1,3 +1,4 @@
+import { getIconColor } from '@/app/services/helpers'
 import Image from 'next/image'
 import React from 'react'
 
@@ -5,9 +6,13 @@ interface TableClickableTitleProps {
     imgPath?: string
     title: string
     icon?: string | null
+    category?: string 
 }
 
-const TableClickableTitle = ({imgPath, title, icon}: TableClickableTitleProps) => {
+const TableClickableTitle = ({imgPath, title, icon, category}: TableClickableTitleProps) => {
+
+  const iconColor = getIconColor(category)
+  
   return (
     <div className="flex items-center gap-2 mb-1">
         {imgPath && 
@@ -20,7 +25,7 @@ const TableClickableTitle = ({imgPath, title, icon}: TableClickableTitleProps) =
         />
         }
         {!imgPath && 
-          <div className="flex justify-center items-center w-9 h-9 text-xl bg-yellow-100 rounded-full object-cover">
+          <div className={`flex justify-center items-center w-9 h-9 text-xl rounded-full object-cover ${iconColor}`}>
           {icon}
           </div>
         }

@@ -55,3 +55,26 @@ export interface SortStatus {
     isAscending: boolean;
     value: string;
 }
+
+export type LabelType =
+  // Profit/Usage types
+  | 'very_low'
+  | 'low'
+  | 'medium'
+  | 'high'
+  // Ingredient Category types (using "pretty" strings)
+  | 'Produce'
+  | 'Meat & Poultry'
+  | 'Fish & Seafood'
+  | 'Dairy & Alternatives'
+  | 'Dry Goods'
+  | 'Spices & Seasonings'
+  | 'Oils, Vinegars, & Condiments'
+  | 'Frozen'
+  | 'Coffee & Tea'
+  | 'Beverages (Other)'
+  | 'Bakery'
+  | 'Other'
+  | ''; // Default/unset
+
+  export type IngredientCategoryType = Exclude<LabelType, 'very_low' | 'low' | 'medium' | 'high'>;

@@ -61,6 +61,7 @@ const IngredientsTable = ({items}: {items: Ingredient[]}) => {
                   <TableClickableTitle
                     title={item.name}
                     icon={item.icon}
+                    category={item.category}
                   />
                 </Link>
               </td>
@@ -77,6 +78,12 @@ const IngredientsTable = ({items}: {items: Ingredient[]}) => {
                 <Label
                   text={getUsageCategory(Number(item.usage)) }
                   type={getUsageCategory(Number(item.usage))}
+                />
+              </td>
+              <td className="hidden md:table-cell pl-4">
+                <Label
+                  text={item.category}
+                  type={item.category}
                 />
               </td>
 
