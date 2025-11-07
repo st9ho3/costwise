@@ -12,6 +12,22 @@ export const recipeCategoryEnum = pgEnum("recipe_category", ["starter", "main", 
 
 export const unitEnum = pgEnum('unit', ['' , 'g', 'ml', 'kg', 'L', 'piece'])
 
+export const ingredientCategoryEnum = pgEnum("ingredient_category", [
+  'Produce',
+  'Meat & Poultry',
+  'Fish & Seafood',
+  'Dairy & Alternatives',
+  'Dry Goods',
+  'Spices & Seasonings',
+  'Oils, Vinegars, & Condiments',
+  'Frozen',
+  'Coffee & Tea',
+  'Beverages (Other)',
+  'Bakery',
+  'Other',
+  '', // For default/unset
+]);
+
 // Defines the 'recipes' table schema.
 export const recipesTable = pgTable("recipes", {
   id: uuid("id").primaryKey(),
@@ -37,6 +53,7 @@ export const ingredientsTable = pgTable('ingredients', {
   unitPrice: numeric('unit_price', { precision: 10, scale: 5 }).notNull(),
   quantity: numeric('quantity').notNull(),
   usage: numeric('usage').notNull().default('1'),
+  category: ingredientCategoryEnum('category').notNull(),
   userId: text("user_id").notNull().references(() => users.id, { onDelete: 'cascade' }), 
 });
 

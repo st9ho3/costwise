@@ -114,15 +114,4 @@ const RecipesTable = ({items}: {items: Recipe[]}) => {
   );
 };
 
-export default RecipesTable;
-
-/* const ClientOnlyTime = ({ date }: { date: string | number | Date }) => {
-  const [formattedTime, setFormattedTime] = useState('');
-
-  useEffect(() => {
-    setFormattedTime(new Date(date).toLocaleDateString());
-  }, [date]);
-
-
-  return <>{formattedTime}</>;
-}; */
+export default RecipesTable
