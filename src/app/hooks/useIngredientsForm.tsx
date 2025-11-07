@@ -65,8 +65,8 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
   const name = watch('name')
   const unit = watch('unit')
   const quantity = watch('quantity')
-
-
+  
+  
 
 
 /* const ingredientsToSend = ingredients.map((ing) => createIngredientPrototype(ing, userId))
@@ -82,9 +82,7 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
     if (mode === 'create') {
       // Create mode logic
       const ingredientPrototype = createIngredientPrototype(data, userId)
-
       const validatedIngredient = IngredientSchema.safeParse(ingredientPrototype);
-      console.log(validatedIngredient);
       if (!validatedIngredient.success) {
         setErrors([]);
         const zodErrors = validatedIngredient.error.errors;

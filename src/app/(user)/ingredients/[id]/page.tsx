@@ -32,11 +32,13 @@ const page = async ({params}: {params: Promise<{id: string}>}) => {
         <IngredientHeader
         name={ingredient?.name}
         icon={ingredient?.icon}
+        type={ingredient?.category || 'Other'} 
         />
         <IngredientData>
-          <Data label='Unit Measure' text={ingredient?.unit} />
-          <Data label='Price per Unit' text={ingredient?.unitPrice} />
-          <Data label='Usage' text={ingredient?.usage} />
+          <Data category='' label='Unit Measure' text={ingredient?.unit} />
+          <Data category='' label='Price per Unit' text={ingredient?.unitPrice} />
+          <Data category='' label='Usage' text={ingredient?.usage} />
+          <Data category={ingredient?.category || 'Other'} label='Category' text={ingredient?.category} />
         </IngredientData>
       </IngredientDetails>
       
