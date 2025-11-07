@@ -53,7 +53,7 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
       usage: 'low',
       userId: userId,
       icon: '',
-      category: 'Other'
+      category: ''
     }
   })
   
