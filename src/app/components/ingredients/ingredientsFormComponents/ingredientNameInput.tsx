@@ -21,7 +21,7 @@ const IngredientNameInput = ({ register, onKeyDown }: IngredientNameInputProps) 
       type="text"
       {...register('name')}
       onKeyDown={onKeyDown}
-      className="p-1 text-lg placeholder:text-gray-500 w-36 focus:outline-none"
+      className="p-1 text-md placeholder:text-gray-500 w-36 focus:outline-none"
       placeholder="Ingredient Name"
     />
   </div>
