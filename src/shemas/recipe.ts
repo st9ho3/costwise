@@ -20,6 +20,27 @@ export const UnitSchema = z.union([
 
 export type Unit = z.infer<typeof UnitSchema>;
 
+// Schema for defining allowed ingredient categories
+export const IngredientCategorySchema = z.union([
+  z.literal('Produce'),
+  z.literal('Meat & Poultry'),
+  z.literal('Fish & Seafood'),
+  z.literal('Dairy & Alternatives'),
+  z.literal('Dry Goods'),
+  z.literal('Spices & Seasonings'),
+  z.literal('Oils, Vinegars, & Condiments'),
+  z.literal('Frozen'),
+  z.literal('Coffee & Tea'),
+  z.literal('Beverages (Other)'),
+  z.literal('Bakery'),
+  z.literal('Other'),
+  z.literal(''), // Added an empty string for default/unset
+], {
+  errorMap: () => ({ message: "Invalid ingredient category." })
+});
+
+// Inferred TypeScript type for an ingredient category
+export type IngredientCategory = z.infer<typeof IngredientCategorySchema>;
 
 // Schema for defining a table column's properties
 export const ColumnSchema = z.object({
@@ -89,7 +110,8 @@ export const IngredientSchema = z.object({
   unitPrice: z.number().min(0.001, "Unit price can't be zero."),
   quantity: z.number().min(1, "Quantity must be non-negative"),
   usage: z.string(),
-  userId: z.string()
+  userId: z.string(),
+  category: IngredientCategorySchema
 });
 
 export type Ingredient = z.infer<typeof IngredientSchema>;
@@ -102,7 +124,8 @@ export const DBIngredientSchema = z.object({
   unitPrice: z.string().min(0.001, "Unit price can't be zero."),
   quantity: z.string().min(1, "Quantity must be non-negative"),
   usage: z.string(),
-  userId: z.string()
+  userId: z.string(),
+  category: IngredientCategorySchema
 });
 
 export type DBIngredient = z.infer<typeof DBIngredientSchema>;
