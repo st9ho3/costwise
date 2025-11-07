@@ -124,7 +124,8 @@ export const DBIngredientSchema = z.object({
   unitPrice: z.string().min(0.001, "Unit price can't be zero."),
   quantity: z.string().min(1, "Quantity must be non-negative"),
   usage: z.string(),
-  userId: z.string()
+  userId: z.string(),
+  category: IngredientCategorySchema
 });
 
 export type DBIngredient = z.infer<typeof DBIngredientSchema>;

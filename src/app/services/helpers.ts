@@ -250,6 +250,7 @@ export const createIngredientPrototype = (data: IngredientFormFields, userId: st
         quantity: data.quantity,
         usage: '0',
         userId: userId,
+        category: data.category
       };
       return ingredientPrototype
   }
@@ -271,6 +272,7 @@ export const createEditIngredientPrototype = (data: IngredientFormFields, ingred
         quantity: data.quantity,
         usage: ingredient.usage || '0',
         userId: userId,
+        category: data.category
       };
 
       return updatedIngredient
