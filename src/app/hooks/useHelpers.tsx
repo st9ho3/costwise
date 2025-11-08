@@ -22,7 +22,7 @@ type ApiResponse<T> = {
 };
 
 interface UseHelpersProps {
-  path: string
+  path: string | null
 }
 
 const useHelpers = ({path}: UseHelpersProps) => {
@@ -54,7 +54,7 @@ const useHelpers = ({path}: UseHelpersProps) => {
   const handleDelete = useCallback(async(id: string | null) => {
     const response = path === 'ingredients' ? await deleteIngredient(id) : await deleteRecipesFromServer(id)
     raiseNotification(response)
-    router.replace(path)
+    router.replace(path || '')
   },[raiseNotification, router, path])
 
   const askPermision = (id: string) => {

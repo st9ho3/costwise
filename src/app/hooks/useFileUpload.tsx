@@ -11,7 +11,7 @@ import useHelpers from './useHelpers';
 export const useFileUpload = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { raiseNotification } = useHelpers();
+  const { raiseNotification } = useHelpers({path: null});
   
   const uploadFile = async (file: File) => {
     setIsLoading(true);
