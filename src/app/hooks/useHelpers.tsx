@@ -1,3 +1,4 @@
+'use client'
 /**
  * - Provides a utility hook for displaying global notifications via the `HomeContext`.
  * - Accepts a standardized API response and automatically determines notification type (success/failure) and message.
@@ -6,6 +7,12 @@
  */
 import { NotificationType } from '@/types/context';
 import { useNotificationStore } from '../stores/notificationStore';
+import { useUIStore } from "@/app/stores/uiStore";
+import { useGeneralStore } from "@/app/stores/generalStore";
+import { useCallback } from 'react';
+import { deleteIngredient, deleteRecipesFromServer } from "@/app/services/services";
+import { useRouter } from "next/navigation";
+
 
 type ApiResponse<T> = {
   success: boolean;
@@ -14,10 +21,26 @@ type ApiResponse<T> = {
   error?: { message: string };
 };
 
-const useHelpers = () => {
+interface UseHelpersProps {
+  path: string
+}
+
+const useHelpers = ({path}: UseHelpersProps) => {
+
+  const isOpen = useNotificationStore((state) => state.notification.isOpen)
+  const openModal = useUIStore((state) => state.openModal)
+  const isDeleteActive = useUIStore((state) => state.isDeleteActive)
+  const closeModal = useUIStore((state) => state.reset)
+  const activateDelete = useUIStore((state) => state.activateDelete)
+  const isModalOpen = useUIStore((state) => state.isModalOpen)
+  const passItemId = useGeneralStore((state) => state.setId)
+  const storedItemId = useGeneralStore((state) => state.itemId)
+  const router = useRouter()
+
+  
   const handleNotification = useNotificationStore((state) => state.handleNotification)
   
-  const raiseNotification = <T,>(response: ApiResponse<T>) => {
+  const raiseNotification = useCallback(<T,>(response: ApiResponse<T>) => {
     const message = response.success ? response.message : response.error?.message || 'An unknown error occurred.';
     const type = response.success ? NotificationType.Success : NotificationType.Failure;
     setTimeout(() => {
@@ -26,7 +49,21 @@ const useHelpers = () => {
     setTimeout(() => {
       handleNotification({ isOpen: false, message: "", notificationType: NotificationType.Info})
     }, 4000);
-  };
-  return { raiseNotification };
+  }, [handleNotification]);
+
+  const handleDelete = useCallback(async(id: string | null) => {
+    const response = path === 'ingredients' ? await deleteIngredient(id) : await deleteRecipesFromServer(id)
+    raiseNotification(response)
+    router.replace(path)
+  },[raiseNotification, router, path])
+
+  const askPermision = (id: string) => {
+    openModal('delete')
+    activateDelete()
+    passItemId(id)
+  }
+
+
+  return { isOpen, isModalOpen, isDeleteActive, closeModal, storedItemId, handleDelete, askPermision };
 };
 export default useHelpers;

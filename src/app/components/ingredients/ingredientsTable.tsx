@@ -2,56 +2,29 @@
 import { ingredientColumns, ingredientSortedLinks } from "@/app/constants/data";
 import { getUsageCategory, paginate } from "@/app/services/helpers";
 import { Ingredient} from "@/shemas/recipe";
-import { useRouter } from "next/navigation";
 /* import Notification from '@/app/components/shared/notification'
  */import Link from "next/link";
 import Label from "../shared/label";
-import { deleteIngredient } from "@/app/services/services";
 import useHelpers from "@/app/hooks/useHelpers";
-import { useCallback, useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import useSorting from "@/app/hooks/useSorting";
 import { usePaginationStore } from "@/app/stores/paginationStore";
 import TableHead from "../shared/table/tableHead";
 import TableActions from "../shared/table/tableActions";
 import TableClickableTitle from "../shared/table/tableClickableTitle";
 import Notification from "../shared/notification";
-import { useNotificationStore } from "@/app/stores/notificationStore";
 import MonetaryCell from "../shared/table/monetaryCell";
-import { useUIStore } from "@/app/stores/uiStore";
 import Modal from "../shared/modal";
-import Button from "../shared/sharedButton";
-import { useGeneralStore } from "@/app/stores/generalStore";
+import DeleteConfirmationModal from "../shared/deleteConfirmationModal";
 
 const IngredientsTable = ({items}: {items: Ingredient[]}) => {
 
   const page = usePaginationStore((state) => state.currentPage)
   const reset = usePaginationStore((state) => state.resetPage)
-  const isOpen = useNotificationStore((state) => state.notification.isOpen)
-  const openModal = useUIStore((state) => state.openModal)
-  const isDeleteActive = useUIStore((state) => state.isDeleteActive)
-  const closeModal = useUIStore((state) => state.reset)
-  const activateDelete = useUIStore((state) => state.activateDelete)
-  const isModalOpen = useUIStore((state) => state.isModalOpen)
-  const passItemId = useGeneralStore((state) => state.setId)
-  const storedItemId = useGeneralStore((state) => state.itemId)
-  const {raiseNotification} = useHelpers()
+  const {isOpen, isModalOpen, isDeleteActive, closeModal, storedItemId, handleDelete, askPermision} = useHelpers({path: 'ingredients'})
   const {sortData, sortStatus, sortedData} = useSorting({data: items})
-  const router = useRouter()
   const paginateItems = useMemo(() => paginate(10, page, sortedData ),[sortedData, page]);
-
   const itemsToDisplay = paginateItems ? paginateItems : [];
-
-  const handleDelete = useCallback(async(id: string | null) => {
-    const response = await deleteIngredient(id)
-    raiseNotification(response)
-    router.replace("ingredients")
-  },[raiseNotification, router])
-
-  const askPermision = (id: string) => {
-    openModal('delete')
-    activateDelete()
-    passItemId(id)
-  }
 
   useEffect(() => {
     reset()
@@ -118,11 +91,11 @@ const IngredientsTable = ({items}: {items: Ingredient[]}) => {
       {isOpen && <Notification />}
       {isModalOpen && isDeleteActive && 
       <Modal isOpen={isModalOpen} onClose={closeModal} type="delete">
-        <div className="h-25 w-fit p-5">
-        <p>This action is irreversible. Are you sure you want to continue?</p>
-        <Button text='Yes' action={() => handleDelete(storedItemId)} />
-        <Button text='No' action={closeModal} />
-        </div> 
+        <DeleteConfirmationModal
+          onDelete={handleDelete}
+          onClose={closeModal}
+          id={storedItemId}
+         />
       </Modal>}
     </div>
   );
