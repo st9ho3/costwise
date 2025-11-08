@@ -1,18 +1,22 @@
 "use client"
 import React from 'react';
-import { LogOut, CircleUserRound, X } from 'lucide-react';
+import { LogOut, CircleUserRound, User } from 'lucide-react';
 import Image from 'next/image';
 import { signOut } from 'next-auth/react';
-import { useUIStore } from '@/app/stores/uiStore';
 
 
 const UserProfile = ({ name, email, avatar }: {name: string, email: string, avatar: string | null | undefined}) => {
-
-  const closeProfile = useUIStore((state) => state.closeProfile)
+  
   return (
-    <div className=" absolute top-13 right-8 z-50 w-72 font-sans bg-white rounded-xl shadow-lg border border-gray-200/50">
-      <X onClick={() => closeProfile()} className='flex justify-self-end m-1 cursor-pointer' />
+    <div className=" w-80 bg-white rounded-xl ">
       <div className="p-2">
+        <button
+          
+          className="flex items-center w-full px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-500 transition-colors duration-150"
+        >
+          <User className="w-5 h-5 mr-3" strokeWidth={2} />
+          User Details
+        </button>
         <button
           onClick={() => signOut()}
           className="flex items-center w-full px-3 py-2 text-sm font-medium text-red-600 rounded-md hover:bg-red-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500 transition-colors duration-150"

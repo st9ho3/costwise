@@ -1,13 +1,12 @@
 "use client"
 import React, { useEffect, useRef } from 'react';
-import { X, ArrowLeft } from 'lucide-react';
+import { X } from 'lucide-react';
 import { ModalProps } from '../../../types/context';
-import { useHomeContext } from '@/app/context/homeContext/homeContext';
 
-const Modal= ({ isOpen, onClose, children }: ModalProps) => {
+const Modal= ({ isOpen, onClose, children, type }: ModalProps) => {
 
   const modalRef = useRef<HTMLDivElement>(null);
-  const { state, dispatch} = useHomeContext()
+ 
 
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -25,47 +24,23 @@ const Modal= ({ isOpen, onClose, children }: ModalProps) => {
     };
   }, [isOpen, onClose]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-     
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-        onClose();
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isOpen, onClose]);
-
-
   if (!isOpen) {
     return null;
   }
 
   const handleClose = (e: React.MouseEvent) => {
-    
     e.stopPropagation()
     onClose()
   }
 
   return (
     <div
-      className="fixed inset-0 z-55 flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity duration-300">
+      onClick={handleClose}
+      className="fixed inset-0 z-55 flex items-center justify-center bg-black/30 backdrop-blur-sm transition-opacity duration-300">
       <div
         ref={modalRef}
-        className={`relative w-full max-w-fit p-9 mx-4 transform transition-all duration-300 bg-white rounded-2xl shadow-xl`} >
+        className={`relative w-full max-w-fit ${type === 'create' ? 'p-9' : 'pt-9'} mx-4 transform transition-all duration-300 bg-white rounded-2xl shadow-xl`} >
 
-        {state.modalType.type !== "create" && <button
-          onClick={() => dispatch({type: "OPEN_MODAL", payload: {type: "create"}})}
-          className="absolute top-3 right-11 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-offset-2 transition-colors"
-          aria-label="Close modal" >
-            <ArrowLeft />
-        </button>}
         <button
           onClick={handleClose}
           className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-offset-2 transition-colors"

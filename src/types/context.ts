@@ -62,6 +62,7 @@ export interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
+  type?: string
 }
 
 export interface ButtonProps {
