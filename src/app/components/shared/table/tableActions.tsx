@@ -3,8 +3,8 @@ import Link from 'next/link'
 import React from 'react'
 
 interface TableActionsProps {
-    onDelete: (id: string) => void
-    id: string
+    onDelete: (id: string | undefined) => void
+    id: string | undefined
     path: string
 }
 

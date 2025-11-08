@@ -8,6 +8,7 @@ interface DeleteConfirmationModalProps {
 }
 
 const DeleteConfirmationModal = ({onDelete, onClose, id}: DeleteConfirmationModalProps) => {
+
   return (
     <div className="h-25 w-fit p-5">
         <p>This action is irreversible. Are you sure you want to continue?</p>
