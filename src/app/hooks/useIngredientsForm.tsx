@@ -58,7 +58,7 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
   })
   
   const router = useRouter();
-  const { raiseNotification } = useHelpers();
+  const { raiseNotification } = useHelpers({path: null});
   const [errors, setErrors] = useState<string[]>([])
 
   const price = watch('unitPrice')

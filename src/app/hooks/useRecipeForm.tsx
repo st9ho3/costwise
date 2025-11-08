@@ -38,7 +38,7 @@ const useRecipeForm = ({mode, recipe, recipeIngredients, userId}: RecipeFormProp
   const notification = useNotificationStore((state) => state.notification)
   const router = useRouter();
   const { handleFileUpload, error } = useFileUpload();
-  const { raiseNotification } = useHelpers();
+  const { raiseNotification } = useHelpers({path: null});
   
   const { register, handleSubmit, setValue, reset, formState, getValues, watch } = useForm<FormFields>({
     defaultValues: mode === "create" ? {
