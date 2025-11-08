@@ -57,7 +57,7 @@ const useHelpers = ({path}: UseHelpersProps) => {
     router.replace(path || '')
   },[raiseNotification, router, path])
 
-  const askPermision = (id: string) => {
+  const askPermision = (id: string | undefined) => {
     openModal('delete')
     activateDelete()
     passItemId(id)

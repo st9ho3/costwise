@@ -11,6 +11,7 @@ import IngredientHeader from '@/app/components/ingredients/ingredientPage/ingred
 import IngredientDetails from '@/app/components/ingredients/ingredientPage/ingredientDetails'
 import IngredientData from '@/app/components/ingredients/ingredientPage/ingredientData'
 import Data from '@/app/components/ingredients/ingredientPage/data'
+import ActionsContainer from '@/app/components/shared/actionsContainer'
 
 
 
@@ -29,6 +30,7 @@ const page = async ({params}: {params: Promise<{id: string}>}) => {
   return (
     <div className='flex p-5'>
       <IngredientDetails>
+        <ActionsContainer id={ingredient?.id} />
         <IngredientHeader
         name={ingredient?.name}
         icon={ingredient?.icon}
@@ -40,6 +42,7 @@ const page = async ({params}: {params: Promise<{id: string}>}) => {
           <Data category='' label='Usage' text={ingredient?.usage} />
           <Data category={ingredient?.category || 'Other'} label='Category' text={ingredient?.category} />
         </IngredientData>
+        
       </IngredientDetails>
       
     </div>

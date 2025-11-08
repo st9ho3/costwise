@@ -7,7 +7,7 @@ interface IngredientDataProps {
 const IngredientData = ({children}: IngredientDataProps) => {
 
   return (
-    <div className='pt-5'>
+    <div className=' flex flex-col pt-5'>
       {children}
     </div>
   )

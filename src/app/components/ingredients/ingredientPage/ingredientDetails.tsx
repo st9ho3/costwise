@@ -6,7 +6,7 @@ interface IngredientDetailsProps {
 
 const IngredientDetails = ({children}: IngredientDetailsProps) => {
   return (
-    <div className='border w-60 p-5 border-gray-200 rounded-xl'>
+    <div className='flex flex-col gap-4 border w-60 p-5 border-gray-200 rounded-xl'>
       {children}
     </div>
   )
