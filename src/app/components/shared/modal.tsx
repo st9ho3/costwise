@@ -2,6 +2,8 @@
 import React, { useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
 import { ModalProps } from '../../../types/context';
+import { AlertCircleIcon } from "lucide-react";
+
 
 const Modal= ({ isOpen, onClose, children, type }: ModalProps) => {
 
@@ -36,11 +38,11 @@ const Modal= ({ isOpen, onClose, children, type }: ModalProps) => {
   return (
     <div
       onClick={handleClose}
-      className="fixed inset-0 z-55 flex items-center justify-center bg-black/30 backdrop-blur-sm transition-opacity duration-300">
+      className={`fixed inset-0 z-55 flex items-center justify-center ${type === 'delete' ? 'bg-white/30' : 'bg-black/30' }  backdrop-blur-sm transition-opacity duration-300`}>
       <div
         ref={modalRef}
         className={`relative w-full max-w-fit ${type === 'create' ? 'p-9' : 'pt-9'} mx-4 transform transition-all duration-300 bg-white rounded-2xl shadow-xl`} >
-
+        {type === 'delete' && <AlertCircleIcon className="absolute top-3 left-3" color="red" size={28} /> }
         <button
           onClick={handleClose}
           className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-offset-2 transition-colors"

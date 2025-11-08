@@ -17,6 +17,10 @@ import TableActions from "../shared/table/tableActions";
 import TableClickableTitle from "../shared/table/tableClickableTitle";
 import MonetaryCell from "../shared/table/monetaryCell";
 import PercentilleCell from "../shared/table/percentilleCell";
+import Modal from "../shared/modal";
+import Button from "../shared/sharedButton";
+import { useUIStore } from "@/app/stores/uiStore";
+import { useGeneralStore } from "@/app/stores/generalStore";
 
 
 const RecipesTable = ({items}: {items: Recipe[]}) => {
@@ -24,6 +28,13 @@ const RecipesTable = ({items}: {items: Recipe[]}) => {
   const notification = useNotificationStore((state) => state.notification)
   const resetPage = usePaginationStore((state) => state.resetPage)
   const resetNotification = useNotificationStore((state) => state.reset)
+  const isModalOpen = useUIStore((state) => state.isModalOpen)
+  const isDeleteActive = useUIStore((state) => state.isDeleteActive)
+  const closeModal = useUIStore((state) => state.reset)
+  const storedItemId = useGeneralStore((state) => state.itemId)
+  const openModal = useUIStore((state) => state.openModal)
+  const activateDelete = useUIStore((state) => state.activateDelete)
+  const passItemId = useGeneralStore((state) => state.setId)
   const { raiseNotification } = useHelpers()
   const router = useRouter()
   const {sortData, sortStatus, sortedData} = useSorting({data: items})
@@ -40,7 +51,13 @@ const RecipesTable = ({items}: {items: Recipe[]}) => {
 
   }, [resetNotification, resetPage])
 
-  const handleDelete = useCallback(async(id: string) => {
+  const askPermision = (id: string) => {
+    openModal('delete')
+    activateDelete()
+    passItemId(id)
+  }
+
+  const handleDelete = useCallback(async(id: string | null) => {
     const response = await deleteRecipesFromServer(id)
     raiseNotification(response)
     router.replace("recipes")
@@ -101,7 +118,7 @@ const RecipesTable = ({items}: {items: Recipe[]}) => {
               <td className="align-middle text-center gap-5 flex justify-center md:text-start md:justify-start mt-4 md:pl-4">
                 <TableActions
                   id={item.id}
-                  onDelete={handleDelete}
+                  onDelete={askPermision}
                   path="recipes"
                 />
               </td>
@@ -110,6 +127,14 @@ const RecipesTable = ({items}: {items: Recipe[]}) => {
         </tbody>
       </table>
       {notification.isOpen && <Notification />}
+      {isModalOpen && isDeleteActive && 
+      <Modal isOpen={isModalOpen} onClose={closeModal} type="delete">
+        <div className="h-25 w-fit p-5">
+        <p>This action is irreversible. Are you sure you want to continue?</p>
+        <Button text='Yes' action={() => handleDelete(storedItemId)} />
+        <Button text='No' action={closeModal} />
+        </div> 
+      </Modal>}
     </div>
   );
 };

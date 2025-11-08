@@ -17,12 +17,23 @@ import TableClickableTitle from "../shared/table/tableClickableTitle";
 import Notification from "../shared/notification";
 import { useNotificationStore } from "@/app/stores/notificationStore";
 import MonetaryCell from "../shared/table/monetaryCell";
+import { useUIStore } from "@/app/stores/uiStore";
+import Modal from "../shared/modal";
+import Button from "../shared/sharedButton";
+import { useGeneralStore } from "@/app/stores/generalStore";
 
 const IngredientsTable = ({items}: {items: Ingredient[]}) => {
 
   const page = usePaginationStore((state) => state.currentPage)
   const reset = usePaginationStore((state) => state.resetPage)
   const isOpen = useNotificationStore((state) => state.notification.isOpen)
+  const openModal = useUIStore((state) => state.openModal)
+  const isDeleteActive = useUIStore((state) => state.isDeleteActive)
+  const closeModal = useUIStore((state) => state.reset)
+  const activateDelete = useUIStore((state) => state.activateDelete)
+  const isModalOpen = useUIStore((state) => state.isModalOpen)
+  const passItemId = useGeneralStore((state) => state.setId)
+  const storedItemId = useGeneralStore((state) => state.itemId)
   const {raiseNotification} = useHelpers()
   const {sortData, sortStatus, sortedData} = useSorting({data: items})
   const router = useRouter()
@@ -30,11 +41,17 @@ const IngredientsTable = ({items}: {items: Ingredient[]}) => {
 
   const itemsToDisplay = paginateItems ? paginateItems : [];
 
-  const handleDelete = useCallback(async(id: string) => {
+  const handleDelete = useCallback(async(id: string | null) => {
     const response = await deleteIngredient(id)
     raiseNotification(response)
     router.replace("ingredients")
   },[raiseNotification, router])
+
+  const askPermision = (id: string) => {
+    openModal('delete')
+    activateDelete()
+    passItemId(id)
+  }
 
   useEffect(() => {
     reset()
@@ -90,7 +107,7 @@ const IngredientsTable = ({items}: {items: Ingredient[]}) => {
               <td className="align-middle text-center gap-5 flex justify-center md:text-start md:justify-start mt-4 md:pl-4">
                 <TableActions
                   id={item.id}
-                  onDelete={handleDelete}
+                  onDelete={askPermision}
                   path="ingredients"
                 />
               </td>
@@ -99,6 +116,14 @@ const IngredientsTable = ({items}: {items: Ingredient[]}) => {
         </tbody>
       </table>
       {isOpen && <Notification />}
+      {isModalOpen && isDeleteActive && 
+      <Modal isOpen={isModalOpen} onClose={closeModal} type="delete">
+        <div className="h-25 w-fit p-5">
+        <p>This action is irreversible. Are you sure you want to continue?</p>
+        <Button text='Yes' action={() => handleDelete(storedItemId)} />
+        <Button text='No' action={closeModal} />
+        </div> 
+      </Modal>}
     </div>
   );
 };

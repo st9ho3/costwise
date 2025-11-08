@@ -75,7 +75,7 @@ export const sendRecipeToUpdate = async (data: FormFields, addedIngredients: Rec
   return response;
 };
 
-export const deleteRecipesFromServer = async (recipeId: string) => {
+export const deleteRecipesFromServer = async (recipeId: string | null) => {
   const response = await fetch(`api/recipes/${recipeId}`, {
     method: "DELETE",
     headers: {
@@ -126,7 +126,7 @@ export const updateIngredient = async (ingredient: Ingredient) => {
 }
 
 
-export const deleteIngredient = async (id: string) => {
+export const deleteIngredient = async (id: string | null)  => {
   
   const response = await fetch(`/api/ingredients/${id}`, {
     method: "DELETE",
