@@ -1,15 +1,12 @@
 "use client"
 import React from 'react'
-import Image from 'next/image'
-import { Bell, CircleUserRound } from 'lucide-react'
+import { Bell } from 'lucide-react'
 import { Session } from 'next-auth'
 import NotificationsNumber from '../shared/notificationsNumber'
 import SearchBoard from '../shared/search/searchBoard'
-import { useUIStore } from '@/app/stores/uiStore'
 
 const Header = ({session}: {session: Session}) => {
 
-  const openProfile = useUIStore((state) => state.openProfile)
   
   return (
     <header className="flex items-center justify-between p-2 border-b border-gray-200">
@@ -28,19 +25,6 @@ const Header = ({session}: {session: Session}) => {
         <span className="text-gray-600 mr-4">
           Hello, {session?.user?.email} 
         </span>
-        {session.user?.image 
-          ? <Image onClick={() => openProfile()}
-            alt='profile pic'
-            src={session?.user?.image}
-            width={30}
-            height={30}
-            className='rounded-full cursor-pointer'
-          /> 
-          : <CircleUserRound onClick={() => openProfile()}
-            className="w-9 h-9 text-gray-300"
-            strokeWidth={1.5}
-          />
-        } 
       </div>
     </header>
   )

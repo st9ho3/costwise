@@ -15,9 +15,11 @@ import {
 } from 'lucide-react';
 import Modal from '../shared/modal';
 import { useSession } from 'next-auth/react';
-import UserProfile from '../shared/profileModal';
 import { useUIStore } from '@/app/stores/uiStore';
 import { useFileStore } from '@/app/stores/fileStore';
+import { Session } from 'next-auth';
+import Profile from '../shared/userProfile';
+import UserProfile from '../shared/profileModal';
 
 function SidebarLink({
   icon: Icon,
@@ -78,12 +80,12 @@ function SidebarLink({
 /**
  * Renders a collapsible navigation sidebar.
  */
-export default function Sidebar() {
+export default function Sidebar({session}: {session: Session}) {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const isModalOpen = useUIStore((state) => state.isModalOpen)
   const modalType = useUIStore((state) => state.modalType)
-  const closeModal = useUIStore((state) => state.closeModal)
   const isProfileOpen = useUIStore((state) => state.isProfileOpen)
+  const reset = useUIStore((state) => state.reset)
   const resetFile = useFileStore((state) => state.reset)
   const {data} = useSession()
   
@@ -91,13 +93,14 @@ export default function Sidebar() {
   return (
     <>
       <aside
-        className={`bg-white border-r border-gray-200 flex flex-col justify-between p-2 transition-all duration-300 ease-in-out ${
+        className={`bg-white border-r border-gray-200 justify-between flex flex-col gap-8 p-2 transition-all duration-300 ease-in-out ${
           isCollapsed ? 'w-15' : 'w-40' // Adjusted width for better spacing
         }`}
       >
         {/* Top navigation links */}
-        <nav className="flex flex-col space-y-2">
+        <nav className="flex flex-col  space-y-2">
 
+          <Profile isCollapsed={isCollapsed} session={session} />
           <SidebarLink
             icon={Home}
             text="Home"
@@ -145,9 +148,10 @@ export default function Sidebar() {
 
       {/* Modal for 'create' action */}
       <Modal
+        type='create'
         isOpen={isModalOpen}
         onClose={() => {
-          closeModal()
+          reset()
           resetFile()
         }}
       >
@@ -156,7 +160,16 @@ export default function Sidebar() {
         }
       </Modal>
 
-      {isProfileOpen && <UserProfile name={data?.user?.name || "Unknown name"} email={data?.user?.email || "Unknown email"} avatar={data?.user?.image} />}
+      {isProfileOpen && 
+        <Modal
+        isOpen={isModalOpen}
+        onClose={() => {
+          reset()
+        }}
+        >
+          <UserProfile name={data?.user?.name || "Unknown name"} email={data?.user?.email || "Unknown email"} avatar={data?.user?.image} />
+        </Modal>
+      }
     </>
   );
 }

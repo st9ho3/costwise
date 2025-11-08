@@ -29,7 +29,7 @@ export const useUIStore = create<State>((set) => ({
         modalType: {type: type}
     }),
     closeModal: () => set({isModalOpen: false}),
-    openProfile: () => set({isProfileOpen: true}),
+    openProfile: () => set({ isModalOpen: true, isProfileOpen: true}),
     closeProfile: () => set({isProfileOpen: false}),
 
     reset: () => set({
