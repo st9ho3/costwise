@@ -152,3 +152,52 @@ export const DBRecipeIngredientsSchema = z.object({
 });
 
 export type DBRecipeIngredients = z.infer<typeof DBRecipeIngredientsSchema>;
+
+// Schema for defining a supplier
+export const SupplierSchema = z.object({
+  id: z.string().uuid(),
+  userId: z.string(), 
+  name: z.string().min(1, "Supplier name is required"),
+  
+  // What they sell
+  category: z.array(IngredientCategorySchema).min(1, "Must have at least one category"),
+
+  // Contact Info
+  contactPerson: z.string().optional(),
+  email: z.string().email("Invalid email address").optional(),
+  phone: z.string().optional(),
+  website: z.string().url("Invalid URL").optional(),
+
+  // Structured Address
+  address: z.object({
+    street: z.string().optional(),
+    city: z.string().optional(),
+    state: z.string().optional(), 
+    postalCode: z.string().optional(),
+    country: z.string().optional(),
+  }).optional(),
+
+  // Financial & Admin
+  paymentTerms: z.string().optional(),
+  vatNumber: z.string().optional(), 
+  notes: z.string().optional(),
+
+  // Logistics
+  deliveryTime: z.union([ 
+    z.literal('same day'),
+    z.literal('1-2 days'),
+    z.literal('2-3 days'),
+    z.literal('up to 5 days'),
+    z.literal('weekly'),
+  ]).optional(),
+
+  // Status & Metadata
+  status: z.union([
+    z.literal('active'), 
+    z.literal('inactive')
+  ]).default('active'),
+  
+  dateAdded: z.date().default(() => new Date()),
+});
+
+export type Supplier = z.infer<typeof SupplierSchema>;
