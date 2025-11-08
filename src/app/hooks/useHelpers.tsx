@@ -64,6 +64,6 @@ const useHelpers = ({path}: UseHelpersProps) => {
   }
 
 
-  return { isOpen, isModalOpen, isDeleteActive, closeModal, storedItemId, handleDelete, askPermision };
+  return { isOpen, isModalOpen, isDeleteActive, closeModal, storedItemId, handleDelete, askPermision, raiseNotification };
 };
 export default useHelpers;
