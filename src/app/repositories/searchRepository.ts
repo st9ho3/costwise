@@ -22,7 +22,7 @@ export class SearchRepository implements ISearchRepository {
                 .from(recipesTable)
                 .where(and(
                     eq(recipesTable.userId, this.userId),
-                    ilike(recipesTable.title, `${this.searchTerm}%`)
+                    ilike(recipesTable.title, `%${this.searchTerm}%`)
                 ));
 
             return recipes;
@@ -39,7 +39,7 @@ export class SearchRepository implements ISearchRepository {
                 .from(ingredientsTable)
                 .where(and(
                     eq(ingredientsTable.userId, this.userId),
-                    ilike(ingredientsTable.name, `${this.searchTerm}%`)
+                    ilike(ingredientsTable.name, `%${this.searchTerm}%`)
                 ));
         
             return ingredients;
