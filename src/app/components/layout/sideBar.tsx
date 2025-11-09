@@ -42,9 +42,9 @@ function SidebarLink({
         href={href}
         className="flex relative group items-center p-2 text-gray-700 rounded-lg hover:bg-gray-100 group"
       >
-        <Icon className="w-6 h-6 stroke-1 shrink-0" />
+        <Icon className="w-5 h-5 stroke-1 shrink-0" />
         <span
-          className={`ml-3 whitespace-nowrap transition-opacity duration-200 ${
+          className={`ml-3 whitespace-nowrap text-sm transition-opacity duration-200 ${
             isCollapsed ? 'opacity-0' : 'opacity-100'
           }`}
         >
@@ -62,9 +62,9 @@ function SidebarLink({
       onClick={() => openModal('create')}
       className="flex relative group items-center p-2 text-gray-700 rounded-lg hover:bg-gray-100 group cursor-pointer"
     >
-      <Icon className="w-6 h-6 stroke-1 shrink-0" />
+      <Icon className="w-5 h-5 stroke-1 shrink-0" />
       <span
-        className={`ml-3 whitespace-nowrap transition-opacity duration-200 ${
+        className={`ml-3 whitespace-nowrap text-sm transition-opacity duration-200 ${
           isCollapsed ? 'opacity-0' : 'opacity-100'
         }`}
       >
@@ -98,8 +98,7 @@ export default function Sidebar({session}: {session: Session}) {
         }`}
       >
         {/* Top navigation links */}
-        <nav className="flex flex-col  space-y-2">
-
+        <nav className="flex flex-col">
           <Profile isCollapsed={isCollapsed} session={session} />
           <SidebarLink
             icon={Home}

@@ -28,6 +28,19 @@ export const ingredientCategoryEnum = pgEnum("ingredient_category", [
   '', // For default/unset
 ]);
 
+export const deliveryTimeEnum = pgEnum("delivery_time", [
+  'Same Day',
+  '1-2 Days',
+  '2-3 Days',
+  'Up to 5 days',
+  'Weekly'
+])
+
+export const supplierStatusEnum = pgEnum('status', [
+  'active',
+  'reference'
+])
+
 // Defines the 'recipes' table schema.
 export const recipesTable = pgTable("recipes", {
   id: uuid("id").primaryKey(),
@@ -65,6 +78,39 @@ ingredientId: uuid("ingredient_id").notNull().references(() =>  ingredientsTable
 quantity: numeric("quantity").notNull()
 });
 
+export const suppliers = pgTable('suppliers', {
+  id: uuid('id').primaryKey(),
+  name: varchar('name', {length: 255}).notNull(),
+  userId: varchar('userId').notNull().references(() => users.id, {onDelete: 'cascade'} ),
+
+  ContactPerson: varchar('contact_person', {length: 255}),
+  email: varchar('email'),
+  phone: varchar('phone'),
+  website: varchar('website'),
+
+  deliveryTime: deliveryTimeEnum('delivery_time').notNull(),
+
+  status: supplierStatusEnum('status').notNull(),
+  dateAdded: date('date_added')
+})
+
+export const suppplierAddresses = pgTable('supplier_addresses', {
+  id: uuid('id').primaryKey(),
+  street: varchar('street', {length: 100}),
+  city: varchar('city', {length: 100}),
+  state: varchar('state', {length: 30}),
+  postalCode: varchar('postal_code', {length: 10}),
+  country: varchar('country', {length: 50}),
+  suppliersId: uuid('suppliers_id').notNull().references(() => suppliers.id, {onDelete: 'cascade'})
+})
+
+export const supplierFinancialData = pgTable('supplier_financial_data', {
+  supplierId: uuid("supplier_id").primaryKey().references(() => suppliers.id, { onDelete: 'cascade' }),
+  vatNumber: varchar("vat_number", {length: 50}),
+  paymentTerms: pgEnum("payment_terms", ["Net 30", "Net 60", "Net 90", "Due on Receipt"])("payment_terms"),
+  defaultCurrency: varchar("default_currency", {length: 3}).default("EUR"), 
+})
+
 export const recipeRelations = relations(recipesTable,({many, one}) => ({
   recipeIngredients: many(recipeIngredientsTable),
   user: one(users, {
@@ -91,6 +137,14 @@ export const recipeIngredientsRelations = relations(recipeIngredientsTable, ({on
     references: [ingredientsTable.id]
   })
 }))
+
+
+
+
+
+
+
+
 
 
 

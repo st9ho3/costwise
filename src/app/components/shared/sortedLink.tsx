@@ -11,7 +11,7 @@ interface SortedLinkProps {
 const SortedLink = ({children, onSort, sortStatus: {isAscending, isFiltering, value}}: SortedLinkProps) => {
 
   return (
-    <div className='cursor-pointer flex items-center gap-2' onClick={() => onSort(`${children}`)}>
+    <div className='cursor-pointer text-xs flex items-center gap-2' onClick={() => onSort(`${children}`)}>
       {children}
       {!isFiltering 
       ? <ArrowDownUp size={15}/> 

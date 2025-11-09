@@ -11,7 +11,7 @@ const Profile = ({session, isCollapsed}: {session: Session, isCollapsed: boolean
   return (
     <div className='ml-1'>
       {session.user?.image 
-          ? <div onClick={() => openProfile()} className='flex items-center gap-1 border-b pb-2.5 cursor-pointer border-gray-200 text-sm text-gray-600'>
+          ? <div onClick={() => openProfile()} className='flex items-center gap-1 border-b pb-1.5 mb-2 cursor-pointer border-gray-200 text-sm text-gray-600'>
             <Image 
             alt='profile pic'
             src={session?.user?.image}

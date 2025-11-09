@@ -31,13 +31,13 @@ const page = async() => {
   const avgProfitMargin = recipeAnalytics && recipeAnalytics.avgProfitMargin !== null ? Number(recipeAnalytics.avgProfitMargin) : 0
   const totalIngredients = ingredientAnalytics ? ingredientAnalytics.totalIngredients : 0
 
-  console.log(recipeAnalytics)
+  console.log(Number(avgfoodCost.toFixed((2))))
   return (
     <div className=' m-2'>
       <div className='m-1 p-3 flex justify-between rounded-2xl bg-white h-full'>
         <Card title='Recipes' value={totalRecipes} Icon={ShoppingBasket} color='border-1 border-amber-600' />
         <Card title='Ingredients' value={totalIngredients} Icon={Carrot} color='border-1  border-red-600' />
-        <Card title='Avg Food Cost' value={avgfoodCost} Icon={Percent} color='border-1  border-green-600' />
+        <Card title='Avg Food Cost' value={Number(avgfoodCost.toFixed(2))} Icon={Percent} color='border-1  border-green-600' />
         <Card title='Avg Profit Margin' value={avgProfitMargin} Icon={Percent} color='border-1  border-purple-600' />
       </div>
     </div>
