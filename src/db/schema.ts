@@ -66,8 +66,9 @@ export const ingredientsTable = pgTable('ingredients', {
   unitPrice: numeric('unit_price', { precision: 10, scale: 5 }).notNull(),
   quantity: numeric('quantity').notNull(),
   usage: numeric('usage').notNull().default('1'),
-  category: ingredientCategoryEnum('category').notNull(),
-  userId: text("user_id").notNull().references(() => users.id, { onDelete: 'cascade' }), 
+
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: 'cascade' }),
+  category: ingredientCategoryEnum('category').notNull().references(() => categories.id)
 });
 
 // Defines the 'recipeIngredients' table schema, linking recipes and ingredients.
@@ -109,6 +110,18 @@ export const supplierFinancialData = pgTable('supplier_financial_data', {
   vatNumber: varchar("vat_number", {length: 50}),
   paymentTerms: pgEnum("payment_terms", ["Net 30", "Net 60", "Net 90", "Due on Receipt"])("payment_terms"),
   defaultCurrency: varchar("default_currency", {length: 3}).default("EUR"), 
+})
+
+export const supplierCategories = pgTable('supplier_categories', {
+  suplierId: uuid('supplier_id').references(() => suppliers.id, {onDelete: 'cascade'}),
+  categoryId: uuid('category_id').references(() => categories.id, {onDelete: 'cascade'})
+}, (t) => ({
+  pk: primaryKey({columns: [t.suplierId, t.categoryId]})
+}))
+
+export const categories = pgTable('categories', {
+  id: uuid('id').primaryKey(),
+  category: ingredientCategoryEnum('category')
 })
 
 export const recipeRelations = relations(recipesTable,({many, one}) => ({
