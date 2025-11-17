@@ -20,7 +20,7 @@ const page = async ({params}: {params: Promise<{id: string}>}) => {
   const service = new IngredientService()
   const ingredient = await service.findById(id)
 
-  console.log(ingredient)
+  
   const session = await auth()
     
     if (!session?.user) {
@@ -34,13 +34,13 @@ const page = async ({params}: {params: Promise<{id: string}>}) => {
         <IngredientHeader
         name={ingredient?.name}
         icon={ingredient?.icon}
-        type={ingredient?.category || 'Other'} 
+        type={ingredient?.categoryName || 'Other'} 
         />
         <IngredientData>
           <Data category='' label='Unit Measure' text={ingredient?.unit} />
           <Data category='' label='Price per Unit' text={ingredient?.unitPrice} />
           <Data category='' label='Usage' text={ingredient?.usage} />
-          <Data category={ingredient?.category || 'Other'} label='Category' text={ingredient?.category} />
+          <Data category={ingredient?.categoryName || 'Other'} label='Category' text={ingredient?.categoryName } />
         </IngredientData>
         
       </IngredientDetails>

@@ -19,6 +19,7 @@ const ingredientsPage = async () => {
   const ingredients = rawIngredients ? rawIngredients.map((ingredient) => {
     return ingredient;
   }) : [];
+
   
   return (
     <div className="flex flex-col h-full w-full px-2 md:px-5 bg-white">

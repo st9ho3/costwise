@@ -1,6 +1,6 @@
 
 import { Database } from '@/db/schema';
-import { Recipe, Ingredient, RecipeIngredients, DBIngredient, DBRecipe } from '@/shemas/recipe';
+import { Recipe, RecipeIngredients, DBIngredient, DBRecipe, IngredientToDisplay } from '@/shemas/recipe';
 import { RecipeWithQuery } from './specialTypes';
 
 export interface RecipeAnalytics {
@@ -32,8 +32,8 @@ export interface IRecipeIngredientsRepository {
 }
 
 export interface IIngredientRepository {
-  findById(id: string): Promise<Ingredient | undefined>;
-  findAll(userId: string): Promise<Ingredient[] | undefined>;
+  findById(id: string): Promise<IngredientToDisplay | undefined>;
+  findAll(userId: string): Promise<IngredientToDisplay[] | undefined>;
   create(ingredient: DBIngredient): Promise<{ingredientId: string} | undefined>;
   update(ingredient: DBIngredient, tx?: Database): Promise<{ingredientId: string} | undefined>;
   delete(id: string): Promise<{ingredientId: string} | undefined>;

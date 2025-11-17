@@ -1,7 +1,7 @@
 "use client";
 import { ingredientColumns, ingredientSortedLinks } from "@/app/constants/data";
 import { getUsageCategory, paginate } from "@/app/services/helpers";
-import { Ingredient} from "@/shemas/recipe";
+import { IngredientToDisplay} from "@/shemas/recipe";
 /* import Notification from '@/app/components/shared/notification'
  */import Link from "next/link";
 import Label from "../shared/label";
@@ -17,7 +17,7 @@ import MonetaryCell from "../shared/table/monetaryCell";
 import Modal from "../shared/modal";
 import DeleteConfirmationModal from "../shared/deleteConfirmationModal";
 
-const IngredientsTable = ({items}: {items: Ingredient[]}) => {
+const IngredientsTable = ({items}: {items: IngredientToDisplay[]}) => {
 
   const page = usePaginationStore((state) => state.currentPage)
   const reset = usePaginationStore((state) => state.resetPage)
@@ -72,8 +72,8 @@ const IngredientsTable = ({items}: {items: Ingredient[]}) => {
               </td>
               <td className="hidden md:table-cell pl-4">
                 <Label
-                  text={item.category}
-                  type={item.category}
+                  text={item.categoryName}
+                  type={item.categoryName}
                 />
               </td>
 

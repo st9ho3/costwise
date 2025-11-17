@@ -22,6 +22,28 @@ export type Unit = z.infer<typeof UnitSchema>;
 
 // Schema for defining allowed ingredient categories
 export const IngredientCategorySchema = z.union([
+  z.literal('5dee106a-5050-443e-8368-03397e02af6d'),
+  z.literal('a7b9013d-8f0d-4ef5-96fa-1f91df6e7fb5'),
+  z.literal('1670a6d4-f212-4770-80c7-0e31c0f4c26b'),
+  z.literal('80662af1-1943-4168-8549-ef721b0e9f54'),
+  z.literal('b660f354-a89d-420c-80d1-ba0f16b433ec'),
+  z.literal('90aae231-631c-4fed-baf0-929be5a26b13'),
+  z.literal('25f19080-3387-4470-95df-598817d5ccfe'),
+  z.literal('83602573-0b31-439c-8890-ee084a547c22'),
+  z.literal('ad6fbf47-f289-4ffb-b070-a5957330a56b'),
+  z.literal('f50e6aea-bb2d-42a1-8778-52cdbfec1540'),
+  z.literal('0d4584b2-8bfa-4a82-9f11-a3b88af2d6c5'),
+  z.literal('ef45178d-e566-4637-b7f9-abcf6d575466'),
+  z.literal(''), // Added an empty string for default/unset
+], {
+  errorMap: () => ({ message: "Invalid ingredient category." })
+});
+
+// Inferred TypeScript type for an ingredient category
+export type IngredientCategory = z.infer<typeof IngredientCategorySchema>;
+
+// Schema for defining the allowed ingredient category *names*
+export const IngredientCategoryNameSchema = z.union([
   z.literal('Produce'),
   z.literal('Meat & Poultry'),
   z.literal('Fish & Seafood'),
@@ -34,13 +56,14 @@ export const IngredientCategorySchema = z.union([
   z.literal('Beverages (Other)'),
   z.literal('Bakery'),
   z.literal('Other'),
-  z.literal(''), // Added an empty string for default/unset
+  z.literal(''), // Fallback for empty/unset
 ], {
-  errorMap: () => ({ message: "Invalid ingredient category." })
+  // Add a custom error message for clarity
+  errorMap: () => ({ message: "Invalid ingredient category name." })
 });
 
-// Inferred TypeScript type for an ingredient category
-export type IngredientCategory = z.infer<typeof IngredientCategorySchema>;
+// Inferred TypeScript type
+export type IngredientCategoryName = z.infer<typeof IngredientCategoryNameSchema>;
 
 // Schema for defining a table column's properties
 export const ColumnSchema = z.object({
@@ -111,10 +134,15 @@ export const IngredientSchema = z.object({
   quantity: z.number().min(1, "Quantity must be non-negative"),
   usage: z.string(),
   userId: z.string(),
+
   category: IngredientCategorySchema
 });
 
 export type Ingredient = z.infer<typeof IngredientSchema>;
+
+export type IngredientToDisplay = Ingredient & {
+  categoryName: IngredientCategoryName
+}
 
 export const DBIngredientSchema = z.object({
   id: z.string().uuid(),
@@ -184,11 +212,11 @@ export const SupplierSchema = z.object({
 
   // Logistics
   deliveryTime: z.union([ 
-    z.literal('same day'),
-    z.literal('1-2 days'),
-    z.literal('2-3 days'),
-    z.literal('up to 5 days'),
-    z.literal('weekly'),
+    z.literal('Same Day'),
+    z.literal('1-2 Days'),
+    z.literal('2-3 Days'),
+    z.literal('Up to 5 days'),
+    z.literal('Weekly'),
   ]).optional(),
 
   // Status & Metadata

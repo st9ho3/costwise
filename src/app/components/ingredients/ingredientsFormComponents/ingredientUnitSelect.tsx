@@ -10,11 +10,11 @@ type IngredientUnitSelectProps = {
 
 const IngredientUnitSelect = memo(({ register, onKeyDown }: IngredientUnitSelectProps) => (
   <div className='flex items-center p-1 space-x-3 border-dashed rounded-lg border-1 border-gray-300'>
-    <Scale />
+    <Scale size={18} />
     <select
       id="unit"
       {...register('unit')}
-      className="block w-20 p-2 text-lg bg-white text-gray-800 focus:outline-none"
+      className="block w-20 p-2 text-md bg-white text-gray-800 focus:outline-none"
       onKeyDown={onKeyDown}
     >
       <option value="">Unit</option>

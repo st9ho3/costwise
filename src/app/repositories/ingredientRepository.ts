@@ -14,24 +14,27 @@
  * - Transaction support for atomic operations
  */
 
-import { DBIngredient, Ingredient } from "@/shemas/recipe";
+import { DBIngredient, IngredientToDisplay } from "@/shemas/recipe";
 import { IIngredientRepository, IngredientAnalytics } from "@/types/repositories";
 import { db } from "@/db/db";
-import { Database, ingredientsTable } from "@/db/schema";
+import { categories, Database, ingredientsTable } from "@/db/schema";
 import { transformIngredientFromDB } from "../services/helpers";
 import { countDistinct, eq, sql } from "drizzle-orm";
 
 export class IngredientRepository implements IIngredientRepository {
 
     
-    async findAll(userId: string): Promise<Ingredient[] | undefined> {
+    async findAll(userId: string): Promise<IngredientToDisplay[] | undefined> {
         try {
             const dbIngredients = await db
-                .select()
+                .select({ingredientsTable, categories} )
                 .from(ingredientsTable)
-                .where(eq(ingredientsTable.userId, userId));
-
-            const ingredients = dbIngredients.map((dbIngredient) => transformIngredientFromDB(dbIngredient));
+                .innerJoin(categories, eq(ingredientsTable.category, categories.id))
+                .where(
+                    eq(ingredientsTable.userId, userId)
+                );
+                
+            const ingredients = dbIngredients.map((dbIngredient) => transformIngredientFromDB(dbIngredient.ingredientsTable as DBIngredient, dbIngredient.categories.category));
             return ingredients;
         } catch (err) {
             console.error("Failed to fetch ingredients:", err);
@@ -40,19 +43,19 @@ export class IngredientRepository implements IIngredientRepository {
     }
 
  
-    async findById(id: string): Promise<Ingredient | undefined> {
+    async findById(id: string): Promise<IngredientToDisplay | undefined> {
         try {
             const [dbIngredient] = await db
                 .select()
                 .from(ingredientsTable)
+                .innerJoin(categories, eq(ingredientsTable.category, categories.id))
                 .where(eq(ingredientsTable.id, id));
 
             if (!dbIngredient) {
                 return undefined;
             }
-
-            const ingredient = transformIngredientFromDB(dbIngredient);
-            return ingredient;
+            const ingredient = transformIngredientFromDB(dbIngredient.ingredients as DBIngredient, dbIngredient.categories.category);
+            return ingredient
         } catch (err) {
             console.error("Failed to fetch ingredient by ID:", err);
             throw new Error(`IngredientRepository.findById: Failed to fetch ingredient with ID ${id}: ${err}`);
@@ -61,6 +64,7 @@ export class IngredientRepository implements IIngredientRepository {
 
   
     async create(ingredient: DBIngredient): Promise<{ ingredientId: string } | undefined> {
+        console.log(ingredient)
         try {
             const [ingredientID] = await db
                 .insert(ingredientsTable)

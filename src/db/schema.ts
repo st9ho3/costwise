@@ -36,6 +36,13 @@ export const deliveryTimeEnum = pgEnum("delivery_time", [
   'Weekly'
 ])
 
+export const paymentTermsEnum = pgEnum("payment_terms", [
+  'Net 30',
+  'Net 60',
+  'Net 90',
+  'Due on Receipt'
+])
+
 export const supplierStatusEnum = pgEnum('status', [
   'active',
   'reference'
@@ -54,6 +61,7 @@ export const recipesTable = pgTable("recipes", {
   sellingPrice: numeric("selling_price", { precision: 10, scale: 2 }).notNull(),
   profitMargin: numeric("profit_margin", { precision: 10, scale: 2 }).notNull(),
   foodCost: numeric("food_cost", { precision: 10, scale: 2 }).notNull(),
+
   userId: text("user_id").notNull().references(() => users.id, { onDelete: 'cascade' }),
 });
 
@@ -68,7 +76,7 @@ export const ingredientsTable = pgTable('ingredients', {
   usage: numeric('usage').notNull().default('1'),
 
   userId: text("user_id").notNull().references(() => users.id, { onDelete: 'cascade' }),
-  category: ingredientCategoryEnum('category').notNull().references(() => categories.id)
+  category: uuid('category').notNull().references(() => categories.id)
 });
 
 // Defines the 'recipeIngredients' table schema, linking recipes and ingredients.
@@ -82,7 +90,7 @@ quantity: numeric("quantity").notNull()
 export const suppliers = pgTable('suppliers', {
   id: uuid('id').primaryKey(),
   name: varchar('name', {length: 255}).notNull(),
-  userId: varchar('userId').notNull().references(() => users.id, {onDelete: 'cascade'} ),
+  userId: text('userId').notNull().references(() => users.id, {onDelete: 'cascade'} ),
 
   ContactPerson: varchar('contact_person', {length: 255}),
   email: varchar('email'),
@@ -106,22 +114,20 @@ export const suppplierAddresses = pgTable('supplier_addresses', {
 })
 
 export const supplierFinancialData = pgTable('supplier_financial_data', {
-  supplierId: uuid("supplier_id").primaryKey().references(() => suppliers.id, { onDelete: 'cascade' }),
+  supplierId: uuid("supplier_id").references(() => suppliers.id, { onDelete: 'cascade' }),
   vatNumber: varchar("vat_number", {length: 50}),
   paymentTerms: pgEnum("payment_terms", ["Net 30", "Net 60", "Net 90", "Due on Receipt"])("payment_terms"),
   defaultCurrency: varchar("default_currency", {length: 3}).default("EUR"), 
-})
+}, (t) => [primaryKey({columns: [t.supplierId, t.vatNumber, t.defaultCurrency, t.paymentTerms]})])
 
 export const supplierCategories = pgTable('supplier_categories', {
-  suplierId: uuid('supplier_id').references(() => suppliers.id, {onDelete: 'cascade'}),
+  suplierId: uuid('suplier_id').references(() => suppliers.id, {onDelete: 'cascade'}),
   categoryId: uuid('category_id').references(() => categories.id, {onDelete: 'cascade'})
-}, (t) => ({
-  pk: primaryKey({columns: [t.suplierId, t.categoryId]})
-}))
+},(t) => [primaryKey({columns: [t.suplierId, t.categoryId]})])
 
 export const categories = pgTable('categories', {
   id: uuid('id').primaryKey(),
-  category: ingredientCategoryEnum('category')
+  category: ingredientCategoryEnum('category').notNull()
 })
 
 export const recipeRelations = relations(recipesTable,({many, one}) => ({
