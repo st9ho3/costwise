@@ -208,9 +208,9 @@ export const transformRecipeToDB = (recipe: Recipe): DBRecipe => ({
           foodCost: recipe.foodCost ? recipe.foodCost.toString() : "0"
 }) 
 
-export const transformIngredientFromDB = (ingredient: DBIngredient, category: IngredientCategoryName): IngredientToDisplay => ({
+export const transformIngredientFromDB = (ingredient: DBIngredient, category?: IngredientCategoryName): IngredientToDisplay => ({
   ...ingredient,
-  categoryName: category,
+  categoryName: category ? category : 'Other',
   unitPrice: Number(ingredient.unitPrice),
   quantity: Number(ingredient.quantity)
 })
