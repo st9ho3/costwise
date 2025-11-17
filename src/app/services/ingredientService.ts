@@ -15,7 +15,7 @@
  */
 import { IIngredientService } from "@/types/services";
 import { IngredientRepository } from "../repositories/ingredientRepository";
-import { Ingredient } from "@/shemas/recipe";
+import { Ingredient, IngredientToDisplay } from "@/shemas/recipe";
 import { checkIfIngredientExists } from "@/db/helpers";
 import { zodValidateIngredientBeforeAddItToDatabase } from "./services";
 import { RecipeRepository } from "../repositories/recipeRepository";
@@ -39,7 +39,7 @@ export class IngredientService implements IIngredientService {
         this.recipeService = new RecipeService()
     }
 
-    async findAll(userId: string): Promise<Ingredient[] | undefined> {
+    async findAll(userId: string): Promise<IngredientToDisplay[] | undefined> {
       
       try {
         const ingredients = await this.ingredientRepository.findAll(userId)
@@ -50,7 +50,7 @@ export class IngredientService implements IIngredientService {
       }
     }
 
-    async findById(id: string): Promise<Ingredient | undefined> {
+    async findById(id: string): Promise<IngredientToDisplay | undefined> {
       const ingredient = await this.ingredientRepository.findById(id)
      
       return ingredient
@@ -100,7 +100,7 @@ export class IngredientService implements IIngredientService {
     async delete(id: string): Promise<void> {
 
       await this.ingredientRepository.delete(id)
-
+     
     }
 
     async getIngredientAnalytics(userId: string): Promise<IngredientAnalytics | undefined> {

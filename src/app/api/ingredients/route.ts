@@ -17,7 +17,6 @@ export const POST = async (req: NextRequest) => {
     const ingredient: Ingredient = await req.json();
 
     const service = new IngredientService();
-
     try {
         if(!session?.user) {
         throw new Error("Can't take an action if not validated")

@@ -1,12 +1,12 @@
 import React from 'react'
 import Title from '@/app/components/ingredients/ingredientPage/title'
-import { IngredientCategoryType } from '@/types/specialTypes'
+import { IngredientCategoryName } from '@/shemas/recipe'
 
 
 interface IngredientHeaderProps {
     name: string | undefined
     icon: string | undefined | null
-    type: IngredientCategoryType
+    type: IngredientCategoryName
 }
 
 const IngredientHeader = ({name, icon, type}: IngredientHeaderProps) => {

@@ -16,7 +16,7 @@ const IngredientNameInput = ({ register, onKeyDown }: IngredientNameInputProps) 
   
   return (
   <div className='flex items-center p-1 space-x-3 border-dashed rounded-lg border-1 border-gray-300'>
-    <Carrot />
+    <Carrot size={18} />
     <input
       type="text"
       {...register('name')}

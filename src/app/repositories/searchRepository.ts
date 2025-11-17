@@ -41,8 +41,8 @@ export class SearchRepository implements ISearchRepository {
                     eq(ingredientsTable.userId, this.userId),
                     ilike(ingredientsTable.name, `%${this.searchTerm}%`)
                 ));
-        
-            return ingredients;
+                
+            return ingredients as DBIngredient[]
         } catch(error) {
             console.error('SearchRepository.findIngredients: ', error);
         }

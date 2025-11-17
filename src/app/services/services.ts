@@ -127,13 +127,14 @@ export const updateIngredient = async (ingredient: Ingredient) => {
 
 
 export const deleteIngredient = async (id: string | null)  => {
-  
+  console.log('deleteIngredient: ',id)
   const response = await fetch(`/api/ingredients/${id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json"
     }
   })
+  
   if (!response.ok) {
     const error = await response.json(); 
     return error
