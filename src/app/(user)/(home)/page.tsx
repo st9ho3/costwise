@@ -30,8 +30,7 @@ const page = async() => {
   const avgfoodCost = recipeAnalytics  && recipeAnalytics.avgFoodCost !== null ? Number(recipeAnalytics.avgFoodCost) : 0
   const avgProfitMargin = recipeAnalytics && recipeAnalytics.avgProfitMargin !== null ? Number(recipeAnalytics.avgProfitMargin) : 0
   const totalIngredients = ingredientAnalytics ? ingredientAnalytics.totalIngredients : 0
-
-  console.log(Number(avgfoodCost.toFixed((2))))
+  
   return (
     <div className=' m-2'>
       <div className='m-1 p-3 flex justify-between rounded-2xl bg-white h-full'>

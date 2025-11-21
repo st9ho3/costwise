@@ -131,4 +131,60 @@ export const categorySeedData = [
   { id: "ef45178d-e566-4637-b7f9-abcf6d575466", category: 'Other' },
 ];
 
+export const deliveryOptions = [
+  {
+    value: '',
+    text: '--'
+  },
+  {
+    value: 'Same Day',
+    text: 'Αυθημερόν' // Same Day
+  },
+  {
+    value: '1-2 Days',
+    text: '1-2 Ημέρες' // 1-2 Days
+  },
+  {
+    value: '2-3 Days',
+    text: '2-3 Ημέρες' // 2-3 Days
+  },
+  {
+    value: 'Up to 5 days',
+    text: 'Έως 5 Ημέρες' // Up to 5 days
+  },
+  {
+    value: 'Weekly',
+    text: 'Εβδομαδιαίως' // Weekly
+  }
+]
 
+export type DeliveryOption = typeof deliveryOptions[number];
+
+export const paymentTermsOptions = [
+  {
+    value: '',
+    text: '--' // Placeholder/Default
+  },
+  {
+    value: 'Net 30',
+    text: '30 Ημέρες' // Net 30 Days (Πληρωτέο σε 30 ημέρες)
+  },
+  {
+    value: 'Net 60',
+    text: '60 Ημέρες' // Net 60 Days
+  },
+  {
+    value: 'Due on Receipt',
+    text: 'Άμεσα Πληρωτέο' // Due on Receipt (Πληρωτέο με την παραλαβή)
+  },
+  {
+    value: 'COD',
+    text: 'Αντικαταβολή' // Cash on Delivery (Αντικαταβολή)
+  },
+  {
+    value: 'Prepaid',
+    text: 'Προπληρωμένο' // Prepaid (Προπληρωμή)
+  }
+] 
+
+export type PaymentTermOption = typeof paymentTermsOptions[number];
