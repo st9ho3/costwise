@@ -223,7 +223,7 @@ export const SupplierSchema = z.object({
   status: z.union([
     z.literal('active'), 
     z.literal('inactive')
-  ]).default('active'),
+  ]).default('inactive'),
   
   dateAdded: z.date().default(() => new Date()),
 });
