@@ -13,11 +13,16 @@ const useSuppliersForm = ({}) => {
         defaultValues: defaultSupplierValues,
         resolver: zodResolver(SupplierSchema)
     })
+
+    const onSubmit = () => {
+      console.log('Submitting...')
+    }
   return {
     register,
     handleSubmit,
     reset,
-    formState
+    formState,
+    onSubmit
   }
 }
 

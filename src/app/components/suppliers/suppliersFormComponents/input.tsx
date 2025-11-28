@@ -1,7 +1,7 @@
 import { FormFields } from '@/app/hooks/useSuppliersForm'
 import type{ LucideIcon } from 'lucide-react'
 import React from 'react'
-import { UseFormRegister } from 'react-hook-form'
+import { Path, UseFormRegister } from 'react-hook-form'
 
 interface InputProps{
     label: string
@@ -9,7 +9,7 @@ interface InputProps{
     type: string
     icon?: LucideIcon,
     width: number,
-    name: keyof FormFields,
+    name: Path<FormFields>,
     register: UseFormRegister<FormFields>
 }
 

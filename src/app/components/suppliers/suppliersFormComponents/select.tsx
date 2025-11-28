@@ -2,14 +2,14 @@ import React from 'react'
 import type{ LucideIcon } from 'lucide-react'
 import { DeliveryOption, PaymentTermOption } from '@/app/constants/data'
 import { FormFields } from '@/app/hooks/useSuppliersForm'
-import { UseFormRegister } from 'react-hook-form'
+import { Path, UseFormRegister } from 'react-hook-form'
 
 interface SelectProps{
     label: string
     options: DeliveryOption[] | PaymentTermOption[]
     icon: LucideIcon,
     width: number
-    name: keyof FormFields,
+    name: Path<FormFields>,
     register: UseFormRegister<FormFields>
 }
 
