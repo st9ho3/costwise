@@ -5,13 +5,16 @@ import Input from './suppliersFormComponents/input'
 import { AtSign, Banknote, BookCopy, Globe, LetterText, Phone, Pin, Truck } from 'lucide-react'
 import Select from './suppliersFormComponents/select'
 import { deliveryOptions, paymentTermsOptions } from '@/app/constants/data'
+import useSuppliersForm from '@/app/hooks/useSuppliersForm'
 
 const SuppliersForm = () => {
   
+  const {register, handleSubmit, onSubmit} = useSuppliersForm({})
+
   return (
     <div className='flex w-5xl h-fit'>
       <ExitButton />
-      <form className='flex flex-col p-3 gap-2 flex-grow '>
+      <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col p-3 gap-2 flex-grow '>
         <div className='flex justify-between'>
           <Input 
           label='Όνοματεπώνυμο'
@@ -19,6 +22,8 @@ const SuppliersForm = () => {
           type='text'
           icon={LetterText}
           width={50}
+          register={register}
+          name='contactPerson'
            />
           <Input 
           label='Επωνυμία'
@@ -26,6 +31,8 @@ const SuppliersForm = () => {
           type='text'
           icon={LetterText}
           width={50}
+          register={register}
+          name='name'
            />
         </div>
         <hr className='border-gray-100 my-2' />
@@ -38,6 +45,8 @@ const SuppliersForm = () => {
           type='email'
           icon={AtSign}
           width={50}
+          register={register}
+          name='email'
          />
           <Input
           label='Τηλέφωνο'
@@ -45,6 +54,8 @@ const SuppliersForm = () => {
           type='number'
           icon={Phone}
           width={50}
+          register={register}
+          name='phone'
          />
          <Input
         label='Website'
@@ -52,6 +63,8 @@ const SuppliersForm = () => {
         placeholder='www.example.com'
         icon={Globe}
         width={50}
+        register={register}
+        name='website'
          />
         </div>
         </div>
@@ -62,12 +75,16 @@ const SuppliersForm = () => {
             icon={Truck}
             width={30}
             options={deliveryOptions}
+            register={register}
+            name='deliveryTime'
            />
           <Select
             label='Πληρωμή'
             icon={Banknote}
             width={30}
             options={paymentTermsOptions}
+            register={register}
+            name='paymentTerms'
            />
           <Input
             label='ΑΦΜ'
@@ -75,6 +92,8 @@ const SuppliersForm = () => {
             placeholder='Προσθέστε το ΑΦΜ'
             icon={BookCopy}
             width={30}
+            register={register}
+            name='vatNumber'
            />
         </div>
         <hr className='border-gray-100 my-2' />
@@ -86,18 +105,24 @@ const SuppliersForm = () => {
           placeholder='Σολωμού 49'
           icon={Pin}
           width={30}
+          register={register}
+          name='address.street'
         />
           <Input 
           label='Πόλη'
           type='text'
           placeholder='π.χ. Αθήνα'
           width={30}
+          register={register}
+          name='address.city'
         />
           <Input 
           label='T.K'
           type='text'
           placeholder='π.χ. 11851'
           width={30}
+          register={register}
+          name='address.postalCode'
         />
         </div>
         </div>
