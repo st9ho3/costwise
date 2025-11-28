@@ -206,7 +206,13 @@ export const SupplierSchema = z.object({
   }).optional(),
 
   // Financial & Admin
-  paymentTerms: z.string().optional(),
+  paymentTerms: z.union([
+  z.literal('Net 30'),
+  z.literal('Net 60'),
+  z.literal('Due on Receipt'),
+  z.literal('COD'),
+  z.literal('Prepaid'),
+]).optional(),
   vatNumber: z.string().optional(), 
   notes: z.string().optional(),
 
@@ -220,12 +226,9 @@ export const SupplierSchema = z.object({
   ]).optional(),
 
   // Status & Metadata
-  status: z.union([
-    z.literal('active'), 
-    z.literal('inactive')
-  ]).default('inactive'),
+  isActive: z.boolean(),
   
-  dateAdded: z.date().default(() => new Date()),
+  dateAdded: z.date(),
 });
 
 export type Supplier = z.infer<typeof SupplierSchema>;

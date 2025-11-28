@@ -1,15 +1,20 @@
+import { FormFields } from '@/app/hooks/useSuppliersForm'
 import type{ LucideIcon } from 'lucide-react'
 import React from 'react'
+import { UseFormRegister } from 'react-hook-form'
 
 interface InputProps{
     label: string
     placeholder: string
     type: string
     icon?: LucideIcon,
-    width: number
+    width: number,
+    name: keyof FormFields,
+    register: UseFormRegister<FormFields>
 }
 
-const Input = ({label, placeholder, type, icon: Icon, width}: InputProps) => {
+const Input = ({label, register, placeholder, name, type, icon: Icon, width}: InputProps) => {
+
   return (
     <div className={`flex flex-grow flex-col gap-2`}>
         <div className='flex items-center gap-2'>
@@ -17,7 +22,7 @@ const Input = ({label, placeholder, type, icon: Icon, width}: InputProps) => {
             {Icon && <Icon size={16} color='gray' />}
         </div>
      
-     <input className={`outline w-${width} outline-gray-200 rounded-lg px-3 py-2 focus:outline-blue-600`} id='name' placeholder={placeholder} type={type} />
+     <input {...register(`${name}`)} className={`outline w-${width} outline-gray-200 rounded-lg px-3 py-2 focus:outline-blue-600`} id='name' placeholder={placeholder} type={type} />
     </div>
   )
 }
