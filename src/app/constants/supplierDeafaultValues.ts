@@ -1,14 +1,15 @@
+import { v4 as uuidv4 } from 'uuid';
 
 export const defaultSupplierValues = {
   // Status & Metadata (RHF defaults can often override Zod defaults)
   // For RHF, it's best to explicitly set the default value.
-  id: '', 
+  id: uuidv4(), 
   userId: '', 
   name: '',
   
   // What they sell
   // Initialize arrays as empty arrays
-  category: [], // This should match the type of IngredientCategorySchema[]
+  category: [''], // This should match the type of IngredientCategorySchema[]
 
   // Contact Info
   contactPerson: '',

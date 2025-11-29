@@ -9,14 +9,18 @@ export type FormFields = z.infer<typeof SupplierSchema>;
 
 const useSuppliersForm = ({}) => {
 
-    const {register, handleSubmit, reset, formState} = useForm<FormFields>({
+    const {register, handleSubmit, reset, formState, watch} = useForm<FormFields>({
         defaultValues: defaultSupplierValues,
         resolver: zodResolver(SupplierSchema)
     })
 
-    const onSubmit = () => {
-      console.log('Submitting...')
+    const onSubmit = (data: FormFields) => {
+      console.log(data)
     }
+console.log(formState.errors)
+const deliverytime = watch('deliveryTime')
+const payment = watch('paymentTerms')
+console.log(deliverytime, payment)
   return {
     register,
     handleSubmit,
