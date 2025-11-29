@@ -14,7 +14,7 @@ interface SelectProps{
 }
 
 const Select = ({label, register, name, icon: Icon, width, options}: SelectProps) => {
-  console.log()
+  
   return (
     <div className={`flex flex-grow w-${width} flex-col gap-2`}>
         <div className='flex items-center gap-2'>
@@ -22,7 +22,7 @@ const Select = ({label, register, name, icon: Icon, width, options}: SelectProps
              <Icon color='gray' size={18} />
         </div>
    
-      <select {...register(`${name}`)} className={`border w-${width} border-gray-200 text-gray-600 rounded-lg p-1 focus:outline-none`} name="delevery_time" id="delevery_time">
+      <select {...register(name)} className={`border w-${width} border-gray-200 text-gray-600 rounded-lg p-1 focus:outline-none`} id="delevery_time">
         {options.map((option) => <option key={option.value} value={option.value}> {option.text} </option> )}
       </select>
     </div>
