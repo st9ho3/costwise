@@ -6,15 +6,20 @@ import { AtSign, Banknote, BookCopy, Globe, LetterText, Phone, Pin, Truck } from
 import Select from './suppliersFormComponents/select'
 import { deliveryOptions, paymentTermsOptions } from '@/app/constants/data'
 import useSuppliersForm from '@/app/hooks/useSuppliersForm'
+import CategoryShowroom from './suppliersFormComponents/categoryShowroom'
 
-const SuppliersForm = () => {
+interface SuppliersFormProps {
+  userId: string
+}
+
+const SuppliersForm = ({userId}: SuppliersFormProps) => {
   
-  const {register, handleSubmit, onSubmit} = useSuppliersForm({})
+  const {register, handleSubmit, onSubmit} = useSuppliersForm({userId})
 
   return (
     <div className='flex w-5xl h-fit'>
       <ExitButton />
-      <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col p-3 gap-2 flex-grow '>
+      <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col p-3 gap-2 w-4/5 '>
         <div className='flex justify-between'>
           <Input 
           label='Όνοματεπώνυμο'
@@ -129,8 +134,8 @@ const SuppliersForm = () => {
         
         <button>Click me</button>
       </form>
-      <div className='p-3 flex-grow'>
-        
+      <div className='p-3 border border-red-200 flex-grow'>
+        <CategoryShowroom />
       </div>
     </div>
   )
