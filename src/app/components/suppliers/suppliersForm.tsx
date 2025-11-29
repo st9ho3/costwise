@@ -2,7 +2,7 @@
 import React from 'react'
 import ExitButton from '../shared/exitButton'
 import Input from './suppliersFormComponents/input'
-import { AtSign, Banknote, BookCopy, Globe, LetterText, Phone, Pin, Truck } from 'lucide-react'
+import { AtSign, Banknote, BookCopy, LetterText, Phone, Pin, Truck } from 'lucide-react'
 import Select from './suppliersFormComponents/select'
 import { deliveryOptions, paymentTermsOptions } from '@/app/constants/data'
 import useSuppliersForm from '@/app/hooks/useSuppliersForm'
@@ -57,15 +57,15 @@ const SuppliersForm = () => {
           register={register}
           name='phone'
          />
-         <Input
+         {/* <Input
         label='Website'
-        type='url'
+        type='text'
         placeholder='www.example.com'
         icon={Globe}
         width={50}
         register={register}
         name='website'
-         />
+         /> */}
         </div>
         </div>
         <hr className='border-gray-100 my-2' />
@@ -127,7 +127,7 @@ const SuppliersForm = () => {
         </div>
         </div>
         
-        
+        <button>Click me</button>
       </form>
       <div className='p-3 flex-grow'>
         

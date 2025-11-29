@@ -188,13 +188,13 @@ export const SupplierSchema = z.object({
   name: z.string().min(1, "Supplier name is required"),
   
   // What they sell
-  category: z.array(IngredientCategorySchema).min(1, "Must have at least one category"),
+  category: z.array(z.string()),
 
   // Contact Info
   contactPerson: z.string().optional(),
   email: z.string().email("Invalid email address").optional(),
   phone: z.string().optional(),
-  website: z.string().url("Invalid URL").optional(),
+  website: z.string().optional(),
 
   // Structured Address
   address: z.object({
@@ -207,6 +207,7 @@ export const SupplierSchema = z.object({
 
   // Financial & Admin
   paymentTerms: z.union([
+  z.literal(''),
   z.literal('Net 30'),
   z.literal('Net 60'),
   z.literal('Due on Receipt'),
@@ -218,6 +219,7 @@ export const SupplierSchema = z.object({
 
   // Logistics
   deliveryTime: z.union([ 
+    z.literal(''),
     z.literal('Same Day'),
     z.literal('1-2 Days'),
     z.literal('2-3 Days'),

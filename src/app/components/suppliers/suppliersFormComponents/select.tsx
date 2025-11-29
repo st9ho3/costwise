@@ -14,6 +14,7 @@ interface SelectProps{
 }
 
 const Select = ({label, register, name, icon: Icon, width, options}: SelectProps) => {
+  console.log()
   return (
     <div className={`flex flex-grow w-${width} flex-col gap-2`}>
         <div className='flex items-center gap-2'>
