@@ -205,9 +205,9 @@ export const zodValidateIngredientBeforeAddItToDatabase = async (request: Ingred
     }
 };
 
-export const zodValidateSupplierBeforeAddThemToDatabase = async (request: Supplier) => {
+/* export const zodValidateSupplierBeforeAddThemToDatabase = async (request: Supplier) => {
 
-}
+} */
 
 export const search = async(searchTerm: string) => {
 
