@@ -14,7 +14,7 @@
 
 import { uid } from "uid";
 import { FormFields } from "../components/recipes/recipeForm/recipeForm";
-import { Ingredient, IngredientSchema, Recipe, RecipeIngredients, RecipeIngredientsSchema, RecipeSchema } from "@/shemas/recipe";
+import { Ingredient, IngredientSchema, Recipe, RecipeIngredients, RecipeIngredientsSchema, RecipeSchema, Supplier } from "@/shemas/recipe";
 import { RecipeUpdatePayload } from "@/types/context";
 
 
@@ -146,6 +146,22 @@ export const deleteIngredient = async (id: string | null)  => {
   
 }
 
+export const sendSupplier = async (supplier: Supplier) => {
+  const res = await fetch('/api/suppliers', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(supplier)
+  })
+  if (!res.ok) {
+    return await res.json()
+  }
+
+  const response = await res.json();
+  return response;
+}
+
 export const zodValidateDataBeforeAddThemToDatabase = (request: RecipeUpdatePayload) => {
   const {recipe, addedIngredients, removedIngredients} = request;
   if (typeof recipe.dateCreated === 'string') {
@@ -188,6 +204,10 @@ export const zodValidateIngredientBeforeAddItToDatabase = async (request: Ingred
       return validatedIngredient;
     }
 };
+
+/* export const zodValidateSupplierBeforeAddThemToDatabase = async (request: Supplier) => {
+
+} */
 
 export const search = async(searchTerm: string) => {
 

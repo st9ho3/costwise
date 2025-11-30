@@ -30,7 +30,8 @@ const useSuppliersForm = ({userId}: UseSuppliersFormProps) => {
     
 
     const onSubmit = (data: FormFields) => {
-      const supplier = {...data, userId: userId}
+      const supplier = {...data, category: categories, userId: userId}
+      console.log(categories)
       console.log(supplier)
     }
 
