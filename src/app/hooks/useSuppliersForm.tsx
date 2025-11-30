@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { defaultSupplierValues } from '../constants/supplierDeafaultValues';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
+import { useState } from 'react';
 
 export type FormFields = z.infer<typeof SupplierSchema>;
 
@@ -17,6 +18,16 @@ const useSuppliersForm = ({userId}: UseSuppliersFormProps) => {
         defaultValues: defaultSupplierValues,
         resolver: zodResolver(SupplierSchema)
     })
+    const [categories, setCategories] = useState<string[]>([])
+    const selectCategory = (id: string) => {
+      if (!categories.includes(id)) {
+        setCategories([...categories, id])
+      } else {
+        const filteredCategories = categories.filter((category) => category !== id)
+        setCategories(filteredCategories)
+      }
+    } 
+    
 
     const onSubmit = (data: FormFields) => {
       const supplier = {...data, userId: userId}
@@ -28,7 +39,9 @@ const useSuppliersForm = ({userId}: UseSuppliersFormProps) => {
     handleSubmit,
     reset,
     formState,
-    onSubmit
+    onSubmit,
+    selectCategory,
+    categories
   }
 }
 

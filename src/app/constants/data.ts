@@ -114,6 +114,22 @@ export const typeStyles = {
   '': 'bg-gray-300/30 text-gray-500', // Fallback for empty string
 };
 
+export const unselectedTypeStyles = {
+  // Ingredient Category Styles
+  'Produce': 'border-green-300/30 text-green-500',
+  'Meat & Poultry': 'border-red-300/30 text-red-500',
+  'Fish & Seafood': 'border-blue-300/30 text-blue-500',
+  'Dairy & Alternatives': 'border-yellow-300/30 text-yellow-500',
+  'Dry Goods': 'border-orange-300/30 text-orange-500',
+  'Spices & Seasonings': 'border-amber-300/30 text-amber-500',
+  'Oils, Vinegars, & Condiments': 'border-indigo-300/30 text-indigo-500',
+  'Frozen': 'border-sky-300/30 text-sky-500',
+  'Coffee & Tea': 'border-stone-300/30 text-stone-500',
+  'Beverages (Other)': 'border-cyan-300/30 text-cyan-500',
+  'Bakery': 'border-rose-300/30 text-rose-500',
+  'Other': 'border-gray-300/30 text-gray-500',
+  '': 'border-gray-300/30 text-gray-500', // Fallback for empty string
+}
 
 // Define the data array with the specific UUIDs
 export const categorySeedData = [

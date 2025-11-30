@@ -14,7 +14,7 @@ interface SuppliersFormProps {
 
 const SuppliersForm = ({userId}: SuppliersFormProps) => {
   
-  const {register, handleSubmit, onSubmit} = useSuppliersForm({userId})
+  const {register, handleSubmit, onSubmit, selectCategory, categories} = useSuppliersForm({userId})
 
   return (
     <div className='flex w-5xl h-fit'>
@@ -135,7 +135,7 @@ const SuppliersForm = ({userId}: SuppliersFormProps) => {
         <button>Click me</button>
       </form>
       <div className='p-3 border border-red-200 flex-grow'>
-        <CategoryShowroom />
+        <CategoryShowroom selected={categories} onSelect={selectCategory} />
       </div>
     </div>
   )
