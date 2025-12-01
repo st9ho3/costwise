@@ -1,4 +1,4 @@
-import { Recipe, Ingredient, RecipeIngredients, DBRecipe, DBIngredient, IngredientToDisplay } from '@/shemas/recipe';
+import { Recipe, Ingredient, RecipeIngredients, DBRecipe, DBIngredient, IngredientToDisplay, Supplier } from '@/shemas/recipe';
 import { RecipeWithQuery } from './specialTypes';
 import { Database } from '@/db/schema';
 import { RecipeAnalytics, IngredientAnalytics } from './repositories';
@@ -36,4 +36,12 @@ export interface IIngredientService {
 export interface ISearchService {
   findRecipe(searchTerm: string, userId: string) : Promise<Recipe[] | undefined>;
   findIngredient(searchTerm: string, userId: string) : Promise<Ingredient[] | undefined>;
+}
+
+export interface ISupplierService {
+    findAll(supplierId: string): Promise<Supplier[] | undefined>
+    findById(supplierId: string): Promise<Supplier | undefined>
+    create(supplier: Supplier): Promise<{supplierId: string} | undefined>
+    update(supplier: Supplier): Promise<{supplierId: string} | undefined>
+    delete(supplierId: string): Promise<void>
 }

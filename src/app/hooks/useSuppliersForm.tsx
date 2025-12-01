@@ -5,6 +5,7 @@ import { defaultSupplierValues } from '../constants/supplierDeafaultValues';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 import { useState } from 'react';
+import { sendSupplier } from '../services/services';
 
 export type FormFields = z.infer<typeof SupplierSchema>;
 
@@ -29,10 +30,9 @@ const useSuppliersForm = ({userId}: UseSuppliersFormProps) => {
     } 
     
 
-    const onSubmit = (data: FormFields) => {
+    const onSubmit = async(data: FormFields) => {
       const supplier = {...data, category: categories, userId: userId}
-      console.log(categories)
-      console.log(supplier)
+      await sendSupplier(supplier)
     }
 
   return {
