@@ -134,7 +134,7 @@ const SuppliersForm = ({userId}: SuppliersFormProps) => {
         
         <button>Click me</button>
       </form>
-      <div className='p-3 border border-red-200 flex-grow'>
+      <div className='p-3'>
         <CategoryShowroom selected={categories} onSelect={selectCategory} />
       </div>
     </div>
