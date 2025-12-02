@@ -14,7 +14,7 @@
 
 import { uid } from "uid";
 import { FormFields } from "../components/recipes/recipeForm/recipeForm";
-import { Ingredient, IngredientSchema, Recipe, RecipeIngredients, RecipeIngredientsSchema, RecipeSchema, Supplier } from "@/shemas/recipe";
+import { Ingredient, IngredientSchema, Recipe, RecipeIngredients, RecipeIngredientsSchema, RecipeSchema, Supplier, SupplierSchema } from "@/shemas/recipe";
 import { RecipeUpdatePayload } from "@/types/context";
 
 
@@ -195,8 +195,8 @@ export const zodValidateDataBeforeAddThemToDatabase = (request: RecipeUpdatePayl
   };
 };
 
-export const zodValidateIngredientBeforeAddItToDatabase = async (request: Ingredient) => {
-  const ingredient = await request
+export const zodValidateIngredientBeforeAddItToDatabase =  (request: Ingredient) => {
+  const ingredient = request
 
   if (ingredient) {
       const validatedIngredient = IngredientSchema.parse(ingredient)
@@ -205,9 +205,18 @@ export const zodValidateIngredientBeforeAddItToDatabase = async (request: Ingred
     }
 };
 
-/* export const zodValidateSupplierBeforeAddThemToDatabase = async (request: Supplier) => {
+export const zodValidateSupplierBeforeAddThemToDatabase = (request: Supplier) => {
+  const supplier = request
 
-} */
+  if (supplier) {
+    if (typeof supplier.dateAdded === 'string') {
+    supplier.dateAdded = new Date(supplier.dateAdded)
+  }
+    const validatedSupplier = SupplierSchema.parse(supplier)
+    console.log("Zod validated supplier: ",validatedSupplier)
+    return validatedSupplier
+  }
+}
 
 export const search = async(searchTerm: string) => {
 

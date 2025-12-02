@@ -1,5 +1,6 @@
-/* import { Supplier } from "@/shemas/recipe";
+import { Supplier } from "@/shemas/recipe";
 import { ISupplierService } from "@/types/services";
+import { zodValidateSupplierBeforeAddThemToDatabase } from "./services";
 
 export class SupplierService implements ISupplierService {
     async findById(supplierId: string): Promise<Supplier | undefined> {
@@ -11,6 +12,8 @@ export class SupplierService implements ISupplierService {
     }
 
     async create(supplier: Supplier): Promise<{ supplierId: string; } | undefined> {
+        const validatedSupplier = zodValidateSupplierBeforeAddThemToDatabase(supplier)
+        console.log('create service: ', validatedSupplier)
         
     }
 
@@ -21,5 +24,5 @@ export class SupplierService implements ISupplierService {
     async delete(supplierId: string): Promise<void> {
         
     }
-} */
+}
 
