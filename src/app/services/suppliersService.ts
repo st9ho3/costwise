@@ -1,6 +1,7 @@
 import { Supplier } from "@/shemas/recipe";
 import { ISupplierService } from "@/types/services";
 import { zodValidateSupplierBeforeAddThemToDatabase } from "./services";
+import { destructureSupplier } from "./helpers";
 
 export class SupplierService implements ISupplierService {
     async findById(supplierId: string): Promise<Supplier | undefined> {
@@ -13,7 +14,13 @@ export class SupplierService implements ISupplierService {
 
     async create(supplier: Supplier): Promise<{ supplierId: string; } | undefined> {
         const validatedSupplier = zodValidateSupplierBeforeAddThemToDatabase(supplier)
-        console.log('create service: ', validatedSupplier)
+        if (!validatedSupplier) {
+            throw new Error('Supplier Service, Error with validating supplier')
+        }
+        const {categories, address, paymentTerms, dbSupplier} = destructureSupplier(validatedSupplier)
+        console.log(`cat: ${categories}, address: ${address}, payment: ${paymentTerms}, supplier: ${dbSupplier}`)
+
+
         
     }
 
