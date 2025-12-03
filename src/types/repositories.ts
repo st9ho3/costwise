@@ -53,11 +53,12 @@ export interface ISupplierRepository {
 }
 
 export interface IAddressesRepository {
-  findById(adresssId: string): Promise<[] | undefined>;
-  findAll(userId: string): Promise<Supplier[] | undefined>;
   create(address: DBSupplierAddress, tx: Database, suppliersId: string): Promise<{addressId: string} | undefined>;
   update(supplierId: string, supplier: Supplier, tx?: Database): Promise<{supplierId: string} | undefined>;
-  delete(supplierId: string, tx: Database): Promise<{id: string} | undefined>;
+}
+export interface ISupplierFinancialDataRepository {
+  create(finData: DBSupplierAddress, tx: Database, suppliersId: string): Promise<{confirmation: string} | undefined>;
+  update(supplierId: string, finData: Supplier, tx?: Database): Promise<{supplierId: string} | undefined>;
 }
 
 export interface ISearchRepository {

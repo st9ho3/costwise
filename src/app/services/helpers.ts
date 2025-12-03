@@ -353,12 +353,8 @@ export const destructureSupplier = (supplier: Supplier) => {
         const categories = supplier.category
         // In the address table will propably have options in order to add multiple addresses after. So maybe we will iterate on the address service through the addresses array. Hoever now we will use an object so a simple address.
         const address = supplier.address
-        const paymentTerms = {
-            paymentTerms: supplier.paymentTerms,
-            vatNumber: supplier.vatNumber,
-            defaultCurrency: 'euro'
-        }
-        return {categories, address, paymentTerms, dbSupplier}
+        const financialData = supplier.financialData
+        return {categories, address, financialData, dbSupplier}
 }
 
 
