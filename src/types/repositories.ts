@@ -1,6 +1,6 @@
 
 import { Database } from '@/db/schema';
-import { Recipe, RecipeIngredients, DBIngredient, DBRecipe, IngredientToDisplay } from '@/shemas/recipe';
+import { Recipe, RecipeIngredients, DBIngredient, DBRecipe, IngredientToDisplay, Supplier } from '@/shemas/recipe';
 import { RecipeWithQuery } from './specialTypes';
 
 export interface RecipeAnalytics {
@@ -42,6 +42,14 @@ export interface IIngredientRepository {
   updateUsage(id: string, tx: Database, action: "+" | "-"): Promise<undefined>
   getIngredientAnalytics(userId: string): Promise<IngredientAnalytics | undefined>;
 
+}
+
+export interface ISupplierRepository {
+  findById(supplierId: string): Promise<Supplier[] | undefined>;
+  findAll(userId: string): Promise<Supplier[] | undefined>;
+  create(supplier: Supplier, tx: Database): Promise<{supplierId: string} | undefined>;
+  update(supplierId: string, supplier: Supplier, tx?: Database): Promise<{supplierId: string} | undefined>;
+  delete(supplierId: string, tx: Database): Promise<{id: string} | undefined>;
 }
 
 export interface ISearchRepository {
