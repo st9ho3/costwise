@@ -43,11 +43,6 @@ export const paymentTermsEnum = pgEnum("payment_terms", [
   'Due on Receipt'
 ])
 
-export const supplierStatusEnum = pgEnum('status', [
-  'active',
-  'reference'
-])
-
 // Defines the 'recipes' table schema.
 export const recipesTable = pgTable("recipes", {
   id: uuid("id").primaryKey(),
@@ -89,18 +84,18 @@ quantity: numeric("quantity").notNull()
 
 export const suppliers = pgTable('suppliers', {
   id: uuid('id').primaryKey(),
-  name: varchar('name', {length: 255}).notNull(),
+  name: varchar('name', {length: 255}).notNull().unique(),
   userId: text('userId').notNull().references(() => users.id, {onDelete: 'cascade'} ),
 
-  ContactPerson: varchar('contact_person', {length: 255}),
+  contactPerson: varchar('contact_person', {length: 255}),
   email: varchar('email'),
-  phone: varchar('phone'),
+  phone: varchar('phone').unique(),
   website: varchar('website'),
 
-  deliveryTime: deliveryTimeEnum('delivery_time').notNull(),
+  deliveryTime: deliveryTimeEnum('delivery_time'),
 
-  status: supplierStatusEnum('status').notNull(),
-  dateAdded: date('date_added')
+  isActive: boolean('is_active').notNull(),
+  dateAdded: timestamp('date_added')
 })
 
 export const suppplierAddresses = pgTable('supplier_addresses', {

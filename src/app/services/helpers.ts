@@ -12,8 +12,8 @@
  * These functions are used across the application to ensure consistent data handling,
  * financial calculations, and pagination of recipe and ingredient lists.
  */
-import { DBIngredient, DBRecipe, Ingredient, IngredientCategoryName, IngredientToDisplay, Recipe, RecipeIngredients, Unit } from "@/shemas/recipe";
-import { RecipeIngredientFromDB } from "@/types/specialTypes";
+import { DBIngredient, DBRecipe, Ingredient, IngredientCategoryName, IngredientToDisplay, Recipe, RecipeIngredients, Supplier, Unit } from "@/shemas/recipe";
+import {  RecipeIngredientFromDB } from "@/types/specialTypes";
 import { FormFields } from "../hooks/useRecipeForm";
 import { IngredientFormFields } from "../hooks/useIngredientsForm";
 
@@ -234,7 +234,6 @@ export const transformRecipeIngredentFromDB = (
   };
 };
 
-
 ////////////////
 const createIngredientIcon = (category: string | undefined): string => {
   switch (category) {
@@ -338,5 +337,28 @@ export const createEditIngredientPrototype = (data: IngredientFormFields, ingred
       return updatedIngredient
 }
 
+export const destructureSupplier = (supplier: Supplier) => {
+        const dbSupplier = {
+          id: supplier.id,
+          userId: supplier.userId,
+          name: supplier.name,
+          ContactPerson: supplier.contactPerson,
+          email: supplier.email,
+          phone: supplier.phone,
+          website: supplier.website,
+          deliveryTime: supplier.deliveryTime,
+          isActive: supplier.isActive,
+          dateAdded: supplier.dateAdded
+        }
+        const categories = supplier.category
+        // In the address table will propably have options in order to add multiple addresses after. So maybe we will iterate on the address service through the addresses array. Hoever now we will use an object so a simple address.
+        const address = supplier.address
+        const paymentTerms = {
+            paymentTerms: supplier.paymentTerms,
+            vatNumber: supplier.vatNumber,
+            defaultCurrency: 'euro'
+        }
+        return {categories, address, paymentTerms, dbSupplier}
+}
 
 

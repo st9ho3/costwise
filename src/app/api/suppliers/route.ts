@@ -1,11 +1,11 @@
-/* import { auth } from "@/auth"
+import { auth } from "@/auth"
 import { sendError, sendSuccess } from "../utils/responses";
 import { NextRequest } from "next/server";
-import { Supplier } from "@/shemas/recipe"; */
-/* import { SupplierService } from "@/app/services/suppliersService"; */
+import { Supplier } from "@/shemas/recipe";
+import { SupplierService } from "@/app/services/suppliersService";
 
-export const POST = async(/* req: NextRequest */) => {
-   /*  const session = await auth()
+export const POST = async(req: NextRequest) => {
+    const session = await auth()
 
     try {
         if(!session?.user) {
@@ -26,5 +26,5 @@ export const POST = async(/* req: NextRequest */) => {
     } catch(err) {
         console.log('error on the route: ', err)
         return sendError(`${err}`, 500)
-    } */
+    }
 }

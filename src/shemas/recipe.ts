@@ -191,10 +191,10 @@ export const SupplierSchema = z.object({
   category: z.array(z.string()),
 
   // Contact Info
-  contactPerson: z.string().optional(),
-  email: z.string().email("Invalid email address").optional(),
-  phone: z.string().optional(),
-  website: z.string().optional(),
+  contactPerson: z.string().optional().transform(val => val === '' ? undefined : val),
+  email: z.string().email("Invalid email address").optional().transform(val => val === '' ? undefined : val),
+  phone: z.string().optional().transform(val => val === '' ? undefined : val),
+  website: z.string().optional().transform(val => val === '' ? undefined : val),
 
   // Structured Address
   address: z.object({
@@ -225,7 +225,11 @@ export const SupplierSchema = z.object({
     z.literal('2-3 Days'),
     z.literal('Up to 5 days'),
     z.literal('Weekly'),
-  ]).optional(),
+  ])
+  .optional()
+  .transform(
+    val => val === '' ? undefined : val 
+  ),
 
   // Status & Metadata
   isActive: z.boolean(),
