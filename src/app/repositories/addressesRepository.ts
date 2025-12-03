@@ -4,12 +4,7 @@ import { IAddressesRepository } from "@/types/repositories";
 import { DBSupplierAddress } from "@/types/specialTypes";
 
 export class SupplierAddressRepository implements IAddressesRepository {
-    async findById(adresssId: string): Promise<[] | undefined> {
-        
-    }
-    async findAll(userId: string): Promise<Supplier[] | undefined> {
-        
-    }
+    
     async create(address: DBSupplierAddress, tx: Database, suppliersId: string): Promise<{ addressId: string; } | undefined> {
         const addressForDb = {...address, suppliersId}
         console.log(addressForDb)
@@ -28,7 +23,5 @@ export class SupplierAddressRepository implements IAddressesRepository {
     async update(supplierId: string, supplier: Supplier, tx?: Database): Promise<{ supplierId: string; } | undefined> {
         
     }
-    async delete(supplierId: string, tx: Database): Promise<{ id: string; } | undefined> {
-        
-    }
+    
 }

@@ -206,15 +206,19 @@ export const SupplierSchema = z.object({
   }).optional().transform(val => val === undefined ? null : val),
 
   // Financial & Admin
-  paymentTerms: z.union([
-  z.literal(''),
-  z.literal('Net 30'),
-  z.literal('Net 60'),
-  z.literal('Due on Receipt'),
-  z.literal('COD'),
-  z.literal('Prepaid'),
-]).optional(),
-  vatNumber: z.string().optional(), 
+  financialData: z.object({
+    paymentTerms: z.union([
+    z.literal(''),
+    z.literal('Net 30'),
+    z.literal('Net 60'),
+    z.literal('Due on Receipt'),
+    z.literal('COD'),
+    z.literal('Prepaid'),
+  ]).optional(),
+    vatNumber: z.string().optional(), 
+    
+  })
+  .optional(),
   notes: z.string().optional(),
 
   // Logistics
