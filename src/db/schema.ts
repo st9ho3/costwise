@@ -88,7 +88,7 @@ export const suppliers = pgTable('suppliers', {
   userId: text('userId').notNull().references(() => users.id, {onDelete: 'cascade'} ),
 
   contactPerson: varchar('contact_person', {length: 255}),
-  email: varchar('email'),
+  email: varchar('email').unique(),
   phone: varchar('phone').unique(),
   website: varchar('website'),
 
@@ -99,7 +99,7 @@ export const suppliers = pgTable('suppliers', {
 })
 
 export const suppplierAddresses = pgTable('supplier_addresses', {
-  id: uuid('id').primaryKey(),
+  id: uuid('id').primaryKey().defaultRandom(),
   street: varchar('street', {length: 100}),
   city: varchar('city', {length: 100}),
   state: varchar('state', {length: 30}),

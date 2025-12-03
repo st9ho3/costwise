@@ -1,7 +1,7 @@
 
 import { Database } from '@/db/schema';
 import { Recipe, RecipeIngredients, DBIngredient, DBRecipe, IngredientToDisplay, Supplier } from '@/shemas/recipe';
-import { RecipeWithQuery } from './specialTypes';
+import { DBSupplier, DBSupplierAddress, RecipeWithQuery } from './specialTypes';
 
 export interface RecipeAnalytics {
   avgProfitMargin: string | null
@@ -47,7 +47,15 @@ export interface IIngredientRepository {
 export interface ISupplierRepository {
   findById(supplierId: string): Promise<Supplier[] | undefined>;
   findAll(userId: string): Promise<Supplier[] | undefined>;
-  create(supplier: Supplier, tx: Database): Promise<{supplierId: string} | undefined>;
+  create(supplier: DBSupplier, tx: Database): Promise<{supplierId: string} | undefined>;
+  update(supplierId: string, supplier: Supplier, tx?: Database): Promise<{supplierId: string} | undefined>;
+  delete(supplierId: string, tx: Database): Promise<{id: string} | undefined>;
+}
+
+export interface IAddressesRepository {
+  findById(adresssId: string): Promise<[] | undefined>;
+  findAll(userId: string): Promise<Supplier[] | undefined>;
+  create(address: DBSupplierAddress, tx: Database, suppliersId: string): Promise<{addressId: string} | undefined>;
   update(supplierId: string, supplier: Supplier, tx?: Database): Promise<{supplierId: string} | undefined>;
   delete(supplierId: string, tx: Database): Promise<{id: string} | undefined>;
 }
