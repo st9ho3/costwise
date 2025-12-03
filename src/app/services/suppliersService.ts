@@ -4,13 +4,16 @@ import { destructureSupplier } from "./helpers";
 import { db } from "@/db/db";
 import { SupplierRepository } from "../repositories/suppliersRepository";
 import { Supplier } from "@/shemas/recipe";
+import { SupplierAddressRepository } from "../repositories/addressesRepository";
 
 export class SupplierService implements ISupplierService {
 
     private supplierRepository: SupplierRepository
+    private addressRepository: SupplierAddressRepository
 
     constructor() {
         this.supplierRepository = new SupplierRepository()
+        this.addressRepository = new SupplierAddressRepository()
     }
 
     async findById(supplierId: string): Promise<Supplier | undefined> {
@@ -32,7 +35,8 @@ export class SupplierService implements ISupplierService {
 
             const transactionResponse = await db.transaction(async (tx) => {
                 const supplierId = await this.supplierRepository.create(dbSupplier, tx)
-                return supplierId
+                const addressId = await this.addressRepository.create(address, tx, dbSupplier.id)
+                return {supplierId, addressId}
             })
             return transactionResponse
 

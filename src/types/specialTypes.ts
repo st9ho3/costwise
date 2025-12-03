@@ -89,3 +89,6 @@ export type LabelType =
   | 'vatNumber'
   | 'notes'
   >
+
+  export type DBSupplierAddress = Supplier['address'];
+

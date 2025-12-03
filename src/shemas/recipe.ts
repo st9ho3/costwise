@@ -198,12 +198,12 @@ export const SupplierSchema = z.object({
 
   // Structured Address
   address: z.object({
-    street: z.string().optional(),
-    city: z.string().optional(),
-    state: z.string().optional(), 
-    postalCode: z.string().optional(),
-    country: z.string().optional(),
-  }).optional(),
+    street: z.string().optional().transform(val => val === '' ? undefined : val),
+    city: z.string().optional().transform(val => val === '' ? undefined : val),
+    state: z.string().optional().transform(val => val === '' ? undefined : val), 
+    postalCode: z.string().optional().transform(val => val === '' ? undefined : val),
+    country: z.string().optional().transform(val => val === '' ? undefined : val),
+  }).optional().transform(val => val === undefined ? null : val),
 
   // Financial & Admin
   paymentTerms: z.union([

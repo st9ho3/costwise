@@ -342,7 +342,7 @@ export const destructureSupplier = (supplier: Supplier) => {
           id: supplier.id,
           userId: supplier.userId,
           name: supplier.name,
-          ContactPerson: supplier.contactPerson,
+          contactPerson: supplier.contactPerson,
           email: supplier.email,
           phone: supplier.phone,
           website: supplier.website,
