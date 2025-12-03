@@ -13,7 +13,7 @@
  * financial calculations, and pagination of recipe and ingredient lists.
  */
 import { DBIngredient, DBRecipe, Ingredient, IngredientCategoryName, IngredientToDisplay, Recipe, RecipeIngredients, Supplier, Unit } from "@/shemas/recipe";
-import { RecipeIngredientFromDB } from "@/types/specialTypes";
+import {  RecipeIngredientFromDB } from "@/types/specialTypes";
 import { FormFields } from "../hooks/useRecipeForm";
 import { IngredientFormFields } from "../hooks/useIngredientsForm";
 
@@ -234,7 +234,6 @@ export const transformRecipeIngredentFromDB = (
   };
 };
 
-
 ////////////////
 const createIngredientIcon = (category: string | undefined): string => {
   switch (category) {
@@ -343,7 +342,7 @@ export const destructureSupplier = (supplier: Supplier) => {
           id: supplier.id,
           userId: supplier.userId,
           name: supplier.name,
-          contactPerson: supplier.contactPerson,
+          ContactPerson: supplier.contactPerson,
           email: supplier.email,
           phone: supplier.phone,
           website: supplier.website,

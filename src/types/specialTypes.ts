@@ -1,3 +1,5 @@
+import { Supplier } from "@/shemas/recipe";
+
 export type RecipeIngredientFromDB = {
   id: number;
   quantity: string;
@@ -78,3 +80,12 @@ export type LabelType =
   | ''; // Default/unset
 
   export type IngredientCategoryType = Exclude<LabelType, 'very_low' | 'low' | 'medium' | 'high'>;
+
+  export type DBSupplier = Omit<
+  Supplier,
+  | 'category'
+  | 'address'
+  | 'paymentTerms'
+  | 'vatNumber'
+  | 'notes'
+  >
