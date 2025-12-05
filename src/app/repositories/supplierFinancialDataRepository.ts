@@ -8,7 +8,7 @@ export class SupplierFinDataRepository implements ISupplierFinancialDataReposito
     async create(finData: DBSupplierFinancialData, tx: Database, suppliersId: string): Promise<{ confirmation: string; } | undefined> {
         try {
             if (finData) {
-            
+                console.log('finData repository: ', finData)
             const [supplierId] = await tx 
             .insert(supplierFinancialData)
             .values({...finData, supplierId: suppliersId})
