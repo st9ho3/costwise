@@ -40,7 +40,9 @@ export class SupplierService implements ISupplierService {
             const transactionResponse = await db.transaction(async (tx) => {
                 
                 const supplierId = await this.supplierRepository.create(dbSupplier, tx)
+                console.log('supplier transaction created: ', supplierId)
                  await this.addressRepository.create(address, tx, dbSupplier.id)
+                 
                  await this.financialDataRepository.create(financialData, tx, dbSupplier.id)
 
                 return {supplierId}
