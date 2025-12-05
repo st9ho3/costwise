@@ -91,4 +91,5 @@ export type LabelType =
   >
 
   export type DBSupplierAddress = Supplier['address'];
+  export type DBSupplierFinancialData = Supplier['financialData']
 

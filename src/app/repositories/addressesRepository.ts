@@ -7,7 +7,7 @@ export class SupplierAddressRepository implements IAddressesRepository {
     
     async create(address: DBSupplierAddress, tx: Database, suppliersId: string): Promise<{ addressId: string; } | undefined> {
         const addressForDb = {...address, suppliersId}
-        console.log(addressForDb)
+        console.log('create Address repository:', addressForDb)
         try {
             const [addressId] = await tx
             .insert(suppplierAddresses)

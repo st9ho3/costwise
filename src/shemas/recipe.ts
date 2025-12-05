@@ -208,7 +208,7 @@ export const SupplierSchema = z.object({
   // Financial & Admin
   financialData: z.object({
     paymentTerms: z.union([
-    z.literal(''),
+    z.literal(undefined),
     z.literal('Net 30'),
     z.literal('Net 60'),
     z.literal('Due on Receipt'),
