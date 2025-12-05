@@ -18,11 +18,11 @@ const Select = ({label, register, name, icon: Icon, width, options}: SelectProps
   return (
     <div className={`flex flex-grow w-${width} flex-col gap-2`}>
         <div className='flex items-center gap-2'>
-             <label htmlFor="delevery_time">{label}</label>
+             <label htmlFor="select">{label}</label>
              <Icon color='gray' size={18} />
         </div>
    
-      <select {...register(name)} className={`border w-${width} border-gray-200 text-gray-600 rounded-lg p-1 focus:outline-none`} id="delevery_time">
+      <select {...register(name)} className={`border w-${width} border-gray-200 text-gray-600 rounded-lg p-1 focus:outline-none`} id="select">
         {options.map((option) => <option key={option.value} value={option.value}> {option.text} </option> )}
       </select>
     </div>

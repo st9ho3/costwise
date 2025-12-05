@@ -89,7 +89,7 @@ const SuppliersForm = ({userId}: SuppliersFormProps) => {
             width={30}
             options={paymentTermsOptions}
             register={register}
-            name='paymentTerms'
+            name='financialData.paymentTerms'
            />
           <Input
             label='ΑΦΜ'
@@ -98,7 +98,7 @@ const SuppliersForm = ({userId}: SuppliersFormProps) => {
             icon={BookCopy}
             width={30}
             register={register}
-            name='vatNumber'
+            name='financialData.vatNumber'
            />
         </div>
         <hr className='border-gray-100 my-2' />
