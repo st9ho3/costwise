@@ -16,7 +16,6 @@ export const POST = async(req: NextRequest) => {
         
         const service = new SupplierService()
         const res = await service.create(supplier)
-        console.log(supplier)
         if (res) {
             return sendSuccess("Supplier successfully created!", res, 201);
         } else {

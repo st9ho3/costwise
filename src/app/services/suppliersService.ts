@@ -5,15 +5,19 @@ import { db } from "@/db/db";
 import { SupplierRepository } from "../repositories/suppliersRepository";
 import { Supplier } from "@/shemas/recipe";
 import { SupplierAddressRepository } from "../repositories/addressesRepository";
+import { SupplierFinDataRepository } from "../repositories/supplierFinancialDataRepository";
 
 export class SupplierService implements ISupplierService {
 
     private supplierRepository: SupplierRepository
     private addressRepository: SupplierAddressRepository
+    private financialDataRepository: SupplierFinDataRepository
 
     constructor() {
         this.supplierRepository = new SupplierRepository()
         this.addressRepository = new SupplierAddressRepository()
+        this.financialDataRepository = new SupplierFinDataRepository()
+        
     }
 
     async findById(supplierId: string): Promise<Supplier | undefined> {
@@ -29,14 +33,17 @@ export class SupplierService implements ISupplierService {
         if (!validatedSupplier) {
             throw new Error('Supplier Service, Error with validating supplier')
         }
-        const {categories, address, paymentTerms, dbSupplier} = destructureSupplier(validatedSupplier)
-
+        const {categories, address, financialData, dbSupplier} = destructureSupplier(validatedSupplier)
+        console.log('Supplier Service: ', financialData)
         try {
 
             const transactionResponse = await db.transaction(async (tx) => {
+                
                 const supplierId = await this.supplierRepository.create(dbSupplier, tx)
-                const addressId = await this.addressRepository.create(address, tx, dbSupplier.id)
-                return {supplierId, addressId}
+                 await this.addressRepository.create(address, tx, dbSupplier.id)
+                 await this.financialDataRepository.create(financialData, tx, dbSupplier.id)
+
+                return {supplierId}
             })
             return transactionResponse
 
