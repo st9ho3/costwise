@@ -203,7 +203,7 @@ export const SupplierSchema = z.object({
     state: z.string().optional().transform(val => val === '' ? undefined : val), 
     postalCode: z.string().optional().transform(val => val === '' ? undefined : val),
     country: z.string().optional().transform(val => val === '' ? undefined : val),
-  }).optional().transform(val => val === undefined ? null : val),
+  }).optional(),
 
   // Financial & Admin
   financialData: z.object({
@@ -231,9 +231,7 @@ export const SupplierSchema = z.object({
     z.literal('Weekly'),
   ])
   .optional()
-  .transform(
-    val => val === '' ? undefined : val 
-  ),
+  ,
 
   // Status & Metadata
   isActive: z.boolean(),
