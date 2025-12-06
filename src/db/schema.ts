@@ -40,7 +40,9 @@ export const paymentTermsEnum = pgEnum("payment_terms", [
   'Net 30',
   'Net 60',
   'Net 90',
-  'Due on Receipt'
+  'Due on Receipt',
+  'Prepaid',
+  'COD'
 ])
 
 // Defines the 'recipes' table schema.
@@ -109,11 +111,11 @@ export const suppplierAddresses = pgTable('supplier_addresses', {
 })
 
 export const supplierFinancialData = pgTable('supplier_financial_data', {
-  supplierId: uuid("supplier_id").references(() => suppliers.id, { onDelete: 'cascade' }),
+  supplierId: uuid("supplier_id").primaryKey().references(() => suppliers.id, { onDelete: 'cascade' }),
   vatNumber: varchar("vat_number", {length: 50}),
-  paymentTerms: pgEnum("payment_terms", ["Net 30", "Net 60", "Net 90", "Due on Receipt", 'Prepaid', 'COD'])("payment_terms"),
+  paymentTerms: paymentTermsEnum('payment_terms'),
   defaultCurrency: varchar("default_currency", {length: 3}).default("EUR"), 
-}, (t) => [primaryKey({columns: [t.supplierId, t.vatNumber, t.defaultCurrency, t.paymentTerms]})])
+})
 
 export const supplierCategories = pgTable('supplier_categories', {
   suplierId: uuid('suplier_id').references(() => suppliers.id, {onDelete: 'cascade'}),

@@ -88,6 +88,7 @@ export type LabelType =
   | 'paymentTerms'
   | 'vatNumber'
   | 'notes'
+  | 'financialData'
   >
 
   export type DBSupplierAddress = Supplier['address'];
