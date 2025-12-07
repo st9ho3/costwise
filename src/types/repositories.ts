@@ -69,7 +69,7 @@ export interface ISuppliersCategoryRepository {
 
 export interface IIngredientCategoryRepository {
   create(category: string, tx: Database, ingredientId: string): Promise<void>
-  delete(category: string, tx: Database, ingredientId: string): Promise<void>
+  delete(ingredientId: string, tx: Database): Promise<void>
 }
 
 export interface ISearchRepository {

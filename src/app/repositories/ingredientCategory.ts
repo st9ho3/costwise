@@ -1,5 +1,6 @@
 import { Database, ingredientCategories } from "@/db/schema";
 import { IIngredientCategoryRepository } from "@/types/repositories";
+import { eq } from "drizzle-orm";
 
 export class IngredientCategoryRepository implements IIngredientCategoryRepository {
 
@@ -15,7 +16,13 @@ export class IngredientCategoryRepository implements IIngredientCategoryReposito
         }
     }
 
-    async delete(category: string, tx: Database, ingredientId: string): Promise<void> {
-        
+    async delete(ingredientId: string, tx: Database): Promise<void> {
+        try {
+            await tx 
+            .delete(ingredientCategories)
+            .where(eq(ingredientCategories.ingredientId, ingredientId))
+        }catch(err){
+            throw new Error(`IngredientCategoryRepository.delete: ${err}`)
+        }
     }
 } 
