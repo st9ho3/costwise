@@ -49,7 +49,7 @@ export interface ISupplierRepository {
   findAll(userId: string): Promise<Supplier[] | undefined>;
   create(supplier: DBSupplier, tx: Database): Promise<{supplierId: string} | undefined>;
   update(supplierId: string, supplier: Supplier, tx?: Database): Promise<{supplierId: string} | undefined>;
-  delete(supplierId: string, tx: Database): Promise<{id: string} | undefined>;
+  delete(supplierId: string, db: Database): Promise<{id: string} | undefined>;
 }
 
 export interface IAddressesRepository {
@@ -63,7 +63,6 @@ export interface ISupplierFinancialDataRepository {
 
 export interface ISuppliersCategoryRepository {
   create(category: string, tx: Database, suppliersId: string): Promise<void>
-  update(category: string, tx: Database, suppliersId: string): Promise<void>
   delete(category: string, tx: Database, suppliersId: string): Promise<void>
 }
 
