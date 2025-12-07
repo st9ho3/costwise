@@ -34,7 +34,7 @@ export interface IRecipeIngredientsRepository {
 export interface IIngredientRepository {
   findById(id: string): Promise<IngredientToDisplay | undefined>;
   findAll(userId: string): Promise<IngredientToDisplay[] | undefined>;
-  create(ingredient: DBIngredient): Promise<{ingredientId: string} | undefined>;
+  create(ingredient: DBIngredient, tx: Database): Promise<{ingredientId: string} | undefined>;
   update(ingredient: DBIngredient, tx?: Database): Promise<{ingredientId: string} | undefined>;
   delete(id: string): Promise<{ingredientId: string} | undefined>;
 
@@ -65,6 +65,11 @@ export interface ISuppliersCategoryRepository {
   create(category: string, tx: Database, suppliersId: string): Promise<void>
   update(category: string, tx: Database, suppliersId: string): Promise<void>
   delete(category: string, tx: Database, suppliersId: string): Promise<void>
+}
+
+export interface IIngredientCategoryRepository {
+  create(category: string, tx: Database, ingredientId: string): Promise<void>
+  delete(category: string, tx: Database, ingredientId: string): Promise<void>
 }
 
 export interface ISearchRepository {

@@ -188,7 +188,7 @@ export const SupplierSchema = z.object({
   name: z.string().min(1, "Supplier name is required"),
   
   // What they sell
-  category: z.array(z.string()),
+  category: z.array(IngredientCategorySchema),
 
   // Contact Info
   contactPerson: z.string().optional().transform(val => val === '' ? undefined : val),
