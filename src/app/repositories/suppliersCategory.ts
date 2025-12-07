@@ -5,7 +5,7 @@ import { ISuppliersCategoryRepository } from "@/types/repositories";
 export class SuppliersCategoryRepository implements ISuppliersCategoryRepository {
 
     async create(category: IngredientCategory, tx: Database, suppliersId: string): Promise<void> {
-        console.log(category, suppliersId)
+        console.log(`Category of Supplier ${suppliersId} is: ${category}`)
         try {
             await tx 
             .insert(supplierCategories)
