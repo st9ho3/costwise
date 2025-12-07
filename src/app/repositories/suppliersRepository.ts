@@ -1,6 +1,7 @@
 import { Database, suppliers } from "@/db/schema";
 import { ISupplierRepository } from "@/types/repositories";
 import { DBSupplier } from "@/types/specialTypes";
+import { eq } from "drizzle-orm";
 
 export class SupplierRepository implements ISupplierRepository {
     async findById(supplierId: string): Promise<DBSupplier[] | undefined> {
@@ -29,7 +30,17 @@ export class SupplierRepository implements ISupplierRepository {
     async update(supplierId: string, supplier: DBSupplier, tx?: Database): Promise<{ supplierId: string; } | undefined> {
         
     }
-    async delete(supplierId: string, tx: Database): Promise<{ id: string; } | undefined> {
-        
+    async delete(supplierId: string, db: Database): Promise<{ id: string; } | undefined> {
+        try {
+            const [supplier] = await db
+            .delete(suppliers)
+            .where(eq(suppliers.id, supplierId))
+            .returning({
+                id: suppliers.id
+            })
+            return supplier
+        }catch(err){
+            throw new Error(`SupplierRepository.delete ${err}`)
+        }
     }
 }

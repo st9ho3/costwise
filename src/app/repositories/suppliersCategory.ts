@@ -1,6 +1,7 @@
 import { Database, supplierCategories } from "@/db/schema";
 import { IngredientCategory } from "@/shemas/recipe";
 import { ISuppliersCategoryRepository } from "@/types/repositories";
+import { and, eq } from "drizzle-orm";
 
 export class SuppliersCategoryRepository implements ISuppliersCategoryRepository {
 
@@ -16,10 +17,17 @@ export class SuppliersCategoryRepository implements ISuppliersCategoryRepository
         
 
     }
-    async update(category: string, tx: Database, suppliersId: string): Promise<void> {
-        
-    }
+
     async delete(category: string, tx: Database, suppliersId: string): Promise<void> {
-        
+        try {
+            await tx
+            .delete(supplierCategories)
+            .where(and(
+                eq(supplierCategories.categoryId, category),
+                eq(supplierCategories.suplierId, suppliersId)
+            ))
+        }catch(err){
+            throw new Error(`SuppliersCategoryRepository.delete: ${err}`)
+        }
     }
 }
