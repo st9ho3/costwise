@@ -1,11 +1,20 @@
+import { db } from "@/db/db";
 import { Database, suppliers } from "@/db/schema";
 import { ISupplierRepository } from "@/types/repositories";
 import { DBSupplier } from "@/types/specialTypes";
 import { eq } from "drizzle-orm";
 
 export class SupplierRepository implements ISupplierRepository {
-    async findById(supplierId: string): Promise<DBSupplier[] | undefined> {
-        
+    async findById(supplierId: string): Promise<DBSupplier | undefined> {
+        try {
+            const supplier = await db
+            .select()
+            .from(suppliers)
+            .where(eq(suppliers.id, supplierId))
+            return supplier
+        }catch(err){
+            throw new Error(`SupplierRepository.findById: ${err}`)
+        }
     }
 
     async findAll(userId: string): Promise<DBSupplier[] | undefined> {
@@ -30,7 +39,7 @@ export class SupplierRepository implements ISupplierRepository {
     async update(supplierId: string, supplier: DBSupplier, tx?: Database): Promise<{ supplierId: string; } | undefined> {
         
     }
-    async delete(supplierId: string, db: Database): Promise<{ id: string; } | undefined> {
+    async delete(supplierId: string): Promise<{ id: string; } | undefined> {
         try {
             const [supplier] = await db
             .delete(suppliers)
