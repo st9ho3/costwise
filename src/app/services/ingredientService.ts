@@ -24,6 +24,7 @@ import { RecipeService } from "./recipeService";
 import { db } from "@/db/db";
 import { Database } from "@/db/schema";
 import { IngredientAnalytics } from "@/types/repositories";
+import { IngredientCategoryRepository } from "../repositories/ingredientCategory";
 
 
 export class IngredientService implements IIngredientService {
@@ -31,12 +32,14 @@ export class IngredientService implements IIngredientService {
     private ingredientRepository: IngredientRepository
     private recipeRepository: RecipeRepository
     private recipeService: RecipeService
+    private ingredientCategoryRepository: IngredientCategoryRepository
     
 
     constructor() {
         this.ingredientRepository = new IngredientRepository()
         this.recipeRepository = new RecipeRepository()
         this.recipeService = new RecipeService()
+        this.ingredientCategoryRepository = new IngredientCategoryRepository()
     }
 
     async findAll(userId: string): Promise<IngredientToDisplay[] | undefined> {
@@ -62,9 +65,16 @@ export class IngredientService implements IIngredientService {
           const validatedIngredient = await zodValidateIngredientBeforeAddItToDatabase(ingredient)
           const DBIngredient = validatedIngredient ? transformIngredientToDB(validatedIngredient) : undefined
           
+
           if (!ingredientExists && DBIngredient) {
-            const ingredientId = this.ingredientRepository.create(DBIngredient)
-            return ingredientId
+
+            const transactionResult = await db.transaction(async (tx) => {
+              const ingredientId = this.ingredientRepository.create(DBIngredient, tx)
+              await this.ingredientCategoryRepository.create(DBIngredient.category, tx, DBIngredient.id, )
+              return ingredientId
+            })
+              return transactionResult
+            
           } else {
             console.log("Ingredient already exists or is not validated")
             throw Error("Ingredient already exists or is not validated")

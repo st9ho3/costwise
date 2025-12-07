@@ -122,6 +122,11 @@ export const supplierCategories = pgTable('supplier_categories', {
   categoryId: uuid('category_id').references(() => categories.id, {onDelete: 'cascade'})
 },(t) => [primaryKey({columns: [t.suplierId, t.categoryId]})])
 
+export const ingredientCategories = pgTable('ingredient_categories', {
+  ingredientId: uuid('suplier_id').references(() => ingredientsTable.id, {onDelete: 'cascade'}),
+  categoryId: uuid('category_id').references(() => categories.id, {onDelete: 'cascade'})
+},(t) => [primaryKey({columns: [t.ingredientId, t.categoryId]})])
+
 export const categories = pgTable('categories', {
   id: uuid('id').primaryKey(),
   category: ingredientCategoryEnum('category').notNull()

@@ -6,17 +6,20 @@ import { SupplierRepository } from "../repositories/suppliersRepository";
 import { Supplier } from "@/shemas/recipe";
 import { SupplierAddressRepository } from "../repositories/addressesRepository";
 import { SupplierFinDataRepository } from "../repositories/supplierFinancialDataRepository";
+import { SuppliersCategoryRepository } from "../repositories/suppliersCategory";
 
 export class SupplierService implements ISupplierService {
 
     private supplierRepository: SupplierRepository
     private addressRepository: SupplierAddressRepository
     private financialDataRepository: SupplierFinDataRepository
+    private suppliersCategoryRepository: SuppliersCategoryRepository
 
     constructor() {
         this.supplierRepository = new SupplierRepository()
         this.addressRepository = new SupplierAddressRepository()
         this.financialDataRepository = new SupplierFinDataRepository()
+        this.suppliersCategoryRepository = new SuppliersCategoryRepository()
         
     }
 
@@ -40,11 +43,9 @@ export class SupplierService implements ISupplierService {
             const transactionResponse = await db.transaction(async (tx) => {
                 
                 const supplierId = await this.supplierRepository.create(dbSupplier, tx)
-                console.log('supplier transaction created: ', supplierId)
                  await this.addressRepository.create(address, tx, dbSupplier.id)
-                 
                  await this.financialDataRepository.create(financialData, tx, dbSupplier.id)
-
+                 await Promise.all(categories.map(async (category) => await this.suppliersCategoryRepository.create(category, tx, dbSupplier.id)))
                 return {supplierId}
             })
             return transactionResponse
