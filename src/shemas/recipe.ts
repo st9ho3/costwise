@@ -235,7 +235,7 @@ export const SupplierSchema = z.object({
   // Status & Metadata
   isActive: z.boolean(),
   
-  dateAdded: z.date(),
+  dateAdded: z.date().optional(),
 });
 
 export type Supplier = z.infer<typeof SupplierSchema>;

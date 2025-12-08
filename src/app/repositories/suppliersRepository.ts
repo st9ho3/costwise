@@ -3,15 +3,17 @@ import { Database, suppliers } from "@/db/schema";
 import { ISupplierRepository } from "@/types/repositories";
 import { DBSupplier } from "@/types/specialTypes";
 import { eq } from "drizzle-orm";
+import { transformSupplierFromDB } from "../services/helpers";
 
 export class SupplierRepository implements ISupplierRepository {
     async findById(supplierId: string): Promise<DBSupplier | undefined> {
+
         try {
-            const supplier = await db
+            const [supplier] = await db
             .select()
             .from(suppliers)
             .where(eq(suppliers.id, supplierId))
-            return supplier
+            return transformSupplierFromDB(supplier)
         }catch(err){
             throw new Error(`SupplierRepository.findById: ${err}`)
         }

@@ -13,7 +13,7 @@
  * financial calculations, and pagination of recipe and ingredient lists.
  */
 import { DBIngredient, DBRecipe, Ingredient, IngredientCategoryName, IngredientToDisplay, Recipe, RecipeIngredients, Supplier, Unit } from "@/shemas/recipe";
-import {  RecipeIngredientFromDB } from "@/types/specialTypes";
+import {  DBSupplier, RawDBSupplier, RecipeIngredientFromDB } from "@/types/specialTypes";
 import { FormFields } from "../hooks/useRecipeForm";
 import { IngredientFormFields } from "../hooks/useIngredientsForm";
 
@@ -233,6 +233,30 @@ export const transformRecipeIngredentFromDB = (
     ingredientId: ingredient.ingredientId,
   };
 };
+
+export const transformSupplierFromDB = (raw: RawDBSupplier): DBSupplier => {
+
+  return {
+    // Pass through required fields
+    id: raw.id,
+    userId: raw.userId,
+    name: raw.name,
+    isActive: raw.isActive,
+    dateAdded: raw.dateAdded ?? undefined,
+
+    // Transform Nullable fields to Undefined
+    // The '??' operator checks for null OR undefined. 
+    // If raw.contactPerson is null, it returns undefined.
+    contactPerson: raw.contactPerson ?? undefined,
+    email: raw.email ?? undefined,
+    phone: raw.phone ?? undefined,
+    website: raw.website ?? undefined,
+    
+    // For Unions (like deliveryTime), you may need a type cast 
+    // if Drizzle types it simply as 'string | null'
+    deliveryTime: (raw.deliveryTime ?? undefined) as DBSupplier['deliveryTime'],
+  };
+}
 
 ////////////////
 const createIngredientIcon = (category: string | undefined): string => {
