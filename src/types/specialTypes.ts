@@ -94,3 +94,15 @@ export type LabelType =
   export type DBSupplierAddress = Supplier['address'];
   export type DBSupplierFinancialData = Supplier['financialData']
 
+  export interface RawDBSupplier {
+    id: string
+    name: string;
+    userId: string;
+    contactPerson: string | null;
+    email: string | null;
+    phone: string | null;
+    website: string | null;
+    deliveryTime: "Same Day" | "1-2 Days" | "2-3 Days" | "Up to 5 days" | "Weekly" | null;
+    isActive: boolean;
+    dateAdded: Date | null;
+}

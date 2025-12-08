@@ -45,7 +45,7 @@ export interface IIngredientRepository {
 }
 
 export interface ISupplierRepository {
-  findById(supplierId: string): Promise<Supplier | undefined>;
+  findById(supplierId: string): Promise<DBSupplier | undefined>;
   findAll(userId: string): Promise<Supplier[] | undefined>;
   create(supplier: DBSupplier, tx: Database): Promise<{supplierId: string} | undefined>;
   update(supplierId: string, supplier: Supplier, tx?: Database): Promise<{supplierId: string} | undefined>;

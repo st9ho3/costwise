@@ -1,7 +1,6 @@
-
 import React from 'react'
 
-const SuppliersPage = () => {
+const SuppliersPage = async() => {
 
   return (
     <div>
