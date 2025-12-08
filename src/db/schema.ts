@@ -100,7 +100,7 @@ export const suppliers = pgTable('suppliers', {
   dateAdded: timestamp('date_added')
 })
 
-export const suppplierAddresses = pgTable('supplier_addresses', {
+export const supplierAddresses = pgTable('supplier_addresses', {
   id: uuid('id').primaryKey().defaultRandom(),
   street: varchar('street', {length: 100}),
   city: varchar('city', {length: 100}),
@@ -164,13 +164,13 @@ export const suppliersRelations = relations(suppliers, ({one, many}) => ({
     fields: [suppliers.id],
     references: [supplierFinancialData.supplierId]
   }),
-  suppplierAddresses: many(suppplierAddresses),
+  supplierAddresses: many(supplierAddresses),
   supplierCategories: many(supplierCategories)
 }))
 
-export const supplierAddressesRelations = relations(suppplierAddresses, ({one}) => ({
+export const supplierAddressesRelations = relations(supplierAddresses, ({one}) => ({
   suppliers: one(suppliers, {
-    fields: [suppplierAddresses.suppliersId],
+    fields: [supplierAddresses.suppliersId],
     references: [suppliers.id]
   })
 }))
