@@ -105,8 +105,13 @@ export type LabelType =
     deliveryTime: "Same Day" | "1-2 Days" | "2-3 Days" | "Up to 5 days" | "Weekly" | null;
     isActive: boolean;
     dateAdded: Date | null;
-
-    supplier_addresses: {
+    supplierFinancialData: {
+        supplierId: string;
+        vatNumber: string | null;
+        paymentTerms: "Net 30" | "Net 60" | "Due on Receipt" | "COD" | "Prepaid" | "Net 90" | null;
+        defaultCurrency: string | null;
+    };
+    supplierAddresses: {
         id: string;
         street: string | null;
         city: string | null;
@@ -114,17 +119,9 @@ export type LabelType =
         postalCode: string | null;
         country: string | null;
         suppliersId: string;
-    };
-
-    supplier_financial_data: {
-        supplierId: string;
-        vatNumber: string | null;
-        paymentTerms: "Net 30" | "Net 60" | "Due on Receipt" | "COD" | "Prepaid" | "Net 90" | null;
-        defaultCurrency: string | null;
-    };
-
-    supplier_categories: {
+    }[];
+    supplierCategories: {
         suplierId: string | null;
         categoryId: string | null;
-    };
+    }[];
 }
