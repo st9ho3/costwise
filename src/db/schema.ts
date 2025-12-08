@@ -159,6 +159,21 @@ export const recipeIngredientsRelations = relations(recipeIngredientsTable, ({on
   })
 }))
 
+export const suppliersRelations = relations(suppliers, ({one, many}) => ({
+  supplierFinancialData: one(supplierFinancialData, {
+    fields: [suppliers.id],
+    references: [supplierFinancialData.supplierId]
+  }),
+  suppplierAddresses: many(suppplierAddresses )
+}))
+
+export const supplierAddressesRelations = relations(suppplierAddresses, ({one}) => ({
+  suppliers: one(suppliers, {
+    fields: [suppplierAddresses.suppliersId],
+    references: [suppliers.id]
+  })
+}))
+
 
 
 

@@ -1,5 +1,5 @@
 import { db } from "@/db/db";
-import { Database, suppliers } from "@/db/schema";
+import { Database, supplierCategories, supplierFinancialData, suppliers, suppplierAddresses } from "@/db/schema";
 import { ISupplierRepository } from "@/types/repositories";
 import { DBSupplier } from "@/types/specialTypes";
 import { eq } from "drizzle-orm";
@@ -9,11 +9,15 @@ export class SupplierRepository implements ISupplierRepository {
     async findById(supplierId: string): Promise<DBSupplier | undefined> {
 
         try {
-            const [supplier] = await db
-            .select()
-            .from(suppliers)
-            .where(eq(suppliers.id, supplierId))
-            return transformSupplierFromDB(supplier)
+            const supplier = await db
+            .query.suppliers.findFirst({
+                where: eq(suppliers.id, supplierId),
+                with: {
+                    supplierFinancialData: true,
+                    suppplierAddresses: true
+                }
+            })
+            return supplier
         }catch(err){
             throw new Error(`SupplierRepository.findById: ${err}`)
         }
