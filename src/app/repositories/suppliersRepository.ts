@@ -14,7 +14,8 @@ export class SupplierRepository implements ISupplierRepository {
                 where: eq(suppliers.id, supplierId),
                 with: {
                     supplierFinancialData: true,
-                    suppplierAddresses: true
+                    suppplierAddresses: true,
+                    supplierCategories: true
                 }
             })
             return supplier

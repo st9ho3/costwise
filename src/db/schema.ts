@@ -164,7 +164,8 @@ export const suppliersRelations = relations(suppliers, ({one, many}) => ({
     fields: [suppliers.id],
     references: [supplierFinancialData.supplierId]
   }),
-  suppplierAddresses: many(suppplierAddresses )
+  suppplierAddresses: many(suppplierAddresses),
+  supplierCategories: many(supplierCategories)
 }))
 
 export const supplierAddressesRelations = relations(suppplierAddresses, ({one}) => ({
@@ -173,6 +174,26 @@ export const supplierAddressesRelations = relations(suppplierAddresses, ({one}) 
     references: [suppliers.id]
   })
 }))
+
+export const supplierCategoriesRelations = relations(supplierCategories, ({one}) => ({
+  suppliers: one(suppliers, {
+    fields: [supplierCategories.suplierId],
+    references: [suppliers.id]
+  }),
+  categories: one(categories, {
+    fields: [supplierCategories.categoryId],
+    references: [categories.id]
+  })
+}))
+
+export const categoriesRelations = relations(categories, ({many}) => ({
+  supplierCategories: many(supplierCategories),
+  ingredientCategories: many(ingredientCategories)
+}))
+
+
+
+
 
 
 
