@@ -211,6 +211,7 @@ export const SupplierSchema = z.object({
     z.literal('').transform(val => val === '' ? undefined : val),
     z.literal('Net 30'),
     z.literal('Net 60'),
+    z.literal('Net 90'),
     z.literal('Due on Receipt'),
     z.literal('COD'),
     z.literal('Prepaid'),
