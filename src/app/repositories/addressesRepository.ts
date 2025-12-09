@@ -1,4 +1,4 @@
-import { Database, suppplierAddresses } from "@/db/schema";
+import { Database, supplierAddresses } from "@/db/schema";
 import { Supplier } from "@/shemas/recipe";
 import { IAddressesRepository } from "@/types/repositories";
 import { DBSupplierAddress } from "@/types/specialTypes";
@@ -10,10 +10,10 @@ export class SupplierAddressRepository implements IAddressesRepository {
         console.log('create Address repository:', addressForDb)
         try {
             const [addressId] = await tx
-            .insert(suppplierAddresses)
+            .insert(supplierAddresses)
             .values(addressForDb)
             .returning({
-                addressId: suppplierAddresses.id
+                addressId: supplierAddresses.id
             })
             return addressId
         }catch(err){
