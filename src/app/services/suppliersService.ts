@@ -69,7 +69,7 @@ export class SupplierService implements ISupplierService {
         
     }
 
-    async delete(supplierId: string): Promise<void> {
+    async delete(supplierId: string): Promise<{id: string} | undefined> {
         const response = await this.supplierRepository.delete(supplierId)
         return response
     }

@@ -1,3 +1,4 @@
+import { IngredientCategory } from '@/shemas/recipe';
 import { v4 as uuidv4 } from 'uuid';
 
 export const defaultSupplierValues = {
@@ -9,7 +10,7 @@ export const defaultSupplierValues = {
   
   // What they sell
   // Initialize arrays as empty arrays
-  category: [''], // This should match the type of IngredientCategorySchema[]
+  category: [""] as IngredientCategory[], // This should match the type of IngredientCategorySchema[]
 
   // Contact Info
   contactPerson: '',
@@ -29,7 +30,7 @@ export const defaultSupplierValues = {
 
   // Financial & Admin
   // Pick a sensible default for the required union
-  paymentTerms: undefined, 
+  paymentTerms: '', 
   vatNumber: '', 
   notes: '',
 
