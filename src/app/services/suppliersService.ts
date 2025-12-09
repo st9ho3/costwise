@@ -7,7 +7,6 @@ import { Supplier } from "@/shemas/recipe";
 import { SupplierAddressRepository } from "../repositories/addressesRepository";
 import { SupplierFinDataRepository } from "../repositories/supplierFinancialDataRepository";
 import { SuppliersCategoryRepository } from "../repositories/suppliersCategory";
-import { RawDBSupplier } from "@/types/specialTypes";
 
 export class SupplierService implements ISupplierService {
 
@@ -29,6 +28,7 @@ export class SupplierService implements ISupplierService {
             if (!supplier) {
                 throw new Error('SupplierService: Something happened')
             }
+            
             return transformSupplierFromDB(supplier)
         
         
