@@ -5,6 +5,7 @@ import { DBSupplier, RawDBSupplier } from "@/types/specialTypes";
 import { eq } from "drizzle-orm";
 
 export class SupplierRepository implements ISupplierRepository {
+
     async findById(supplierId: string): Promise<RawDBSupplier | undefined> {
 
         try {
@@ -23,11 +24,25 @@ export class SupplierRepository implements ISupplierRepository {
         }
     }
 
-    async findAll(userId: string): Promise<DBSupplier[] | undefined> {
-        
+    async findAll(userId: string): Promise<RawDBSupplier[] | undefined> {
+
+        try {
+            const totalSuppliers = await db
+            .query.suppliers.findMany({
+                where: eq(suppliers.userId, userId),
+                with: {
+                    supplierAddresses: true,
+                    supplierCategories: true,
+                    supplierFinancialData: true
+                }
+            })
+            return totalSuppliers
+        }catch(err){
+            throw new Error(`SupplierRepository: ${err}`)
+        }
     }
+
     async create(supplier: DBSupplier, tx: Database): Promise<{ supplierId: string; } | undefined> {
-        console.log('create repository:', supplier)
         try {
            const [supplierId] =  await tx
             .insert(suppliers)

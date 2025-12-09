@@ -12,8 +12,8 @@
  * These functions are used across the application to ensure consistent data handling,
  * financial calculations, and pagination of recipe and ingredient lists.
  */
-import { DBIngredient, DBRecipe, Ingredient, IngredientCategoryName, IngredientToDisplay, Recipe, RecipeIngredients, Supplier, Unit } from "@/shemas/recipe";
-import {  DBSupplier, RawDBSupplier, RecipeIngredientFromDB } from "@/types/specialTypes";
+import { DBIngredient, DBRecipe, Ingredient, IngredientCategory, IngredientCategoryName, IngredientToDisplay, Recipe, RecipeIngredients, Supplier, Unit } from "@/shemas/recipe";
+import {  RawDBSupplier, RecipeIngredientFromDB } from "@/types/specialTypes";
 import { FormFields } from "../hooks/useRecipeForm";
 import { IngredientFormFields } from "../hooks/useIngredientsForm";
 
@@ -231,6 +231,43 @@ export const transformRecipeIngredentFromDB = (
     quantity: parseFloat(ingredient.quantity),
     recipeId: ingredient.recipeId,
     ingredientId: ingredient.ingredientId,
+  };
+};
+
+export const transformSupplierFromDB = (raw: RawDBSupplier): Supplier => {
+  return {
+    // 1. Direct Copy of Scalar Fields
+    id: raw.id,
+    userId: raw.userId,
+    name: raw.name,
+    contactPerson: raw.contactPerson || undefined,
+    email: raw.email || undefined,
+    phone: raw.phone || undefined,
+    website: raw.website || undefined,
+    deliveryTime: raw.deliveryTime || undefined,
+    isActive: raw.isActive,
+    dateAdded: raw.dateAdded ? new Date(raw.dateAdded) : undefined,
+    notes: "", // 'notes' exists in Supplier but is missing from RawDBSupplier interface
+
+    // 2. Transform Address (Take first element)
+    address: raw.supplierAddresses[0] ? {
+      street: raw.supplierAddresses[0].street || undefined,
+      city: raw.supplierAddresses[0].city || undefined,
+      state: raw.supplierAddresses[0].state || undefined,
+      postalCode: raw.supplierAddresses[0].postalCode || undefined,
+      country: raw.supplierAddresses[0].country || undefined,
+    } : undefined,
+
+    // 3. Transform Financial Data (Rename and extract)
+    financialData: {
+      paymentTerms: raw.supplierFinancialData?.paymentTerms || undefined,
+      vatNumber: raw.supplierFinancialData?.vatNumber || undefined,
+    },
+
+    // 4. Transform Categories (Map objects to strings)
+    category: raw.supplierCategories
+      .map(c => c.categoryId) as IngredientCategory[]
+      
   };
 };
 

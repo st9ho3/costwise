@@ -1,12 +1,13 @@
 import { ISupplierService } from "@/types/services";
 import { zodValidateSupplierBeforeAddThemToDatabase } from "./services";
-import { destructureSupplier } from "./helpers";
+import { destructureSupplier, transformSupplierFromDB } from "./helpers";
 import { db } from "@/db/db";
 import { SupplierRepository } from "../repositories/suppliersRepository";
 import { Supplier } from "@/shemas/recipe";
 import { SupplierAddressRepository } from "../repositories/addressesRepository";
 import { SupplierFinDataRepository } from "../repositories/supplierFinancialDataRepository";
 import { SuppliersCategoryRepository } from "../repositories/suppliersCategory";
+import { RawDBSupplier } from "@/types/specialTypes";
 
 export class SupplierService implements ISupplierService {
 
@@ -24,11 +25,19 @@ export class SupplierService implements ISupplierService {
     }
 
     async findById(supplierId: string): Promise<Supplier | undefined> {
+        const supplier = await this.supplierRepository.findById(supplierId)
+            if (!supplier) {
+                throw new Error('SupplierService: Something happened')
+            }
+            return transformSupplierFromDB(supplier)
+        
         
     }
 
-    async findAll(supplierId: string): Promise<Supplier[] | undefined> {
-        
+    async findAll(userId: string): Promise<Supplier[] | undefined> {
+        const suppliers = await this.supplierRepository.findAll(userId)
+
+        return suppliers?.map((supplier) => transformSupplierFromDB(supplier))
     }
 
     async create(supplier: Supplier): Promise<{ supplierId: string } | undefined> {
@@ -61,7 +70,8 @@ export class SupplierService implements ISupplierService {
     }
 
     async delete(supplierId: string): Promise<void> {
-        
+        const response = await this.supplierRepository.delete(supplierId)
+        return response
     }
 }
 

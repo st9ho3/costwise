@@ -1,5 +1,5 @@
 import { Recipe, Ingredient, RecipeIngredients, DBRecipe, DBIngredient, IngredientToDisplay, Supplier } from '@/shemas/recipe';
-import { RecipeWithQuery } from './specialTypes';
+import { RawDBSupplier, RecipeWithQuery } from './specialTypes';
 import { Database } from '@/db/schema';
 import { RecipeAnalytics, IngredientAnalytics } from './repositories';
 
