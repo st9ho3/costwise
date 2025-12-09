@@ -1,5 +1,5 @@
 import { Recipe, Ingredient, RecipeIngredients, DBRecipe, DBIngredient, IngredientToDisplay, Supplier } from '@/shemas/recipe';
-import { RawDBSupplier, RecipeWithQuery } from './specialTypes';
+import { RecipeWithQuery } from './specialTypes';
 import { Database } from '@/db/schema';
 import { RecipeAnalytics, IngredientAnalytics } from './repositories';
 
@@ -43,5 +43,5 @@ export interface ISupplierService {
     findById(supplierId: string): Promise<Supplier | undefined>
     create(supplier: Supplier): Promise<{supplierId: string} | undefined>
     update(supplier: Supplier): Promise<{supplierId: string} | undefined>
-    delete(supplierId: string): Promise<void>
+    delete(supplierId: string): Promise<{id: string} | undefined>
 }

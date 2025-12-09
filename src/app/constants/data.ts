@@ -190,6 +190,10 @@ export const paymentTermsOptions = [
     text: '60 Ημέρες' // Net 60 Days
   },
   {
+    value: 'Net 90',
+    text: '90 Ημέρες' // Net 60 Days
+  },
+  {
     value: 'Due on Receipt',
     text: 'Άμεσα Πληρωτέο' // Due on Receipt (Πληρωτέο με την παραλαβή)
   },

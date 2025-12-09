@@ -1,9 +1,10 @@
 import React from 'react'
 import { INGREDIENT_CATEGORIES as categories } from '@/app/constants/supplierDeafaultValues'
 import SelectItem from '../../shared/selectItem'
+import { IngredientCategory } from '@/shemas/recipe'
 
 interface CategoryShowroomProps {
-  onSelect: (id: string) => void
+  onSelect: (id: IngredientCategory) => void
   selected: string[]
 }
 

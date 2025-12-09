@@ -1,5 +1,5 @@
 'use client'
-import { SupplierSchema } from '@/shemas/recipe';
+import { IngredientCategory, Supplier, SupplierSchema } from '@/shemas/recipe';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { defaultSupplierValues } from '../constants/supplierDeafaultValues';
 import { useForm } from 'react-hook-form';
@@ -11,16 +11,20 @@ export type FormFields = z.infer<typeof SupplierSchema>;
 
 interface UseSuppliersFormProps {
   userId: string
+  mode: 'create' | 'edit'
+  supplier: Supplier | undefined
 }
 
-const useSuppliersForm = ({userId}: UseSuppliersFormProps) => {
+const useSuppliersForm = ({userId, mode, supplier}: UseSuppliersFormProps) => {
 
     const {register, handleSubmit, reset, formState} = useForm<FormFields>({
-        defaultValues: defaultSupplierValues,
+        defaultValues: mode === 'create' ? defaultSupplierValues : supplier,
         resolver: zodResolver(SupplierSchema)
     })
-    const [categories, setCategories] = useState<string[]>([])
-    const selectCategory = (id: string) => {
+    const INITIAL_STATE = mode === 'edit' && supplier ? supplier.category : []
+    const [categories, setCategories] = useState<IngredientCategory[]>(INITIAL_STATE)
+
+    const selectCategory = (id: IngredientCategory) => {
       if (!categories.includes(id)) {
         setCategories([...categories, id])
       } else {
@@ -33,7 +37,7 @@ const useSuppliersForm = ({userId}: UseSuppliersFormProps) => {
     const onSubmit = async(data: FormFields) => {
       const supplier = {...data, category: categories, userId: userId}
       await sendSupplier(supplier)
-    }
+    } 
 
   return {
     register,

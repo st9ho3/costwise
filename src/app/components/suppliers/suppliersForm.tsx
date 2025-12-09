@@ -7,14 +7,17 @@ import Select from './suppliersFormComponents/select'
 import { deliveryOptions, paymentTermsOptions } from '@/app/constants/data'
 import useSuppliersForm from '@/app/hooks/useSuppliersForm'
 import CategoryShowroom from './suppliersFormComponents/categoryShowroom'
+import { Supplier } from '@/shemas/recipe'
 
 interface SuppliersFormProps {
-  userId: string
+  userId: string 
+  mode: 'create' | 'edit'
+  supplier?: Supplier | undefined
 }
 
-const SuppliersForm = ({userId}: SuppliersFormProps) => {
+const SuppliersForm = ({userId, mode, supplier}: SuppliersFormProps) => {
   
-  const {register, handleSubmit, onSubmit, selectCategory, categories} = useSuppliersForm({userId})
+  const {register, handleSubmit, onSubmit, selectCategory, categories} = useSuppliersForm({userId, mode, supplier})
 
   return (
     <div className='flex w-5xl h-fit'>

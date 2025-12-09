@@ -6,7 +6,7 @@ interface SelectItemProps {
     icon?: string
     name: IngredientCategoryName
     id: IngredientCategory
-    onSelect: (id: string) => void
+    onSelect: (id: IngredientCategory) => void
     selected: string[]
 }
 

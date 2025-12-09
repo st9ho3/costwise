@@ -208,7 +208,7 @@ export const SupplierSchema = z.object({
   // Financial & Admin
   financialData: z.object({
     paymentTerms: z.union([
-    z.literal('').transform(val => val === '' ? undefined : val),
+    z.literal(''),
     z.literal('Net 30'),
     z.literal('Net 60'),
     z.literal('Net 90'),
@@ -223,7 +223,7 @@ export const SupplierSchema = z.object({
 
   // Logistics
   deliveryTime: z.union([ 
-    z.literal('').transform(val => val === '' ? undefined : val),
+    z.literal(''),
     z.literal('Same Day'),
     z.literal('1-2 Days'),
     z.literal('2-3 Days'),
