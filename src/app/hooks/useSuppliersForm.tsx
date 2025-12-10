@@ -36,6 +36,7 @@ const useSuppliersForm = ({userId, mode, supplier}: UseSuppliersFormProps) => {
 
     const onSubmit = async(data: FormFields) => {
       const supplier = {...data, category: categories, userId: userId}
+      console.log(`supplier_data_onSubmit: ${supplier}`)
       await sendSupplier(supplier)
     } 
 
