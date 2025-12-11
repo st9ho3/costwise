@@ -17,8 +17,7 @@ import Modal from '../shared/modal';
 import { useSession } from 'next-auth/react';
 import { useUIStore } from '@/app/stores/uiStore';
 import { useFileStore } from '@/app/stores/fileStore';
-import { Session } from 'next-auth';
-import Profile from '../shared/userProfile';
+
 import UserProfile from '../shared/profileModal';
 
 function SidebarLink({
@@ -40,7 +39,7 @@ function SidebarLink({
     return (
       <Link
         href={href}
-        className="flex relative group items-center p-2 text-gray-700 rounded-lg hover:bg-gray-100 group"
+        className="flex relative group items-center p-2 text-gray-700 rounded-full hover:bg-gray-100 group"
       >
         <Icon className="w-5 h-5 stroke-1 shrink-0" />
         <span
@@ -80,7 +79,7 @@ function SidebarLink({
 /**
  * Renders a collapsible navigation sidebar.
  */
-export default function Sidebar({session}: {session: Session}) {
+export default function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const isModalOpen = useUIStore((state) => state.isModalOpen)
   const modalType = useUIStore((state) => state.modalType)
@@ -99,7 +98,6 @@ export default function Sidebar({session}: {session: Session}) {
       >
         {/* Top navigation links */}
         <nav className="flex flex-col">
-          <Profile isCollapsed={isCollapsed} session={session} />
           <SidebarLink
             icon={Home}
             text="Home"

@@ -4,26 +4,25 @@ import { Session } from 'next-auth'
 import Image from 'next/image'
 import React from 'react'
 
-const Profile = ({session, isCollapsed}: {session: Session, isCollapsed: boolean}) => {
+const Profile = ({session}: {session: Session}) => {
 
       const openProfile = useUIStore((state) => state.openProfile)
 
   return (
     <div className='ml-1'>
       {session.user?.image 
-          ? <div onClick={() => openProfile()} className='flex items-center gap-1 border-b pb-1.5 mb-2 cursor-pointer border-gray-200 text-sm text-gray-600'>
+          ? <div onClick={() => openProfile()} className='h-10 w-10 rounded-full 
+            bg-blue-600 text-white 
+            flex items-center justify-center 
+            text-sm font-medium shadow-sm ring-2 ring-white
+            transition-transform duration-200 group-hover:scale-105'>
             <Image 
             alt='profile pic'
             src={session?.user?.image}
-            width={30}
-            height={30}
+            width={50}
+            height={50}
             className='rounded-full '
             />
-            
-            <span className={`whitespace-nowrap transition-opacity  duration-200 ${
-            isCollapsed ? 'opacity-0' : 'opacity-100'}`}>Hello, there</span>
-            <span className={`whitespace-nowrap transition-opacity text-xl duration-200 ${
-            isCollapsed ? 'opacity-0' : 'opacity-100'}`}>👋</span>
           </div>
           :
           <div>

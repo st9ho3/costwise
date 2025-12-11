@@ -5,10 +5,9 @@ import { Bell, Menu } from 'lucide-react'
 import { Session } from 'next-auth'
 import NotificationsNumber from '../shared/notificationsNumber'
 import SearchBoard from '../shared/search/searchBoard'
+import Profile from '../shared/userProfile'
 
 const Header = ({ session }: { session: Session }) => {
-  // Safe fallback for user initials
-  const userInitial = session?.user?.email?.[0]?.toUpperCase() || 'U';
 
   return (
     <header 
@@ -27,7 +26,7 @@ const Header = ({ session }: { session: Session }) => {
         </button>
         {/* You can replace this text with your Logo Image */}
         <span className="text-xl font-semibold text-gray-700 tracking-tight hidden sm:block">
-          Dashboard
+          
         </span>
       </div>
 
@@ -43,7 +42,7 @@ const Header = ({ session }: { session: Session }) => {
         <button className="relative group p-2.5 rounded-full hover:bg-gray-100 transition-colors">
           <Bell className="text-gray-500 group-hover:text-gray-700" size={22} strokeWidth={2} />
           {/* Positioning the badge absolutely within the button */}
-          <div className="absolute top-2 right-2">
+          <div className="absolute top-7 right-6">
             <NotificationsNumber />
           </div>
         </button>
@@ -65,24 +64,7 @@ const Header = ({ session }: { session: Session }) => {
           </div>
 
           {/* Avatar / Circle */}
-          <div className="
-            h-10 w-10 rounded-full 
-            bg-blue-600 text-white 
-            flex items-center justify-center 
-            text-sm font-medium shadow-sm ring-2 ring-white
-            transition-transform duration-200 group-hover:scale-105
-          ">
-            {session?.user?.image ? (
-               // eslint-disable-next-line @next/next/no-img-element
-               <img 
-                 src={session.user.image} 
-                 alt="Profile" 
-                 className="h-full w-full rounded-full object-cover" 
-               />
-            ) : (
-               <span>{userInitial}</span>
-            )}
-          </div>
+          <Profile session={session} />
         </div>
       </div>
     </header>
