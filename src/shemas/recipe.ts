@@ -130,7 +130,7 @@ export const IngredientSchema = z.object({
   icon: z.string().optional().nullable(),
   name: z.string().min(1, "Name is required"),
   unit: UnitSchema,
-  unitPrice: z.number().min(0.001, "Unit price can't be zero."),
+  unitPrice: z.number().min(0.0001, "Unit price can't be zero."),
   quantity: z.number().min(1, "Quantity must be non-negative"),
   usage: z.string(),
   userId: z.string(),

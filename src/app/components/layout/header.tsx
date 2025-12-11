@@ -12,7 +12,7 @@ const Header = ({ session }: { session: Session }) => {
   return (
     <header 
       className="
-        sticky top-0 z-40 w-full
+        sticky top-0 z-1 w-full
         flex items-center justify-between 
         px-6 py-3 h-20
         bg-white/95 backdrop-blur-sm

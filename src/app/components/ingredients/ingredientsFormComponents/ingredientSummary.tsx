@@ -1,3 +1,8 @@
+// src/components/ingredients/constants/IngredientSummary.tsx
+
+import React from 'react';
+import { Calculator } from 'lucide-react';
+
 type IngredientSummaryProps = {
   quantity: number;
   unit: string;
@@ -5,23 +10,38 @@ type IngredientSummaryProps = {
   price: number;
 };
 
-const IngredientSummary = ({ quantity, unit, name, price }: IngredientSummaryProps) => (
-  <div className="w-full rounded-lg border border-dashed border-gray-300 bg-gray-50 p-4 mt-3 text-center text-gray-600">
-    <p className="text-lg">
-      {quantity} {unit} of <span className="font-semibold text-gray-800">{name}</span> cost <span className="font-semibold text-red-500">{price}€</span>
-    </p>
-  </div>
-);
+const IngredientSummary = ({ quantity, unit, name, price }: IngredientSummaryProps) => {
+  
+  const totalCost = (quantity * price).toFixed(2);
+  const safeName = name || "Item";
 
-// --- components/ingredient-form/FormErrors.tsx ---
-type FormErrorsProps = {
-  errors: string[];
+  return (
+    <div className="
+      flex items-start gap-3 w-full 
+      p-4 rounded-2xl 
+      bg-blue-50 border border-blue-100
+      text-blue-900
+    ">
+      <div className="mt-0.5 p-1.5 bg-blue-100 rounded-lg text-blue-600">
+        <Calculator size={18} strokeWidth={2.5} />
+      </div>
+
+      <div className="flex flex-col w-full">
+        <span className="text-xs font-bold uppercase tracking-wider text-blue-400 mb-0.5">
+          Summary
+        </span>
+        <p className="text-sm text-blue-900 leading-relaxed">
+          <span className="font-semibold">{quantity} {unit}</span> of <span className="font-semibold">{safeName}</span>
+        </p>
+        <div className="mt-2 pt-2 border-t border-blue-200/60 flex justify-between items-center w-full">
+            <span className="text-xs font-medium text-blue-500">Estimated Cost</span>
+            <span className="text-lg font-bold text-blue-700 font-mono tracking-tight">
+                {totalCost}€
+            </span>
+        </div>
+      </div>
+    </div>
+  );
 };
 
-export const FormErrors = ({ errors }: FormErrorsProps) => (
-  <div className="mt-2 text-center">
-    {errors.length > 0 && errors.map((err) => <p key={err} className='text-red-500'> {err} </p>)}
-  </div>
-);
-
-export default IngredientSummary
+export default IngredientSummary;

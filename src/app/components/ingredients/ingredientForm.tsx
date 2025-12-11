@@ -1,17 +1,24 @@
+// src/components/ingredients/IngredientForm.tsx
+
 "use client"
 import React from 'react';
-import { IngredientNameInput, IngredientPriceInput, IngredientSummary, IngredientUnitSelect, AddIngredientButton, FormErrors } from '../../constants/components';
+import { 
+  IngredientNameInput, 
+  IngredientPriceInput, 
+  IngredientSummary, 
+  IngredientUnitSelect, 
+  AddIngredientButton, 
+  FormErrors 
+} from '../../constants/components';
 import Incremental from '../shared/incremental';
 import { Ingredient } from '@/shemas/recipe';
-import { useIngredientForm } from '../../hooks/useIngredientsForm'; // Adjust path
+import { useIngredientForm } from '../../hooks/useIngredientsForm';
 import IngredientCatSelect from './ingredientsFormComponents/ingredientCatSelect';
-
 
 type AddIngredientProps = {
   ingredient: Ingredient | undefined
   mode: 'create' | 'edit'
   userId: string
-  
 };
 
 const IngredientForm = ({ ingredient, mode, userId }: AddIngredientProps) => {
@@ -21,21 +28,90 @@ const IngredientForm = ({ ingredient, mode, userId }: AddIngredientProps) => {
   } = useIngredientForm({ ingredient, mode, userId });
 
   return (
-    <form className="p-2" onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-wrap items-center justify-center gap-4 rounded-lg">
-        <IngredientNameInput register={register} onKeyDown={handleKeyDown} />
-        <IngredientPriceInput
-          onChange={setValue}
-          price={price}
-        />
-        <Incremental onIngredientChange={setValue} count={quantity} onKeyDown={handleKeyDown} setErrors={setErrors} />
-        <IngredientUnitSelect register={register}  onKeyDown={handleKeyDown}  />
-        <IngredientCatSelect register={register} onKeyDown={handleKeyDown} />
-      </div>
+    <form 
+      className="w-full max-w-3xl mx-auto p-2 md:mt-4" 
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      {/* SINGLE CARD CONTAINER: Fits content efficiently */}
+      <div className="bg-white p-6 rounded-[28px] shadow-sm border border-gray-100">
+        
+        {/* GRID LAYOUT: 12-column grid for precise sizing */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-end">
+          
+          {/* --- ROW 1: Name & Category --- */}
+          
+          {/* Name: Takes up ~60% of width */}
+          <div className="md:col-span-7">
+            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5 ml-1">
+              Ingredient Name
+            </label>
+            <IngredientNameInput register={register} onKeyDown={handleKeyDown} />
+          </div>
 
-      <AddIngredientButton mode={mode} isSubmitting={isSubmitting} />
-      <IngredientSummary quantity={quantity} unit={unit} name={name} price={price} />
-      <FormErrors errors={errors} />
+          {/* Category: Takes up ~40% of width */}
+          <div className="md:col-span-5">
+             <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5 ml-1">
+               Category
+             </label>
+             <IngredientCatSelect register={register} onKeyDown={handleKeyDown} />
+          </div>
+
+
+          {/* --- ROW 2: Quantity, Unit, Price --- */}
+          
+          {/* Quantity: Takes up ~33% */}
+          <div className="md:col-span-4">
+            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5 ml-1">
+              Quantity
+            </label>
+            <div className="w-full">
+              <Incremental 
+                onIngredientChange={setValue} 
+                count={quantity} 
+                onKeyDown={handleKeyDown} 
+                setErrors={setErrors} 
+              />
+            </div>
+          </div>
+
+          {/* Unit: Takes up ~25% */}
+          <div className="md:col-span-3">
+            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5 ml-1">
+              Unit
+            </label>
+            <IngredientUnitSelect register={register} onKeyDown={handleKeyDown} />
+          </div>
+
+          {/* Price: Takes up ~42% (Remaining space) */}
+          <div className="md:col-span-5">
+            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5 ml-1">
+              Price / Unit
+            </label>
+            <IngredientPriceInput
+              onChange={setValue}
+              price={price}
+            />
+          </div>
+        </div>
+
+        {/* --- FOOTER SECTION: Summary & Actions --- */}
+        <div className="mt-6 space-y-4">
+            {/* Dynamic Summary */}
+            <div className="min-h-[80px]"> {/* Min-height prevents layout jump */}
+                <IngredientSummary quantity={quantity} unit={unit} name={name} price={price} />
+            </div>
+
+            {/* Error Feedback */}
+            <FormErrors errors={errors} />
+
+            {/* Action Button: Right aligned */}
+            <div className="flex justify-end pt-2">
+                <div className="w-full md:w-auto min-w-[160px]">
+                    <AddIngredientButton mode={mode} isSubmitting={isSubmitting} />
+                </div>
+            </div>
+        </div>
+      </div>
     </form>
   );
 };
