@@ -33,10 +33,10 @@ const page = async() => {
   
   return (
     <div className=' m-2'>
-      <div className='m-1 p-3 flex justify-between rounded-2xl bg-white h-full'>
-        <Card title='Recipes' value={totalRecipes} Icon={ShoppingBasket} color='border-1 border-amber-600' />
-        <Card title='Ingredients' value={totalIngredients} Icon={Carrot} color='border-1  border-red-600' />
-        <Card title='Avg Food Cost' value={Number(avgfoodCost.toFixed(2))} Icon={Percent} color='border-1  border-green-600' />
+      <div className='m-1 p-3 flex justify-between rounded-2xl h-full'>
+        <Card title='Recipes' value={totalRecipes} Icon={ShoppingBasket} color='border-1' />
+        <Card title='Ingredients' value={totalIngredients} Icon={Carrot} color='border-1 ' />
+        <Card title='Avg Food Cost' value={Number(avgfoodCost.toFixed(2))} Icon={Percent} color='border-1' />
         <Card title='Avg Profit Margin' value={avgProfitMargin} Icon={Percent} color='border-1  border-purple-600' />
       </div>
     </div>

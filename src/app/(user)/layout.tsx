@@ -36,7 +36,7 @@ export default async function RootLayout({
       <body>
         <SessionProvider session={session}>
           <HomeContextProvider>
-            <div className="flex h-screen bg-[rgb(252,252,252)]">
+            <div className="flex h-screen bg-[rgb(246,246,246)]">
               <Sidebar session={session} />
               <div className="flex flex-col flex-1 w-full overflow-hidden">
                 <Header session={session} />
