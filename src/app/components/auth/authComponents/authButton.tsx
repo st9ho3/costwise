@@ -24,7 +24,12 @@ const Button = ({ children, variant = 'default', isSignIn, mode, type }: ButtonP
 
   if (isSignIn && mode === "google") {
     return (
-      <button type={type} onClick={() => signIn("google")} className={mergedClasses.trim()} >
+      <button type={type} onClick={() => signIn("google")} className="
+                flex items-center justify-center w-full h-12 gap-3
+                rounded-full border border-gray-200 bg-white
+                text-sm font-medium text-gray-700
+                hover:bg-gray-50 hover:border-gray-300 transition-all duration-200
+            " >
         {children}
       </button>
     );

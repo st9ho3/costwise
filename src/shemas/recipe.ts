@@ -42,6 +42,17 @@ export const IngredientCategorySchema = z.union([
 // Inferred TypeScript type for an ingredient category
 export type IngredientCategory = z.infer<typeof IngredientCategorySchema>;
 
+export const DeliveryTimeSchema = z.union([ 
+    z.literal(''),
+    z.literal('Same Day'),
+    z.literal('1-2 Days'),
+    z.literal('2-3 Days'),
+    z.literal('Up to 5 days'),
+    z.literal('Weekly'),
+  ])
+
+  export type DeliveryTime = z.infer<typeof DeliveryTimeSchema>
+
 // Schema for defining the allowed ingredient category *names*
 export const IngredientCategoryNameSchema = z.union([
   z.literal('Produce'),
@@ -222,14 +233,7 @@ export const SupplierSchema = z.object({
   notes: z.string().optional(),
 
   // Logistics
-  deliveryTime: z.union([ 
-    z.literal(''),
-    z.literal('Same Day'),
-    z.literal('1-2 Days'),
-    z.literal('2-3 Days'),
-    z.literal('Up to 5 days'),
-    z.literal('Weekly'),
-  ])
+  deliveryTime: DeliveryTimeSchema
   .optional()
   ,
 
