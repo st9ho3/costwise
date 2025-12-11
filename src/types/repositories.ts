@@ -48,7 +48,7 @@ export interface ISupplierRepository {
   findById(supplierId: string): Promise<RawDBSupplier | undefined>;
   findAll(userId: string): Promise<RawDBSupplier[] | undefined>;
   create(supplier: DestructuredSupplier, tx: Database): Promise<{supplierId: string} | undefined>;
-  update(supplierId: string, supplier: Supplier, tx?: Database): Promise<{supplierId: string} | undefined>;
+  update(supplierId: string, supplier: DestructuredSupplier, tx: Database): Promise<{id: string | undefined} | undefined>;
   delete(supplierId: string, db: Database): Promise<{id: string} | undefined>;
 }
 
