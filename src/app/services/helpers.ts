@@ -16,6 +16,7 @@ import { DBIngredient, DBRecipe, Ingredient, IngredientCategory, IngredientCateg
 import {  DestructuredSupplier, RawDBSupplier, RecipeIngredientFromDB } from "@/types/specialTypes";
 import { FormFields } from "../hooks/useRecipeForm";
 import { IngredientFormFields } from "../hooks/useIngredientsForm";
+import { zodValidateSupplierBeforeAddThemToDatabase } from "./services";
 
 
 export const paginate = <T>(itemsPerPage: number, page: number, items: T[] ): T[]=> {
@@ -392,6 +393,15 @@ export const destructureSupplier = (supplier: Supplier) => {
         const address = supplier.address 
         const financialData = {...supplier.financialData, paymentTerms: supplier.financialData.paymentTerms === '' ? undefined : supplier.financialData.paymentTerms}
         return {categories, address, financialData, dbSupplier}
+}
+
+export const prepareSupplierForDB = (supplier: Supplier) => {
+  const validatedSupplier = zodValidateSupplierBeforeAddThemToDatabase(supplier)
+          if (!validatedSupplier) {
+              throw new Error('Supplier Service, Error with validating supplier')
+          }
+          return destructureSupplier(validatedSupplier)
+           
 }
 
 

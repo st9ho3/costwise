@@ -5,7 +5,8 @@ import { defaultSupplierValues } from '../constants/supplierDeafaultValues';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 import { useState } from 'react';
-import { sendSupplier } from '../services/services';
+import { createSupplier, updateSupplier } from '../services/services';
+import { redirect } from 'next/navigation';
 
 export type FormFields = z.infer<typeof SupplierSchema>;
 
@@ -39,10 +40,18 @@ const useSuppliersForm = ({userId, mode, supplier}: UseSuppliersFormProps) => {
     }
 
     const onSubmit = async(data: FormFields) => {
+
       const supplier = {...data, category: categories, userId: userId}
-      console.log(`supplier_data_onSubmit: ${supplier}`)
-      await sendSupplier(supplier)
-      resetForm()
+
+      if (mode === 'create') {
+         await createSupplier(supplier)
+        resetForm()
+        redirect('/suppliers')
+      } else {
+        await updateSupplier(supplier)
+        redirect('/suppliers')
+      }
+     
     } 
 
   return {

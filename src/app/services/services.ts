@@ -146,9 +146,25 @@ export const deleteIngredient = async (id: string | null)  => {
   
 }
 
-export const sendSupplier = async (supplier: Supplier) => {
+export const createSupplier = async (supplier: Supplier) => {
   const res = await fetch('/api/suppliers', {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(supplier)
+  })
+  if (!res.ok) {
+    return await res.json()
+  }
+
+  const response = await res.json();
+  return response;
+}
+
+export const updateSupplier = async (supplier: Supplier) => {
+  const res = await fetch(`/api/suppliers/${supplier.id}`, {
+    method: 'PATCH',
     headers: {
       'Content-Type': 'application/json'
     },

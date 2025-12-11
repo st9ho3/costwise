@@ -58,8 +58,14 @@ export class SupplierRepository implements ISupplierRepository {
         }
         
     }
-    async update(supplierId: string, supplier: DBSupplier, tx?: Database): Promise<{ supplierId: string; } | undefined> {
-        
+    async update(supplierId: string, supplier: DestructuredSupplier, tx: Database): Promise<{ id: string } | undefined> {
+        const [id] = await tx
+        .update(suppliers)
+        .set(supplier)
+        .where(eq(suppliers.id, supplierId))
+        .returning({id: suppliers.id})
+
+        return id
     }
     async delete(supplierId: string): Promise<{ id: string; } | undefined> {
         try {
