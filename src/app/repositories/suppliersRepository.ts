@@ -1,7 +1,7 @@
 import { db } from "@/db/db";
 import { Database, suppliers} from "@/db/schema";
 import { ISupplierRepository } from "@/types/repositories";
-import { DBSupplier, RawDBSupplier } from "@/types/specialTypes";
+import { DBSupplier, DestructuredSupplier, RawDBSupplier } from "@/types/specialTypes";
 import { eq } from "drizzle-orm";
 
 export class SupplierRepository implements ISupplierRepository {
@@ -42,7 +42,8 @@ export class SupplierRepository implements ISupplierRepository {
         }
     }
 
-    async create(supplier: DBSupplier, tx: Database): Promise<{ supplierId: string; } | undefined> {
+    async create(supplier: DestructuredSupplier, tx: Database): Promise<{ supplierId: string; } | undefined> {
+        console.log('supplier repo', supplier)
         try {
            const [supplierId] =  await tx
             .insert(suppliers)

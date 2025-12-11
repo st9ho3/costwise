@@ -13,7 +13,7 @@
  * financial calculations, and pagination of recipe and ingredient lists.
  */
 import { DBIngredient, DBRecipe, Ingredient, IngredientCategory, IngredientCategoryName, IngredientToDisplay, Recipe, RecipeIngredients, Supplier, Unit } from "@/shemas/recipe";
-import {  RawDBSupplier, RecipeIngredientFromDB } from "@/types/specialTypes";
+import {  DestructuredSupplier, RawDBSupplier, RecipeIngredientFromDB } from "@/types/specialTypes";
 import { FormFields } from "../hooks/useRecipeForm";
 import { IngredientFormFields } from "../hooks/useIngredientsForm";
 
@@ -375,7 +375,7 @@ export const createEditIngredientPrototype = (data: IngredientFormFields, ingred
 }
 
 export const destructureSupplier = (supplier: Supplier) => {
-        const dbSupplier = {
+        const dbSupplier: DestructuredSupplier = {
           id: supplier.id,
           userId: supplier.userId,
           name: supplier.name,

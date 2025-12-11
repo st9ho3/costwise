@@ -33,11 +33,16 @@ const useSuppliersForm = ({userId, mode, supplier}: UseSuppliersFormProps) => {
       }
     } 
     
+    const resetForm = () => {
+      reset()
+      setCategories([])
+    }
 
     const onSubmit = async(data: FormFields) => {
       const supplier = {...data, category: categories, userId: userId}
       console.log(`supplier_data_onSubmit: ${supplier}`)
       await sendSupplier(supplier)
+      resetForm()
     } 
 
   return {

@@ -9,9 +9,7 @@ import { signOut } from 'next-auth/react';
 const UserProfile = ({ name, email, avatar }: {name: string, email: string, avatar: string | null | undefined}) => {
   
   return (
-    // CONTAINER:
-    // 1. rounded-[28px]: Matches the large rounded surface style
-    // 2. shadow-xl: Gives it elevation above the rest of the UI
+    
     <div className="w-80 bg-white rounded-[28px] shadow-xl border border-gray-100 overflow-hidden flex flex-col p-2">
       
       {/* SECTION 1: IDENTITY (Centered Top) */}

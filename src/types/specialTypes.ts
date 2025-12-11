@@ -1,4 +1,4 @@
-import { Supplier } from "@/shemas/recipe";
+import {  Supplier } from "@/shemas/recipe";
 
 export type RecipeIngredientFromDB = {
   id: number;
@@ -81,7 +81,7 @@ export type LabelType =
 
   export type IngredientCategoryType = Exclude<LabelType, 'very_low' | 'low' | 'medium' | 'high'>;
 
-  export type DBSupplier = Omit<
+  export type DestructuredSupplier = Omit<
   Supplier,
   | 'category'
   | 'address'
@@ -89,7 +89,12 @@ export type LabelType =
   | 'vatNumber'
   | 'notes'
   | 'financialData'
-  >
+  | 'deliveryTime' >
+  & {
+    deliveryTime: 'Same Day' | '1-2 Days' | '2-3 Days' | 'Up to 5 days' | 'Weekly' | undefined
+  }
+  
+  
 
   export type DBSupplierAddress = Supplier['address'];
   export type DBSupplierFinancialData = Supplier['financialData']
