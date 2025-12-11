@@ -13,7 +13,7 @@ const Notification = () => {
 
   return (
     <div
-      className={`fixed top-5 right-5 flex items-center justify-between max-w-md mx-auto p-4 rounded-xl shadow-[0_4px_10px_rgba(0,0,0,0.05)] border ${borderClass} ${bgClass}`}
+      className={`fixed z-150 top-5 right-5 flex items-center justify-between max-w-md mx-auto p-4 rounded-xl shadow-[0_4px_10px_rgba(0,0,0,0.05)] border ${borderClass} ${bgClass}`}
     >
       <div className="flex items-center">
         <Icon className={`mr-4 flex-shrink-0 ${iconClass}`} size={24} strokeWidth={2} />

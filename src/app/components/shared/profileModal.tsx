@@ -1,51 +1,87 @@
+// src/components/shared/UserProfile.tsx
+
 "use client"
 import React from 'react';
 import { LogOut, CircleUserRound, User } from 'lucide-react';
 import Image from 'next/image';
 import { signOut } from 'next-auth/react';
 
-
 const UserProfile = ({ name, email, avatar }: {name: string, email: string, avatar: string | null | undefined}) => {
   
   return (
-    <div className=" w-80 bg-white rounded-xl ">
-      <div className="p-2">
-        <button
-          
-          className="flex items-center w-full px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-500 transition-colors duration-150"
-        >
-          <User className="w-5 h-5 mr-3" strokeWidth={2} />
-          User Details
-        </button>
-        <button
-          onClick={() => signOut()}
-          className="flex items-center w-full px-3 py-2 text-sm font-medium text-red-600 rounded-md hover:bg-red-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500 transition-colors duration-150"
-        >
-          <LogOut className="w-5 h-5 mr-3" strokeWidth={2} />
-          Sign Out
-        </button>
-      </div>
+    // CONTAINER:
+    // 1. rounded-[28px]: Matches the large rounded surface style
+    // 2. shadow-xl: Gives it elevation above the rest of the UI
+    <div className="w-80 bg-white rounded-[28px] shadow-xl border border-gray-100 overflow-hidden flex flex-col p-2">
       
-      <hr className="border-gray-200/75" />
-      
-      <div className="flex items-center p-3">
-        {/* Avatar */}
-        <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 mr-4 border-2 border-gray-100">
-           {avatar 
-           ? <Image src={avatar} alt='profile avatar' width={90} height={90} /> 
-           : <CircleUserRound className="w-full h-full text-gray-300" strokeWidth={1.5} />
-          }
-           
-          
+      {/* SECTION 1: IDENTITY (Centered Top) */}
+      <div className="flex flex-col items-center justify-center pt-6 pb-4">
+        {/* Avatar Container with Ring */}
+        <div className="relative w-20 h-20 mb-3 rounded-full border-4 border-white shadow-sm ring-1 ring-gray-100 overflow-hidden">
+           {avatar ? (
+             <Image 
+               src={avatar} 
+               alt='Profile Avatar' 
+               fill 
+               className="object-cover"
+               sizes="80px"
+             /> 
+           ) : (
+             <div className="w-full h-full bg-gray-50 flex items-center justify-center">
+                <CircleUserRound className="w-10 h-10 text-gray-300" strokeWidth={1.5} />
+             </div>
+           )}
         </div>
 
-        <div className="flex-grow overflow-hidden">
-          <p className="font-semibold text-gray-800 truncate">{name}</p>
-          <div className="flex items-center">
-            <p className="text-sm text-gray-500 truncate">{email}</p>
-            
-          </div>
+        {/* Text Info */}
+        <div className="text-center px-4">
+          <p className="text-lg font-bold text-gray-900 truncate tracking-tight">
+            {name || "User"}
+          </p>
+          <p className="text-xs font-medium text-gray-500 truncate mt-0.5 bg-gray-100 px-2 py-0.5 rounded-full inline-block">
+            {email}
+          </p>
         </div>
+      </div>
+
+      {/* Divider */}
+      <div className="h-px w-full bg-gray-100 my-1" />
+
+      {/* SECTION 2: ACTIONS (Menu List) */}
+      <div className="flex flex-col gap-1 p-2">
+        
+        {/* User Details Button */}
+        <button
+          className="
+            group flex items-center w-full px-4 h-12 
+            rounded-full 
+            text-sm font-medium text-gray-700 
+            hover:bg-gray-100 hover:text-gray-900 
+            transition-all duration-200
+          "
+        >
+          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-50 text-gray-500 group-hover:bg-white group-hover:text-blue-600 mr-3 transition-colors">
+             <User className="w-4 h-4" strokeWidth={2.5} />
+          </div>
+          Account Details
+        </button>
+
+        {/* Sign Out Button (Destructive Styling) */}
+        <button
+          onClick={() => signOut()}
+          className="
+            group flex items-center w-full px-4 h-12 
+            rounded-full 
+            text-sm font-medium text-red-600 
+            hover:bg-red-50 
+            transition-all duration-200
+          "
+        >
+          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-red-50 text-red-500 group-hover:bg-red-100 group-hover:text-red-600 mr-3 transition-colors">
+             <LogOut className="w-4 h-4" strokeWidth={2.5} />
+          </div>
+          Sign Out
+        </button>
       </div>
     </div>
   );
