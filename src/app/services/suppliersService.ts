@@ -39,7 +39,7 @@ export class SupplierService implements ISupplierService {
         return suppliers?.map((supplier) => transformSupplierFromDB(supplier))
     }
 
-    async create(supplier: Supplier): Promise<{ supplierId: string } | undefined> {
+    async create(supplier: Supplier): Promise<{ id: string } | undefined> {
         
         const {categories, address, financialData, dbSupplier} = prepareSupplierForDB(supplier)
         
@@ -61,17 +61,16 @@ export class SupplierService implements ISupplierService {
         
     }
 
-    async update(supplier: Supplier): Promise<{ supplierId: string; } | undefined> {
+    async update(supplier: Supplier): Promise<{ id: string; } | undefined> {
 
         const {categories, address, financialData, dbSupplier} = prepareSupplierForDB(supplier)
 
         try {
             const transactionResponse = await db.transaction(async(tx) => {
                 const supplierId = await this.supplierRepository.update(dbSupplier.id, dbSupplier, tx)
-                const addressId = await this.addressRepository.update(dbSupplier.id, address, tx)
-                const finData = await this.financialDataRepository.update(dbSupplier.id, financialData, tx)
-                console.log(addressId)
-                return 
+                 await this.addressRepository.update(dbSupplier.id, address, tx)
+                 await this.financialDataRepository.update(dbSupplier.id, financialData, tx)
+                return supplierId
             })
             return transactionResponse
         }catch(err){

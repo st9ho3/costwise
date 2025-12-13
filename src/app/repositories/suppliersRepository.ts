@@ -42,14 +42,13 @@ export class SupplierRepository implements ISupplierRepository {
         }
     }
 
-    async create(supplier: DestructuredSupplier, tx: Database): Promise<{ supplierId: string; } | undefined> {
-        console.log('supplier repo', supplier)
+    async create(supplier: DestructuredSupplier, tx: Database): Promise<{ id: string; } | undefined> {
         try {
            const [supplierId] =  await tx
             .insert(suppliers)
             .values(supplier)
             .returning({
-                supplierId: suppliers.id
+                id: suppliers.id
             })
             return supplierId
             
