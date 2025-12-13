@@ -41,7 +41,7 @@ export interface ISearchService {
 export interface ISupplierService {
     findAll(supplierId: string): Promise<Supplier[] | undefined>
     findById(supplierId: string): Promise<Supplier | undefined>
-    create(supplier: Supplier): Promise<{supplierId: string} | undefined>
-    update(supplier: Supplier): Promise<{supplierId: string} | undefined>
+    create(supplier: Supplier): Promise<{id: string} | undefined>
+    update(supplier: Supplier): Promise<{id: string} | undefined>
     delete(supplierId: string): Promise<{id: string} | undefined>
 }

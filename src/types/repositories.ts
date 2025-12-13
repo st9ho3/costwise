@@ -1,6 +1,6 @@
 
 import { Database } from '@/db/schema';
-import { Recipe, RecipeIngredients, DBIngredient, DBRecipe, IngredientToDisplay, Supplier } from '@/shemas/recipe';
+import { Recipe, RecipeIngredients, DBIngredient, DBRecipe, IngredientToDisplay } from '@/shemas/recipe';
 import {  DBSupplierAddress, DBSupplierFinancialData, DestructuredSupplier, RawDBSupplier, RecipeWithQuery } from './specialTypes';
 
 export interface RecipeAnalytics {
@@ -47,7 +47,7 @@ export interface IIngredientRepository {
 export interface ISupplierRepository {
   findById(supplierId: string): Promise<RawDBSupplier | undefined>;
   findAll(userId: string): Promise<RawDBSupplier[] | undefined>;
-  create(supplier: DestructuredSupplier, tx: Database): Promise<{supplierId: string} | undefined>;
+  create(supplier: DestructuredSupplier, tx: Database): Promise<{id: string} | undefined>;
   update(supplierId: string, supplier: DestructuredSupplier, tx: Database): Promise<{id: string | undefined} | undefined>;
   delete(supplierId: string, db: Database): Promise<{id: string} | undefined>;
 }
