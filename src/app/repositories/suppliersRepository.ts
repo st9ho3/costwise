@@ -1,7 +1,7 @@
 import { db } from "@/db/db";
 import { Database, suppliers} from "@/db/schema";
 import { ISupplierRepository } from "@/types/repositories";
-import { DBSupplier, DestructuredSupplier, RawDBSupplier } from "@/types/specialTypes";
+import { DestructuredSupplier, RawDBSupplier } from "@/types/specialTypes";
 import { eq } from "drizzle-orm";
 
 export class SupplierRepository implements ISupplierRepository {

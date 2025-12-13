@@ -1,5 +1,4 @@
 import { Database, supplierFinancialData } from "@/db/schema";
-import { Supplier } from "@/shemas/recipe";
 import { ISupplierFinancialDataRepository } from "@/types/repositories";
 import { DBSupplierFinancialData } from "@/types/specialTypes";
 
@@ -21,7 +20,14 @@ export class SupplierFinDataRepository implements ISupplierFinancialDataReposito
             throw new Error(`FinData Repository: ${err}`)
         }
     }
-    async update(supplierId: string, finData: Supplier, tx?: Database): Promise<{ supplierId: string; } | undefined> {
-        
+    async update(supplierId: string, finData: DBSupplierFinancialData, tx: Database): Promise<{ confirmation: string; } | undefined> {
+        const [id] = await tx
+        .update(supplierFinancialData)
+        .set(finData)
+        .returning({
+                confirmation: supplierFinancialData.supplierId
+            }
+        )
+        return id
     }
 }
