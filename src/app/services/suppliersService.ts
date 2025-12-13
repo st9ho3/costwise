@@ -1,6 +1,5 @@
 import { ISupplierService } from "@/types/services";
-import { zodValidateSupplierBeforeAddThemToDatabase } from "./services";
-import { destructureSupplier, prepareSupplierForDB, transformSupplierFromDB } from "./helpers";
+import {  prepareSupplierForDB, transformSupplierFromDB } from "./helpers";
 import { db } from "@/db/db";
 import { SupplierRepository } from "../repositories/suppliersRepository";
 import { Supplier } from "@/shemas/recipe";
@@ -67,12 +66,17 @@ export class SupplierService implements ISupplierService {
         const {categories, address, financialData, dbSupplier} = prepareSupplierForDB(supplier)
 
         try {
-
+            const transactionResponse = await db.transaction(async(tx) => {
+                const supplierId = await this.supplierRepository.update(dbSupplier.id, dbSupplier, tx)
+                const addressId = await this.addressRepository.update(dbSupplier.id, address, tx)
+                const finData = await this.financialDataRepository.update(dbSupplier.id, financialData, tx)
+                console.log(addressId)
+                return 
+            })
+            return transactionResponse
         }catch(err){
             throw new Error(`Supplier Service Update: ${err}`)
         }
-        
-        return {supplierId: 'Service is running'}
     }
 
     async delete(supplierId: string): Promise<{id: string} | undefined> {

@@ -54,11 +54,11 @@ export interface ISupplierRepository {
 
 export interface IAddressesRepository {
   create(address: DBSupplierAddress, tx: Database, suppliersId: string): Promise<{addressId: string} | undefined>;
-  update(supplierId: string, supplier: Supplier, tx?: Database): Promise<{supplierId: string} | undefined>;
+  update(supplierId: string, address: DBSupplierAddress, tx: Database): Promise<{addressId: string} | undefined>;
 }
 export interface ISupplierFinancialDataRepository {
   create(finData: DBSupplierFinancialData, tx: Database, suppliersId: string): Promise<{confirmation: string} | undefined>;
-  update(supplierId: string, finData: Supplier, tx?: Database): Promise<{supplierId: string} | undefined>;
+  update(supplierId: string, finData: DBSupplierFinancialData, tx: Database): Promise<{confirmation: string} | undefined>;
 }
 
 export interface ISuppliersCategoryRepository {

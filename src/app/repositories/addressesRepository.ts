@@ -1,5 +1,4 @@
 import { Database, supplierAddresses } from "@/db/schema";
-import { Supplier } from "@/shemas/recipe";
 import { IAddressesRepository } from "@/types/repositories";
 import { DBSupplierAddress } from "@/types/specialTypes";
 
@@ -7,7 +6,6 @@ export class SupplierAddressRepository implements IAddressesRepository {
     
     async create(address: DBSupplierAddress, tx: Database, suppliersId: string): Promise<{ addressId: string; } | undefined> {
         const addressForDb = {...address, suppliersId}
-        console.log('create Address repository:', addressForDb)
         try {
             const [addressId] = await tx
             .insert(supplierAddresses)
@@ -20,8 +18,15 @@ export class SupplierAddressRepository implements IAddressesRepository {
             throw new Error(`address repository: ${err}`)
         }
     }
-    async update(supplierId: string, supplier: Supplier, tx?: Database): Promise<{ supplierId: string; } | undefined> {
-        
+    async update(supplierId: string, address: DBSupplierAddress, tx: Database): Promise<{ addressId: string; } | undefined> {
+        const addressForDb = {...address, supplierId}
+        const [addressId] = await tx
+        .update(supplierAddresses)
+        .set(addressForDb)
+        .returning(
+            {addressId: supplierAddresses.id}
+        )
+        return addressId
     }
     
 }
