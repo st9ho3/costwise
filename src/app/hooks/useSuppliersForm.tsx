@@ -7,6 +7,7 @@ import z from 'zod';
 import { useState } from 'react';
 import { createSupplier, updateSupplier } from '../services/services';
 import { redirect } from 'next/navigation';
+import { getArrayChanges } from '../services/helpers';
 
 export type FormFields = z.infer<typeof SupplierSchema>;
 
@@ -23,32 +24,34 @@ const useSuppliersForm = ({userId, mode, supplier}: UseSuppliersFormProps) => {
         resolver: zodResolver(SupplierSchema)
     })
     const INITIAL_STATE = mode === 'edit' && supplier ? supplier.category : []
-    const [categories, setCategories] = useState<IngredientCategory[]>(INITIAL_STATE)
+    const [tempCategories, setTempCategories] = useState<IngredientCategory[]>(INITIAL_STATE)
 
     const selectCategory = (id: IngredientCategory) => {
-      if (!categories.includes(id)) {
-        setCategories([...categories, id])
+      if (!tempCategories.includes(id)) {
+        setTempCategories([...tempCategories, id])
       } else {
-        const filteredCategories = categories.filter((category) => category !== id)
-        setCategories(filteredCategories)
+        const filteredCategories = tempCategories.filter((category) => category !== id)
+        setTempCategories(filteredCategories)
       }
     } 
     
     const resetForm = () => {
       reset()
-      setCategories([])
+      setTempCategories([])
     }
 
     const onSubmit = async(data: FormFields) => {
 
-      const supplier = {...data, category: categories, userId: userId}
+      const supplier = {...data, category: tempCategories, userId: userId}
+
 
       if (mode === 'create') {
          await createSupplier(supplier)
         resetForm()
         redirect('/suppliers')
       } else {
-        await updateSupplier(supplier)
+        const {added, removed} = getArrayChanges(supplier.category, tempCategories)
+        await updateSupplier(supplier, added, removed)
         redirect('/suppliers')
       }
      
@@ -61,7 +64,7 @@ const useSuppliersForm = ({userId, mode, supplier}: UseSuppliersFormProps) => {
     formState,
     onSubmit,
     selectCategory,
-    categories
+    tempCategories
   }
 }
 

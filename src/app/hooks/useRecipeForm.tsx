@@ -18,7 +18,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { calculateRecipeData, getTotalPrice } from '@/app/services/helpers';
+import { calculateRecipeData, getArrayChanges, getTotalPrice } from '@/app/services/helpers';
 import { sendRecipe, sendRecipeToUpdate } from '@/app/services/services';
 import { useRouter } from 'next/navigation';
 import { useFileUpload } from './useFileUpload';
@@ -81,12 +81,7 @@ const useRecipeForm = ({mode, recipe, recipeIngredients, userId}: RecipeFormProp
 
     const {newCost, newMargin, newPrice, foodCost} = calculateRecipeData(data, recipe, tempIngredients);
     
-    const addedIngredients: RecipeIngredients[] = tempIngredients.filter(
-      (tempIngredient) => !recipeIngredients.includes(tempIngredient)
-    );
-    const removedIngredients: RecipeIngredients[] = recipeIngredients.filter(
-      (recipeIngredient) => !tempIngredients.includes(recipeIngredient)
-    );
+    const {added, removed} = getArrayChanges(recipeIngredients, tempIngredients)
 
     let submissionSuccessful = false;
 
@@ -108,7 +103,7 @@ const useRecipeForm = ({mode, recipe, recipeIngredients, userId}: RecipeFormProp
           foodCost: foodCost
         };
           
-        const response = await sendRecipeToUpdate(recipeToUpdate, addedIngredients, removedIngredients);
+        const response = await sendRecipeToUpdate(recipeToUpdate, added, removed);
         raiseNotification(response);
         submissionSuccessful = response.success;
       
