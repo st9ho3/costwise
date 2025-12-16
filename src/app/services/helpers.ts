@@ -409,4 +409,9 @@ export const prepareSupplierForDB = (supplier: Supplier) => {
            
 }
 
+export const getArrayChanges = <T,>(originalArray: T[], newArray: T[]) => {
+  const added = newArray.filter((item) => !originalArray.includes(item));
+  const removed = originalArray.filter((item) => !newArray.includes(item));
+  return { added, removed };
+};
 

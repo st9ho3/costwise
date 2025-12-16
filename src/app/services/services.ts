@@ -14,7 +14,7 @@
 
 import { uid } from "uid";
 import { FormFields } from "../components/recipes/recipeForm/recipeForm";
-import { Ingredient, IngredientSchema, Recipe, RecipeIngredients, RecipeIngredientsSchema, RecipeSchema, Supplier, SupplierSchema } from "@/shemas/recipe";
+import { Ingredient, IngredientCategory, IngredientSchema, Recipe, RecipeIngredients, RecipeIngredientsSchema, RecipeSchema, Supplier, SupplierSchema } from "@/shemas/recipe";
 import { RecipeUpdatePayload } from "@/types/context";
 
 
@@ -162,13 +162,14 @@ export const createSupplier = async (supplier: Supplier) => {
   return response;
 }
 
-export const updateSupplier = async (supplier: Supplier) => {
+export const updateSupplier = async (supplier: Supplier, addedCategories: IngredientCategory[], removedCategories: IngredientCategory[]) => {
+  const dataToSend = { recipe: supplier, addedIngredients: addedCategories, removedCategories: removedCategories};
   const res = await fetch(`/api/suppliers/${supplier.id}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(supplier)
+    body: JSON.stringify(dataToSend)
   })
   if (!res.ok) {
     return await res.json()
