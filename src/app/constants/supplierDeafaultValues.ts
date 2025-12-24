@@ -1,25 +1,15 @@
 import { IngredientCategory } from '@/shemas/recipe';
 import { v4 as uuidv4 } from 'uuid';
 
-export const defaultSupplierValues = {
-  // Status & Metadata (RHF defaults can often override Zod defaults)
-  // For RHF, it's best to explicitly set the default value.
-  id: uuidv4(), 
+export const getDefaultSupplierValues = () => ({
+  id: uuidv4(), // ✅ Fresh UUID each time
   userId: '', 
   name: '',
-  
-  // What they sell
-  // Initialize arrays as empty arrays
-  category: [""] as IngredientCategory[], // This should match the type of IngredientCategorySchema[]
-
-  // Contact Info
+  category: [] as IngredientCategory[],
   contactPerson: '',
   email: '',
   phone: '',
   website: '',
-
-  // Structured Address
-  // Initialize nested objects
   address: {
     street: '',
     city: '',
@@ -27,20 +17,14 @@ export const defaultSupplierValues = {
     postalCode: '',
     country: '',
   },
-
-  // Financial & Admin
-  // Pick a sensible default for the required union
-  paymentTerms: '', 
-  vatNumber: '', 
+  
+    paymentTerms: '', 
+    vatNumber: '',
   notes: '',
-
-  // Logistics (Optional)
-  // If the field is optional, an empty string or undefined is typically used.
-  // Using an empty string is often easier for text/select inputs.
-  deliveryTime: undefined, // Or '' if your select uses an empty string for the placeholder
+  deliveryTime: undefined, 
   isActive: false,
-  dateAdded: new Date(),
-};
+  dateAdded: new Date(), // ✅ Fresh date each time too
+});
 
 export const INGREDIENT_CATEGORIES = [
   { name: 'Produce', id: '5dee106a-5050-443e-8368-03397e02af6d', icon: '🥕' },
