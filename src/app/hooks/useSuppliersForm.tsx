@@ -1,7 +1,7 @@
 'use client'
 import { IngredientCategory, Supplier, SupplierSchema } from '@/shemas/recipe';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { defaultSupplierValues } from '../constants/supplierDeafaultValues';
+import { getDefaultSupplierValues } from '../constants/supplierDeafaultValues';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 import { useState } from 'react';
@@ -20,7 +20,7 @@ interface UseSuppliersFormProps {
 const useSuppliersForm = ({userId, mode, supplier}: UseSuppliersFormProps) => {
 
     const {register, handleSubmit, reset, formState} = useForm<FormFields>({
-        defaultValues: mode === 'create' ? defaultSupplierValues : supplier,
+        defaultValues: mode === 'create' ? getDefaultSupplierValues() : supplier,
         resolver: zodResolver(SupplierSchema)
     })
     const INITIAL_STATE = mode === 'edit' && supplier ? supplier.category : []

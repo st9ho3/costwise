@@ -85,7 +85,7 @@ quantity: numeric("quantity").notNull()
 });
 
 export const suppliers = pgTable('suppliers', {
-  id: uuid('id').primaryKey(),
+  id: uuid('id').primaryKey().defaultRandom(),
   name: varchar('name', {length: 255}).notNull().unique(),
   userId: text('userId').notNull().references(() => users.id, {onDelete: 'cascade'} ),
 

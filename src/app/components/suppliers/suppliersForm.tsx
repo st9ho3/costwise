@@ -17,7 +17,7 @@ interface SuppliersFormProps {
 
 const SuppliersForm = ({userId, mode, supplier}: SuppliersFormProps) => {
   
-  const {register, handleSubmit, onSubmit, selectCategory, categories} = useSuppliersForm({userId, mode, supplier})
+  const {register, handleSubmit, onSubmit, selectCategory, tempCategories} = useSuppliersForm({userId, mode, supplier})
 
   return (
     <div className='flex w-5xl h-fit'>
@@ -138,7 +138,7 @@ const SuppliersForm = ({userId, mode, supplier}: SuppliersFormProps) => {
         <button>Click me</button>
       </form>
       <div className='p-3'>
-        <CategoryShowroom selected={categories} onSelect={selectCategory} />
+        <CategoryShowroom selected={tempCategories} onSelect={selectCategory} />
       </div>
     </div>
   )

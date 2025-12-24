@@ -8,7 +8,7 @@ export const PATCH = async(req: NextRequest) => {
 
     const request = await req.json()
     const res = await service.update(request)
-    console.log(request)
+    console.log(res)
     
 
     return sendSuccess('supplier created', 'Patch', 201)
