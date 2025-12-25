@@ -46,13 +46,9 @@ export class SupplierService implements ISupplierService {
         try {
 
             const transactionResponse = await db.transaction(async (tx) => {
-                console.log('transactions starts')
                 const supplierId = await this.supplierRepository.create(dbSupplier, tx)
-                console.log('supplier table done')
                  await this.addressRepository.create(address, tx, dbSupplier.id)
-                 console.log('address table done')
                  await this.financialDataRepository.create(financialData, tx, dbSupplier.id)
-                 console.log('financials table done')
                  await Promise.all(categories.map(async (category) => await this.suppliersCategoryRepository.create(category, tx, dbSupplier.id)))
                 return {supplierId}
             })
@@ -65,14 +61,15 @@ export class SupplierService implements ISupplierService {
     }
 
     async update(supplier: Supplier): Promise<{ id: string; } | undefined> {
-
-        const { address, financialData, dbSupplier} = prepareSupplierForDB(supplier)
-
+        console.log('Service update: ', supplier)
+        const { address, financialData, dbSupplier, categories} = prepareSupplierForDB(supplier)
+        console.log(`Categories in service : `, categories)
         try {
             const transactionResponse = await db.transaction(async(tx) => {
                 const supplierId = await this.supplierRepository.update(dbSupplier.id, dbSupplier, tx)
                  await this.addressRepository.update(dbSupplier.id, address, tx)
                  await this.financialDataRepository.update(dbSupplier.id, financialData, tx)
+
                 return supplierId
             })
             return transactionResponse
