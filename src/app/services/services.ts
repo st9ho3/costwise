@@ -163,7 +163,8 @@ export const createSupplier = async (supplier: Supplier) => {
 }
 
 export const updateSupplier = async (supplier: Supplier, addedCategories: IngredientCategory[], removedCategories: IngredientCategory[]) => {
-  const dataToSend = { recipe: supplier, addedIngredients: addedCategories, removedCategories: removedCategories};
+  const dataToSend = { supplier: supplier, addedCategories: addedCategories, removedCategories: removedCategories};
+  
   const res = await fetch(`/api/suppliers/${supplier.id}`, {
     method: 'PATCH',
     headers: {
@@ -223,8 +224,9 @@ export const zodValidateIngredientBeforeAddItToDatabase =  (request: Ingredient)
 };
 
 export const zodValidateSupplierBeforeAddThemToDatabase = (request: Supplier) => {
-  const supplier = request
-
+  
+  const {supplier} = request
+  console.log(supplier)
   if (supplier) {
     if (typeof supplier.dateAdded === 'string') {
     supplier.dateAdded = new Date(supplier.dateAdded)

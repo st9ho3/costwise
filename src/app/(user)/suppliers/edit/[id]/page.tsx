@@ -20,7 +20,7 @@ const EditPage = async() => {
   const service = new SupplierService()
   
 
-  const tempId = 'e54479d2-9202-4fbb-bf9d-fb86b5905951'
+  const tempId = '11299633-46cc-4746-89d3-ae93a9c1c88d'
   const supplier = await service.findById(tempId)
     
   return (

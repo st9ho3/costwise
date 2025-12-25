@@ -401,6 +401,7 @@ export const destructureSupplier = (supplier: Supplier) => {
 }
 
 export const prepareSupplierForDB = (supplier: Supplier) => {
+  console.log('prepareSupplier: ', supplier)
   const validatedSupplier = zodValidateSupplierBeforeAddThemToDatabase(supplier)
           if (!validatedSupplier) {
               throw new Error('Supplier Service, Error with validating supplier')
@@ -410,8 +411,12 @@ export const prepareSupplierForDB = (supplier: Supplier) => {
 }
 
 export const getArrayChanges = <T,>(originalArray: T[], newArray: T[]) => {
+  console.log('oroginal Array: ', originalArray)
+  console.log('new Array: ', newArray)
   const added = newArray.filter((item) => !originalArray.includes(item));
+  console.log('added categories', added)
   const removed = originalArray.filter((item) => !newArray.includes(item));
+  console.log('removed categories', removed)
   return { added, removed };
 };
 

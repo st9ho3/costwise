@@ -24,6 +24,7 @@ const useSuppliersForm = ({userId, mode, supplier}: UseSuppliersFormProps) => {
         resolver: zodResolver(SupplierSchema)
     })
     const INITIAL_STATE = mode === 'edit' && supplier ? supplier.category : []
+    const [existingCategories] = useState<IngredientCategory[] | undefined>(supplier?.category)
     const [tempCategories, setTempCategories] = useState<IngredientCategory[]>(INITIAL_STATE)
 
     const selectCategory = (id: IngredientCategory) => {
@@ -46,11 +47,18 @@ const useSuppliersForm = ({userId, mode, supplier}: UseSuppliersFormProps) => {
 
 
       if (mode === 'create') {
+
          await createSupplier(supplier)
         resetForm()
         redirect('/suppliers')
       } else {
-        const {added, removed} = getArrayChanges(supplier.category, tempCategories)
+
+        if (!existingCategories) {
+          return {added: [''], removed: ['']}
+        }
+        
+        const {added, removed} = getArrayChanges(existingCategories, tempCategories)
+        
         await updateSupplier(supplier, added, removed)
         redirect('/suppliers')
       }

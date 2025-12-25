@@ -43,7 +43,6 @@ export class SupplierRepository implements ISupplierRepository {
     }
 
     async create(supplier: DestructuredSupplier, tx: Database): Promise<{ id: string; } | undefined> {
-        console.log('repository supplier: ',supplier)
         try {
            const [supplierId] =  await tx
             .insert(suppliers)
