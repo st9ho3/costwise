@@ -96,7 +96,7 @@ export type LabelType =
   
   
 
-  export type DBSupplierAddress = Supplier['address'];
+  export type DBSupplierAddress = RawDBSupplier['supplierAddresses'];
   export type DBSupplierFinancialData = RawDBSupplier['supplierFinancialData']
 
   export interface RawDBSupplier {
