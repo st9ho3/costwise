@@ -65,7 +65,7 @@ export class SupplierService implements ISupplierService {
     async update(supplier: SupplierUpdatePayload): Promise<{ id: string; } | undefined> {
         
         const { validatedAddedItems, validatedRemovedItems, destructuredSupplier } = prepareSupplierForDB(supplier, 'update')
-        
+        console.log('service: ', destructuredSupplier)
         try {
             const transactionResponse = await db.transaction(async(tx) => {
                 const supplierId = await this.supplierRepository.update(destructuredSupplier.dbSupplier.id, destructuredSupplier.dbSupplier, tx)

@@ -58,7 +58,7 @@ const useSuppliersForm = ({userId, mode, supplier}: UseSuppliersFormProps) => {
         }
         
         const {added, removed} = getArrayChanges(existingCategories, tempCategories)
-        
+        console.log('client: ', supplier)
         await updateSupplier(supplier, added, removed)
         redirect('/suppliers')
       }

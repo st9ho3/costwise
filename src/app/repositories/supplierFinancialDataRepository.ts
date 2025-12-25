@@ -1,6 +1,7 @@
 import { Database, supplierFinancialData } from "@/db/schema";
 import { ISupplierFinancialDataRepository } from "@/types/repositories";
 import { DBSupplierFinancialData } from "@/types/specialTypes";
+import { eq } from "drizzle-orm";
 
 export class SupplierFinDataRepository implements ISupplierFinancialDataRepository {
 
@@ -21,9 +22,11 @@ export class SupplierFinDataRepository implements ISupplierFinancialDataReposito
         }
     }
     async update(supplierId: string, finData: DBSupplierFinancialData, tx: Database): Promise<{ confirmation: string; } | undefined> {
+        console.log(finData)
         const [id] = await tx
         .update(supplierFinancialData)
-        .set(finData)
+        .set({...finData, supplierId: supplierId})
+        .where(eq(supplierFinancialData.supplierId, supplierId))
         .returning({
                 confirmation: supplierFinancialData.supplierId
             }

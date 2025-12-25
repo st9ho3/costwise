@@ -1,6 +1,7 @@
 import { Database, supplierAddresses } from "@/db/schema";
 import { IAddressesRepository } from "@/types/repositories";
 import { DBSupplierAddress } from "@/types/specialTypes";
+import { eq } from "drizzle-orm";
 
 export class SupplierAddressRepository implements IAddressesRepository {
     
@@ -18,11 +19,12 @@ export class SupplierAddressRepository implements IAddressesRepository {
             throw new Error(`address repository: ${err}`)
         }
     }
-    async update(supplierId: string, address: DBSupplierAddress, tx: Database): Promise<{ addressId: string; } | undefined> {
-        const addressForDb = {...address, supplierId}
+    async update(supplierId: string, addresses: DBSupplierAddress, tx: Database): Promise<{ addressId: string; } | undefined> {
+        const address = addresses[0]
         const [addressId] = await tx
         .update(supplierAddresses)
-        .set(addressForDb)
+        .set(address)
+        .where(eq(supplierAddresses.suppliersId, address.suppliersId))
         .returning(
             {addressId: supplierAddresses.id}
         )
