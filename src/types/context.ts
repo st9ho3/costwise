@@ -1,7 +1,7 @@
 import { MessageType } from "@/shemas/chat";
 import { initialState } from "@/app/context/homeContext/homeReducer";
 import { ReactNode } from "react";
-import { RecipeIngredients } from "@/shemas/recipe";
+import { IngredientCategory, Recipe, RecipeIngredients, Supplier } from "@/shemas/recipe";
 
 export interface HomeContextProps {
     state: typeof initialState,
@@ -80,17 +80,23 @@ export interface Ingredient {
   recipeId: string;
 }
 
-export interface Recipe {
+/* export interface Recipe {
   id: string;
   title: string;
   totalCost: number;
   createdBy: string;
   dateCreated: Date; // Or Date if you parse it
   category: string;   // Or a specific literal type like 'starter'
-}
+} */
 
 export interface RecipeUpdatePayload {
   recipe: Recipe;
-  addedIngredients?: RecipeIngredients[];
-  removedIngredients?: RecipeIngredients[];
+  addedIngredients: RecipeIngredients[];
+  removedIngredients: RecipeIngredients[];
+}
+
+export interface SupplierUpdatePayload {
+  supplier: Supplier;
+  addedCategories: IngredientCategory[];
+  removedCategories: IngredientCategory[];
 }

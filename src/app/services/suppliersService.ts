@@ -2,10 +2,11 @@ import { ISupplierService } from "@/types/services";
 import {  prepareSupplierForDB, transformSupplierFromDB } from "./helpers";
 import { db } from "@/db/db";
 import { SupplierRepository } from "../repositories/suppliersRepository";
-import { Supplier } from "@/shemas/recipe";
+import { IngredientCategory, Supplier } from "@/shemas/recipe";
 import { SupplierAddressRepository } from "../repositories/addressesRepository";
 import { SupplierFinDataRepository } from "../repositories/supplierFinancialDataRepository";
 import { SuppliersCategoryRepository } from "../repositories/suppliersCategory";
+import { SupplierUpdatePayload } from "@/types/context";
 
 export class SupplierService implements ISupplierService {
 
@@ -13,6 +14,7 @@ export class SupplierService implements ISupplierService {
     private addressRepository: SupplierAddressRepository
     private financialDataRepository: SupplierFinDataRepository
     private suppliersCategoryRepository: SuppliersCategoryRepository
+    
 
     constructor() {
         this.supplierRepository = new SupplierRepository()
@@ -39,17 +41,17 @@ export class SupplierService implements ISupplierService {
         return suppliers?.map((supplier) => transformSupplierFromDB(supplier))
     }
 
-    async create(supplier: Supplier): Promise<{ id: string } | undefined> {
+    async create(supplier: SupplierUpdatePayload): Promise<{ id: string } | undefined> {
         
-        const {categories, address, financialData, dbSupplier} = prepareSupplierForDB(supplier)
+        const {destructuredSupplier} = prepareSupplierForDB(supplier, 'create')
         
         try {
 
             const transactionResponse = await db.transaction(async (tx) => {
-                const supplierId = await this.supplierRepository.create(dbSupplier, tx)
-                 await this.addressRepository.create(address, tx, dbSupplier.id)
-                 await this.financialDataRepository.create(financialData, tx, dbSupplier.id)
-                 await Promise.all(categories.map(async (category) => await this.suppliersCategoryRepository.create(category, tx, dbSupplier.id)))
+                const supplierId = await this.supplierRepository.create(destructuredSupplier.dbSupplier, tx)
+                 await this.addressRepository.create(destructuredSupplier.address, tx, destructuredSupplier.dbSupplier.id)
+                 await this.financialDataRepository.create(destructuredSupplier.financialData, tx, destructuredSupplier.dbSupplier.id)
+                 await Promise.all(destructuredSupplier.categories.map(async (category: IngredientCategory) => await this.suppliersCategoryRepository.create(category, tx, destructuredSupplier.dbSupplier.id)))
                 return {supplierId}
             })
             return transactionResponse.supplierId
@@ -60,16 +62,25 @@ export class SupplierService implements ISupplierService {
         
     }
 
-    async update(supplier: Supplier): Promise<{ id: string; } | undefined> {
-        console.log('Service update: ', supplier)
-        const { address, financialData, dbSupplier, categories} = prepareSupplierForDB(supplier)
-        console.log(`Categories in service : `, categories)
+    async update(supplier: SupplierUpdatePayload): Promise<{ id: string; } | undefined> {
+        
+        const { validatedAddedItems, validatedRemovedItems, destructuredSupplier } = prepareSupplierForDB(supplier, 'update')
+        
         try {
             const transactionResponse = await db.transaction(async(tx) => {
-                const supplierId = await this.supplierRepository.update(dbSupplier.id, dbSupplier, tx)
-                 await this.addressRepository.update(dbSupplier.id, address, tx)
-                 await this.financialDataRepository.update(dbSupplier.id, financialData, tx)
-
+                const supplierId = await this.supplierRepository.update(destructuredSupplier.dbSupplier.id, destructuredSupplier.dbSupplier, tx)
+                 await this.addressRepository.update(destructuredSupplier.dbSupplier.id, destructuredSupplier.address, tx)
+                 await this.financialDataRepository.update(destructuredSupplier.dbSupplier.id, destructuredSupplier.financialData, tx)
+                 if (validatedRemovedItems) {
+                    await Promise.all(validatedRemovedItems.map(async(item) => {
+                        await this.suppliersCategoryRepository.delete(item, tx, destructuredSupplier.dbSupplier.id)
+                    }))
+                 }
+                 if (validatedAddedItems) {
+                    await Promise.all(validatedAddedItems.map(async(item) => {
+                        await this.suppliersCategoryRepository.create(item, tx, destructuredSupplier.dbSupplier.id)
+                    }))
+                 }
                 return supplierId
             })
             return transactionResponse

@@ -1,8 +1,8 @@
 import { auth } from "@/auth"
 import { sendError, sendSuccess } from "../utils/responses";
 import { NextRequest } from "next/server";
-import { Supplier } from "@/shemas/recipe";
 import { SupplierService } from "@/app/services/suppliersService";
+import { SupplierUpdatePayload } from "@/types/context";
 
 export const POST = async(req: NextRequest) => {
     const session = await auth()
@@ -12,7 +12,7 @@ export const POST = async(req: NextRequest) => {
             throw new Error("Can't take an action if not validated")
         }
 
-        const supplier: Supplier = await req.json()
+        const supplier: SupplierUpdatePayload = await req.json()
         
         const service = new SupplierService()
         const res = await service.create(supplier)

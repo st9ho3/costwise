@@ -17,7 +17,7 @@ import { IIngredientService } from "@/types/services";
 import { IngredientRepository } from "../repositories/ingredientRepository";
 import { Ingredient, IngredientToDisplay } from "@/shemas/recipe";
 import { checkIfIngredientExists } from "@/db/helpers";
-import { zodValidateIngredientBeforeAddItToDatabase } from "./services";
+import { zodValidateIngredientBeforeAddItToDatabase } from "./validationService";
 import { RecipeRepository } from "../repositories/recipeRepository";
 import { transformIngredientToDB } from "./helpers";
 import { RecipeService } from "./recipeService";

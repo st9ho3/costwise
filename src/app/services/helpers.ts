@@ -12,11 +12,13 @@
  * These functions are used across the application to ensure consistent data handling,
  * financial calculations, and pagination of recipe and ingredient lists.
  */
-import { DBIngredient, DBRecipe, Ingredient, IngredientCategory, IngredientCategoryName, IngredientToDisplay, Recipe, RecipeIngredients, Supplier, Unit } from "@/shemas/recipe";
+import { DBIngredient, DBRecipe, Ingredient, IngredientCategory, IngredientCategoryName, IngredientCategorySchema, IngredientToDisplay, Recipe, RecipeIngredients, Supplier, SupplierSchema, Unit } from "@/shemas/recipe";
 import {  DestructuredSupplier, RawDBSupplier, RecipeIngredientFromDB } from "@/types/specialTypes";
 import { FormFields } from "../hooks/useRecipeForm";
 import { IngredientFormFields } from "../hooks/useIngredientsForm";
-import { zodValidateSupplierBeforeAddThemToDatabase } from "./services";
+import { validateComplexEntity } from "./validationService";
+import { SupplierUpdatePayload } from "@/types/context";
+
 
 
 export const paginate = <T>(itemsPerPage: number, page: number, items: T[] ): T[]=> {
@@ -400,23 +402,25 @@ export const destructureSupplier = (supplier: Supplier) => {
         return {categories, address, financialData, dbSupplier}
 }
 
-export const prepareSupplierForDB = (supplier: Supplier) => {
-  console.log('prepareSupplier: ', supplier)
-  const validatedSupplier = zodValidateSupplierBeforeAddThemToDatabase(supplier)
-          if (!validatedSupplier) {
+export const prepareSupplierForDB = (supplier: SupplierUpdatePayload, mode: 'create' | 'update') => {
+
+  const {validatedEntity, validatedAddedItems, validatedRemovedItems} = validateComplexEntity(supplier.supplier, SupplierSchema, IngredientCategorySchema, 'dateAdded', supplier.addedCategories, supplier.removedCategories)
+  const destructuredSupplier = destructureSupplier(validatedEntity)
+
+          if (!validatedEntity) {
               throw new Error('Supplier Service, Error with validating supplier')
           }
-          return destructureSupplier(validatedSupplier)
-           
+          if (mode === 'create') {
+              return {destructuredSupplier, validatedAddedItems: undefined, validatedRemovedItems: undefined }
+          } else {
+
+            return { destructuredSupplier, validatedAddedItems, validatedRemovedItems}
+          }
 }
 
 export const getArrayChanges = <T,>(originalArray: T[], newArray: T[]) => {
-  console.log('oroginal Array: ', originalArray)
-  console.log('new Array: ', newArray)
   const added = newArray.filter((item) => !originalArray.includes(item));
-  console.log('added categories', added)
   const removed = originalArray.filter((item) => !newArray.includes(item));
-  console.log('removed categories', removed)
   return { added, removed };
 };
 
