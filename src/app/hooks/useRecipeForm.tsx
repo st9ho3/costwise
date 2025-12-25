@@ -118,7 +118,7 @@ const useRecipeForm = ({mode, recipe, recipeIngredients, userId}: RecipeFormProp
           foodCost: foodCost
         };
 
-        const response = await sendRecipe(updatedData, tempIngredients);
+        const response = await sendRecipe(updatedData, tempIngredients, []);
         raiseNotification(response);
         submissionSuccessful = response.success;
       }

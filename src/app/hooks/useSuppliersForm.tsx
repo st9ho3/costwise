@@ -48,7 +48,7 @@ const useSuppliersForm = ({userId, mode, supplier}: UseSuppliersFormProps) => {
 
       if (mode === 'create') {
 
-         await createSupplier(supplier)
+         await createSupplier(supplier, tempCategories, [])
         resetForm()
         redirect('/suppliers')
       } else {

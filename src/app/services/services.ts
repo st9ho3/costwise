@@ -14,8 +14,7 @@
 
 import { uid } from "uid";
 import { FormFields } from "../components/recipes/recipeForm/recipeForm";
-import { Ingredient, IngredientCategory, IngredientSchema, Recipe, RecipeIngredients, RecipeIngredientsSchema, RecipeSchema, Supplier, SupplierSchema } from "@/shemas/recipe";
-import { RecipeUpdatePayload } from "@/types/context";
+import { Ingredient, IngredientCategory, Recipe, RecipeIngredients, Supplier } from "@/shemas/recipe";
 
 
 
@@ -35,8 +34,8 @@ export const createMessage = (text: string, user: string) => {
 };
 
 
-export const sendRecipe = async (data: Recipe, ing: RecipeIngredients[]) => {
-  const dataToSend = { recipe: data, addedIngredients: ing };
+export const sendRecipe = async (data: Recipe, addedIngredients: RecipeIngredients[], removedIngredients: RecipeIngredients[]) => {
+  const dataToSend = { recipe: data, addedIngredients: addedIngredients, removedIngredients: removedIngredients };
   
   const res = await fetch("/api/recipes", {
     method: "POST",
@@ -146,13 +145,15 @@ export const deleteIngredient = async (id: string | null)  => {
   
 }
 
-export const createSupplier = async (supplier: Supplier) => {
+export const createSupplier = async (supplier: Supplier, addedCategories: IngredientCategory[], removedCategories: IngredientCategory[] ) => {
+    const dataToSend = { supplier: supplier, addedCategories: addedCategories, removedCategories: removedCategories};
+
   const res = await fetch('/api/suppliers', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(supplier)
+    body: JSON.stringify(dataToSend)
   })
   if (!res.ok) {
     return await res.json()
@@ -180,62 +181,6 @@ export const updateSupplier = async (supplier: Supplier, addedCategories: Ingred
   return response;
 }
 
-export const zodValidateDataBeforeAddThemToDatabase = (request: RecipeUpdatePayload) => {
-  const {recipe, addedIngredients, removedIngredients} = request;
-  if (typeof recipe.dateCreated === 'string') {
-    recipe.dateCreated = new Date(recipe.dateCreated);
-  }
-
-  const validatedRecipe = RecipeSchema.parse(recipe);
-
-  let validatedAddedIngredients;
-  let validatedRemovedIngredients;
-
-  if (addedIngredients && addedIngredients.length > 0) {
-    const validatedRecipeAddedIngredients = addedIngredients.map((ingredient: RecipeIngredients) => {
-      const validatedIngredient = RecipeIngredientsSchema.parse(ingredient);
-      return validatedIngredient;
-    });
-    validatedAddedIngredients = validatedRecipeAddedIngredients;
-  }
-  if (removedIngredients && removedIngredients.length > 0) {
-    const validatedRecipeRemovedIngredients = removedIngredients.map((ingredient: RecipeIngredients) => {
-      const validatedIngredient = RecipeIngredientsSchema.parse(ingredient);
-      return validatedIngredient;
-    });
-    validatedRemovedIngredients = validatedRecipeRemovedIngredients;
-  }
-
-  return {
-    validatedRecipe: validatedRecipe,
-    validatedRecipeAddedIngredients: validatedAddedIngredients ? validatedAddedIngredients : [],
-    validatedRecipeRemovedIngredients: validatedRemovedIngredients ? validatedRemovedIngredients : []
-  };
-};
-
-export const zodValidateIngredientBeforeAddItToDatabase =  (request: Ingredient) => {
-  const ingredient = request
-
-  if (ingredient) {
-      const validatedIngredient = IngredientSchema.parse(ingredient)
-      console.log("Zod validated ingredient: ",validatedIngredient)
-      return validatedIngredient;
-    }
-};
-
-export const zodValidateSupplierBeforeAddThemToDatabase = (request: Supplier) => {
-  
-  const {supplier} = request
-  console.log(supplier)
-  if (supplier) {
-    if (typeof supplier.dateAdded === 'string') {
-    supplier.dateAdded = new Date(supplier.dateAdded)
-  }
-    const validatedSupplier = SupplierSchema.parse(supplier)
-    console.log("Zod validated supplier: ",validatedSupplier)
-    return validatedSupplier
-  }
-}
 
 export const search = async(searchTerm: string) => {
 

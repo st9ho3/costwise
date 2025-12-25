@@ -11,11 +11,11 @@
  * - `DELETE` handler: Deletes a recipe by its ID from the URL parameters. It calls the `delete` method of `RecipeService` and returns a success response upon successful deletion.
  */
 import { NextRequest } from "next/server";
-import { zodValidateDataBeforeAddThemToDatabase } from "@/app/services/services";
 import { RecipeUpdatePayload } from "@/types/context";
 import { sendError, sendSuccess } from "../../utils/responses";
 import { RecipeService } from "@/app/services/recipeService";
 import { auth } from "@/auth";
+
 
 const service = new RecipeService();
 
@@ -44,9 +44,11 @@ export const PATCH = async (req: NextRequest, context: { params: Promise<{ id: s
         const request: RecipeUpdatePayload = await req.json();
         const { id } = await context.params;
 
-        const { validatedRecipe, validatedRecipeAddedIngredients, validatedRecipeRemovedIngredients } = zodValidateDataBeforeAddThemToDatabase(request);
-        console.log("PATCH", id);
-        const response = await service.update(id, validatedRecipe, validatedRecipeRemovedIngredients, validatedRecipeAddedIngredients);
+        if (!request.addedIngredients || !request.removedIngredients) {
+            sendError('Something went wrong with categories')
+        }
+
+        const response = await service.update(id, request.recipe, request.removedIngredients, request.addedIngredients);
 
         if (response) {
             return sendSuccess("Recipe updated succesfully", null, 201);

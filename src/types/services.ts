@@ -2,6 +2,7 @@ import { Recipe, Ingredient, RecipeIngredients, DBRecipe, DBIngredient, Ingredie
 import { RecipeWithQuery } from './specialTypes';
 import { Database } from '@/db/schema';
 import { RecipeAnalytics, IngredientAnalytics } from './repositories';
+import { SupplierUpdatePayload } from './context';
 
 export interface CreateResponse {
     recipe: string | undefined;
@@ -9,7 +10,8 @@ export interface CreateResponse {
 
 export interface CreateRequest {
     recipe: Recipe,
-    addedIngredients: RecipeIngredients[]
+    addedIngredients: RecipeIngredients[],
+    removedIngredients: RecipeIngredients[]
 }
 
 export interface IRecipeService {
@@ -41,7 +43,7 @@ export interface ISearchService {
 export interface ISupplierService {
     findAll(supplierId: string): Promise<Supplier[] | undefined>
     findById(supplierId: string): Promise<Supplier | undefined>
-    create(supplier: Supplier): Promise<{id: string} | undefined>
-    update(supplier: Supplier): Promise<{id: string} | undefined>
+    create(supplier: SupplierUpdatePayload): Promise<{id: string} | undefined>
+    update(supplier: SupplierUpdatePayload): Promise<{id: string} | undefined>
     delete(supplierId: string): Promise<{id: string} | undefined>
 }
