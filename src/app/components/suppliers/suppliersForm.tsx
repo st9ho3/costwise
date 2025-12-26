@@ -17,8 +17,8 @@ interface SuppliersFormProps {
 
 const SuppliersForm = ({userId, mode, supplier}: SuppliersFormProps) => {
   
-  const {register, handleSubmit, onSubmit, selectCategory, tempCategories} = useSuppliersForm({userId, mode, supplier})
-
+  const {register, handleSubmit, onSubmit, selectCategory, formState, tempCategories} = useSuppliersForm({userId, mode, supplier})
+console.log(formState.errors)
   return (
     <div className='flex w-5xl h-fit'>
       <ExitButton />
