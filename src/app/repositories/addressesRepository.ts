@@ -19,12 +19,14 @@ export class SupplierAddressRepository implements IAddressesRepository {
             throw new Error(`address repository: ${err}`)
         }
     }
-    async update(supplierId: string, addresses: DBSupplierAddress, tx: Database): Promise<{ addressId: string; } | undefined> {
-        const address = addresses[0]
+    async update(supplierId: string, address: DBSupplierAddress, tx: Database): Promise<{ addressId: string; } | undefined> {
+        if (!address) {
+            return {addressId: 'Address dont exist'}
+        }
         const [addressId] = await tx
         .update(supplierAddresses)
         .set(address)
-        .where(eq(supplierAddresses.suppliersId, address.suppliersId))
+        .where(eq(supplierAddresses.suppliersId, supplierId))
         .returning(
             {addressId: supplierAddresses.id}
         )

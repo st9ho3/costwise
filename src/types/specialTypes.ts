@@ -91,12 +91,12 @@ export type LabelType =
   | 'financialData'
   | 'deliveryTime' >
   & {
-    deliveryTime: 'Same Day' | '1-2 Days' | '2-3 Days' | 'Up to 5 days' | 'Weekly' | undefined
+    deliveryTime: 'Same Day' | '1-2 Days' | '2-3 Days' | 'Up to 5 days' | 'Weekly' | undefined | null
   }
   
   
 
-  export type DBSupplierAddress = RawDBSupplier['supplierAddresses'];
+  export type DBSupplierAddress = Supplier['address'];
   export type DBSupplierFinancialData = RawDBSupplier['supplierFinancialData']
 
   export interface RawDBSupplier {

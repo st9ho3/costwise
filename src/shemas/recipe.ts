@@ -43,13 +43,13 @@ export const IngredientCategorySchema = z.union([
 export type IngredientCategory = z.infer<typeof IngredientCategorySchema>;
 
 export const DeliveryTimeSchema = z.union([ 
-    z.literal(''),
+  
     z.literal('Same Day'),
     z.literal('1-2 Days'),
     z.literal('2-3 Days'),
     z.literal('Up to 5 days'),
     z.literal('Weekly'),
-  ])
+  ]).nullable().optional()
 
   export type DeliveryTime = z.infer<typeof DeliveryTimeSchema>
 
@@ -202,18 +202,18 @@ export const SupplierSchema = z.object({
   category: z.array(IngredientCategorySchema),
 
   // Contact Info
-  contactPerson: z.string().optional().transform(val => val === '' ? undefined : val),
-  email: z.string().email("Invalid email address").optional().transform(val => val === '' ? undefined : val),
-  phone: z.string().optional().transform(val => val === '' ? undefined : val),
-  website: z.string().optional().transform(val => val === '' ? undefined : val),
+  contactPerson: z.string().optional().nullable().transform(val => val === '' ? null : val),
+  email: z.string().email("Invalid email address").nullable().optional().transform(val => val === '' ? null : val),
+  phone: z.string().optional().nullable().transform(val => val === '' ? null : val),
+  website: z.string().optional().nullable().transform(val => val === '' ? null : val),
 
   // Structured Address
   address: z.object({
-    street: z.string().optional().transform(val => val === '' ? undefined : val),
-    city: z.string().optional().transform(val => val === '' ? undefined : val),
-    state: z.string().optional().transform(val => val === '' ? undefined : val), 
-    postalCode: z.string().optional().transform(val => val === '' ? undefined : val),
-    country: z.string().optional().transform(val => val === '' ? undefined : val),
+    street: z.string().optional().nullable().transform(val => val === '' ? null : val),
+    city: z.string().optional().nullable().transform(val => val === '' ? null : val),
+    state: z.string().optional().nullable().transform(val => val === '' ? null : val), 
+    postalCode: z.string().optional().nullable().transform(val => val === '' ? null : val),
+    country: z.string().optional().nullable().transform(val => val === '' ? null : val),
   }).optional(),
 
   // Financial & Admin
@@ -226,15 +226,15 @@ export const SupplierSchema = z.object({
     z.literal('Due on Receipt'),
     z.literal('COD'),
     z.literal('Prepaid'),
-  ]).optional(),
-    vatNumber: z.string().optional().transform(val => val === '' ? undefined : val), 
+  ]).optional().nullable(),
+    vatNumber: z.string().nullable().optional().transform(val => val === '' ? null : val), 
     
   }),
   notes: z.string().optional(),
 
   // Logistics
   deliveryTime: DeliveryTimeSchema
-  .optional()
+  .optional().nullable()
   ,
 
   // Status & Metadata

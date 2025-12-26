@@ -1,29 +1,30 @@
 import { IngredientCategory } from '@/shemas/recipe';
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid'
 
 export const getDefaultSupplierValues = () => ({
-  id: uuidv4(), // ✅ Fresh UUID each time
+  id: uuidv4(),
   userId: '', 
   name: '',
   category: [] as IngredientCategory[],
-  contactPerson: '',
-  email: '',
-  phone: '',
-  website: '',
+  contactPerson: null,
+  email: null,
+  phone: null,
+  website: null,
   address: {
-    street: '',
-    city: '',
-    state: '', 
-    postalCode: '',
-    country: '',
+    street: null,
+    city: null,
+    state: null,
+    postalCode: null,
+    country: null,
   },
-  
-    paymentTerms: '', 
-    vatNumber: '',
+  financialData: {
+    paymentTerms: null,
+    vatNumber: null,
+  },
   notes: '',
-  deliveryTime: undefined, 
+  deliveryTime: null, 
   isActive: false,
-  dateAdded: new Date(), // ✅ Fresh date each time too
+  dateAdded: new Date(),
 });
 
 export const INGREDIENT_CATEGORIES = [
@@ -40,5 +41,3 @@ export const INGREDIENT_CATEGORIES = [
   { name: 'Bakery', id: '0d4584b2-8bfa-4a82-9f11-a3b88af2d6c5', icon: '🍞' },
   { name: 'Other', id: 'ef45178d-e566-4637-b7f9-abcf6d575466', icon: '📦' },
 ] as const;
-
-
