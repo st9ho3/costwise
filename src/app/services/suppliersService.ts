@@ -14,14 +14,14 @@ export class SupplierService implements ISupplierService {
     private addressRepository: SupplierAddressRepository
     private financialDataRepository: SupplierFinDataRepository
     private suppliersCategoryRepository: SuppliersCategoryRepository
-    
+    private currentUserID: string | undefined
 
-    constructor() {
+    constructor(currentUserID?: string) {
         this.supplierRepository = new SupplierRepository()
         this.addressRepository = new SupplierAddressRepository()
         this.financialDataRepository = new SupplierFinDataRepository()
         this.suppliersCategoryRepository = new SuppliersCategoryRepository()
-        
+        this.currentUserID = currentUserID
     }
 
     async findById(supplierId: string): Promise<Supplier | undefined> {
@@ -44,9 +44,10 @@ export class SupplierService implements ISupplierService {
     async create(supplier: SupplierUpdatePayload): Promise<{ id: string } | undefined> {
         
         const {destructuredSupplier} = prepareSupplierForDB(supplier, 'create')
-        
+        if (destructuredSupplier.dbSupplier.userId !== this.currentUserID ) {
+            throw new Error('Entity is not owned by user')
+        }
         try {
-
             const transactionResponse = await db.transaction(async (tx) => {
                 const supplierId = await this.supplierRepository.create(destructuredSupplier.dbSupplier, tx)
                  await this.addressRepository.create(destructuredSupplier.address, tx, destructuredSupplier.dbSupplier.id)
@@ -66,6 +67,7 @@ export class SupplierService implements ISupplierService {
         
         const { validatedAddedItems, validatedRemovedItems, destructuredSupplier } = prepareSupplierForDB(supplier, 'update')
         console.log('service: ', destructuredSupplier)
+
         try {
             const transactionResponse = await db.transaction(async(tx) => {
                 const supplierId = await this.supplierRepository.update(destructuredSupplier.dbSupplier.id, destructuredSupplier.dbSupplier, tx)

@@ -26,7 +26,7 @@ const useSuppliersForm = ({userId, mode, supplier}: UseSuppliersFormProps) => {
     const INITIAL_STATE = mode === 'edit' && supplier ? supplier.category : []
     const [existingCategories] = useState<IngredientCategory[] | undefined>(supplier?.category)
     const [tempCategories, setTempCategories] = useState<IngredientCategory[]>(INITIAL_STATE)
-
+    console.log(formState.errors)
     const selectCategory = (id: IngredientCategory) => {
       if (!tempCategories.includes(id)) {
         setTempCategories([...tempCategories, id])

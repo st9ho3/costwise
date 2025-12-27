@@ -51,7 +51,6 @@ export const getTotalPrice = (ingredients: RecipeIngredients[]): number => {
 
 }
 
-
 export const getProfitMarginType = (margin: number | undefined): 'high' | 'medium' | 'low' | 'very_low' => {
   if (margin === undefined || margin <= 40) {
     return 'very_low'; // Treat undefined or margin <= 40 as the lowest category
@@ -186,8 +185,6 @@ console.log(price)
   };
 }
 
-
-
 /////////////
 
 export const transformRecipeFromDB = (recipeFromDb: DBRecipe): Recipe => ({
@@ -275,7 +272,7 @@ export const transformSupplierFromDB = (raw: RawDBSupplier): Supplier => {
 };
 
 ////////////////
-const createIngredientIcon = (category: string | undefined): string => {
+export const createIngredientIcon = (category: string | undefined): string => {
   switch (category) {
     case '5dee106a-5050-443e-8368-03397e02af6d': // Produce
       return '🥕';
@@ -388,7 +385,7 @@ export const destructureSupplier = (supplier: Supplier) => {
           website: supplier.website,
           isActive: supplier.isActive,
           dateAdded: supplier.dateAdded,
-          deliveryTime: supplier.deliveryTime 
+          deliveryTime: supplier.deliveryTime === '' || !supplier.deliveryTime ? null : supplier.deliveryTime 
         }
         const categories = supplier.category
         // In the address table will propably have options in order to add multiple addresses after. So maybe we will iterate on the address service through the addresses array. Hoever now we will use an object so a simple address.
