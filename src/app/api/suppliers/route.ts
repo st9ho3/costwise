@@ -14,7 +14,7 @@ export const POST = async(req: NextRequest) => {
 
         const supplier: SupplierUpdatePayload = await req.json()
         
-        const service = new SupplierService()
+        const service = new SupplierService(session.user.id)
         const res = await service.create(supplier)
         if (res) {
             return sendSuccess("Supplier successfully created!", res, 201);

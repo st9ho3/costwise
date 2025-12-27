@@ -43,7 +43,7 @@ export const IngredientCategorySchema = z.union([
 export type IngredientCategory = z.infer<typeof IngredientCategorySchema>;
 
 export const DeliveryTimeSchema = z.union([ 
-  
+    z.literal(''),
     z.literal('Same Day'),
     z.literal('1-2 Days'),
     z.literal('2-3 Days'),
