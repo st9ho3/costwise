@@ -7,6 +7,7 @@ import { SupplierAddressRepository } from "../repositories/addressesRepository";
 import { SupplierFinDataRepository } from "../repositories/supplierFinancialDataRepository";
 import { SuppliersCategoryRepository } from "../repositories/suppliersCategory";
 import { SupplierUpdatePayload } from "@/types/context";
+import { ConflictError, ForbiddenError } from "../utils/errors";
 
 export class SupplierService implements ISupplierService {
 
@@ -42,12 +43,17 @@ export class SupplierService implements ISupplierService {
     }
 
     async create(supplier: SupplierUpdatePayload): Promise<{ id: string } | undefined> {
+
+        if (supplier.supplier.userId !== this.currentUserID ) {
+            throw new ForbiddenError('Supplier', supplier.supplier.id, this.currentUserID)
+        }
+        const exists = await this.supplierRepository.findByName(supplier.supplier.name, this.currentUserID)
+        if (exists) {
+            throw new ConflictError('Supplier', 'name')
+        }
         
         const {destructuredSupplier} = prepareSupplierForDB(supplier, 'create')
-        if (destructuredSupplier.dbSupplier.userId !== this.currentUserID ) {
-            throw new Error('Entity is not owned by user')
-        }
-        try {
+        
             const transactionResponse = await db.transaction(async (tx) => {
                 const supplierId = await this.supplierRepository.create(destructuredSupplier.dbSupplier, tx)
                  await this.addressRepository.create(destructuredSupplier.address, tx, destructuredSupplier.dbSupplier.id)
@@ -57,16 +63,14 @@ export class SupplierService implements ISupplierService {
             })
             return transactionResponse.supplierId
 
-        }catch(err) {
-            throw new Error(String(err))
-        }
+       
         
     }
 
     async update(supplier: SupplierUpdatePayload): Promise<{ id: string; } | undefined> {
         
         const { validatedAddedItems, validatedRemovedItems, destructuredSupplier } = prepareSupplierForDB(supplier, 'update')
-        console.log('service: ', destructuredSupplier)
+        
 
         try {
             const transactionResponse = await db.transaction(async(tx) => {

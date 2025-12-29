@@ -15,6 +15,7 @@ export interface IngredientAnalytics {
 
 export interface IRecipeRepository {
   findById(id: string): Promise<RecipeWithQuery | undefined>;
+  findByName(recipesName: string): Promise<string | undefined>;
   findAllByIngredientId(id: string): Promise<DBRecipe[] | undefined>;
   findAll(userId: string): Promise<Recipe[] | undefined>;
   create(recipe: DBRecipe, tx: Database): Promise<string | undefined>;
@@ -33,6 +34,7 @@ export interface IRecipeIngredientsRepository {
 
 export interface IIngredientRepository {
   findById(id: string): Promise<IngredientToDisplay | undefined>;
+  findByName(ingredientsName: string): Promise<string | undefined>;
   findAll(userId: string): Promise<IngredientToDisplay[] | undefined>;
   create(ingredient: DBIngredient, tx: Database): Promise<{ingredientId: string} | undefined>;
   update(ingredient: DBIngredient, tx?: Database): Promise<{ingredientId: string} | undefined>;
@@ -46,6 +48,7 @@ export interface IIngredientRepository {
 
 export interface ISupplierRepository {
   findById(supplierId: string): Promise<RawDBSupplier | undefined>;
+  findByName(suppliersName: string, userId: string | undefined): Promise<string | undefined>;
   findAll(userId: string): Promise<RawDBSupplier[] | undefined>;
   create(supplier: DestructuredSupplier, tx: Database): Promise<{id: string} | undefined>;
   update(supplierId: string, supplier: DestructuredSupplier, tx: Database): Promise<{id: string | undefined} | undefined>;

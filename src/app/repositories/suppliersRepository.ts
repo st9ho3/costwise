@@ -2,7 +2,8 @@ import { db } from "@/db/db";
 import { Database, suppliers} from "@/db/schema";
 import { ISupplierRepository } from "@/types/repositories";
 import { DestructuredSupplier, RawDBSupplier } from "@/types/specialTypes";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
+import { DatabaseError } from "../utils/errors";
 
 export class SupplierRepository implements ISupplierRepository {
 
@@ -20,7 +21,7 @@ export class SupplierRepository implements ISupplierRepository {
             })
             return supplier
         }catch(err){
-            throw new Error(`SupplierRepository.findById: ${err}`)
+            throw new DatabaseError('Supplier FindById', err)
         }
     }
 
@@ -38,7 +39,7 @@ export class SupplierRepository implements ISupplierRepository {
             })
             return totalSuppliers
         }catch(err){
-            throw new Error(`SupplierRepository: ${err}`)
+            throw new DatabaseError('Supplier FindAll', err)
         }
     }
 
@@ -53,18 +54,23 @@ export class SupplierRepository implements ISupplierRepository {
             return supplierId
             
         }catch(err) {
-            throw new Error(`Supplier Repository: ${err}`)
+            throw new DatabaseError('Supplier Create', err)
         }
         
     }
     async update(supplierId: string, supplier: DestructuredSupplier, tx: Database): Promise<{ id: string } | undefined> {
-        const [id] = await tx
+        try {
+            const [id] = await tx
         .update(suppliers)
         .set(supplier)
         .where(eq(suppliers.id, supplierId))
         .returning({id: suppliers.id})
 
         return id
+        }catch(err) {
+            throw new DatabaseError('Supplier Update', err)
+        }
+        
     }
     async delete(supplierId: string): Promise<{ id: string; } | undefined> {
         try {
@@ -76,7 +82,20 @@ export class SupplierRepository implements ISupplierRepository {
             })
             return supplier
         }catch(err){
-            throw new Error(`SupplierRepository.delete ${err}`)
+            throw new DatabaseError('Supplier Delete', err)
         }
+    }
+
+
+     async findByName(suppliersName: string, userId: string): Promise<string | undefined> {
+        const [result] = await db
+        .select({name: suppliers.name})
+        .from(suppliers)
+        .where(and(
+            eq(suppliers.userId, userId),
+            eq(suppliers.name, suppliersName)
+        ))
+
+        return result ? result.name : undefined
     }
 }

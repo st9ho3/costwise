@@ -55,9 +55,9 @@ export class NotFoundError extends AppError {
 export class ForbiddenError extends AppError {
     public readonly resource: string
     public readonly identifier: string
-    public readonly userId: string 
+    public readonly userId: string | undefined
 
-    constructor(resource: string, identifier: string, userId: string) {
+    constructor(resource: string, identifier: string, userId: string | undefined) {
         super(`${resource} not found`, 404)
         this.resource = resource
         this.identifier = identifier
@@ -71,7 +71,7 @@ export class AuthenticationError extends AppError {
     }
 }
 
-export class DataBaseError extends AppError {
+export class DatabaseError extends AppError {
     public readonly originalError: unknown
     public readonly operation: string
 
