@@ -48,7 +48,7 @@ export interface IIngredientRepository {
 
 export interface ISupplierRepository {
   findById(supplierId: string): Promise<RawDBSupplier | undefined>;
-  findByName(suppliersName: string, userId: string | undefined): Promise<string | undefined>;
+  findByName(suppliersName: string, userId: string | undefined): Promise<{name: string; id: string}  | undefined>;
   findAll(userId: string): Promise<RawDBSupplier[] | undefined>;
   create(supplier: DestructuredSupplier, tx: Database): Promise<{id: string} | undefined>;
   update(supplierId: string, supplier: DestructuredSupplier, tx: Database): Promise<{id: string | undefined} | undefined>;
