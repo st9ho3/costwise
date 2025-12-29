@@ -1,6 +1,7 @@
 import { Ingredient, IngredientSchema} from "@/shemas/recipe";
 
 import { z } from "zod";
+import { ValidationError } from "../utils/errors";
 
 export const zodValidateIngredientBeforeAddItToDatabase =  (request: Ingredient) => {
   const ingredient = request
@@ -23,20 +24,35 @@ export const validateComplexEntity = <T extends object, TArrayItem>(
     if (fieldName in entity && typeof entity[fieldName] === 'string') {
     entity[fieldName] = new Date(entity[fieldName] as string) as T[keyof T]
   }
-  const validatedEntity = entitySchema.parse(entity)
+  const entityResult = entitySchema.safeParse(entity)
 
+  if (!entityResult.success) {
+    throw new ValidationError(entityResult.error)
+  }
+  const validatedEntity = entityResult.data
+  
   let validatedAddedItems
   let validatedRemovedItems
 
   if (addedItems && addedItems.length > 0) {
      validatedAddedItems = addedItems.map((item: TArrayItem) => {
-      return arraysSchema.parse(item);
+      const arrayItem = arraysSchema.safeParse(item);
+
+      if (!arrayItem.success) {
+        throw new ValidationError(arrayItem.error)
+      }
+      return arrayItem.data
     })
   }
 
   if (removedItems && removedItems.length > 0) {
      validatedRemovedItems = removedItems.map((item: TArrayItem) => {
-      return arraysSchema.parse(item);
+      const arrayItem = arraysSchema.safeParse(item);
+      
+      if (!arrayItem.success) {
+        throw new ValidationError(arrayItem.error)
+      }
+      return arrayItem.data
     })
   }
 

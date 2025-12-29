@@ -411,9 +411,6 @@ export const prepareSupplierForDB = (supplier: SupplierUpdatePayload, mode: 'cre
   const {validatedEntity, validatedAddedItems, validatedRemovedItems} = validateComplexEntity(supplier.supplier, SupplierSchema, IngredientCategorySchema, 'dateAdded', supplier.addedCategories, supplier.removedCategories)
   const destructuredSupplier = destructureSupplier(validatedEntity)
 
-          if (!validatedEntity) {
-              throw new Error('Supplier Service, Error with validating supplier')
-          }
           if (mode === 'create') {
               return {destructuredSupplier, validatedAddedItems: undefined, validatedRemovedItems: undefined }
           } else {
