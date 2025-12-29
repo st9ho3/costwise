@@ -87,15 +87,18 @@ export class SupplierRepository implements ISupplierRepository {
     }
 
 
-     async findByName(suppliersName: string, userId: string): Promise<string | undefined> {
+     async findByName(suppliersName: string, userId: string): Promise<{name: string; id: string} | undefined> {
         const [result] = await db
-        .select({name: suppliers.name})
+        .select({
+            name: suppliers.name,
+            id: suppliers.id
+        })
         .from(suppliers)
         .where(and(
             eq(suppliers.userId, userId),
             eq(suppliers.name, suppliersName)
         ))
 
-        return result ? result.name : undefined
+        return result ? result : undefined
     }
 }

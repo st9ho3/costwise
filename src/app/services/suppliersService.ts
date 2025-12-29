@@ -7,7 +7,7 @@ import { SupplierAddressRepository } from "../repositories/addressesRepository";
 import { SupplierFinDataRepository } from "../repositories/supplierFinancialDataRepository";
 import { SuppliersCategoryRepository } from "../repositories/suppliersCategory";
 import { SupplierUpdatePayload } from "@/types/context";
-import { ConflictError, ForbiddenError } from "../utils/errors";
+import { ConflictError, ForbiddenError, NotFoundError } from "../utils/errors";
 
 export class SupplierService implements ISupplierService {
 
@@ -17,7 +17,7 @@ export class SupplierService implements ISupplierService {
     private suppliersCategoryRepository: SuppliersCategoryRepository
     private currentUserID: string | undefined
 
-    constructor(currentUserID?: string) {
+    constructor(currentUserID: string) {
         this.supplierRepository = new SupplierRepository()
         this.addressRepository = new SupplierAddressRepository()
         this.financialDataRepository = new SupplierFinDataRepository()
@@ -26,9 +26,13 @@ export class SupplierService implements ISupplierService {
     }
 
     async findById(supplierId: string): Promise<Supplier | undefined> {
+        
         const supplier = await this.supplierRepository.findById(supplierId)
             if (!supplier) {
-                throw new Error('SupplierService: Something happened')
+                throw new NotFoundError('Supplier', supplierId)
+            }
+            if (supplier?.userId !== this.currentUserID ) {
+            throw new ForbiddenError('Supplier', supplier.id, this.currentUserID)
             }
             
             return transformSupplierFromDB(supplier)
@@ -37,6 +41,9 @@ export class SupplierService implements ISupplierService {
     }
 
     async findAll(userId: string): Promise<Supplier[] | undefined> {
+        if (userId !== this.currentUserID ) {
+            throw new ForbiddenError('Suppliers', 'All suppliers', this.currentUserID)
+            }
         const suppliers = await this.supplierRepository.findAll(userId)
 
         return suppliers?.map((supplier) => transformSupplierFromDB(supplier))
@@ -68,11 +75,19 @@ export class SupplierService implements ISupplierService {
     }
 
     async update(supplier: SupplierUpdatePayload): Promise<{ id: string; } | undefined> {
+
+        if (supplier.supplier.userId !== this.currentUserID ) {
+            throw new ForbiddenError('Supplier', supplier.supplier.id, this.currentUserID)
+        }
+
+        const existResult = await this.supplierRepository.findByName(supplier.supplier.name, this.currentUserID)
+        if (existResult && existResult.id !== supplier.supplier.id ) {
+            throw new ConflictError('Supplier', 'name')
+        }
         
         const { validatedAddedItems, validatedRemovedItems, destructuredSupplier } = prepareSupplierForDB(supplier, 'update')
         
-
-        try {
+        
             const transactionResponse = await db.transaction(async(tx) => {
                 const supplierId = await this.supplierRepository.update(destructuredSupplier.dbSupplier.id, destructuredSupplier.dbSupplier, tx)
                  await this.addressRepository.update(destructuredSupplier.dbSupplier.id, destructuredSupplier.address, tx)
@@ -90,12 +105,18 @@ export class SupplierService implements ISupplierService {
                 return supplierId
             })
             return transactionResponse
-        }catch(err){
-            throw new Error(`Supplier Service Update: ${err}`)
-        }
     }
 
     async delete(supplierId: string): Promise<{id: string} | undefined> {
+
+        const exists = await this.supplierRepository.findById(supplierId)
+        
+        if (!exists) {
+            throw new NotFoundError('Supplier', supplierId)
+        }
+        if (exists.userId !== this.currentUserID ) {
+            throw new ForbiddenError('Supplier', exists.id, this.currentUserID)
+        } 
         const response = await this.supplierRepository.delete(supplierId)
         return response
     }
