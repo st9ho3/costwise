@@ -14,6 +14,7 @@
  * - The response body includes `success: false` and an `error` object containing the message.
  * - This helps in providing a clear, structured way to communicate failures to the client.
  */
+import { FieldError } from '@/types/errors';
 import { NextResponse } from 'next/server';
 
 interface APIResponseSuccess<T> {
@@ -25,9 +26,17 @@ interface APIResponseSuccess<T> {
 interface APIResponseError {
     success: boolean;
     error: {
-        message: string;
+        message: string
+        errors?: FieldError[]
     };
 }
+
+interface ErrorObject {
+    message: string
+    errors?: FieldError[]
+    field?: string
+}
+
 
 export const sendSuccess = <T>(message: string, data: T, status = 200): NextResponse<APIResponseSuccess<T>> => {
     return NextResponse.json({
@@ -37,11 +46,13 @@ export const sendSuccess = <T>(message: string, data: T, status = 200): NextResp
     }, { status });
 };
 
-export const sendError = (message: string, status = 500): NextResponse<APIResponseError> => {
+export const sendError = (error: ErrorObject, status = 500): NextResponse<APIResponseError> => {
     return NextResponse.json({
         success: false,
         error: {
-            message,
-        },
+            message: error.message,
+            errors: error.errors,
+            field: error.field
+        }
     }, { status });
 };
