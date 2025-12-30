@@ -1,24 +1,42 @@
 import { NextRequest } from "next/server";
-import { sendSuccess, sendError } from "../../utils/responses";
+import { sendSuccess } from "../../utils/responses";
 import { SupplierService } from "@/app/services/suppliersService";
 import { auth } from "@/auth";
 import { AuthenticationError } from "@/app/utils/errors";
+import { errorHandler } from "@/app/utils/errorHandler";
 
-const session = await auth()
-if (!session?.user?.id) {
-    throw new AuthenticationError()
-}
+export const PATCH = async (req: NextRequest) => {
+  try {
+    const session = await auth();
 
-const service = new SupplierService(session?.user?.id)
+    if (!session?.user?.id) {
+      throw new AuthenticationError();
+    }
 
-export const PATCH = async(req: NextRequest) => {
+    const service = new SupplierService(session.user.id);
+    const request = await req.json();
+    const res = await service.update(request);
 
-    const request = await req.json()
-    const res = await service.update(request)
+    return sendSuccess('supplier updated', res, 200);
+  } catch (err) {
+    return errorHandler(err);
+  }
+};
 
-    if (!res) {
-        return sendError('Invalid Data')
-    } 
+export const DELETE = async (req: NextRequest) => {
+  try {
+    const session = await auth();
 
-    return sendSuccess('supplier created', 'Patch', 201)
-}
+    if (!session?.user?.id) {
+      throw new AuthenticationError();
+    }
+
+    const service = new SupplierService(session.user.id);
+    const request = await req.json();
+    const res = await service.delete(request);
+
+    return sendSuccess('supplier deleted', res, 200);
+  } catch (err) {
+    return errorHandler(err);
+  }
+};
