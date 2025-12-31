@@ -52,7 +52,7 @@ const useHelpers = ({path}: UseHelpersProps) => {
   }, [handleNotification]);
 
   const handleDelete = useCallback(async(id: string | null) => {
-    console.log('handleDelete on Hook: ',id)
+
     const response = path === 'ingredients' ? await deleteIngredient(id) : await deleteRecipesFromServer(id)
     raiseNotification(response)
     router.replace(`/${path}` || '')

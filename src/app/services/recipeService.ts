@@ -254,7 +254,7 @@ export class RecipeService implements IRecipeService {
     const tax = recipe.tax;
     const price = recipe.sellingPrice ? recipe.sellingPrice : 1;
     const margin = cost && calculateProfitMargin(cost, price, tax);
-    console.log("margin: ", margin);
+
     const updatedRecipe = {
       ...recipe,
       totalCost: cost ? cost : 0,

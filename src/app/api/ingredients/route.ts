@@ -22,13 +22,12 @@ export const POST = async (req: NextRequest) => {
       throw new Error("Can't take an action if not validated");
     }
     const response = await service.create(ingredient);
-    console.log(response);
+
     if (!response) {
       return sendError("Something wrong with the request", 404);
     }
     return sendSuccess("Ingredient successfully created", response, 201);
   } catch (err) {
-    console.log("error on the route: ", err);
     return sendError(`${err}`, 500);
   }
 };

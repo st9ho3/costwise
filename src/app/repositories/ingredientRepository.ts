@@ -75,7 +75,6 @@ export class IngredientRepository implements IIngredientRepository {
   async create(
     ingredient: DBIngredient
   ): Promise<{ ingredientId: string } | undefined> {
-    console.log(ingredient);
     try {
       const [ingredientID] = await db
         .insert(ingredientsTable)
@@ -108,7 +107,6 @@ export class IngredientRepository implements IIngredientRepository {
           ingredientId: ingredientsTable.id,
         });
 
-      console.log("Updated ingredient ID:", ingredientId);
       return ingredientId;
     } catch (err) {
       console.error("Failed to update ingredient:", err);
@@ -177,5 +175,9 @@ export class IngredientRepository implements IIngredientRepository {
         `IngredientRepository.getIngredientAnalytics: Failed to get analytics for user ${userId}: ${err}`
       );
     }
+  }
+
+  async findByName(ingredientsName: string): Promise<string | undefined> {
+    return "";
   }
 }

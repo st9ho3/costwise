@@ -69,7 +69,6 @@ export class IngredientService implements IIngredientService {
 
       return ingredientId;
     } else {
-      console.log("Ingredient already exists or is not validated");
       throw Error("Ingredient already exists or is not validated");
     }
   }
@@ -82,19 +81,19 @@ export class IngredientService implements IIngredientService {
     const DBIngredient = validatedIngredient
       ? transformIngredientToDB(validatedIngredient)
       : undefined;
-    console.log("DBIngredient", DBIngredient);
+
     try {
       const transactionResponse = await db.transaction(async (tx: Database) => {
         const ingredientId = DBIngredient
           ? await this.ingredientRepository.update(DBIngredient, tx)
           : undefined;
-        console.log("ingredientID: ", ingredientId);
+
         const recipes = ingredientId
           ? await this.recipeRepository.findAllByIngredientId(
               ingredientId?.ingredientId
             )
           : [];
-        console.log("recipes: ", recipes);
+
         if (recipes) {
           for (const dbRecipe of recipes) {
             if (DBIngredient) {
@@ -109,9 +108,7 @@ export class IngredientService implements IIngredientService {
         return ingredientId;
       });
       return transactionResponse;
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   }
 
   async delete(id: string): Promise<void> {

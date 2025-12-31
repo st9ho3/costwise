@@ -108,7 +108,7 @@ export class RecipeRepository implements IRecipeRepository {
         .returning({
           returnedId: recipesTable.id,
         });
-      console.log("recipeReceipt", recipeReceipt);
+
       return recipeReceipt.returnedId;
     } catch (err) {
       console.error("Failed to create recipe:", err);

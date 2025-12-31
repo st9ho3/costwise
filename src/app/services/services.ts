@@ -1,12 +1,12 @@
 /**
  * Service functions for API communication and data validation in the recipe and ingredient management system.
- * 
+ *
  * This module provides:
  * - HTTP client functions for CRUD operations on recipes and ingredients (create, update, delete)
  * - Zod-based validation utilities to ensure data integrity before sending to the backend
  * - A mock messaging utility for local storage-based chat simulation (used for demonstration)
  * - Type-safe request/response handling
- * 
+ *
  * These functions act as the bridge between the frontend UI (forms, buttons) and the backend API,
  * ensuring that only valid, well-structured data is transmitted and that user actions trigger
  * the appropriate server-side operations.
@@ -14,9 +14,13 @@
 
 import { uid } from "uid";
 import { FormFields } from "../components/recipes/recipeForm/recipeForm";
-import { Ingredient, IngredientCategory, Recipe, RecipeIngredients, Supplier } from "@/shemas/recipe";
-
-
+import {
+  Ingredient,
+  IngredientCategory,
+  Recipe,
+  RecipeIngredients,
+  Supplier,
+} from "@/shemas/recipe";
 
 export const createMessage = (text: string, user: string) => {
   const message = {
@@ -33,43 +37,56 @@ export const createMessage = (text: string, user: string) => {
   return message;
 };
 
+export const sendRecipe = async (
+  data: Recipe,
+  addedIngredients: RecipeIngredients[],
+  removedIngredients: RecipeIngredients[]
+) => {
+  const dataToSend = {
+    recipe: data,
+    addedIngredients: addedIngredients,
+    removedIngredients: removedIngredients,
+  };
 
-export const sendRecipe = async (data: Recipe, addedIngredients: RecipeIngredients[], removedIngredients: RecipeIngredients[]) => {
-  const dataToSend = { recipe: data, addedIngredients: addedIngredients, removedIngredients: removedIngredients };
-  
   const res = await fetch("/api/recipes", {
     method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(dataToSend)
+    body: JSON.stringify(dataToSend),
   });
 
   if (!res.ok) {
-    return await res.json()
+    return await res.json();
   }
 
   const response = await res.json();
   return response;
 };
 
-export const sendRecipeToUpdate = async (data: FormFields, addedIngredients: RecipeIngredients[], removedIngredients: RecipeIngredients[] ) => {
-  const dataToSend = { recipe: data, addedIngredients: addedIngredients, removedIngredients: removedIngredients};
+export const sendRecipeToUpdate = async (
+  data: FormFields,
+  addedIngredients: RecipeIngredients[],
+  removedIngredients: RecipeIngredients[]
+) => {
+  const dataToSend = {
+    recipe: data,
+    addedIngredients: addedIngredients,
+    removedIngredients: removedIngredients,
+  };
   const res = await fetch(`/api/recipes/${data.id}`, {
     method: "PATCH",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(dataToSend)
+    body: JSON.stringify(dataToSend),
   });
 
   if (!res.ok) {
     const response = await res.json();
-     console.log(response)
   }
 
   const response = await res.json();
-    console.log(response)
 
   return response;
 };
@@ -78,16 +95,16 @@ export const deleteRecipesFromServer = async (recipeId: string | null) => {
   const response = await fetch(`api/recipes/${recipeId}`, {
     method: "DELETE",
     headers: {
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   });
 
   if (!response.ok) {
-    const error = await response.json(); 
-    return error
+    const error = await response.json();
+    return error;
   } else {
-    const res = await response.json()
-    return res
+    const res = await response.json();
+    return res;
   }
 };
 
@@ -95,105 +112,114 @@ export const sendIngredient = async (ingredient: Ingredient) => {
   const res = await fetch("/api/ingredients", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(ingredient)
-  })
-  const response = await res.json()
-  
-  return response
-}
+    body: JSON.stringify(ingredient),
+  });
+  const response = await res.json();
+
+  return response;
+};
 
 export const updateIngredient = async (ingredient: Ingredient) => {
   const res = await fetch(`/api/ingredients/${ingredient.id}`, {
     method: "PATCH",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(ingredient)
-  })
+    body: JSON.stringify(ingredient),
+  });
 
   if (!res.ok) {
-    console.log("An error occured, ", res.status, res.statusText);
-    const response = await res.json()
-    return response
-    
+    const response = await res.json();
+    return response;
   } else {
-    const response = await res.json()
-    return response
+    const response = await res.json();
+    return response;
   }
-}
+};
 
-
-export const deleteIngredient = async (id: string | null)  => {
-  console.log('deleteIngredient: ',id)
+export const deleteIngredient = async (id: string | null) => {
   const response = await fetch(`/api/ingredients/${id}`, {
     method: "DELETE",
     headers: {
-      "Content-Type": "application/json"
-    }
-  })
-  
+      "Content-Type": "application/json",
+    },
+  });
+
   if (!response.ok) {
-    const error = await response.json(); 
-    return error
+    const error = await response.json();
+    return error;
   } else {
-    const res = await response.json()
-    console.log(res)
-    return res
+    const res = await response.json();
+
+    return res;
   }
-  
-}
+};
 
-export const createSupplier = async (supplier: Supplier, addedCategories: IngredientCategory[], removedCategories: IngredientCategory[] ) => {
-    const dataToSend = { supplier: supplier, addedCategories: addedCategories, removedCategories: removedCategories};
+export const createSupplier = async (
+  supplier: Supplier,
+  addedCategories: IngredientCategory[],
+  removedCategories: IngredientCategory[]
+) => {
+  const dataToSend = {
+    supplier: supplier,
+    addedCategories: addedCategories,
+    removedCategories: removedCategories,
+  };
 
-  const res = await fetch('/api/suppliers', {
-    method: 'POST',
+  const res = await fetch("/api/suppliers", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(dataToSend)
-  })
+    body: JSON.stringify(dataToSend),
+  });
   if (!res.ok) {
-    return await res.json()
+    return await res.json();
   }
 
   const response = await res.json();
   return response;
-}
+};
 
-export const updateSupplier = async (supplier: Supplier, addedCategories: IngredientCategory[], removedCategories: IngredientCategory[]) => {
-  const dataToSend = { supplier: supplier, addedCategories: addedCategories, removedCategories: removedCategories};
-  
+export const updateSupplier = async (
+  supplier: Supplier,
+  addedCategories: IngredientCategory[],
+  removedCategories: IngredientCategory[]
+) => {
+  const dataToSend = {
+    supplier: supplier,
+    addedCategories: addedCategories,
+    removedCategories: removedCategories,
+  };
+
   const res = await fetch(`/api/suppliers/${supplier.id}`, {
-    method: 'PATCH',
+    method: "PATCH",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(dataToSend)
-  })
+    body: JSON.stringify(dataToSend),
+  });
   if (!res.ok) {
-    return await res.json()
+    return await res.json();
   }
 
   const response = await res.json();
   return response;
-}
+};
 
-
-export const search = async(searchTerm: string) => {
-
-    const res = await fetch(`/api/search?q=${searchTerm}`, {
-    method: 'GET',
+export const search = async (searchTerm: string) => {
+  const res = await fetch(`/api/search?q=${searchTerm}`, {
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-  
+      "Content-Type": "application/json",
+    },
+  });
+
   if (!res) {
-    throw new Error('Something happened on searching...')
+    throw new Error("Something happened on searching...");
   }
-  const response = await res.json()
-  return response  
-}
+  const response = await res.json();
+  return response;
+};
