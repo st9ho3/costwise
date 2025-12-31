@@ -12,24 +12,11 @@
  */
 import { NextRequest } from "next/server";
 import { RecipeUpdatePayload } from "@/types/context";
-import { sendError, sendSuccess } from "../../utils/responses";
+import { sendSuccess } from "../../utils/responses";
 import { RecipeService } from "@/app/services/recipeService";
 import { auth } from "@/auth";
-
-export async function GET(
-  request: NextRequest,
-  context: { params: Promise<{ id: string }> }
-) {
-  const session = await auth();
-  if (!session?.user?.id) {
-    throw new Error("Can't take an action if not validated");
-  }
-  const service = new RecipeService(session.user.id);
-  const { id } = await context.params;
-  const recipe = await service.findById(id);
-
-  return sendSuccess("Recipe fetched succesfully", recipe, 200);
-}
+import { AuthenticationError } from "@/app/utils/errors";
+import { errorHandler } from "@/app/utils/errorHandler";
 
 export const PATCH = async (
   req: NextRequest,
@@ -38,15 +25,11 @@ export const PATCH = async (
   const session = await auth();
   try {
     if (!session?.user?.id) {
-      throw new Error("Can't take an action if not validated");
+      throw new AuthenticationError();
     }
     const service = new RecipeService(session.user.id);
     const request: RecipeUpdatePayload = await req.json();
     const { id } = await context.params;
-
-    if (!request.addedIngredients || !request.removedIngredients) {
-      sendError("Something went wrong with categories");
-    }
 
     const response = await service.update(
       id,
@@ -54,18 +37,9 @@ export const PATCH = async (
       request.removedIngredients,
       request.addedIngredients
     );
-
-    if (response) {
-      return sendSuccess("Recipe updated succesfully", null, 201);
-    } else {
-      return sendError(
-        "Something went wrong with the data or recipe not found",
-        404
-      );
-    }
+    return sendSuccess("Recipe updated succesfully", null, 201);
   } catch (err) {
-    console.error("UPDATE error: ", err);
-    return sendError(`An internal server error occurred, ${err}`, 500);
+    return errorHandler(err);
   }
 };
 
@@ -74,10 +48,15 @@ export const DELETE = async (
   context: { params: Promise<{ id: string }> }
 ) => {
   const session = await auth();
-  if (!session?.user) {
-    throw new Error("Can't take an action if not validated");
+  try {
+    if (!session?.user?.id) {
+      throw new AuthenticationError();
+    }
+    const service = new RecipeService(session.user.id);
+    const { id } = await context.params;
+    await service.delete(id);
+    return sendSuccess("Recipe succesfully deleted", null, 200);
+  } catch (err) {
+    return errorHandler(err);
   }
-  const { id } = await context.params;
-  await service.delete(id);
-  return sendSuccess("Recipe succesfully deleted", null, 200);
 };

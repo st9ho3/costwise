@@ -22,7 +22,7 @@ import {
 import { db } from "@/db/db";
 import { categories, Database, ingredientsTable } from "@/db/schema";
 import { transformIngredientFromDB } from "../utils/transformers";
-import { countDistinct, eq, sql } from "drizzle-orm";
+import { and, countDistinct, eq, sql } from "drizzle-orm";
 
 export class IngredientRepository implements IIngredientRepository {
   async findAll(userId: string): Promise<IngredientToDisplay[] | undefined> {
@@ -177,7 +177,23 @@ export class IngredientRepository implements IIngredientRepository {
     }
   }
 
-  async findByName(ingredientsName: string): Promise<string | undefined> {
-    return "";
+  async findByName(
+    ingredientsName: string,
+    userId: string
+  ): Promise<{ name: string; id: string } | undefined> {
+    const [result] = await db
+      .select({
+        name: ingredientsTable.name,
+        id: ingredientsTable.id,
+      })
+      .from(ingredientsTable)
+      .where(
+        and(
+          eq(ingredientsTable.userId, userId),
+          eq(ingredientsTable.name, ingredientsName)
+        )
+      );
+
+    return result ? result : undefined;
   }
 }

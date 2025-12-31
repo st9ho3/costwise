@@ -6,28 +6,26 @@
  * If the provided data is invalid or an error occurs during the process, it returns an appropriate error response with a 404 or 500 status code.
  */
 import { NextRequest } from "next/server";
-import { sendError, sendSuccess } from "../utils/responses";
+import { sendSuccess } from "../utils/responses";
 import { RecipeService } from "@/app/services/recipeService";
 import { auth } from "@/auth";
+import { errorHandler } from "@/app/utils/errorHandler";
+import { AuthenticationError } from "@/app/utils/errors";
 
 export const POST = async (req: NextRequest) => {
   const session = await auth();
 
   try {
     if (!session?.user?.id) {
-      throw new Error("Can't take an action if not validated");
+      throw new AuthenticationError();
     }
     const service = new RecipeService(session.user.id);
     const request = await req.json();
 
-    const res = await service.create(request);
+    await service.create(request);
 
-    if (res) {
-      return sendSuccess("Recipe successfully created!", null, 201);
-    } else {
-      return sendError("Invalid Data.", 404);
-    }
+    return sendSuccess("Recipe successfully created!", null, 201);
   } catch (err) {
-    return sendError(`${err}`, 500);
+    return errorHandler(err);
   }
 };

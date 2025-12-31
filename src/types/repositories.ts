@@ -1,16 +1,27 @@
-
-import { Database } from '@/db/schema';
-import { Recipe, RecipeIngredients, DBIngredient, DBRecipe, IngredientToDisplay } from '@/shemas/recipe';
-import {  DBSupplierAddress, DBSupplierFinancialData, DestructuredSupplier, RawDBSupplier, RecipeWithQuery } from './specialTypes';
+import { Database } from "@/db/schema";
+import {
+  Recipe,
+  RecipeIngredients,
+  DBIngredient,
+  DBRecipe,
+  IngredientToDisplay,
+} from "@/shemas/recipe";
+import {
+  DBSupplierAddress,
+  DBSupplierFinancialData,
+  DestructuredSupplier,
+  RawDBSupplier,
+  RecipeWithQuery,
+} from "./specialTypes";
 
 export interface RecipeAnalytics {
-  avgProfitMargin: string | null
-  avgFoodCost: string | null
-  totalRecipes: number
+  avgProfitMargin: string | null;
+  avgFoodCost: string | null;
+  totalRecipes: number;
 }
 
 export interface IngredientAnalytics {
-  totalIngredients: number
+  totalIngredients: number;
 }
 
 export interface IRecipeRepository {
@@ -18,58 +29,106 @@ export interface IRecipeRepository {
   findAllByIngredientId(id: string): Promise<DBRecipe[] | undefined>;
   findAll(userId: string): Promise<Recipe[] | undefined>;
   create(recipe: DBRecipe, tx: Database): Promise<string | undefined>;
-  update(id: string, recipe: Recipe, tx?: Database): Promise<{id: string} | undefined>;
-  delete(id: string, tx: Database): Promise<{id: string} | undefined>;
+  update(
+    id: string,
+    recipe: Recipe,
+    tx?: Database
+  ): Promise<{ id: string } | undefined>;
+  delete(id: string, tx: Database): Promise<{ id: string } | undefined>;
 
   getRecipesAnalytics(userId: string): Promise<RecipeAnalytics | undefined>;
-  findByName(recipesName: string, userId: string | undefined): Promise<{name: string; id: string}  | undefined>;
-  
+  findByName(
+    recipesName: string,
+    userId: string | undefined
+  ): Promise<{ name: string; id: string } | undefined>;
 }
 
 export interface IRecipeIngredientsRepository {
-
-  create(recipeIngredient: RecipeIngredients, userId: string, tx: Database): Promise<{id: string | null} >;
-  delete(recipeId: string, ingredientId: string, tx?: Database): Promise<{ingredientId: string | null} | undefined>  
+  create(
+    recipeIngredient: RecipeIngredients,
+    userId: string,
+    tx: Database
+  ): Promise<{ id: string | null }>;
+  delete(
+    recipeId: string,
+    ingredientId: string,
+    tx?: Database
+  ): Promise<{ ingredientId: string | null } | undefined>;
 }
 
 export interface IIngredientRepository {
   findById(id: string): Promise<IngredientToDisplay | undefined>;
-  findByName(ingredientsName: string): Promise<string | undefined>;
+  findByName(
+    ingredientsName: string,
+    userId: string
+  ): Promise<string | undefined>;
   findAll(userId: string): Promise<IngredientToDisplay[] | undefined>;
-  create(ingredient: DBIngredient, tx: Database): Promise<{ingredientId: string} | undefined>;
-  update(ingredient: DBIngredient, tx?: Database): Promise<{ingredientId: string} | undefined>;
-  delete(id: string): Promise<{ingredientId: string} | undefined>;
+  create(
+    ingredient: DBIngredient,
+    tx: Database
+  ): Promise<{ ingredientId: string } | undefined>;
+  update(
+    ingredient: DBIngredient,
+    tx?: Database
+  ): Promise<{ ingredientId: string } | undefined>;
+  delete(id: string): Promise<{ ingredientId: string } | undefined>;
 
-
-  updateUsage(id: string, tx: Database, action: "+" | "-"): Promise<undefined>
-  getIngredientAnalytics(userId: string): Promise<IngredientAnalytics | undefined>;
-
+  updateUsage(id: string, tx: Database, action: "+" | "-"): Promise<undefined>;
+  getIngredientAnalytics(
+    userId: string
+  ): Promise<IngredientAnalytics | undefined>;
 }
 
 export interface ISupplierRepository {
   findById(supplierId: string): Promise<RawDBSupplier | undefined>;
-  findByName(suppliersName: string, userId: string | undefined): Promise<{name: string; id: string}  | undefined>;
+  findByName(
+    suppliersName: string,
+    userId: string | undefined
+  ): Promise<{ name: string; id: string } | undefined>;
   findAll(userId: string): Promise<RawDBSupplier[] | undefined>;
-  create(supplier: DestructuredSupplier, tx: Database): Promise<{id: string} | undefined>;
-  update(supplierId: string, supplier: DestructuredSupplier, tx: Database): Promise<{id: string | undefined} | undefined>;
-  delete(supplierId: string, db: Database): Promise<{id: string} | undefined>;
+  create(
+    supplier: DestructuredSupplier,
+    tx: Database
+  ): Promise<{ id: string } | undefined>;
+  update(
+    supplierId: string,
+    supplier: DestructuredSupplier,
+    tx: Database
+  ): Promise<{ id: string | undefined } | undefined>;
+  delete(supplierId: string, db: Database): Promise<{ id: string } | undefined>;
 }
 
 export interface IAddressesRepository {
-  create(address: DBSupplierAddress, tx: Database, suppliersId: string): Promise<{addressId: string} | undefined>;
-  update(supplierId: string, address: DBSupplierAddress, tx: Database): Promise<{addressId: string} | undefined>;
+  create(
+    address: DBSupplierAddress,
+    tx: Database,
+    suppliersId: string
+  ): Promise<{ addressId: string } | undefined>;
+  update(
+    supplierId: string,
+    address: DBSupplierAddress,
+    tx: Database
+  ): Promise<{ addressId: string } | undefined>;
 }
 export interface ISupplierFinancialDataRepository {
-  create(finData: DBSupplierFinancialData, tx: Database, suppliersId: string): Promise<{confirmation: string} | undefined>;
-  update(supplierId: string, finData: DBSupplierFinancialData, tx: Database): Promise<{confirmation: string} | undefined>;
+  create(
+    finData: DBSupplierFinancialData,
+    tx: Database,
+    suppliersId: string
+  ): Promise<{ confirmation: string } | undefined>;
+  update(
+    supplierId: string,
+    finData: DBSupplierFinancialData,
+    tx: Database
+  ): Promise<{ confirmation: string } | undefined>;
 }
 
 export interface ISuppliersCategoryRepository {
-  create(category: string, tx: Database, suppliersId: string): Promise<void>
-  delete(category: string, tx: Database, suppliersId: string): Promise<void>
+  create(category: string, tx: Database, suppliersId: string): Promise<void>;
+  delete(category: string, tx: Database, suppliersId: string): Promise<void>;
 }
 
 export interface ISearchRepository {
-  findRecipe() : Promise<DBRecipe[] | undefined>;
-  findIngredient() : Promise<DBIngredient[] | undefined>;
+  findRecipe(): Promise<DBRecipe[] | undefined>;
+  findIngredient(): Promise<DBIngredient[] | undefined>;
 }
