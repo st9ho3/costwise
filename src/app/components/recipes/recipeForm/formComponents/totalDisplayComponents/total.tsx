@@ -2,7 +2,7 @@
 
 import React, { useMemo } from 'react';
 import { RecipeIngredients } from '@/shemas/recipe';
-import { getTotalPrice } from '@/app/services/helpers';
+import { getTotalPrice } from '@/app/utils/pricing';
 import {  ShoppingBasket,TrendingUp, UtensilsCrossed, BadgeCent, Banknote } from 'lucide-react';
 import { UseFormGetValues, UseFormSetValue, UseFormWatch } from 'react-hook-form';
 import { FormFields } from '../../recipeForm';

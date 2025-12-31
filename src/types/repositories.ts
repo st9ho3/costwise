@@ -15,7 +15,6 @@ export interface IngredientAnalytics {
 
 export interface IRecipeRepository {
   findById(id: string): Promise<RecipeWithQuery | undefined>;
-  findByName(recipesName: string): Promise<string | undefined>;
   findAllByIngredientId(id: string): Promise<DBRecipe[] | undefined>;
   findAll(userId: string): Promise<Recipe[] | undefined>;
   create(recipe: DBRecipe, tx: Database): Promise<string | undefined>;
@@ -23,6 +22,7 @@ export interface IRecipeRepository {
   delete(id: string, tx: Database): Promise<{id: string} | undefined>;
 
   getRecipesAnalytics(userId: string): Promise<RecipeAnalytics | undefined>;
+  findByName(recipesName: string, userId: string | undefined): Promise<{name: string; id: string}  | undefined>;
   
 }
 

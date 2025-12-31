@@ -1,4 +1,4 @@
-import { formatPrice, getDisplayUnit } from '@/app/services/helpers'
+import { formatPrice, getDisplayUnit } from '@/app/utils/pricing'
 import React from 'react'
 
 interface MonetaryCellProps {

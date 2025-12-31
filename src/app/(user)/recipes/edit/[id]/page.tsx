@@ -10,7 +10,7 @@
  */
 import React from 'react';
 import { RecipeForm } from '@/app/constants/components';
-import { transformRecipeFromDB, transformRecipeIngredentFromDB } from '@/app/services/helpers';
+import { transformRecipeFromDB, transformRecipeIngredentFromDB } from '@/app/utils/transformers';
 import { IngredientService } from '@/app/services/ingredientService';
 import { RecipeService } from '@/app/services/recipeService';
 import { RecipeIngredientFromDB } from '@/types/specialTypes';
@@ -26,11 +26,11 @@ interface Params {
 const EditPage = async ({ params }: Params) => {
     const session = await auth();
 
-    if (!session?.user) {
+    if (!session?.user?.id) {
         redirect('/signin');
     }
 
-    const recipeService = new RecipeService();
+    const recipeService = new RecipeService(session.user.id);
     const ingredientService = new IngredientService();
 
     const { id } = await params;
