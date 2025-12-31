@@ -1,4 +1,4 @@
-import { getIconColor } from '@/app/services/helpers'
+import { getIconColor } from '@/app/utils/uiHelpers'
 import Image from 'next/image'
 import React from 'react'
 

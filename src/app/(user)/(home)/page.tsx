@@ -16,11 +16,11 @@ const page = async() => {
 
   const session = await auth()
 
-  if (!session?.user) {
+  if (!session?.user?.id) {
     redirect("/signin")
   }
 
-  const recipeService = new RecipeService()
+  const recipeService = new RecipeService(session.user.id)
   const ingredientService = new IngredientService()
 
   const recipeAnalytics = session.user.id && await recipeService.getRecipesAnalytics(session.user.id) 

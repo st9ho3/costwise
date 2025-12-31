@@ -1,6 +1,7 @@
 "use client"
 import { recipesColumns, recipeSortedLinks } from "@/app/constants/data";
-import { getProfitMarginType, paginate } from "@/app/services/helpers";
+import { getProfitMarginType } from "@/app/utils/pricing";
+import { paginate } from "@/app/utils/pagination";
 import { Recipe } from "@/shemas/recipe";
 import Notification from '@/app/components/shared/notification'
 import Link from "next/link";

@@ -11,25 +11,23 @@ import { RecipeService } from "@/app/services/recipeService";
 import { auth } from "@/auth";
 
 export const POST = async (req: NextRequest) => {
-    const session = await auth()
-    
-    const service = new RecipeService();
+  const session = await auth();
 
-
-    try {
-        if(!session?.user) {
-        throw new Error("Can't take an action if not validated")
-        }
-        const request = await req.json();
-
-        const res = await service.create(request);
-
-        if (res) {
-            return sendSuccess("Recipe successfully created!", null, 201);
-        } else {
-            return sendError("Invalid Data.", 404);
-        }
-    } catch (err) {
-        return sendError(`${err}`, 500);
+  try {
+    if (!session?.user?.id) {
+      throw new Error("Can't take an action if not validated");
     }
+    const service = new RecipeService(session.user.id);
+    const request = await req.json();
+
+    const res = await service.create(request);
+
+    if (res) {
+      return sendSuccess("Recipe successfully created!", null, 201);
+    } else {
+      return sendError("Invalid Data.", 404);
+    }
+  } catch (err) {
+    return sendError(`${err}`, 500);
+  }
 };

@@ -18,12 +18,12 @@ export const dynamic = 'force-dynamic';
 const RecipesPage = async () => {
     const session = await auth();
 
-    if (!session?.user) {
+    if (!session?.user?.id) {
         redirect('/signin');
     }
     
 
-    const service = new RecipeService();
+    const service = new RecipeService(session?.user?.id);
 
     const rawRecipes = session.user.id && await service.findAll(session.user.id);
     const recipes = rawRecipes ? rawRecipes.map((recipe) => {

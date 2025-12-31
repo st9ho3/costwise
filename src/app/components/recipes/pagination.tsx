@@ -2,7 +2,7 @@
 import Button from '../shared/sharedButton';
 import { Ingredient, Recipe } from '@/shemas/recipe';
 import { useEffect, useMemo } from 'react';
-import { paginationPages } from '@/app/services/helpers';
+import { paginationPages } from '@/app/utils/pagination';
 import { usePaginationStore } from '@/app/stores/paginationStore';
 
 

@@ -7,7 +7,7 @@ import z from 'zod';
 import { useState } from 'react';
 import { createSupplier, updateSupplier } from '../services/services';
 import { redirect } from 'next/navigation';
-import { getArrayChanges } from '../services/helpers';
+import { getArrayChanges } from '../utils/transformers';
 
 export type FormFields = z.infer<typeof SupplierSchema>;
 

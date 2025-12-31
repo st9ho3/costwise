@@ -1,6 +1,7 @@
 "use client";
 import { ingredientColumns, ingredientSortedLinks } from "@/app/constants/data";
-import { getUsageCategory, paginate } from "@/app/services/helpers";
+import { getUsageCategory } from "@/app/utils/pricing";
+import { paginate } from "@/app/utils/pagination";
 import { IngredientToDisplay} from "@/shemas/recipe";
 /* import Notification from '@/app/components/shared/notification'
  */import Link from "next/link";

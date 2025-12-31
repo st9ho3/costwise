@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
 import { Ingredient, IngredientSchema } from '@/shemas/recipe';
-import { createEditIngredientPrototype, createIngredientPrototype } from '@/app/services/helpers';
+import { createEditIngredientPrototype, createIngredientPrototype } from '@/app/utils/transformers';
 import { sendIngredient, updateIngredient } from '../services/services';
 import useHelpers from './useHelpers';
 import { useForm } from 'react-hook-form';
