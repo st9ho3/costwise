@@ -126,7 +126,7 @@ export const calculateRecipeData = (
   tempIngredients: RecipeIngredients[]
 ) => {
   const newCost = getTotalPrice(tempIngredients);
-  console.log(newCost);
+
   const margin =
     data.profitMargin !== undefined &&
     data.profitMargin !== recipe?.profitMargin
@@ -142,7 +142,7 @@ export const calculateRecipeData = (
   const newTax = data.tax !== undefined ? data.tax : recipe?.tax || 0;
 
   const foodCost = price ? (newCost / price) * 100 : 0;
-  console.log(price);
+
   const newPrice =
     data.profitMargin !== undefined &&
     data.profitMargin !== recipe?.profitMargin &&

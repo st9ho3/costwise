@@ -1,64 +1,66 @@
-import { Ingredient, IngredientSchema} from "@/shemas/recipe";
+import { Ingredient, IngredientSchema } from "@/shemas/recipe";
 
 import { z } from "zod";
 import { ValidationError } from "../utils/errors";
 
-export const zodValidateIngredientBeforeAddItToDatabase =  (request: Ingredient) => {
-  const ingredient = request
+export const zodValidateIngredientBeforeAddItToDatabase = (
+  request: Ingredient
+) => {
+  const ingredient = request;
 
   if (ingredient) {
-      const validatedIngredient = IngredientSchema.parse(ingredient)
-      console.log("Zod validated ingredient: ",validatedIngredient)
-      return validatedIngredient;
-    }
+    const validatedIngredient = IngredientSchema.parse(ingredient);
+
+    return validatedIngredient;
+  }
 };
 
 export const validateComplexEntity = <T extends object, TArrayItem>(
-  entity: T, 
-  entitySchema: z.ZodSchema<T>, 
-  arraysSchema: z.ZodSchema<TArrayItem>, 
-  fieldName: keyof T, 
-  addedItems: TArrayItem[], 
-  removedItems: TArrayItem[] ) => {
-
-    if (fieldName in entity && typeof entity[fieldName] === 'string') {
-    entity[fieldName] = new Date(entity[fieldName] as string) as T[keyof T]
+  entity: T,
+  entitySchema: z.ZodSchema<T>,
+  arraysSchema: z.ZodSchema<TArrayItem>,
+  fieldName: keyof T,
+  addedItems: TArrayItem[],
+  removedItems: TArrayItem[]
+) => {
+  if (fieldName in entity && typeof entity[fieldName] === "string") {
+    entity[fieldName] = new Date(entity[fieldName] as string) as T[keyof T];
   }
-  const entityResult = entitySchema.safeParse(entity)
+  const entityResult = entitySchema.safeParse(entity);
 
   if (!entityResult.success) {
-    throw new ValidationError(entityResult.error)
+    throw new ValidationError(entityResult.error);
   }
-  const validatedEntity = entityResult.data
-  
-  let validatedAddedItems
-  let validatedRemovedItems
+  const validatedEntity = entityResult.data;
+
+  let validatedAddedItems;
+  let validatedRemovedItems;
 
   if (addedItems && addedItems.length > 0) {
-     validatedAddedItems = addedItems.map((item: TArrayItem) => {
+    validatedAddedItems = addedItems.map((item: TArrayItem) => {
       const arrayItem = arraysSchema.safeParse(item);
 
       if (!arrayItem.success) {
-        throw new ValidationError(arrayItem.error)
+        throw new ValidationError(arrayItem.error);
       }
-      return arrayItem.data
-    })
+      return arrayItem.data;
+    });
   }
 
   if (removedItems && removedItems.length > 0) {
-     validatedRemovedItems = removedItems.map((item: TArrayItem) => {
+    validatedRemovedItems = removedItems.map((item: TArrayItem) => {
       const arrayItem = arraysSchema.safeParse(item);
-      
+
       if (!arrayItem.success) {
-        throw new ValidationError(arrayItem.error)
+        throw new ValidationError(arrayItem.error);
       }
-      return arrayItem.data
-    })
+      return arrayItem.data;
+    });
   }
 
-    return {
-      validatedEntity,
-      validatedAddedItems,
-      validatedRemovedItems
-    }
-}
+  return {
+    validatedEntity,
+    validatedAddedItems,
+    validatedRemovedItems,
+  };
+};

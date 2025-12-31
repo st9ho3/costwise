@@ -57,7 +57,6 @@ export const DELETE = async (
 
     return sendSuccess("Ingredient succesfully deleted", null, 201);
   } catch (err) {
-    console.log(err);
     return sendError("An error occured on our side", 500);
   }
 };

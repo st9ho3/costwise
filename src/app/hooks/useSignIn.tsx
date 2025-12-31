@@ -41,11 +41,11 @@ const useSignIn = ({ isSignIn }: AuthProps) => {
             }
            
             if (error) {
-                console.log(error)
+
                 throw new Error(`${error}`)
             }
         } catch(err) {
-            console.log(err)
+
             throw new Error(`${err}`)
         }
     }

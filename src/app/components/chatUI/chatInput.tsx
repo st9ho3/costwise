@@ -16,7 +16,7 @@ const ChatInput = () => {
     const newMessage = createMessage(text, 'me');
     dispatch({ type: 'UPDATE_MESSAGES', payload: newMessage });
     setText('');
-    console.log("Message sent:", state);
+
   };
 
   return (
