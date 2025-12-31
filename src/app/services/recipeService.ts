@@ -44,7 +44,12 @@ import {
 } from "../utils/transformers";
 import { Database } from "@/db/schema";
 import { RecipeAnalytics } from "@/types/repositories";
-import { ConflictError, ForbiddenError, NotFoundError } from "../utils/errors";
+import {
+  ConflictError,
+  ForbiddenError,
+  NotFoundError,
+  ValidationError,
+} from "../utils/errors";
 
 export class RecipeService implements IRecipeService {
   private recipeRepository: RecipeRepository;
@@ -61,11 +66,7 @@ export class RecipeService implements IRecipeService {
 
   async findAll(userId: string): Promise<Recipe[] | undefined> {
     if (userId !== this.currentUserID) {
-      throw new ForbiddenError(
-        "Suppliers",
-        "All suppliers",
-        this.currentUserID
-      );
+      throw new ForbiddenError("Recipes", "All Recipes", this.currentUserID);
     }
     const recipes = await this.recipeRepository.findAll(userId);
 
@@ -78,7 +79,7 @@ export class RecipeService implements IRecipeService {
       throw new NotFoundError("Recipe", id);
     }
     if (recipe?.userId !== this.currentUserID) {
-      throw new ForbiddenError("Supplier", recipe.id, this.currentUserID);
+      throw new ForbiddenError("Recipe", recipe.id, this.currentUserID);
     }
     return recipe;
   }
@@ -88,7 +89,7 @@ export class RecipeService implements IRecipeService {
   ): Promise<CreateResponse | undefined> {
     if (requestData.recipe.userId !== this.currentUserID) {
       throw new ForbiddenError(
-        "Supplier",
+        "Recipe",
         requestData.recipe.id,
         this.currentUserID
       );
@@ -112,7 +113,12 @@ export class RecipeService implements IRecipeService {
     );
 
     if (!validatedAddedItems || validatedAddedItems.length === 0) {
-      throw new Error("Ingredients required in order to create a recipe.");
+      throw new ValidationError([
+        {
+          field: "Recipe Ingredients",
+          message: "Please add ingredients",
+        },
+      ]);
     }
 
     const transactionResponse = await db.transaction(async (tx) => {
@@ -152,6 +158,17 @@ export class RecipeService implements IRecipeService {
     removedIngredients: RecipeIngredients[],
     addedIngredients: RecipeIngredients[]
   ): Promise<{ id: string } | undefined> {
+    if (recipe.userId !== this.currentUserID) {
+      throw new ForbiddenError("Recipe", recipe.id, this.currentUserID);
+    }
+    const exists = await this.recipeRepository.findByName(
+      recipe.title,
+      this.currentUserID
+    );
+    if (exists && exists.id !== recipe.id) {
+      throw new ConflictError("Recipe", "name");
+    }
+
     const { validatedEntity, validatedAddedItems, validatedRemovedItems } =
       validateComplexEntity(
         recipe,
@@ -210,6 +227,13 @@ export class RecipeService implements IRecipeService {
   async delete(id: string): Promise<{ id: string } | undefined> {
     const recipe = await this.recipeRepository.findById(id);
 
+    if (!recipe) {
+      throw new NotFoundError("Recipe", id);
+    }
+    if (recipe.userId !== this.currentUserID) {
+      throw new ForbiddenError("Recipe", id, this.currentUserID);
+    }
+
     const totalDeletion = await db.transaction(async (tx) => {
       const deleteResponse = await this.recipeRepository.delete(id, tx);
       if (recipe?.recipeIngredients) {
@@ -267,12 +291,7 @@ export class RecipeService implements IRecipeService {
   async getRecipesAnalytics(
     userId: string
   ): Promise<RecipeAnalytics | undefined> {
-    try {
-      const recipeAnalytics = this.recipeRepository.getRecipesAnalytics(userId);
-
-      return recipeAnalytics;
-    } catch (err) {
-      throw new Error(`RecipeService: Something happened on our side. ${err}`);
-    }
+    const recipeAnalytics = this.recipeRepository.getRecipesAnalytics(userId);
+    return recipeAnalytics;
   }
 }

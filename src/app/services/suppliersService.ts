@@ -168,13 +168,13 @@ export class SupplierService implements ISupplierService {
   }
 
   async delete(supplierId: string): Promise<{ id: string } | undefined> {
-    const exists = await this.supplierRepository.findById(supplierId);
+    const supplier = await this.supplierRepository.findById(supplierId);
 
-    if (!exists) {
+    if (!supplier) {
       throw new NotFoundError("Supplier", supplierId);
     }
-    if (exists.userId !== this.currentUserID) {
-      throw new ForbiddenError("Supplier", exists.id, this.currentUserID);
+    if (supplier.userId !== this.currentUserID) {
+      throw new ForbiddenError("Supplier", supplier.id, this.currentUserID);
     }
     const response = await this.supplierRepository.delete(supplierId);
     return response;

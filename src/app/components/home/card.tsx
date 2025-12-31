@@ -23,10 +23,10 @@ const Card = ({ title, value, Icon }: CardProps) => {
         /* SHAPE: Material 3 Large Rounded Corners */
         rounded-[24px]
         
-        /* COLOR: Surface (White) with subtle border */
+        /* COLOR: Surface (White) with subtle  */
         bg-white border border-gray-200
         
-        /* ELEVATION: Soft shadow that lifts on hover */
+        /* ELEVATION: Soft that lifts on hover */
         shadow-sm hover:shadow-lg hover:shadow-gray-200/50
         
         /* ANIMATION: Standard Easing */

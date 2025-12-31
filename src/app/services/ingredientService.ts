@@ -77,7 +77,7 @@ export class IngredientService implements IIngredientService {
     ingredient: Ingredient
   ): Promise<{ ingredientId: string } | undefined> {
     const validatedIngredient =
-      await zodValidateIngredientBeforeAddItToDatabase(ingredient);
+      zodValidateIngredientBeforeAddItToDatabase(ingredient);
     const DBIngredient = validatedIngredient
       ? transformIngredientToDB(validatedIngredient)
       : undefined;
