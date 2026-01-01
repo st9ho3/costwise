@@ -12,33 +12,28 @@
  * Error logging is included for debugging purposes.
  */
 import { NextRequest } from "next/server";
-import { sendError, sendSuccess } from "../../utils/responses";
+import { sendSuccess } from "../../utils/responses";
 import { IngredientService } from "@/app/services/ingredientService";
 import { Ingredient } from "@/shemas/recipe";
 import { auth } from "@/auth";
-
-const service = new IngredientService();
+import { AuthenticationError } from "@/app/utils/errors";
+import { errorHandler } from "@/app/utils/errorHandler";
 
 export const PATCH = async (req: NextRequest) => {
   const session = await auth();
-  const ingredient: Ingredient = await req.json();
 
   try {
-    if (!session?.user) {
-      throw new Error("Can't take an action if not validated");
+    if (!session?.user?.id) {
+      throw new AuthenticationError();
     }
+    const service = new IngredientService(session.user.id);
+    const ingredient: Ingredient = await req.json();
+
     const res = await service.update(ingredient);
 
-    if (!res) {
-      return sendError("InvalidData, sorry", 404);
-    } else {
-      return sendSuccess("Ingrediend updated succesfully", res, 201);
-    }
+    return sendSuccess("Ingrediend updated succesfully", res, 201);
   } catch (err) {
-    // Log the actual error on the server for debugging
-    console.error("Error updating ingredient:", err);
-
-    return sendError("An unexpected error occurred on the server.", 500);
+    return errorHandler(err);
   }
 };
 
@@ -48,15 +43,16 @@ export const DELETE = async (
 ) => {
   const session = await auth();
   try {
-    if (!session?.user) {
-      throw new Error("Can't take an action if not validated");
+    if (!session?.user?.id) {
+      throw new AuthenticationError();
     }
+    const service = new IngredientService(session.user.id);
     const { id } = await context.params;
 
     await service.delete(id);
 
     return sendSuccess("Ingredient succesfully deleted", null, 201);
   } catch (err) {
-    return sendError("An error occured on our side", 500);
+    return errorHandler(err);
   }
 };

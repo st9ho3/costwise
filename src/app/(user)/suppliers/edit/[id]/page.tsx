@@ -13,11 +13,11 @@ export interface Params {
 const EditPage = async() => {
 
   const session = await auth()
-  if (!session?.user) {
+  if (!session?.user?.id) {
   redirect("/signin")
   }
 
-  const service = new SupplierService()
+  const service = new SupplierService(session?.user?.id)
   
 
   const tempId = 'f30d24aa-a58c-463e-96be-cd78edc14904'

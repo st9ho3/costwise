@@ -37,6 +37,7 @@ import {
 import { revalidatePath } from "next/cache";
 import { checkIfIngredientExists } from "@/db/helpers";
 import { RecipeWithQuery } from "@/types/specialTypes";
+import { DatabaseError } from "../utils/errors";
 
 export class RecipeRepository implements IRecipeRepository {
   async findById(id: string): Promise<RecipeWithQuery | undefined> {
@@ -55,9 +56,7 @@ export class RecipeRepository implements IRecipeRepository {
       return recipe;
     } catch (err) {
       console.error("Failed to fetch recipe by ID:", err);
-      throw new Error(
-        `RecipeRepository.findById: Failed to fetch recipe with ID ${id}: ${err}`
-      );
+      throw new DatabaseError("RecipeRepository.findById", err);
     }
   }
 
@@ -75,9 +74,7 @@ export class RecipeRepository implements IRecipeRepository {
       return recipes.map((recipe) => recipe.recipes);
     } catch (err) {
       console.error("Failed to fetch recipes by ingredient ID:", err);
-      throw new Error(
-        `RecipeRepository.findAllByIngredientId: Failed to fetch recipes for ingredient ${id}: ${err}`
-      );
+      throw new DatabaseError("RecipeRepository.findAllByIngredientId", err);
     }
   }
 
@@ -94,9 +91,7 @@ export class RecipeRepository implements IRecipeRepository {
       return recipes;
     } catch (err) {
       console.error("Failed to fetch recipes:", err);
-      throw new Error(
-        `RecipeRepository.findAll: Failed to fetch recipes for user ${userId}: ${err}`
-      );
+      throw new DatabaseError("RecipeRepository.findAll", err);
     }
   }
 
@@ -112,9 +107,7 @@ export class RecipeRepository implements IRecipeRepository {
       return recipeReceipt.returnedId;
     } catch (err) {
       console.error("Failed to create recipe:", err);
-      throw new Error(
-        `RecipeRepository.create: Failed to create recipe '${recipe.title}': ${err}`
-      );
+      throw new DatabaseError("RecipeRepository.create", err);
     }
   }
 
@@ -138,9 +131,7 @@ export class RecipeRepository implements IRecipeRepository {
       return response;
     } catch (err) {
       console.error("Failed to update recipe:", err);
-      throw new Error(
-        `RecipeRepository.update: Failed to update recipe with ID ${id}: ${err}`
-      );
+      throw new DatabaseError("RecipeRepository.update", err);
     }
   }
 
@@ -157,9 +148,7 @@ export class RecipeRepository implements IRecipeRepository {
       return deleteReceipt;
     } catch (err) {
       console.error("Failed to delete recipe:", err);
-      throw new Error(
-        `RecipeRepository.delete: Failed to delete recipe with ID ${id}: ${err}`
-      );
+      throw new DatabaseError("RecipeRepository.delete", err);
     }
   }
 
@@ -179,9 +168,7 @@ export class RecipeRepository implements IRecipeRepository {
       return recipeAnalytics;
     } catch (err) {
       console.error("Failed to get recipe analytics:", err);
-      throw new Error(
-        `RecipeRepository.getRecipesAnalytics: Failed to get analytics for user ${userId}: ${err}`
-      );
+      throw new DatabaseError("RecipeRepository.getRecipesAnalytics", err);
     }
   }
 
@@ -243,9 +230,7 @@ export class RecipeIngredientsRepository
       return { id: ingredient.ingredientId };
     } catch (err) {
       console.error("Failed to create recipe-ingredient relationship:", err);
-      throw new Error(
-        `RecipeIngredientsRepository.create: Failed to create relationship for recipe ${recipeIngredient.recipeId}: ${err}`
-      );
+      throw new DatabaseError("RecipeIngredientsRepository.create", err);
     }
   }
 
@@ -272,9 +257,7 @@ export class RecipeIngredientsRepository
       };
     } catch (err) {
       console.error("Failed to delete ingredient from recipe:", err);
-      throw new Error(
-        `RecipeIngredientsRepository.delete: Failed to remove ingredient ${ingredientId} from recipe ${recipeId}: ${err}`
-      );
+      throw new DatabaseError("RecipeIngredientsRepository.delete", err);
     }
   }
 }

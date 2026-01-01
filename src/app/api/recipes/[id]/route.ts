@@ -31,7 +31,7 @@ export const PATCH = async (
     const request: RecipeUpdatePayload = await req.json();
     const { id } = await context.params;
 
-    const response = await service.update(
+    await service.update(
       id,
       request.recipe,
       request.removedIngredients,

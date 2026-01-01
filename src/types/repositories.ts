@@ -61,7 +61,7 @@ export interface IIngredientRepository {
   findByName(
     ingredientsName: string,
     userId: string
-  ): Promise<string | undefined>;
+  ): Promise<{ name: string; id: string } | undefined>;
   findAll(userId: string): Promise<IngredientToDisplay[] | undefined>;
   create(
     ingredient: DBIngredient,

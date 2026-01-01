@@ -7,22 +7,19 @@
  */
 import { AuthService } from "@/app/services/authservice";
 import { NextRequest } from "next/server";
-import { sendError, sendSuccess } from "../../utils/responses";
+import { sendSuccess } from "../../utils/responses";
+import { errorHandler } from "@/app/utils/errorHandler";
 
 export const POST = async (req: NextRequest) => {
-    const service = new AuthService();
+  const service = new AuthService();
 
-    const credentials = await req.json();
+  const credentials = await req.json();
 
-    try {
-        const res = await service.create(credentials);
+  try {
+    const res = await service.create(credentials);
 
-        if (!res) {
-            return sendError("Invalid Data");
-        }
-        
-        return sendSuccess("Account created successfully!", res);
-    } catch (err) {
-        return sendError(`${err}`);
-    }
+    return sendSuccess("Account created successfully!", res);
+  } catch (err) {
+    return errorHandler(err);
+  }
 };

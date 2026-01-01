@@ -6,7 +6,7 @@ import { useHomeContext } from '../../context/homeContext/homeContext';
 import { createMessage } from '@/app/services/services';
 
 const ChatInput = () => {
-  const { state, dispatch } = useHomeContext();
+  const { dispatch } = useHomeContext();
   const [text, setText] = useState<string>('');
 
   const handleSend = (e: React.FormEvent): void => {

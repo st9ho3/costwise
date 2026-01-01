@@ -285,7 +285,7 @@ export class RecipeService implements IRecipeService {
       profitMargin: margin,
     };
 
-    this.recipeRepository.update(recipe.id, updatedRecipe, tx);
+    await this.recipeRepository.update(recipe.id, updatedRecipe, tx);
   }
 
   async getRecipesAnalytics(

@@ -31,7 +31,7 @@ const EditPage = async ({ params }: Params) => {
     }
 
     const recipeService = new RecipeService(session.user.id);
-    const ingredientService = new IngredientService();
+    const ingredientService = new IngredientService(session?.user?.id);
 
     const { id } = await params;
 

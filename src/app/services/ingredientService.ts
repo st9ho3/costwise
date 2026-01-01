@@ -24,25 +24,25 @@ import { RecipeService } from "./recipeService";
 import { db } from "@/db/db";
 import { Database } from "@/db/schema";
 import { IngredientAnalytics } from "@/types/repositories";
+import { ConflictError } from "../utils/errors";
 
 export class IngredientService implements IIngredientService {
   private ingredientRepository: IngredientRepository;
   private recipeRepository: RecipeRepository;
   private recipeService: RecipeService;
 
-  constructor() {
+  private currentUserId: string;
+
+  constructor(userId: string) {
     this.ingredientRepository = new IngredientRepository();
     this.recipeRepository = new RecipeRepository();
-    this.recipeService = new RecipeService();
+    this.recipeService = new RecipeService(userId);
+    this.currentUserId = userId;
   }
 
   async findAll(userId: string): Promise<IngredientToDisplay[] | undefined> {
-    try {
-      const ingredients = await this.ingredientRepository.findAll(userId);
-      return ingredients;
-    } catch (err) {
-      throw new Error(`${err}`);
-    }
+    const ingredients = await this.ingredientRepository.findAll(userId);
+    return ingredients;
   }
 
   async findById(id: string): Promise<IngredientToDisplay | undefined> {
@@ -60,16 +60,16 @@ export class IngredientService implements IIngredientService {
     );
     const validatedIngredient =
       zodValidateIngredientBeforeAddItToDatabase(ingredient);
-    const DBIngredient = validatedIngredient
-      ? transformIngredientToDB(validatedIngredient)
-      : undefined;
+    const DBIngredient = transformIngredientToDB(validatedIngredient);
 
     if (!ingredientExists && DBIngredient) {
-      const ingredientId = this.ingredientRepository.create(DBIngredient);
+      const ingredientId = await this.ingredientRepository.create(DBIngredient);
 
       return ingredientId;
     } else {
-      throw Error("Ingredient already exists or is not validated");
+      if (ingredientExists) {
+        throw new ConflictError("Ingredient", "name");
+      }
     }
   }
 
@@ -78,37 +78,34 @@ export class IngredientService implements IIngredientService {
   ): Promise<{ ingredientId: string } | undefined> {
     const validatedIngredient =
       zodValidateIngredientBeforeAddItToDatabase(ingredient);
-    const DBIngredient = validatedIngredient
-      ? transformIngredientToDB(validatedIngredient)
-      : undefined;
+    const DBIngredient = transformIngredientToDB(validatedIngredient);
 
-    try {
-      const transactionResponse = await db.transaction(async (tx: Database) => {
-        const ingredientId = DBIngredient
-          ? await this.ingredientRepository.update(DBIngredient, tx)
-          : undefined;
+    const transactionResponse = await db.transaction(async (tx: Database) => {
+      const ingredientId = await this.ingredientRepository.update(
+        DBIngredient,
+        tx
+      );
 
-        const recipes = ingredientId
-          ? await this.recipeRepository.findAllByIngredientId(
-              ingredientId?.ingredientId
-            )
-          : [];
+      const recipes = ingredientId
+        ? await this.recipeRepository.findAllByIngredientId(
+            ingredientId?.ingredientId
+          )
+        : [];
 
-        if (recipes) {
-          for (const dbRecipe of recipes) {
-            if (DBIngredient) {
-              await this.recipeService.updateRecipeAfterIngredientsChange(
-                dbRecipe,
-                DBIngredient,
-                tx
-              );
-            }
+      if (recipes) {
+        for (const dbRecipe of recipes) {
+          if (DBIngredient) {
+            await this.recipeService.updateRecipeAfterIngredientsChange(
+              dbRecipe,
+              DBIngredient,
+              tx
+            );
           }
         }
-        return ingredientId;
-      });
-      return transactionResponse;
-    } catch (err) {}
+      }
+      return ingredientId;
+    });
+    return transactionResponse;
   }
 
   async delete(id: string): Promise<void> {
@@ -118,13 +115,9 @@ export class IngredientService implements IIngredientService {
   async getIngredientAnalytics(
     userId: string
   ): Promise<IngredientAnalytics | undefined> {
-    try {
-      const ingredientAnalytics =
-        this.ingredientRepository.getIngredientAnalytics(userId);
+    const ingredientAnalytics =
+      await this.ingredientRepository.getIngredientAnalytics(userId);
 
-      return ingredientAnalytics;
-    } catch (err) {
-      throw new Error(`Ingredient Service: An error on our side ${err}`);
-    }
+    return ingredientAnalytics;
   }
 }

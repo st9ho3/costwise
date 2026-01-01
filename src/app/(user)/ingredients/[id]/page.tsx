@@ -17,15 +17,14 @@ import ActionsContainer from '@/app/components/shared/actionsContainer'
 
 const page = async ({params}: {params: Promise<{id: string}>}) => {
   const {id} = await params
-  const service = new IngredientService()
-  const ingredient = await service.findById(id)
-
-  
   const session = await auth()
     
-    if (!session?.user) {
+    if (!session?.user?.id) {
       redirect("/signin")
     }
+
+  const service = new IngredientService(session.user.id)
+  const ingredient = await service.findById(id)
   
   return (
     <div className='flex p-5'>

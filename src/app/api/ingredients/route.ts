@@ -6,28 +6,27 @@
  * If the request data is invalid or an error occurs during the process, it returns an appropriate error response.
  */
 import { NextRequest } from "next/server";
-import { sendError, sendSuccess } from "../utils/responses";
+import { sendSuccess } from "../utils/responses";
 import { IngredientService } from "@/app/services/ingredientService";
 import { Ingredient } from "@/shemas/recipe";
 import { auth } from "@/auth";
+import { errorHandler } from "@/app/utils/errorHandler";
+import { AuthenticationError } from "@/app/utils/errors";
 
 export const POST = async (req: NextRequest) => {
   const session = await auth();
 
-  const ingredient: Ingredient = await req.json();
-
-  const service = new IngredientService();
   try {
-    if (!session?.user) {
-      throw new Error("Can't take an action if not validated");
+    if (!session?.user?.id) {
+      throw new AuthenticationError();
     }
+    const ingredient: Ingredient = await req.json();
+    const service = new IngredientService(session.user.id);
+
     const response = await service.create(ingredient);
 
-    if (!response) {
-      return sendError("Something wrong with the request", 404);
-    }
     return sendSuccess("Ingredient successfully created", response, 201);
   } catch (err) {
-    return sendError(`${err}`, 500);
+    return errorHandler(err);
   }
 };
