@@ -21,7 +21,7 @@ const page = async() => {
   }
 
   const recipeService = new RecipeService(session.user.id)
-  const ingredientService = new IngredientService()
+  const ingredientService = new IngredientService(session.user.id)
 
   const recipeAnalytics = session.user.id && await recipeService.getRecipesAnalytics(session.user.id) 
   const ingredientAnalytics = session.user.id && await ingredientService.getIngredientAnalytics(session.user.id) 

@@ -2,6 +2,7 @@ import { Database, supplierFinancialData } from "@/db/schema";
 import { ISupplierFinancialDataRepository } from "@/types/repositories";
 import { DBSupplierFinancialData } from "@/types/specialTypes";
 import { eq } from "drizzle-orm";
+import { DatabaseError } from "../utils/errors";
 
 export class SupplierFinDataRepository
   implements ISupplierFinancialDataRepository
@@ -24,7 +25,7 @@ export class SupplierFinDataRepository
           : undefined;
       }
     } catch (err) {
-      throw new Error(`FinData Repository: ${err}`);
+      throw new DatabaseError("FinData Repository", err);
     }
   }
   async update(

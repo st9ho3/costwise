@@ -82,10 +82,6 @@ export const sendRecipeToUpdate = async (
     body: JSON.stringify(dataToSend),
   });
 
-  if (!res.ok) {
-    const response = await res.json();
-  }
-
   const response = await res.json();
 
   return response;

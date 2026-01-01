@@ -2,6 +2,7 @@ import { Database, supplierCategories } from "@/db/schema";
 import { IngredientCategory } from "@/shemas/recipe";
 import { ISuppliersCategoryRepository } from "@/types/repositories";
 import { and, eq } from "drizzle-orm";
+import { DatabaseError } from "../utils/errors";
 
 export class SuppliersCategoryRepository
   implements ISuppliersCategoryRepository
@@ -16,7 +17,7 @@ export class SuppliersCategoryRepository
         .insert(supplierCategories)
         .values({ categoryId: category, suplierId: suppliersId });
     } catch (err) {
-      throw new Error(`SupplierCategoryRepository: ${err}`);
+      throw new DatabaseError("SupplierCategoryRepository", err);
     }
   }
 
@@ -35,7 +36,7 @@ export class SuppliersCategoryRepository
           )
         );
     } catch (err) {
-      throw new Error(`SuppliersCategoryRepository.delete: ${err}`);
+      throw new DatabaseError("SuppliersCategoryRepository.delete", err);
     }
   }
 }

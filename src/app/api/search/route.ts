@@ -1,36 +1,36 @@
 import { SearchService } from "@/app/services/searchService";
 import { auth } from "@/auth";
 import { NextRequest } from "next/server";
-import { sendError, sendSuccess } from "../utils/responses";
+import { sendSuccess } from "../utils/responses";
+import { AuthenticationError, ValidationError } from "../../utils/errors";
+import { errorHandler } from "../../utils/errorHandler";
 
+export const GET = async (req: NextRequest) => {
+  const session = await auth();
 
-export const GET = async(req: NextRequest) => {
-    const session = await auth()
+  const request = req.nextUrl;
+  const searchTerm = request.searchParams.get("q");
 
-    const request = req.nextUrl
-    const searchTerm = request.searchParams.get('q')
+  try {
+    if (!session?.user?.id) {
+      throw new AuthenticationError();
+    }
 
-    try {
-        
-        if(!session?.user?.id) {
-        throw new Error("Can't take an action if not validated")
-        }
-        
-        if (!searchTerm) {
-           return sendSuccess('Need a value', undefined)
-        }
+    if (!searchTerm) {
+      throw new ValidationError([
+        { field: "search", message: "Please enter a value" },
+      ]);
+    }
 
-        const service = new SearchService(searchTerm, session.user.id)
+    const service = new SearchService(searchTerm, session.user.id);
 
-        const ingredients = await service.findIngredient()
-        const recipes = await service.findRecipe()
-        
-        const searcResults = {ingredients: ingredients, recipes: recipes}
+    const ingredients = await service.findIngredient();
+    const recipes = await service.findRecipe();
 
-        return sendSuccess('Your data: ', searcResults)
+    const searcResults = { ingredients: ingredients, recipes: recipes };
 
-    } catch(error) {
-
-        return sendError(String(error))
-    }    
-}
+    return sendSuccess("Your data: ", searcResults);
+  } catch (error) {
+    return errorHandler(error);
+  }
+};

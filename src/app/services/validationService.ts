@@ -8,11 +8,13 @@ export const zodValidateIngredientBeforeAddItToDatabase = (
 ) => {
   const ingredient = request;
 
-  if (ingredient) {
-    const validatedIngredient = IngredientSchema.parse(ingredient);
+  const validatedIngredient = IngredientSchema.safeParse(ingredient);
 
-    return validatedIngredient;
+  if (!validatedIngredient.success) {
+    throw new ValidationError(validatedIngredient.error);
   }
+
+  return validatedIngredient.data;
 };
 
 export const validateComplexEntity = <T extends object, TArrayItem>(

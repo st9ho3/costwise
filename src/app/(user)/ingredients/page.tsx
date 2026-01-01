@@ -12,11 +12,11 @@ export const dynamic = 'force-dynamic';
 const ingredientsPage = async () => {
   const session = await auth();
   
-  if (!session?.user) {
+  if (!session?.user?.id) {
     redirect('/signin');
   }
   
-  const service = new IngredientService();
+  const service = new IngredientService(session?.user?.id);
   const rawIngredients = session.user.id && await service.findAll(session.user.id);
   const ingredients = rawIngredients ? rawIngredients.map((ingredient) => {
     return ingredient;

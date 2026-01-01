@@ -20,11 +20,11 @@ export interface Params {
 const IngredientEditPage = async ({params}: Params ) => {
 
 const session = await auth()
-if (!session?.user) {
+if (!session?.user?.id) {
 redirect("/signin")
 }
 
-const service = new IngredientService()
+const service = new IngredientService(session?.user?.id)
 const {id} = await params
 
 const ingredient = await service.findById(id)

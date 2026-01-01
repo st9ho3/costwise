@@ -23,6 +23,7 @@ import { db } from "@/db/db";
 import { categories, Database, ingredientsTable } from "@/db/schema";
 import { transformIngredientFromDB } from "../utils/transformers";
 import { and, countDistinct, eq, sql } from "drizzle-orm";
+import { DatabaseError } from "../utils/errors";
 
 export class IngredientRepository implements IIngredientRepository {
   async findAll(userId: string): Promise<IngredientToDisplay[] | undefined> {
@@ -42,9 +43,7 @@ export class IngredientRepository implements IIngredientRepository {
       return ingredients;
     } catch (err) {
       console.error("Failed to fetch ingredients:", err);
-      throw new Error(
-        `IngredientRepository.findAll: Failed to fetch ingredients for user ${userId}: ${err}`
-      );
+      throw new DatabaseError("IngredientRepository.findAll", err);
     }
   }
 
@@ -66,9 +65,7 @@ export class IngredientRepository implements IIngredientRepository {
       return ingredient;
     } catch (err) {
       console.error("Failed to fetch ingredient by ID:", err);
-      throw new Error(
-        `IngredientRepository.findById: Failed to fetch ingredient with ID ${id}: ${err}`
-      );
+      throw new DatabaseError("IngredientRepository.findById", err);
     }
   }
 
@@ -86,9 +83,7 @@ export class IngredientRepository implements IIngredientRepository {
       return ingredientID;
     } catch (err) {
       console.error("Failed to create ingredient:", err);
-      throw new Error(
-        `IngredientRepository.create: Failed to create ingredient: ${err}`
-      );
+      throw new DatabaseError("IngredientRepository.create", err);
     }
   }
 
@@ -110,9 +105,7 @@ export class IngredientRepository implements IIngredientRepository {
       return ingredientId;
     } catch (err) {
       console.error("Failed to update ingredient:", err);
-      throw new Error(
-        `IngredientRepository.update: Failed to update ingredient with ID ${ingredient.id}: ${err}`
-      );
+      throw new DatabaseError("IngredientRepository.update", err);
     }
   }
 
@@ -128,9 +121,7 @@ export class IngredientRepository implements IIngredientRepository {
       return ingredientId;
     } catch (err) {
       console.error("Failed to delete ingredient:", err);
-      throw new Error(
-        `IngredientRepository.delete: Failed to delete ingredient with ID ${id}: ${err}`
-      );
+      throw new DatabaseError("IngredientRepository.delete", err);
     }
   }
 
@@ -151,9 +142,7 @@ export class IngredientRepository implements IIngredientRepository {
         .where(eq(ingredientsTable.id, id));
     } catch (err) {
       console.error("Failed to update ingredient usage:", err);
-      throw new Error(
-        `IngredientRepository.updateUsage: Failed to update usage for ingredient ${id}: ${err}`
-      );
+      throw new DatabaseError("IngredientRepository.updateUsage", err);
     }
   }
 
@@ -171,8 +160,9 @@ export class IngredientRepository implements IIngredientRepository {
       return ingredientAnalytics;
     } catch (err) {
       console.error("Failed to get ingredient analytics:", err);
-      throw new Error(
-        `IngredientRepository.getIngredientAnalytics: Failed to get analytics for user ${userId}: ${err}`
+      throw new DatabaseError(
+        "IngredientRepository.getIngredientAnalytics",
+        err
       );
     }
   }
