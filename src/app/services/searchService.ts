@@ -19,28 +19,20 @@ export class SearchService implements ISearchService {
   }
 
   async findRecipe(): Promise<Recipe[] | undefined> {
-    try {
-      const dbRecipes = await this.repository.findRecipe();
-      const recipes = dbRecipes?.map((dbrecipe) =>
-        transformRecipeFromDB(dbrecipe)
-      );
+    const dbRecipes = await this.repository.findRecipe();
+    const recipes = dbRecipes?.map((dbrecipe) =>
+      transformRecipeFromDB(dbrecipe)
+    );
 
-      return recipes;
-    } catch (error) {
-      console.error("SearchService.findRecipes: ", error);
-    }
+    return recipes;
   }
 
   async findIngredient(): Promise<Ingredient[] | undefined> {
-    try {
-      const dbIngredients = await this.repository.findIngredient();
-      const ingredients = dbIngredients?.map((dbIngredient) =>
-        transformIngredientFromDB(dbIngredient)
-      );
+    const dbIngredients = await this.repository.findIngredient();
+    const ingredients = dbIngredients?.map((dbIngredient) =>
+      transformIngredientFromDB(dbIngredient)
+    );
 
-      return ingredients;
-    } catch (error) {
-      console.error("SearchService.findIngredients: ", error);
-    }
+    return ingredients;
   }
 }
