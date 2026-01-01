@@ -56,10 +56,6 @@ export const sendRecipe = async (
     body: JSON.stringify(dataToSend),
   });
 
-  if (!res.ok) {
-    return await res.json();
-  }
-
   const response = await res.json();
   return response;
 };
@@ -95,13 +91,8 @@ export const deleteRecipesFromServer = async (recipeId: string | null) => {
     },
   });
 
-  if (!response.ok) {
-    const error = await response.json();
-    return error;
-  } else {
-    const res = await response.json();
-    return res;
-  }
+  const res = await response.json();
+  return res;
 };
 
 export const sendIngredient = async (ingredient: Ingredient) => {
@@ -126,13 +117,8 @@ export const updateIngredient = async (ingredient: Ingredient) => {
     body: JSON.stringify(ingredient),
   });
 
-  if (!res.ok) {
-    const response = await res.json();
-    return response;
-  } else {
-    const response = await res.json();
-    return response;
-  }
+  const response = await res.json();
+  return response;
 };
 
 export const deleteIngredient = async (id: string | null) => {
@@ -143,14 +129,9 @@ export const deleteIngredient = async (id: string | null) => {
     },
   });
 
-  if (!response.ok) {
-    const error = await response.json();
-    return error;
-  } else {
-    const res = await response.json();
+  const res = await response.json();
 
-    return res;
-  }
+  return res;
 };
 
 export const createSupplier = async (
@@ -171,9 +152,6 @@ export const createSupplier = async (
     },
     body: JSON.stringify(dataToSend),
   });
-  if (!res.ok) {
-    return await res.json();
-  }
 
   const response = await res.json();
   return response;
@@ -197,9 +175,6 @@ export const updateSupplier = async (
     },
     body: JSON.stringify(dataToSend),
   });
-  if (!res.ok) {
-    return await res.json();
-  }
 
   const response = await res.json();
   return response;
@@ -213,9 +188,6 @@ export const search = async (searchTerm: string) => {
     },
   });
 
-  if (!res) {
-    throw new Error("Something happened on searching...");
-  }
   const response = await res.json();
   return response;
 };
