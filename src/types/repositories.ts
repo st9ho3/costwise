@@ -24,6 +24,10 @@ export interface IngredientAnalytics {
   totalIngredients: number;
 }
 
+export interface OperationResult {
+  id: string;
+}
+
 export interface IRecipeRepository {
   findById(id: string): Promise<RecipeWithQuery | undefined>;
   findAllByIngredientId(id: string): Promise<DBRecipe[] | undefined>;
@@ -33,8 +37,8 @@ export interface IRecipeRepository {
     id: string,
     recipe: Recipe,
     tx?: Database
-  ): Promise<{ id: string } | undefined>;
-  delete(id: string, tx: Database): Promise<{ id: string } | undefined>;
+  ): Promise<OperationResult | undefined>;
+  delete(id: string, tx: Database): Promise<OperationResult | undefined>;
 
   getRecipesAnalytics(userId: string): Promise<RecipeAnalytics | undefined>;
   findByName(
@@ -48,12 +52,12 @@ export interface IRecipeIngredientsRepository {
     recipeIngredient: RecipeIngredients,
     userId: string,
     tx: Database
-  ): Promise<{ id: string | null }>;
+  ): Promise<OperationResult | null>;
   delete(
     recipeId: string,
     ingredientId: string,
     tx?: Database
-  ): Promise<{ ingredientId: string | null } | undefined>;
+  ): Promise<OperationResult | null>;
 }
 
 export interface IIngredientRepository {
@@ -66,12 +70,12 @@ export interface IIngredientRepository {
   create(
     ingredient: DBIngredient,
     tx: Database
-  ): Promise<{ ingredientId: string } | undefined>;
+  ): Promise<OperationResult | undefined>;
   update(
     ingredient: DBIngredient,
     tx?: Database
-  ): Promise<{ ingredientId: string } | undefined>;
-  delete(id: string): Promise<{ ingredientId: string } | undefined>;
+  ): Promise<OperationResult | undefined>;
+  delete(id: string): Promise<OperationResult | undefined>;
 
   updateUsage(id: string, tx: Database, action: "+" | "-"): Promise<undefined>;
   getIngredientAnalytics(
@@ -89,13 +93,16 @@ export interface ISupplierRepository {
   create(
     supplier: DestructuredSupplier,
     tx: Database
-  ): Promise<{ id: string } | undefined>;
+  ): Promise<OperationResult | undefined>;
   update(
     supplierId: string,
     supplier: DestructuredSupplier,
     tx: Database
-  ): Promise<{ id: string | undefined } | undefined>;
-  delete(supplierId: string, db: Database): Promise<{ id: string } | undefined>;
+  ): Promise<OperationResult | undefined>;
+  delete(
+    supplierId: string,
+    db: Database
+  ): Promise<OperationResult | undefined>;
 }
 
 export interface IAddressesRepository {
@@ -103,24 +110,24 @@ export interface IAddressesRepository {
     address: DBSupplierAddress,
     tx: Database,
     suppliersId: string
-  ): Promise<{ addressId: string } | undefined>;
+  ): Promise<OperationResult | undefined>;
   update(
     supplierId: string,
     address: DBSupplierAddress,
     tx: Database
-  ): Promise<{ addressId: string } | undefined>;
+  ): Promise<OperationResult | undefined>;
 }
 export interface ISupplierFinancialDataRepository {
   create(
     finData: DBSupplierFinancialData,
     tx: Database,
     suppliersId: string
-  ): Promise<{ confirmation: string } | undefined>;
+  ): Promise<OperationResult | undefined>;
   update(
     supplierId: string,
     finData: DBSupplierFinancialData,
     tx: Database
-  ): Promise<{ confirmation: string } | undefined>;
+  ): Promise<OperationResult | undefined>;
 }
 
 export interface ISuppliersCategoryRepository {

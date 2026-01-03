@@ -23,7 +23,7 @@ import { transformIngredientToDB } from "../utils/transformers";
 import { RecipeService } from "./recipeService";
 import { db } from "@/db/db";
 import { Database } from "@/db/schema";
-import { IngredientAnalytics } from "@/types/repositories";
+import { IngredientAnalytics, OperationResult } from "@/types/repositories";
 import { ConflictError } from "../utils/errors";
 
 export class IngredientService implements IIngredientService {
@@ -51,9 +51,7 @@ export class IngredientService implements IIngredientService {
     return ingredient;
   }
 
-  async create(
-    ingredient: Ingredient
-  ): Promise<{ ingredientId: string } | undefined> {
+  async create(ingredient: Ingredient): Promise<OperationResult | undefined> {
     const ingredientExists = await checkIfIngredientExists(
       ingredient.name,
       ingredient.userId
@@ -63,9 +61,9 @@ export class IngredientService implements IIngredientService {
     const DBIngredient = transformIngredientToDB(validatedIngredient);
 
     if (!ingredientExists && DBIngredient) {
-      const ingredientId = await this.ingredientRepository.create(DBIngredient);
+      const result = await this.ingredientRepository.create(DBIngredient);
 
-      return ingredientId;
+      return result;
     } else {
       if (ingredientExists) {
         throw new ConflictError("Ingredient", "name");
@@ -73,23 +71,16 @@ export class IngredientService implements IIngredientService {
     }
   }
 
-  async update(
-    ingredient: Ingredient
-  ): Promise<{ ingredientId: string } | undefined> {
+  async update(ingredient: Ingredient): Promise<OperationResult | undefined> {
     const validatedIngredient =
       zodValidateIngredientBeforeAddItToDatabase(ingredient);
     const DBIngredient = transformIngredientToDB(validatedIngredient);
 
     const transactionResponse = await db.transaction(async (tx: Database) => {
-      const ingredientId = await this.ingredientRepository.update(
-        DBIngredient,
-        tx
-      );
+      const result = await this.ingredientRepository.update(DBIngredient, tx);
 
-      const recipes = ingredientId
-        ? await this.recipeRepository.findAllByIngredientId(
-            ingredientId?.ingredientId
-          )
+      const recipes = result
+        ? await this.recipeRepository.findAllByIngredientId(result?.id)
         : [];
 
       if (recipes) {
@@ -103,7 +94,7 @@ export class IngredientService implements IIngredientService {
           }
         }
       }
-      return ingredientId;
+      return result;
     });
     return transactionResponse;
   }

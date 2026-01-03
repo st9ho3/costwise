@@ -1,49 +1,75 @@
-import { Recipe, Ingredient, RecipeIngredients, DBRecipe, DBIngredient, IngredientToDisplay, Supplier } from '@/shemas/recipe';
-import { RecipeWithQuery } from './specialTypes';
-import { Database } from '@/db/schema';
-import { RecipeAnalytics, IngredientAnalytics } from './repositories';
-import { SupplierUpdatePayload } from './context';
+import {
+  Recipe,
+  Ingredient,
+  RecipeIngredients,
+  DBRecipe,
+  DBIngredient,
+  IngredientToDisplay,
+  Supplier,
+} from "@/shemas/recipe";
+import { RecipeWithQuery } from "./specialTypes";
+import { Database } from "@/db/schema";
+import {
+  RecipeAnalytics,
+  IngredientAnalytics,
+  OperationResult,
+} from "./repositories";
+import { SupplierUpdatePayload } from "./context";
 
 export interface CreateResponse {
-    recipe: string | undefined;
-    }
+  recipe: string | undefined;
+}
 
 export interface CreateRequest {
-    recipe: Recipe,
-    addedIngredients: RecipeIngredients[],
-    removedIngredients: RecipeIngredients[]
+  recipe: Recipe;
+  addedIngredients: RecipeIngredients[];
+  removedIngredients: RecipeIngredients[];
 }
 
 export interface IRecipeService {
-    findAll(userId: string): Promise<Recipe[] | undefined>
-    findById(id: string): Promise< RecipeWithQuery | undefined>
-    create(request: CreateRequest): Promise<CreateResponse | undefined>
-    update(id: string, recipe: Recipe, removedIngredients: RecipeIngredients[] | undefined, addedIngredients: RecipeIngredients[] | undefined): Promise<{id: string} | undefined>
-    delete(id: string): Promise<{id: string} | undefined>
+  findAll(userId: string): Promise<Recipe[] | undefined>;
+  findById(id: string): Promise<RecipeWithQuery | undefined>;
+  create(request: CreateRequest): Promise<CreateResponse | undefined>;
+  update(
+    id: string,
+    recipe: Recipe,
+    removedIngredients: RecipeIngredients[] | undefined,
+    addedIngredients: RecipeIngredients[] | undefined
+  ): Promise<OperationResult | undefined>;
+  delete(id: string): Promise<OperationResult | undefined>;
 
-    updateRecipeAfterIngredientsChange(recipe: DBRecipe, dbIngredient: DBIngredient, tx?: Database): Promise<void>
-    getRecipesAnalytics(userId: string): Promise<RecipeAnalytics | undefined>;
+  updateRecipeAfterIngredientsChange(
+    recipe: DBRecipe,
+    dbIngredient: DBIngredient,
+    tx?: Database
+  ): Promise<void>;
+  getRecipesAnalytics(userId: string): Promise<RecipeAnalytics | undefined>;
 }
 
 export interface IIngredientService {
-    findAll(userId: string): Promise<IngredientToDisplay[] | undefined>
-    findById(id: string): Promise<IngredientToDisplay | undefined>
-    create(ingredient: Ingredient): Promise<{ingredientId: string} | undefined>
-    update(ingredient: Ingredient): Promise<{ingredientId: string} | undefined>
-    delete(id: string): Promise<void>
+  findAll(userId: string): Promise<IngredientToDisplay[] | undefined>;
+  findById(id: string): Promise<IngredientToDisplay | undefined>;
+  create(ingredient: Ingredient): Promise<OperationResult | undefined>;
+  update(ingredient: Ingredient): Promise<OperationResult | undefined>;
+  delete(id: string): Promise<void>;
 
-    getIngredientAnalytics(userId: string): Promise<IngredientAnalytics | undefined>;
+  getIngredientAnalytics(
+    userId: string
+  ): Promise<IngredientAnalytics | undefined>;
 }
 
 export interface ISearchService {
-  findRecipe(searchTerm: string, userId: string) : Promise<Recipe[] | undefined>;
-  findIngredient(searchTerm: string, userId: string) : Promise<Ingredient[] | undefined>;
+  findRecipe(searchTerm: string, userId: string): Promise<Recipe[] | undefined>;
+  findIngredient(
+    searchTerm: string,
+    userId: string
+  ): Promise<Ingredient[] | undefined>;
 }
 
 export interface ISupplierService {
-    findAll(supplierId: string): Promise<Supplier[] | undefined>
-    findById(supplierId: string): Promise<Supplier | undefined>
-    create(supplier: SupplierUpdatePayload): Promise<{id: string} | undefined>
-    update(supplier: SupplierUpdatePayload): Promise<{id: string} | undefined>
-    delete(supplierId: string): Promise<{id: string} | undefined>
+  findAll(supplierId: string): Promise<Supplier[] | undefined>;
+  findById(supplierId: string): Promise<Supplier | undefined>;
+  create(supplier: SupplierUpdatePayload): Promise<OperationResult | undefined>;
+  update(supplier: SupplierUpdatePayload): Promise<OperationResult | undefined>;
+  delete(supplierId: string): Promise<OperationResult | undefined>;
 }

@@ -18,6 +18,7 @@ import { DBIngredient, IngredientToDisplay } from "@/shemas/recipe";
 import {
   IIngredientRepository,
   IngredientAnalytics,
+  OperationResult,
 } from "@/types/repositories";
 import { db } from "@/db/db";
 import { categories, Database, ingredientsTable } from "@/db/schema";
@@ -69,18 +70,16 @@ export class IngredientRepository implements IIngredientRepository {
     }
   }
 
-  async create(
-    ingredient: DBIngredient
-  ): Promise<{ ingredientId: string } | undefined> {
+  async create(ingredient: DBIngredient): Promise<OperationResult | undefined> {
     try {
-      const [ingredientID] = await db
+      const [result] = await db
         .insert(ingredientsTable)
         .values(ingredient)
         .returning({
-          ingredientId: ingredientsTable.id,
+          id: ingredientsTable.id,
         });
 
-      return ingredientID;
+      return result;
     } catch (err) {
       console.error("Failed to create ingredient:", err);
       throw new DatabaseError("IngredientRepository.create", err);
@@ -90,35 +89,35 @@ export class IngredientRepository implements IIngredientRepository {
   async update(
     ingredient: DBIngredient,
     tx?: Database
-  ): Promise<{ ingredientId: string } | undefined> {
+  ): Promise<OperationResult | undefined> {
     const dbConnection = tx || db;
 
     try {
-      const [ingredientId] = await dbConnection
+      const [result] = await dbConnection
         .update(ingredientsTable)
         .set(ingredient)
         .where(eq(ingredientsTable.id, ingredient.id))
         .returning({
-          ingredientId: ingredientsTable.id,
+          id: ingredientsTable.id,
         });
 
-      return ingredientId;
+      return result;
     } catch (err) {
       console.error("Failed to update ingredient:", err);
       throw new DatabaseError("IngredientRepository.update", err);
     }
   }
 
-  async delete(id: string): Promise<{ ingredientId: string } | undefined> {
+  async delete(id: string): Promise<OperationResult | undefined> {
     try {
-      const [ingredientId] = await db
+      const [result] = await db
         .delete(ingredientsTable)
         .where(eq(ingredientsTable.id, id))
         .returning({
-          ingredientId: ingredientsTable.id,
+          id: ingredientsTable.id,
         });
 
-      return ingredientId;
+      return result;
     } catch (err) {
       console.error("Failed to delete ingredient:", err);
       throw new DatabaseError("IngredientRepository.delete", err);

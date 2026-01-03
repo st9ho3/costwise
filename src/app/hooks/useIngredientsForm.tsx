@@ -30,7 +30,7 @@ type UseIngredientFormProps = {
 
 export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFormProps) => {
 
-  const {register, handleSubmit, reset, formState: {isSubmitting}, watch, setValue} = useForm({
+  const {register, handleSubmit, reset, formState: {isSubmitting, errors}, watch, setValue} = useForm({
     resolver: zodResolver(IngredientSchema),
     defaultValues: mode === 'edit'
     ? {
@@ -53,13 +53,13 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
       usage: 'low',
       userId: userId,
       icon: '',
-      category: ''
+      category: 'ef45178d-e566-4637-b7f9-abcf6d575466'
     }
   })
   
   const router = useRouter();
   const { raiseNotification } = useHelpers({path: null});
-  const [errors, setErrors] = useState<string[]>([])
+  const [error, setErrors] = useState<string[]>([])
 
   const price = watch('unitPrice')
   const name = watch('name')
@@ -134,7 +134,7 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
     quantity,
     unit,
     name,
-    errors,
+    error,
     setErrors,
     register,
     onSubmit,
