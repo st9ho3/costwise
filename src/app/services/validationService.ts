@@ -9,7 +9,7 @@ export const zodValidateIngredientBeforeAddItToDatabase = (
   const ingredient = request;
 
   const validatedIngredient = IngredientSchema.safeParse(ingredient);
-
+  console.log(validatedIngredient);
   if (!validatedIngredient.success) {
     throw new ValidationError(validatedIngredient.error);
   }

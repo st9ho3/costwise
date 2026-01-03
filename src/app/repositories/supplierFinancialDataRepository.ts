@@ -1,5 +1,8 @@
 import { Database, supplierFinancialData } from "@/db/schema";
-import { ISupplierFinancialDataRepository } from "@/types/repositories";
+import {
+  ISupplierFinancialDataRepository,
+  OperationResult,
+} from "@/types/repositories";
 import { DBSupplierFinancialData } from "@/types/specialTypes";
 import { eq } from "drizzle-orm";
 import { DatabaseError } from "../utils/errors";
@@ -11,18 +14,16 @@ export class SupplierFinDataRepository
     finData: DBSupplierFinancialData,
     tx: Database,
     suppliersId: string
-  ): Promise<{ confirmation: string } | undefined> {
+  ): Promise<OperationResult | undefined> {
     try {
       if (finData) {
-        const [supplierId] = await tx
+        const [result] = await tx
           .insert(supplierFinancialData)
           .values({ ...finData, supplierId: suppliersId })
           .returning({
-            confirmation: supplierFinancialData.supplierId,
+            id: supplierFinancialData.supplierId,
           });
-        return supplierId
-          ? { confirmation: "Suppliers Data saved succesfully!" }
-          : undefined;
+        return result;
       }
     } catch (err) {
       throw new DatabaseError("FinData Repository", err);
@@ -32,14 +33,14 @@ export class SupplierFinDataRepository
     supplierId: string,
     finData: DBSupplierFinancialData,
     tx: Database
-  ): Promise<{ confirmation: string } | undefined> {
-    const [id] = await tx
+  ): Promise<OperationResult | undefined> {
+    const [result] = await tx
       .update(supplierFinancialData)
       .set({ ...finData, supplierId: supplierId })
       .where(eq(supplierFinancialData.supplierId, supplierId))
       .returning({
-        confirmation: supplierFinancialData.supplierId,
+        id: supplierFinancialData.supplierId,
       });
-    return id;
+    return result;
   }
 }

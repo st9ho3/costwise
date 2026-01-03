@@ -25,6 +25,7 @@ import { DBRecipe, Recipe, RecipeIngredients } from "@/shemas/recipe";
 import {
   IRecipeIngredientsRepository,
   IRecipeRepository,
+  OperationResult,
   RecipeAnalytics,
 } from "@/types/repositories";
 import { db } from "@/db/db";
@@ -200,7 +201,7 @@ export class RecipeIngredientsRepository
     recipeIngredient: RecipeIngredients,
     userId: string,
     tx: Database
-  ): Promise<{ id: string | null }> {
+  ): Promise<OperationResult | null> {
     try {
       const foundIngredient = await checkIfIngredientExists(
         recipeIngredient.name,
@@ -224,10 +225,10 @@ export class RecipeIngredientsRepository
           quantity: recipeIngredient.quantity.toString(),
         })
         .returning({
-          ingredientId: recipeIngredientsTable.ingredientId,
+          id: recipeIngredientsTable.ingredientId,
         });
 
-      return { id: ingredient.ingredientId };
+      return ingredient;
     } catch (err) {
       console.error("Failed to create recipe-ingredient relationship:", err);
       throw new DatabaseError("RecipeIngredientsRepository.create", err);
@@ -238,7 +239,7 @@ export class RecipeIngredientsRepository
     recipeId: string,
     ingredientId: string,
     tx?: Database
-  ): Promise<{ ingredientId: string | null } | undefined> {
+  ): Promise<OperationResult | null> {
     const dbConnection = tx || db;
 
     try {
@@ -250,11 +251,11 @@ export class RecipeIngredientsRepository
             eq(recipeIngredientsTable.ingredientId, ingredientId)
           )
         )
-        .returning();
+        .returning({
+          id: recipeIngredientsTable.ingredientId,
+        });
 
-      return {
-        ingredientId: removedIngredient.ingredientId,
-      };
+      return removedIngredient;
     } catch (err) {
       console.error("Failed to delete ingredient from recipe:", err);
       throw new DatabaseError("RecipeIngredientsRepository.delete", err);

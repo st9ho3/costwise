@@ -23,7 +23,7 @@ type AddIngredientProps = {
 
 const IngredientForm = ({ ingredient, mode, userId }: AddIngredientProps) => {
   const {
-     price, errors, register, quantity, unit, name,
+     price, error, register, quantity, unit, name,
      setErrors, handleKeyDown, handleSubmit, onSubmit, setValue, isSubmitting
   } = useIngredientForm({ ingredient, mode, userId });
 
@@ -102,7 +102,7 @@ const IngredientForm = ({ ingredient, mode, userId }: AddIngredientProps) => {
             </div>
 
             {/* Error Feedback */}
-            <FormErrors errors={errors} />
+            <FormErrors errors={error} />
 
             {/* Action Button: Right aligned */}
             <div className="flex justify-end pt-2">

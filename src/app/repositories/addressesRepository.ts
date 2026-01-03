@@ -1,5 +1,5 @@
 import { Database, supplierAddresses } from "@/db/schema";
-import { IAddressesRepository } from "@/types/repositories";
+import { IAddressesRepository, OperationResult } from "@/types/repositories";
 import { DBSupplierAddress } from "@/types/specialTypes";
 import { eq } from "drizzle-orm";
 import { DatabaseError } from "../utils/errors";
@@ -9,16 +9,16 @@ export class SupplierAddressRepository implements IAddressesRepository {
     address: DBSupplierAddress,
     tx: Database,
     suppliersId: string
-  ): Promise<{ addressId: string } | undefined> {
+  ): Promise<OperationResult | undefined> {
     const addressForDb = { ...address, suppliersId };
     try {
-      const [addressId] = await tx
+      const [result] = await tx
         .insert(supplierAddresses)
         .values(addressForDb)
         .returning({
-          addressId: supplierAddresses.id,
+          id: supplierAddresses.id,
         });
-      return addressId;
+      return result;
     } catch (err) {
       throw new DatabaseError("address repository", err);
     }
@@ -27,15 +27,15 @@ export class SupplierAddressRepository implements IAddressesRepository {
     supplierId: string,
     address: DBSupplierAddress,
     tx: Database
-  ): Promise<{ addressId: string } | undefined> {
+  ): Promise<OperationResult | undefined> {
     if (!address) {
-      return { addressId: "Address dont exist" };
+      return undefined;
     }
-    const [addressId] = await tx
+    const [result] = await tx
       .update(supplierAddresses)
       .set(address)
       .where(eq(supplierAddresses.suppliersId, supplierId))
-      .returning({ addressId: supplierAddresses.id });
-    return addressId;
+      .returning({ id: supplierAddresses.id });
+    return result;
   }
 }
