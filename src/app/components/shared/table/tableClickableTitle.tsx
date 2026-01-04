@@ -1,4 +1,5 @@
 import { getIconColor } from '@/app/utils/uiHelpers'
+import { IngredientCategory } from '@/shemas/recipe'
 import Image from 'next/image'
 import React from 'react'
 
@@ -6,7 +7,7 @@ interface TableClickableTitleProps {
     imgPath?: string
     title: string
     icon?: string | null
-    category?: string 
+    category?: IngredientCategory
 }
 
 const TableClickableTitle = ({imgPath, title, icon, category}: TableClickableTitleProps) => {

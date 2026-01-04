@@ -180,6 +180,19 @@ export const updateSupplier = async (
   return response;
 };
 
+export const deleteSupplier = async (id: string | null) => {
+  const response = await fetch(`/api/suppliers/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const res = await response.json();
+
+  return res;
+};
+
 export const search = async (searchTerm: string) => {
   const res = await fetch(`/api/search?q=${searchTerm}`, {
     method: "GET",

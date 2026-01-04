@@ -10,7 +10,7 @@ import { useNotificationStore } from '../stores/notificationStore';
 import { useUIStore } from "@/app/stores/uiStore";
 import { useGeneralStore } from "@/app/stores/generalStore";
 import { useCallback } from 'react';
-import { deleteIngredient, deleteRecipesFromServer } from "@/app/services/services";
+import { deleteIngredient, deleteRecipesFromServer, deleteSupplier } from "@/app/services/services";
 import { useRouter } from "next/navigation";
 
 
@@ -53,6 +53,16 @@ const useHelpers = ({path}: UseHelpersProps) => {
 
   const handleDelete = useCallback(async(id: string | null) => {
 
+    switch(path) {
+      case 'ingredients':
+        await deleteIngredient(id)
+
+      case 'recipes':
+        await deleteRecipesFromServer(id)
+      
+      case 'suppliers':
+        await deleteSupplier(id)
+    }
     const response = path === 'ingredients' ? await deleteIngredient(id) : await deleteRecipesFromServer(id)
     raiseNotification(response)
     router.replace(`/${path}` || '')

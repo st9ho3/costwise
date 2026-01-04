@@ -1,12 +1,12 @@
 "use client";
 import Button from '../shared/sharedButton';
-import { Ingredient, Recipe } from '@/shemas/recipe';
+import { Ingredient, Recipe, Supplier } from '@/shemas/recipe';
 import { useEffect, useMemo } from 'react';
 import { paginationPages } from '@/app/utils/pagination';
 import { usePaginationStore } from '@/app/stores/paginationStore';
 
 
-const Pagination = ({ items }: { items: Recipe[] | Ingredient[] }) => {
+const Pagination = ({ items }: { items: Recipe[] | Ingredient[] | Supplier[] }) => {
   
   const currentPage = usePaginationStore((state) => state.currentPage)
   const choosePage = usePaginationStore((state) => state.choosePage)
