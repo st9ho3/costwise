@@ -1,3 +1,4 @@
+import Pagination from '@/app/components/recipes/pagination';
 import SuppliersTable from '@/app/components/suppliers/suppliersTable';
 import { SupplierService } from '@/app/services/suppliersService';
 import { auth } from '@/auth';
@@ -18,9 +19,10 @@ const SuppliersPage = async() => {
         return supplier;
     }) : [];
   return (
-    <div>
-     <SuppliersTable items={suppliers} />
-    </div>
+    <div className="relative w-full h-full px px-2 md:px-5 bg-white">
+            <SuppliersTable items={suppliers} />
+            <Pagination items={suppliers} />
+        </div>
   )
 }
 

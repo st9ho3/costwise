@@ -2,13 +2,14 @@ import { LabelType } from '@/types/specialTypes';
 import React from 'react';
 import { typeStyles } from '@/app/constants/data';
 
-const Label = ({ text, type }: {text: string, type: LabelType}) => {
+const Label = ({ text, type }: {text: string | undefined | null, type: LabelType}) => {
+
 
  const refinedText = text === 'Oils, Vinegars, & Condiments' ? 'Oils, Vinegars, & C...'  : text
   return (
     <div className={`
       inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium
-      ${typeStyles[type]}
+      ${typeStyles[type && type]}
       }`}>
       <span>{refinedText}</span>
     </div>

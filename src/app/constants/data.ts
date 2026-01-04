@@ -158,6 +158,14 @@ export const typeStyles = {
   "Beverages (Other)": "bg-cyan-300/30 text-cyan-500",
   Bakery: "bg-rose-300/30 text-rose-500",
   Other: "bg-gray-300/30 text-gray-500",
+
+  //deliveryTime
+
+  "Same Day": "bg-green-300/30 text-green-500",
+  "1-2 Days": "bg-yellow-300/30 text-yellow-500",
+  "2-3 Days": "bg-indigo-300/30 text-indigo-500",
+  "Up to 5 days": "bg-rose-300/30 text-rose-500",
+  Weekly: "bg-red-300/30 text-red-500",
   "": "bg-gray-300/30 text-gray-500", // Fallback for empty string
 };
 
