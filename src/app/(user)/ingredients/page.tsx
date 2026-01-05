@@ -21,10 +21,7 @@ const ingredientsPage = async () => {
   const ingredients = rawIngredients ? rawIngredients.map((ingredient) => {
     return ingredient;
   }) : [];
-
-  const Sservice = new SupplierRepository()
-
-  await Sservice.delete('7b488c25-450d-4cda-9ad4-618165246ba1')
+  
   return (
     <div className="flex flex-col h-full w-full px-2 md:px-5 bg-white">
       <div className="flex-1 overflow-auto">

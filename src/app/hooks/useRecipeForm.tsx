@@ -76,7 +76,6 @@ const useRecipeForm = ({mode, recipe, recipeIngredients, userId}: RecipeFormProp
       setTempIngredients([]);
     }, 1000);
     router.replace("/recipes");
-    
   },[mode, setValue, reset, router, resetFile]); 
 
   const onSubmit = useCallback( async (data: FormFields) => {

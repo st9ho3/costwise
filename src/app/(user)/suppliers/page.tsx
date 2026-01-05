@@ -20,6 +20,7 @@ const SuppliersPage = async() => {
       const suppliers = result ? result.map((supplier) => {
         return supplier;
     }) : [];
+    console.log(suppliers)
   return (
     <div className="relative w-full h-full px px-2 md:px-5 bg-white">
             <SuppliersTable items={suppliers} />
