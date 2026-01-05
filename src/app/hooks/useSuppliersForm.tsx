@@ -40,8 +40,12 @@ const useSuppliersForm = ({userId, mode, supplier}: UseSuppliersFormProps) => {
     } 
     
     const resetForm = () => {
-      reset()
-      setTempCategories([])
+      setTimeout(() => {
+        reset()
+        setTempCategories([]) 
+      }, 1000)
+      router.replace('/suppliers')
+      router.refresh()
     }
 
     const onSubmit = async(data: FormFields) => {
@@ -54,7 +58,6 @@ const useSuppliersForm = ({userId, mode, supplier}: UseSuppliersFormProps) => {
          const response = await createSupplier(supplier, tempCategories, [])
          raiseNotification(response)
         resetForm()
-        window.location.href = '/suppliers'
         
       } else {
 
@@ -66,7 +69,7 @@ const useSuppliersForm = ({userId, mode, supplier}: UseSuppliersFormProps) => {
 
         await updateSupplier(supplier, added, removed)
         router.refresh()
-    
+        router.replace('/suppliers')
       }
      
     } 
