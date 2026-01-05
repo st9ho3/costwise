@@ -187,7 +187,6 @@ export const deleteSupplier = async (id: string | null) => {
       "Content-Type": "application/json",
     },
   });
-
   const res = await response.json();
 
   return res;

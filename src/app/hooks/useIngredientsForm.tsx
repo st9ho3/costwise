@@ -94,6 +94,7 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
         reset();
         if (router) {
           router.replace('/ingredients');
+          router.refresh();
         }
       }
     } else if (mode === 'edit' && ingredient) {
@@ -112,6 +113,7 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
         reset();
         if (router) {
           router.replace('/ingredients');
+          router.refresh();
         }
       }
     }
