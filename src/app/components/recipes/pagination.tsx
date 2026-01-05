@@ -14,9 +14,8 @@ const Pagination = ({ items }: { items: Recipe[] | Ingredient[] | Supplier[] }) 
   const handlePrev = usePaginationStore((state) => state.handlePrev)
   
   const pages = useMemo(() => paginationPages(items, 10), [items])
-
       useEffect(() => {
-        if (currentPage > pages.length) {
+        if (currentPage > pages.length && pages.length > 0) {
         choosePage(pages.length)
       }
       }, [pages, choosePage, currentPage])

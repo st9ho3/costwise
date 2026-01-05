@@ -1,4 +1,4 @@
-import { Ingredient, Recipe } from "@/shemas/recipe";
+import { Ingredient, Recipe, Supplier } from "@/shemas/recipe";
 
 export const paginate = <T>(
   itemsPerPage: number,
@@ -16,7 +16,7 @@ export const paginate = <T>(
 };
 
 export const paginationPages = (
-  items: Recipe[] | Ingredient[],
+  items: Recipe[] | Ingredient[] | Supplier[],
   itemsPerPage: number
 ) => {
   const pages = Math.ceil(items.length / itemsPerPage);

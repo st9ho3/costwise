@@ -43,9 +43,9 @@ const useSuppliersForm = ({userId, mode, supplier}: UseSuppliersFormProps) => {
       setTimeout(() => {
         reset()
         setTempCategories([]) 
+        router.replace("/suppliers")
       }, 1000)
-      router.replace('/suppliers')
-      router.refresh()
+      
     }
 
     const onSubmit = async(data: FormFields) => {

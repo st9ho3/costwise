@@ -32,7 +32,6 @@ export class SupplierRepository implements ISupplierRepository {
           supplierFinancialData: true,
         },
       });
-      console.log(totalSuppliers);
       return totalSuppliers;
     } catch (err) {
       throw new DatabaseError("Supplier FindAll", err);
