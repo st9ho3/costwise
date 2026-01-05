@@ -17,13 +17,15 @@ export const PATCH = async (req: NextRequest) => {
     const request = await req.json();
     const res = await service.update(request);
 
-    return sendSuccess('supplier updated', res, 200);
+    return sendSuccess("supplier updated", res, 200);
   } catch (err) {
     return errorHandler(err);
   }
 };
-
-export const DELETE = async (req: NextRequest) => {
+export const DELETE = async (
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) => {
   try {
     const session = await auth();
 
@@ -32,10 +34,12 @@ export const DELETE = async (req: NextRequest) => {
     }
 
     const service = new SupplierService(session.user.id);
-    const request = await req.json();
-    const res = await service.delete(request);
+    const { id } = await context.params;
 
-    return sendSuccess('supplier deleted', res, 200);
+    console.log("DELETE", id);
+    const res = await service.delete(id);
+
+    return sendSuccess("supplier deleted", res, 200);
   } catch (err) {
     return errorHandler(err);
   }

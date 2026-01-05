@@ -5,6 +5,7 @@ import { SupplierService } from "@/app/services/suppliersService";
 import { SupplierUpdatePayload } from "@/types/context";
 import { AuthenticationError } from "@/app/utils/errors";
 import { errorHandler } from "@/app/utils/errorHandler";
+import { revalidatePath } from "next/cache";
 
 export const POST = async (req: NextRequest) => {
   try {
@@ -19,6 +20,7 @@ export const POST = async (req: NextRequest) => {
 
     const res = await service.create(supplier);
 
+    revalidatePath("/suppliers");
     return sendSuccess("Supplier successfully created!", res, 201);
   } catch (err) {
     return errorHandler(err);

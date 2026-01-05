@@ -5,6 +5,8 @@ import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import React from 'react'
 
+export const dynamic = 'force-dynamic';
+
 const SuppliersPage = async() => {
 
   const session = await auth();

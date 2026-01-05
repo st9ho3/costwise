@@ -23,8 +23,10 @@ const page = async() => {
   const recipeService = new RecipeService(session.user.id)
   const ingredientService = new IngredientService(session.user.id)
 
-  const recipeAnalytics = session.user.id && await recipeService.getRecipesAnalytics(session.user.id) 
-  const ingredientAnalytics = session.user.id && await ingredientService.getIngredientAnalytics(session.user.id) 
+  const [recipeAnalytics, ingredientAnalytics] = await Promise.all([
+  recipeService.getRecipesAnalytics(session.user.id),
+  ingredientService.getIngredientAnalytics(session.user.id)
+])
   
   const totalRecipes = recipeAnalytics ? recipeAnalytics.totalRecipes : 0
   const avgfoodCost = recipeAnalytics  && recipeAnalytics.avgFoodCost !== null ? Number(recipeAnalytics.avgFoodCost) : 0

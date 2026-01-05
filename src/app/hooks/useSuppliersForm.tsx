@@ -6,8 +6,9 @@ import { useForm } from 'react-hook-form';
 import z from 'zod';
 import { useState } from 'react';
 import { createSupplier, updateSupplier } from '../services/services';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { getArrayChanges } from '../utils/transformers';
+import useHelpers from './useHelpers';
 
 export type FormFields = z.infer<typeof SupplierSchema>;
 
@@ -23,6 +24,8 @@ const useSuppliersForm = ({userId, mode, supplier}: UseSuppliersFormProps) => {
         defaultValues: mode === 'create' ? getDefaultSupplierValues() : supplier,
         resolver: zodResolver(SupplierSchema)
     })
+    const router = useRouter()
+    const {raiseNotification} = useHelpers({path: null})
     const INITIAL_STATE = mode === 'edit' && supplier ? supplier.category : []
     const [existingCategories] = useState<IngredientCategory[] | undefined>(supplier?.category)
     const [tempCategories, setTempCategories] = useState<IngredientCategory[]>(INITIAL_STATE)
@@ -48,9 +51,11 @@ const useSuppliersForm = ({userId, mode, supplier}: UseSuppliersFormProps) => {
 
       if (mode === 'create') {
 
-         await createSupplier(supplier, tempCategories, [])
+         const response = await createSupplier(supplier, tempCategories, [])
+         raiseNotification(response)
         resetForm()
-        redirect('/suppliers')
+        window.location.href = '/suppliers'
+        
       } else {
 
         if (!existingCategories) {
@@ -60,7 +65,8 @@ const useSuppliersForm = ({userId, mode, supplier}: UseSuppliersFormProps) => {
         const {added, removed} = getArrayChanges(existingCategories, tempCategories)
 
         await updateSupplier(supplier, added, removed)
-        redirect('/suppliers')
+        router.refresh()
+    
       }
      
     } 

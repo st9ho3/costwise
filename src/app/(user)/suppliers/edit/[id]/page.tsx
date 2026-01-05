@@ -10,7 +10,7 @@ export interface Params {
     }>
 }
 
-const EditPage = async() => {
+const EditPage = async({params}: Params) => {
 
   const session = await auth()
   if (!session?.user?.id) {
@@ -18,10 +18,8 @@ const EditPage = async() => {
   }
 
   const service = new SupplierService(session?.user?.id)
-  
-
-  const tempId = 'f30d24aa-a58c-463e-96be-cd78edc14904'
-  const supplier = await service.findById(tempId)
+  const {id} = await params
+  const supplier = await service.findById(id)
     
   return (
     <div className="fixed inset-0 z-55 flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity duration-300">

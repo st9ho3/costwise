@@ -39,7 +39,7 @@ const SuppliersTable = ({items}: {items: Supplier[]}) => {
                   className="border-b h-12.5 border-gray-200 text-sm"
                 >
                   <td className="pl-4 md:pl-0 pt-2">
-                <Link href={`/ingredients/${item.id}`}>
+                <Link href={`/suppliers/${item.id}`}>
                   <TableClickableTitle
                     title={item.name}
                   />

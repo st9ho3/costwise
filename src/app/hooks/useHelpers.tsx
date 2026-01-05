@@ -51,19 +51,23 @@ const useHelpers = ({path}: UseHelpersProps) => {
     }, 4000);
   }, [handleNotification]);
 
-  const handleDelete = useCallback(async(id: string | null) => {
-
-    switch(path) {
+  const chooseEntityToDelete = async(id: string | null) => {
+     switch(path) {
       case 'ingredients':
-        await deleteIngredient(id)
-
+        const res_i = await deleteIngredient(id)
+      return res_i
       case 'recipes':
-        await deleteRecipesFromServer(id)
-      
+        const res_r = await deleteRecipesFromServer(id)
+      return res_r
       case 'suppliers':
-        await deleteSupplier(id)
+        const res_s = await deleteSupplier(id)
+      return res_s
+      default :
+        return 
     }
-    const response = path === 'ingredients' ? await deleteIngredient(id) : await deleteRecipesFromServer(id)
+  }
+  const handleDelete = useCallback(async(id: string | null) => {
+    const response = await chooseEntityToDelete(id)
     raiseNotification(response)
     router.replace(`/${path}` || '')
   },[raiseNotification, router, path])
