@@ -44,6 +44,7 @@ const SuppliersTable = ({items}: {items: Supplier[]}) => {
                 <Link href={`/suppliers/${item.id}`}>
                   <TableClickableTitle
                     title={item.name}
+                    imgPath='/images/supplierIcon.png'
                   />
                 </Link>
               </td>

@@ -38,9 +38,11 @@ const useSearch = () => {
    
 
     useEffect(() => {
-        
+        if (searchTerm.trim() === '') {
+            return
+        }
         const searchResults = async() => {
-                
+        
             try {
                 const res =  await search(debouncedValue)
                 if (!res.data) {

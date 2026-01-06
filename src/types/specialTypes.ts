@@ -117,6 +117,7 @@ export interface RawDBSupplier {
   id: string;
   name: string;
   userId: string;
+  icon: string | null;
   contactPerson: string | null;
   email: string | null;
   phone: string | null;

@@ -31,7 +31,7 @@ const TableClickableTitle = ({imgPath, title, icon, category}: TableClickableTit
           </div>
         }
         
-        <p className="text-sm break-words transition-colors duration-300 ease-in-out hover:text-gray-400">
+        <p className="text-xs break-words transition-colors duration-300 ease-in-out hover:text-gray-400">
           {title}
         </p>
     </div>
