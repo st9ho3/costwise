@@ -219,6 +219,7 @@ export const SupplierSchema = z.object({
   id: z.string().uuid(),
   userId: z.string(),
   name: z.string().min(1, "Supplier name is required"),
+  icon: z.string().optional().nullable(),
 
   // What they sell
   category: z.array(IngredientCategorySchema),
