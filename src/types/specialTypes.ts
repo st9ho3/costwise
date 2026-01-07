@@ -1,4 +1,6 @@
-import { Supplier } from "@/shemas/recipe";
+import RecipesTable from "@/app/components/recipes/recipestable";
+import { recipesTable } from "@/db/schema";
+import { RecipeCategorySchema, Supplier } from "@/shemas/recipe";
 
 export type RecipeIngredientFromDB = {
   id: number;
@@ -158,3 +160,20 @@ export interface RawDBSupplier {
     categoryId: string | null;
   }[];
 }
+
+export type Metadata = {
+  page: number | undefined;
+  order: "desc" | "asc" | undefined;
+  sort: string | undefined;
+  itemsPerPage: number;
+  offset: number;
+};
+
+export const sortColumns: Record<string, any> = {
+  title: recipesTable.title,
+  tax: recipesTable.tax,
+  sellingPrice: recipesTable.sellingPrice,
+  profitMargin: recipesTable.profitMargin,
+  totalCost: recipesTable.totalCost,
+  dateCreated: recipesTable.dateCreated,
+};

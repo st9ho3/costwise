@@ -16,10 +16,13 @@ export const paginate = <T>(
 };
 
 export const paginationPages = (
-  items: Recipe[] | Ingredient[] | Supplier[],
+  pageNumber: number | undefined,
   itemsPerPage: number
 ) => {
-  const pages = Math.ceil(items.length / itemsPerPage);
-  const pageNumbers = Array.from({ length: pages }, (_, i) => i + 1);
+  if (!pageNumber) {
+    return;
+  }
+
+  const pageNumbers = Array.from({ length: pageNumber }, (_, i) => i + 1);
   return pageNumbers;
 };

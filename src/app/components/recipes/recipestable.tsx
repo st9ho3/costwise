@@ -18,37 +18,31 @@ import MonetaryCell from "../shared/table/monetaryCell";
 import PercentilleCell from "../shared/table/percentilleCell";
 import Modal from "../shared/modal";
 import DeleteConfirmationModal from "../shared/deleteConfirmationModal";
+import { SortStatus } from "@/types/specialTypes";
 
 
 const RecipesTable = ({items}: {items: Recipe[]}) => {
-  const currentPage = usePaginationStore((state) => state.currentPage)
-  const resetPage = usePaginationStore((state) => state.resetPage)
+  
   const resetNotification = useNotificationStore((state) => state.reset)
   const { isOpen, isModalOpen, isDeleteActive, closeModal, storedItemId, handleDelete, askPermision } = useHelpers({path: 'recipes'})
-  const {sortData, sortStatus, sortedData} = useSorting({data: items})
-  const paginateItems = useMemo(() => paginate(10, currentPage, sortedData),[currentPage, sortedData]);
-  const itemsToDisplay = paginateItems ? paginateItems : [];
 
   useEffect(()=> {
     const reset = () => {
       resetNotification()
-      resetPage()
     }
     reset()
 
-  }, [resetNotification, resetPage])
+  }, [resetNotification])
 
   return (
     <div>
       <table className="w-full table-fixed mb-2">
         <TableHead
           columns={recipesColumns}
-          sortStatus={sortStatus}
           sortedLinks={recipeSortedLinks}
-          onSort={sortData}
         />
         <tbody className="text-gray-500 text-md">
-          {itemsToDisplay.map((item) => (
+          {items.map((item) => (
             <tr
               key={item.id}
               className="border-b h-12.5 border-gray-200 text-sm"
