@@ -13,7 +13,7 @@ import { RecipeForm } from '@/app/constants/components';
 import { transformRecipeFromDB, transformRecipeIngredentFromDB } from '@/app/utils/transformers';
 import { IngredientService } from '@/app/services/ingredientService';
 import { RecipeService } from '@/app/services/recipeService';
-import { RecipeIngredientFromDB } from '@/types/specialTypes';
+import { Metadata, RecipeIngredientFromDB } from '@/types/specialTypes';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 
@@ -45,8 +45,17 @@ const EditPage = async ({ params }: Params) => {
     const recIngredients = recipeIngredients.map((ing: RecipeIngredientFromDB) => transformRecipeIngredentFromDB(ing));
     const recipe = transformRecipeFromDB(rawRecipe);
 
-    const rawIngredients = session.user.id && await ingredientService.findAll(session.user.id);
-    const ingredients = rawIngredients ? rawIngredients : [];
+    // Use a high limit to get all ingredients for dropdown
+    const dropdownMetadata: Metadata = {
+        page: 1,
+        order: 'asc',
+        sort: 'name',
+        itemsPerPage: 1000,
+        offset: 0,
+    };
+
+    const result = session.user.id && await ingredientService.findAll(session.user.id, dropdownMetadata);
+    const ingredients = result ? result.ingredients : [];
 
     return (
         <div className="fixed inset-0 z-55 flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity duration-300">

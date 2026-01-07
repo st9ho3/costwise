@@ -70,7 +70,12 @@ export interface IIngredientRepository {
     ingredientsName: string,
     userId: string
   ): Promise<{ name: string; id: string } | undefined>;
-  findAll(userId: string): Promise<IngredientToDisplay[] | undefined>;
+  findAll(
+    userId: string,
+    metadata: Metadata
+  ): Promise<
+    { ingredients: IngredientToDisplay[]; count: { count: number } } | undefined
+  >;
   create(
     ingredient: DBIngredient,
     tx: Database
@@ -93,7 +98,12 @@ export interface ISupplierRepository {
     suppliersName: string,
     userId: string | undefined
   ): Promise<{ name: string; id: string } | undefined>;
-  findAll(userId: string): Promise<RawDBSupplier[] | undefined>;
+  findAll(
+    userId: string,
+    metadata: Metadata
+  ): Promise<
+    { suppliers: RawDBSupplier[]; count: { count: number } } | undefined
+  >;
   create(
     supplier: DestructuredSupplier,
     tx: Database

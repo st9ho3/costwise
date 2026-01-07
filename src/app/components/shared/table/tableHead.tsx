@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { SortStatus, TableHeadColumn } from '@/types/specialTypes'
+import { TableHeadColumn } from '@/types/specialTypes'
 import SortedLink from '../sortedLink'
 
 interface TableHeadProps {

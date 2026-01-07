@@ -2,7 +2,7 @@
 import { ArrowDown, ArrowDownUp, ArrowUp } from 'lucide-react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 interface SortedLinkProps {
     children: React.ReactNode

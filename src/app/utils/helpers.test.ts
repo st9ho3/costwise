@@ -5,7 +5,7 @@ import {
   getTotalPrice,
   normalizePrice,
 } from "./pricing";
-import { paginate, paginationPages } from "./pagination";
+import { paginationPages } from "./pagination";
 import {
   transformIngredientFromDB,
   transformIngredientToDB,
@@ -84,84 +84,6 @@ const mockDBIngredient: DBIngredient = {
   userId: "user_xyz789",
   category: "ef45178d-e566-4637-b7f9-abcf6d575466",
 };
-
-const mockRecipes: Recipe[] = [
-  {
-    id: "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
-    title: "Grilled Salmon with Asparagus",
-    totalCost: 12.5,
-    createdBy: "Chef John",
-    dateCreated: new Date("2023-10-26T10:00:00.000Z"),
-    category: "main",
-    tax: 0.08,
-    imgPath:
-      "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    sellingPrice: 25.0,
-    profitMargin: 12.5,
-    foodCost: 10.0,
-    userId: "user_abc123",
-  },
-  {
-    id: "2e3f4a5b-6c7d-8e9f-0a1b-2c3d4e5f6a7b",
-    title: "Classic Caesar Salad",
-    totalCost: 4.25,
-    createdBy: "Salad Master",
-    dateCreated: new Date("2023-11-01T15:30:00.000Z"),
-    category: "starter",
-    tax: 0.07,
-    imgPath:
-      "https://images.unsplash.com/photo-1628873099951-403429219b7d?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    sellingPrice: 9.5,
-    profitMargin: 5.25,
-    foodCost: 3.75,
-    userId: "user_xyz789",
-  },
-  {
-    id: "3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f",
-    title: "Decadent Chocolate Lava Cake",
-    totalCost: 3.0,
-    createdBy: "Pastry Chef",
-    dateCreated: new Date("2023-11-15T19:45:00.000Z"),
-    category: "dessert",
-    tax: 0.09,
-    imgPath:
-      "https://images.unsplash.com/photo-1616428587121-654d2458a13a?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    sellingPrice: 8.0,
-    profitMargin: 5.0,
-    foodCost: 2.5,
-    userId: "user_baker567",
-  },
-  {
-    id: "4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a",
-    title: "Spicy Thai Green Curry",
-    totalCost: 6.75,
-    createdBy: "Thai Chef",
-    dateCreated: new Date("2023-11-20T12:00:00.000Z"),
-    category: "main",
-    tax: 0.08,
-    imgPath:
-      "https://images.unsplash.com/photo-1549419137-0105316e100f?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    sellingPrice: 16.0,
-    profitMargin: 9.25,
-    foodCost: 5.5,
-    userId: "user_foodie007",
-  },
-  {
-    id: "5e6f7a8b-9c0d-1e2f-3a4b-5c6d7e8f9a0b",
-    title: "Tomato and Basil Bruschetta",
-    totalCost: 2.1,
-    createdBy: "Italian Mama",
-    dateCreated: new Date("2023-12-05T18:15:00.000Z"),
-    category: "starter",
-    tax: 0.06,
-    imgPath:
-      "https://images.unsplash.com/photo-1563606617061-0428f5963960?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    sellingPrice: 6.5,
-    profitMargin: 4.4,
-    foodCost: 1.75,
-    userId: "user_foodie007",
-  },
-];
 
 const mockDbRecipe: DBRecipe = {
   id: "e446554b-d779-45e0-b615-1a89c379a957",
@@ -350,34 +272,11 @@ describe("calculateProfitMargin", () => {
 
 //////////
 
-describe("paginate", () => {
-  test("Should return empty array [] if no items", () => {
-    const items: Recipe[] = [];
-    const itemsPerPage = 10;
-    const page = 1;
-
-    const result = paginate(itemsPerPage, page, items);
-
-    expect(result).toStrictEqual([]);
-  });
-
-  test("Should return the items the specific page contains", () => {
-    const items = mockRecipes;
-    const itemsPerPage = 10;
-    const page = 1;
-
-    const result = paginate(itemsPerPage, page, items);
-
-    expect(result).toStrictEqual(mockRecipes);
-  });
-});
-
 describe("paginationPages", () => {
   test("Should return an array with the pages", () => {
     const itemsPerPage = 10;
-    const items: Recipe[] = mockRecipes;
 
-    const result = paginationPages(items, itemsPerPage);
+    const result = paginationPages(itemsPerPage);
 
     expect(result).toStrictEqual([1]);
   });

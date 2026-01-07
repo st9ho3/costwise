@@ -25,6 +25,7 @@ import { db } from "@/db/db";
 import { Database } from "@/db/schema";
 import { IngredientAnalytics, OperationResult } from "@/types/repositories";
 import { ConflictError } from "../utils/errors";
+import { Metadata } from "@/types/specialTypes";
 
 export class IngredientService implements IIngredientService {
   private ingredientRepository: IngredientRepository;
@@ -40,9 +41,14 @@ export class IngredientService implements IIngredientService {
     this.currentUserId = userId;
   }
 
-  async findAll(userId: string): Promise<IngredientToDisplay[] | undefined> {
-    const ingredients = await this.ingredientRepository.findAll(userId);
-    return ingredients;
+  async findAll(
+    userId: string,
+    metadata: Metadata
+  ): Promise<
+    { ingredients: IngredientToDisplay[]; count: { count: number } } | undefined
+  > {
+    const result = await this.ingredientRepository.findAll(userId, metadata);
+    return result;
   }
 
   async findById(id: string): Promise<IngredientToDisplay | undefined> {

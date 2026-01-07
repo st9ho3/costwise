@@ -23,17 +23,41 @@ import {
 import { db } from "@/db/db";
 import { categories, Database, ingredientsTable } from "@/db/schema";
 import { transformIngredientFromDB } from "../utils/transformers";
-import { and, countDistinct, eq, sql } from "drizzle-orm";
+import { and, asc, countDistinct, desc, eq, sql } from "drizzle-orm";
 import { DatabaseError } from "../utils/errors";
+import { ingredientSortColumns, Metadata } from "@/types/specialTypes";
 
 export class IngredientRepository implements IIngredientRepository {
-  async findAll(userId: string): Promise<IngredientToDisplay[] | undefined> {
+  async findAll(
+    userId: string,
+    { itemsPerPage, order, sort, offset }: Metadata
+  ): Promise<
+    { ingredients: IngredientToDisplay[]; count: { count: number } } | undefined
+  > {
     try {
-      const dbIngredients = await db
-        .select({ ingredientsTable, categories })
-        .from(ingredientsTable)
-        .innerJoin(categories, eq(ingredientsTable.category, categories.id))
-        .where(eq(ingredientsTable.userId, userId));
+      const sorting = sort
+        ? ingredientSortColumns[sort]
+        : ingredientsTable.name;
+      const orderfn = order === "desc" ? desc : asc;
+      const sortClause = sorting
+        ? orderfn(sorting)
+        : asc(ingredientsTable.name);
+
+      const [dbIngredients, [count]] = await Promise.all([
+        db
+          .select({ ingredientsTable, categories })
+          .from(ingredientsTable)
+          .innerJoin(categories, eq(ingredientsTable.category, categories.id))
+          .where(eq(ingredientsTable.userId, userId))
+          .limit(itemsPerPage)
+          .offset(offset)
+          .orderBy(sortClause),
+
+        db
+          .select({ count: countDistinct(ingredientsTable.id) })
+          .from(ingredientsTable)
+          .where(eq(ingredientsTable.userId, userId)),
+      ]);
 
       const ingredients = dbIngredients.map((dbIngredient) =>
         transformIngredientFromDB(
@@ -41,7 +65,7 @@ export class IngredientRepository implements IIngredientRepository {
           dbIngredient.categories.category
         )
       );
-      return ingredients;
+      return { ingredients, count };
     } catch (err) {
       console.error("Failed to fetch ingredients:", err);
       throw new DatabaseError("IngredientRepository.findAll", err);

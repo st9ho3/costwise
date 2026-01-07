@@ -1,8 +1,13 @@
 import { db } from "@/db/db";
 import { Database, suppliers } from "@/db/schema";
 import { ISupplierRepository } from "@/types/repositories";
-import { DestructuredSupplier, RawDBSupplier } from "@/types/specialTypes";
-import { and, eq } from "drizzle-orm";
+import {
+  DestructuredSupplier,
+  Metadata,
+  RawDBSupplier,
+  supplierSortColumns,
+} from "@/types/specialTypes";
+import { and, asc, countDistinct, desc, eq } from "drizzle-orm";
 import { DatabaseError } from "../utils/errors";
 
 export class SupplierRepository implements ISupplierRepository {
@@ -22,17 +27,37 @@ export class SupplierRepository implements ISupplierRepository {
     }
   }
 
-  async findAll(userId: string): Promise<RawDBSupplier[] | undefined> {
+  async findAll(
+    userId: string,
+    { itemsPerPage, order, sort, offset }: Metadata
+  ): Promise<
+    { suppliers: RawDBSupplier[]; count: { count: number } } | undefined
+  > {
     try {
-      const totalSuppliers = await db.query.suppliers.findMany({
-        where: eq(suppliers.userId, userId),
-        with: {
-          supplierAddresses: true,
-          supplierCategories: true,
-          supplierFinancialData: true,
-        },
-      });
-      return totalSuppliers;
+      const sorting = sort ? supplierSortColumns[sort] : suppliers.dateAdded;
+      const orderfn = order === "asc" ? asc : desc;
+      const sortClause = sorting ? orderfn(sorting) : desc(suppliers.dateAdded);
+
+      const [totalSuppliers, [count]] = await Promise.all([
+        db.query.suppliers.findMany({
+          where: eq(suppliers.userId, userId),
+          with: {
+            supplierAddresses: true,
+            supplierCategories: true,
+            supplierFinancialData: true,
+          },
+          limit: itemsPerPage,
+          offset: offset,
+          orderBy: sortClause,
+        }),
+
+        db
+          .select({ count: countDistinct(suppliers.id) })
+          .from(suppliers)
+          .where(eq(suppliers.userId, userId)),
+      ]);
+
+      return { suppliers: totalSuppliers, count };
     } catch (err) {
       throw new DatabaseError("Supplier FindAll", err);
     }
