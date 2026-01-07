@@ -37,22 +37,27 @@ function SidebarLink({
   // Use a conditional to render either a Link or a div that opens a modal
   if (href !== 'create' && href !== 'profile') {
     return (
-      <Link
+        <Link
         href={href}
-        className="flex relative group items-center p-2 text-gray-700 rounded-full hover:bg-gray-100 group"
+        className="flex relative group items-center p-2 text-gray-700 rounded-full hover:bg-gray-100"
       >
         <Icon className="w-5 h-5 stroke-1 shrink-0" />
-        <span
-          className={`ml-3 whitespace-nowrap text-sm transition-opacity duration-200 ${
-            isCollapsed ? 'opacity-0' : 'opacity-100'
+
+     <span
+          className={`ml-3 whitespace-nowrap text-sm transition-all duration-200 overflow-hidden ${
+            isCollapsed ? 'opacity-0 w-0 ml-0' : 'opacity-100 w-3xl'
           }`}
         >
           {text}
         </span>
-        <span className={`absolute z-100 top-5 left-20  -translate-x-1/2 mb-2 w-max
+        
+      <span className={`absolute z-100 top-5 left-20  -translate-x-1/2 mb-2 w-max
                scale-0 rounded-md bg-gray-800 px-3 py-1.5 text-sm text-white
                transition-all duration-200  ${isCollapsed ? "group-hover:scale-100" : "group-hover:scale-0" }`}>{text}</span>
       </Link>
+      
+      
+      
     );
   }
 

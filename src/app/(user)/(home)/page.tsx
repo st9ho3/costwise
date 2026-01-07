@@ -39,7 +39,7 @@ const page = async() => {
         <Card title='Recipes' value={totalRecipes} Icon={ShoppingBasket} color='border-1' />
         <Card title='Ingredients' value={totalIngredients} Icon={Carrot} color='border-1 ' />
         <Card title='Avg Food Cost' value={Number(avgfoodCost.toFixed(2))} Icon={Percent} color='border-1' />
-        <Card title='Avg Profit Margin' value={avgProfitMargin} Icon={Percent} color='border-1  border-purple-600' />
+        <Card title='Avg Profit Margin' value={Number(avgProfitMargin.toFixed(2))} Icon={Percent} color='border-1  border-purple-600' />
       </div>
     </div>
   )
