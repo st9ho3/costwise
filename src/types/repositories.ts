@@ -10,6 +10,7 @@ import {
   DBSupplierAddress,
   DBSupplierFinancialData,
   DestructuredSupplier,
+  Metadata,
   RawDBSupplier,
   RecipeWithQuery,
 } from "./specialTypes";
@@ -31,7 +32,10 @@ export interface OperationResult {
 export interface IRecipeRepository {
   findById(id: string): Promise<RecipeWithQuery | undefined>;
   findAllByIngredientId(id: string): Promise<DBRecipe[] | undefined>;
-  findAll(userId: string): Promise<Recipe[] | undefined>;
+  findAll(
+    userId: string,
+    metadata: Metadata
+  ): Promise<{ recipes: Recipe[]; count: { count: number } } | undefined>;
   create(recipe: DBRecipe, tx: Database): Promise<string | undefined>;
   update(
     id: string,

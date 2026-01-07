@@ -35,7 +35,7 @@ import {
 } from "../repositories/recipeRepository";
 import { IngredientRepository } from "../repositories/ingredientRepository";
 import { validateComplexEntity } from "./validationService";
-import { RecipeWithQuery } from "@/types/specialTypes";
+import { Metadata, RecipeWithQuery } from "@/types/specialTypes";
 import { calculateProfitMargin, getTotalPrice } from "../utils/pricing";
 import {
   transformRecipeFromDB,
@@ -64,13 +64,16 @@ export class RecipeService implements IRecipeService {
     this.currentUserID = currentUserID;
   }
 
-  async findAll(userId: string): Promise<Recipe[] | undefined> {
+  async findAll(
+    userId: string,
+    metadata: Metadata
+  ): Promise<{ recipes: Recipe[]; count: { count: number } } | undefined> {
     if (userId !== this.currentUserID) {
       throw new ForbiddenError("Recipes", "All Recipes", this.currentUserID);
     }
-    const recipes = await this.recipeRepository.findAll(userId);
+    const result = await this.recipeRepository.findAll(userId, metadata);
 
-    return recipes;
+    return result;
   }
 
   async findById(id: string): Promise<RecipeWithQuery | undefined> {

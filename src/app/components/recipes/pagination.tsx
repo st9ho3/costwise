@@ -1,27 +1,57 @@
 "use client";
 import Button from '../shared/sharedButton';
-import { Ingredient, Recipe, Supplier } from '@/shemas/recipe';
-import { useEffect, useMemo } from 'react';
+import {  useMemo } from 'react';
 import { paginationPages } from '@/app/utils/pagination';
-import { usePaginationStore } from '@/app/stores/paginationStore';
+import { useRouter } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 
-const Pagination = ({ items }: { items: Recipe[] | Ingredient[] | Supplier[] }) => {
+const Pagination = ({currentPage = '1' ,pageNumber}: {currentPage?: string ,pageNumber?: number}) => {
   
-  const currentPage = usePaginationStore((state) => state.currentPage)
-  const choosePage = usePaginationStore((state) => state.choosePage)
-  const handleNext = usePaginationStore((state) => state.handleNext)
-  const handlePrev = usePaginationStore((state) => state.handlePrev)
-  
-  const pages = useMemo(() => paginationPages(items, 10), [items])
-      useEffect(() => {
-        if (currentPage > pages.length && pages.length > 0) {
-        choosePage(pages.length)
-      }
-      }, [pages, choosePage, currentPage])
-
-  if (pages.length <= 1) {
+  const numericCurrentPage = Number(currentPage)
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const params = new URLSearchParams(searchParams)
+  const pathName = usePathname()
+  const pages = useMemo(() => paginationPages(pageNumber, 10), [pageNumber])
+    
+  if (!pages || pages.length <= 1 ) {
         return null;
+      }
+      const handleNext = () => {
+        let nextPage = numericCurrentPage + 1
+        if (!numericCurrentPage) {
+          nextPage = 2
+        } else {
+          nextPage = numericCurrentPage + 1
+        }
+        if (pageNumber && nextPage > pageNumber) {
+          return
+        }
+        params.set('page', nextPage.toString())
+        router.push(`${pathName}?${params}`)
+      }
+      const handlePrev = () => {
+        let previousPage 
+        if (!numericCurrentPage) { 
+          previousPage = 1
+        } else {
+           previousPage = numericCurrentPage - 1
+        }
+        
+        params.set('page', previousPage.toString())
+        if (pageNumber && previousPage < 2) {
+          params.delete('page')
+        }
+        router.push(`${pathName}?${params}`)
+      }
+
+      const choosePage = (page: number) => {
+        params.set('page', page.toString())
+        if (page < 2) {
+          params.delete('page')
+        }
+        router.push(`${pathName}?${params}`)
       }
       
   return (
@@ -42,7 +72,7 @@ const Pagination = ({ items }: { items: Recipe[] | Ingredient[] | Supplier[] }) 
               rounded-md 
               flex items-center justify-center
               transition-colors duration-200
-              ${currentPage === page 
+              ${numericCurrentPage === page 
                 ? 'border-gray-400 border-1' 
                 : 'border-gray-200 hover:bg-gray-300'
               }

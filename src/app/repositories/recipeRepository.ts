@@ -29,7 +29,7 @@ import {
   RecipeAnalytics,
 } from "@/types/repositories";
 import { db } from "@/db/db";
-import { eq, and, avg, countDistinct } from "drizzle-orm";
+import { eq, and, avg, countDistinct, asc, desc } from "drizzle-orm";
 import { Database, recipesTable, recipeIngredientsTable } from "@/db/schema";
 import {
   transformRecipeFromDB,
@@ -37,7 +37,7 @@ import {
 } from "../utils/transformers";
 import { revalidatePath } from "next/cache";
 import { checkIfIngredientExists } from "@/db/helpers";
-import { RecipeWithQuery } from "@/types/specialTypes";
+import { Metadata, RecipeWithQuery, sortColumns } from "@/types/specialTypes";
 import { DatabaseError } from "../utils/errors";
 
 export class RecipeRepository implements IRecipeRepository {
@@ -79,17 +79,36 @@ export class RecipeRepository implements IRecipeRepository {
     }
   }
 
-  async findAll(userId: string): Promise<Recipe[] | undefined> {
+  async findAll(
+    userId: string,
+    { page, itemsPerPage, order, sort, offset }: Metadata
+  ): Promise<{ recipes: Recipe[]; count: { count: number } } | undefined> {
     try {
-      const dbRecipes = await db
-        .select()
-        .from(recipesTable)
-        .where(eq(recipesTable.userId, userId));
+      const sorting = sort ? sortColumns[sort] : recipesTable.dateCreated;
+      const orderfn = order === "desc" ? desc : asc;
+      const sortClause = sorting
+        ? orderfn(sorting)
+        : desc(recipesTable.dateCreated);
+
+      const [dbRecipes, [count]] = await Promise.all([
+        db
+          .select()
+          .from(recipesTable)
+          .where(eq(recipesTable.userId, userId))
+          .limit(itemsPerPage)
+          .offset(offset)
+          .orderBy(sortClause),
+
+        db
+          .select({ count: countDistinct(recipesTable.id) })
+          .from(recipesTable)
+          .where(eq(recipesTable.userId, userId)),
+      ]);
 
       const recipes = dbRecipes.map((dbRecipe) =>
         transformRecipeFromDB(dbRecipe)
       );
-      return recipes;
+      return { recipes, count };
     } catch (err) {
       console.error("Failed to fetch recipes:", err);
       throw new DatabaseError("RecipeRepository.findAll", err);

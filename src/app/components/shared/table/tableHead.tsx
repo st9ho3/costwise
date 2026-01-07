@@ -6,11 +6,9 @@ import SortedLink from '../sortedLink'
 interface TableHeadProps {
     columns: TableHeadColumn[]
     sortedLinks: string[]
-    onSort: (value: string) => void
-    sortStatus: SortStatus
 }
 
-const TableHead = ({columns, onSort, sortStatus, sortedLinks}: TableHeadProps) => {
+const TableHead = ({columns, sortedLinks}: TableHeadProps) => {
   return (
     <thead>
       <tr className="border-b-1 h-8 border-gray-200">
@@ -19,7 +17,7 @@ const TableHead = ({columns, onSort, sortStatus, sortedLinks}: TableHeadProps) =
           {/* column.accessor === 'tax' || column.accessor === 'sellingPrice' || column.accessor === 'profitMargin' || column.accessor === 'totalCost' */
           sortedLinks.includes(column.accessor)
           ? 
-          <SortedLink onSort={onSort} sortStatus={sortStatus}>
+          <SortedLink value={column.accessor} >
           {column.header}
           </SortedLink>
           : column.header

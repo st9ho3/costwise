@@ -7,7 +7,7 @@ import {
   IngredientToDisplay,
   Supplier,
 } from "@/shemas/recipe";
-import { RecipeWithQuery } from "./specialTypes";
+import { Metadata, RecipeWithQuery } from "./specialTypes";
 import { Database } from "@/db/schema";
 import {
   RecipeAnalytics,
@@ -27,7 +27,10 @@ export interface CreateRequest {
 }
 
 export interface IRecipeService {
-  findAll(userId: string): Promise<Recipe[] | undefined>;
+  findAll(
+    userId: string,
+    metadata: Metadata
+  ): Promise<{ recipes: Recipe[]; count: { count: number } } | undefined>;
   findById(id: string): Promise<RecipeWithQuery | undefined>;
   create(request: CreateRequest): Promise<CreateResponse | undefined>;
   update(
