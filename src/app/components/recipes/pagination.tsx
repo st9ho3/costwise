@@ -1,9 +1,10 @@
 "use client";
 import Button from '../shared/sharedButton';
 import {  useMemo } from 'react';
-import { paginationPages } from '@/app/utils/pagination';
+
 import { useRouter } from 'next/navigation';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { paginationPages } from '@/app/utils/pagination';
 
 
 const Pagination = ({currentPage = '1' ,pageNumber}: {currentPage?: string ,pageNumber?: number}) => {
@@ -13,7 +14,7 @@ const Pagination = ({currentPage = '1' ,pageNumber}: {currentPage?: string ,page
   const searchParams = useSearchParams()
   const params = new URLSearchParams(searchParams)
   const pathName = usePathname()
-  const pages = useMemo(() => paginationPages(pageNumber, 10), [pageNumber])
+  const pages = useMemo(() => paginationPages(pageNumber), [pageNumber])
     
   if (!pages || pages.length <= 1 ) {
         return null;

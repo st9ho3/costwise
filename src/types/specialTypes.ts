@@ -1,6 +1,5 @@
-import RecipesTable from "@/app/components/recipes/recipestable";
-import { recipesTable } from "@/db/schema";
-import { RecipeCategorySchema, Supplier } from "@/shemas/recipe";
+import { ingredientsTable, recipesTable, suppliers } from "@/db/schema";
+import { Supplier } from "@/shemas/recipe";
 
 export type RecipeIngredientFromDB = {
   id: number;
@@ -169,6 +168,7 @@ export type Metadata = {
   offset: number;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const sortColumns: Record<string, any> = {
   title: recipesTable.title,
   tax: recipesTable.tax,
@@ -176,4 +176,21 @@ export const sortColumns: Record<string, any> = {
   profitMargin: recipesTable.profitMargin,
   totalCost: recipesTable.totalCost,
   dateCreated: recipesTable.dateCreated,
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const supplierSortColumns: Record<string, any> = {
+  name: suppliers.name,
+  contactPerson: suppliers.contactPerson,
+  email: suppliers.email,
+  deliveryTime: suppliers.deliveryTime,
+  dateAdded: suppliers.dateAdded,
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const ingredientSortColumns: Record<string, any> = {
+  name: ingredientsTable.name,
+  unitPrice: ingredientsTable.unitPrice,
+  usage: ingredientsTable.usage,
+  category: ingredientsTable.category,
 };

@@ -11,6 +11,7 @@ import { SupplierFinDataRepository } from "../repositories/supplierFinancialData
 import { SuppliersCategoryRepository } from "../repositories/suppliersCategory";
 import { SupplierUpdatePayload } from "@/types/context";
 import { ConflictError, ForbiddenError, NotFoundError } from "../utils/errors";
+import { Metadata } from "@/types/specialTypes";
 
 export class SupplierService implements ISupplierService {
   private supplierRepository: SupplierRepository;
@@ -39,7 +40,10 @@ export class SupplierService implements ISupplierService {
     return transformSupplierFromDB(supplier);
   }
 
-  async findAll(userId: string): Promise<Supplier[] | undefined> {
+  async findAll(
+    userId: string,
+    metadata: Metadata
+  ): Promise<{ suppliers: Supplier[]; count: { count: number } } | undefined> {
     if (userId !== this.currentUserID) {
       throw new ForbiddenError(
         "Suppliers",
@@ -47,9 +51,17 @@ export class SupplierService implements ISupplierService {
         this.currentUserID
       );
     }
-    const suppliers = await this.supplierRepository.findAll(userId);
+    const result = await this.supplierRepository.findAll(userId, metadata);
 
-    return suppliers?.map((supplier) => transformSupplierFromDB(supplier));
+    if (!result) {
+      return undefined;
+    }
+
+    const suppliers = result.suppliers.map((supplier) =>
+      transformSupplierFromDB(supplier)
+    );
+
+    return { suppliers, count: result.count };
   }
 
   async create(

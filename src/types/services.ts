@@ -50,7 +50,12 @@ export interface IRecipeService {
 }
 
 export interface IIngredientService {
-  findAll(userId: string): Promise<IngredientToDisplay[] | undefined>;
+  findAll(
+    userId: string,
+    metadata: Metadata
+  ): Promise<
+    { ingredients: IngredientToDisplay[]; count: { count: number } } | undefined
+  >;
   findById(id: string): Promise<IngredientToDisplay | undefined>;
   create(ingredient: Ingredient): Promise<OperationResult | undefined>;
   update(ingredient: Ingredient): Promise<OperationResult | undefined>;
@@ -70,7 +75,10 @@ export interface ISearchService {
 }
 
 export interface ISupplierService {
-  findAll(supplierId: string): Promise<Supplier[] | undefined>;
+  findAll(
+    userId: string,
+    metadata: Metadata
+  ): Promise<{ suppliers: Supplier[]; count: { count: number } } | undefined>;
   findById(supplierId: string): Promise<Supplier | undefined>;
   create(supplier: SupplierUpdatePayload): Promise<OperationResult | undefined>;
   update(supplier: SupplierUpdatePayload): Promise<OperationResult | undefined>;

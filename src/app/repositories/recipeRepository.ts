@@ -81,7 +81,7 @@ export class RecipeRepository implements IRecipeRepository {
 
   async findAll(
     userId: string,
-    { page, itemsPerPage, order, sort, offset }: Metadata
+    { itemsPerPage, order, sort, offset }: Metadata
   ): Promise<{ recipes: Recipe[]; count: { count: number } } | undefined> {
     try {
       const sorting = sort ? sortColumns[sort] : recipesTable.dateCreated;
