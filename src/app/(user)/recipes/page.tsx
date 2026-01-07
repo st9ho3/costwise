@@ -47,9 +47,14 @@ const RecipesPage = async ({searchParams}: Props) => {
     
 
     return (
-        <div className="relative w-full h-full px px-2 md:px-5 bg-white">
-            <RecipesTable items={recipes} />
-            <Pagination pageNumber={pageNumber} currentPage={page} />
+        <div className="flex flex-col h-full w-full px-2 md:px-5 bg-white">
+            <div className="flex-1 overflow-auto">
+                <RecipesTable items={recipes} />
+            </div>
+            <div className="mt-auto">
+                <Pagination pageNumber={pageNumber} currentPage={page} />
+            </div>
+            
         </div>
     );
 };

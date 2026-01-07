@@ -54,10 +54,14 @@ const SuppliersPage = async ({ searchParams }: Props) => {
     : [];
 
   return (
-    <div className="relative w-full h-full px px-2 md:px-5 bg-white">
-      <SuppliersTable items={suppliers} />
-      <Pagination pageNumber={pageNumber} currentPage={page} />
-    </div>
+     <div className="flex flex-col h-full w-full px-2 md:px-5 bg-white">
+            <div className="flex-1 overflow-auto">
+                <SuppliersTable items={suppliers} />
+            </div>
+            <div className="mt-auto">
+                <Pagination pageNumber={pageNumber} currentPage={page} />
+            </div>
+        </div>
   );
 };
 
