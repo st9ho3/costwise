@@ -17,7 +17,7 @@ const Card = ({ title, value, Icon }: CardProps) => {
   return (
     <div
       className={`
-        relative w-full h-[8.75rem] p-5
+        relative w-full h-[4.75rem] md:h-[8.75rem] p-5
         flex flex-col justify-between
         
         /* SHAPE: Material 3 Large Rounded Corners */
@@ -60,7 +60,7 @@ const Card = ({ title, value, Icon }: CardProps) => {
       {/* Card Body: Value & Icon */}
       <div className="flex items-end justify-between mt-auto">
         {/* Value: High-emphasis Dark Gray (almost black) */}
-        <span className="text-5xl font-medium text-gray-900 tracking-tight tabular-nums leading-none">
+        <span className="text-4xl font-medium text-gray-900 tracking-tight tabular-nums leading-none">
           {value}
         </span>
 
