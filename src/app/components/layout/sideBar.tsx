@@ -97,7 +97,7 @@ export default function Sidebar() {
   return (
     <>
       <aside
-        className={`bg-white border-r border-gray-200 justify-between flex flex-col gap-8 p-2 transition-all duration-300 ease-in-out ${
+        className={`bg-white border-r border-gray-200 justify-between hidden md:flex flex-col gap-8 p-2 transition-all duration-300 ease-in-out ${
           isCollapsed ? 'w-15' : 'w-40' // Adjusted width for better spacing
         }`}
       >
