@@ -17,7 +17,7 @@ const Card = ({ title, value, Icon }: CardProps) => {
   return (
     <div
       className={`
-        relative w-60 h-[8.75rem] p-5
+        relative w-full h-[8.75rem] p-5
         flex flex-col justify-between
         
         /* SHAPE: Material 3 Large Rounded Corners */

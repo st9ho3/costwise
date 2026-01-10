@@ -54,7 +54,6 @@ const RecipesPage = async ({searchParams}: Props) => {
             <div className="mt-auto">
                 <Pagination pageNumber={pageNumber} currentPage={page} />
             </div>
-            
         </div>
     );
 };
