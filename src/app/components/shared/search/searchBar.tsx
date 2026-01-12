@@ -11,7 +11,7 @@ interface SearchBarProps {
 const SearchBar = ({ searchTerm, onChange }: SearchBarProps) => {
   return (
     // CONTAINER:
-    // 1. 'rounded-full' creates the signature Google Pill shape
+    // 1. 'rounded-full' creates Pill shape
     // 2. 'bg-gray-100' creates the off-white surface (Google's #f1f3f4)
     // 3. 'focus-within:' classes handle the transition to active state (White bg + Shadow)
     <div
