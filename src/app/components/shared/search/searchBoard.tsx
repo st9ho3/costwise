@@ -22,7 +22,7 @@ const SearchBoard = () => {
 
   return (
     // WIDTH UPDATE: Changed max-w-md -> max-w-2xl (approx 670px)
-    <div className='relative w-full max-w-2xl z-50' ref={searchRef}>
+    <div className='md:relative md:w-full md:max-w-2xl md:z-50' ref={searchRef}>
       <SearchBar
         searchTerm={searchTerm}
         onChange={handleSearch}

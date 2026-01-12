@@ -35,7 +35,7 @@ const page = async() => {
   
   return (
     <div className=' m-2'>
-      <div className='m-1 p-3 grid grid-cols-1 gap-4 place-items-center md:grid-cols-4 rounded-2xl h-full'>
+      <div className='m-1 p-3 grid grid-cols-1 gap-4 place-items-center lg:grid-cols-4 rounded-2xl h-1/2'>
         <Card title='Recipes' value={totalRecipes} Icon={ShoppingBasket} color='border-1' />
         <Card title='Ingredients' value={totalIngredients} Icon={Carrot} color='border-1 ' />
         <Card title='Avg Food Cost' value={Number(avgfoodCost.toFixed(2))} Icon={Percent} color='border-1' />
