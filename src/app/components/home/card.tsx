@@ -47,7 +47,7 @@ const Card = ({ title, value, Icon }: CardProps) => {
             Top-right circle, distinct "Google Blue" or Light Surface interaction 
         */}
         <div className="
-          hidden md:flex items-center justify-center 
+          hidden lg:flex items-center justify-center 
           w-9 h-9 rounded-full 
           bg-blue-50 text-blue-600
           transition-colors duration-300 
@@ -55,15 +55,15 @@ const Card = ({ title, value, Icon }: CardProps) => {
         ">
           <ArrowRight className="w-5 h-5" strokeWidth={2.5} />
         </div>
-        
+
           {/* Mobile Value */}
-        <span className="text-4xl font-medium text-gray-900 tracking-tight tabular-nums leading-none">
+        <span className="lg:hidden text-4xl font-medium text-gray-900 tracking-tight tabular-nums leading-none">
           {value}
         </span>
       </div>
 
       {/* Card Body: Value & Icon */}
-      <div className="hidden md:flex items-end justify-between mt-auto">
+      <div className="hidden lg:flex items-end justify-between mt-auto">
         {/* Value: High-emphasis Dark Gray (almost black) */}
         <span className="text-4xl font-medium text-gray-900 tracking-tight tabular-nums leading-none">
           {value}
