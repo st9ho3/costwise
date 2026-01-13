@@ -6,8 +6,10 @@ import { Session } from 'next-auth'
 import NotificationsNumber from '../shared/notificationsNumber'
 import SearchBoard from '../shared/search/searchBoard'
 import Profile from '../shared/userProfile'
+import { useUIStore } from '@/app/stores/uiStore'
 
 const Header = ({ session }: { session: Session }) => {
+  const toggleMobileMenu = useUIStore((state) => state.toggleMobileMenu)
 
   return (
     <header 
@@ -21,7 +23,10 @@ const Header = ({ session }: { session: Session }) => {
     >
       {/* LEFT: Logo or Menu Trigger (Placeholder) */}
       <div className="flex items-center gap-4 w-60">
-        <button className="p-2 -ml-2 rounded-full hover:bg-gray-100 text-gray-600 lg:hidden">
+        <button 
+          onClick={() => toggleMobileMenu()}
+          className="p-2 -ml-2 rounded-full hover:bg-gray-100 text-gray-600 lg:hidden"
+        >
           <Menu size={24} />
         </button>
         {/* You can replace this text with your Logo Image */}
