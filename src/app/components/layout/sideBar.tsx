@@ -25,11 +25,13 @@ function SidebarLink({
   text,
   isCollapsed,
   href,
+  onClick,
 }: {
   icon: LucideIcon;
   text: string;
   isCollapsed: boolean;
   href: string;
+  onClick?: () => void;
 }) {
   const openModal = useUIStore((state) => state.openModal)
 
@@ -39,7 +41,8 @@ function SidebarLink({
     return (
         <Link
         href={href}
-        className="flex relative group items-center p-2 text-gray-700 rounded-full hover:bg-gray-100"
+        onClick={onClick}
+      className="flex relative group items-center p-2 text-gray-700 rounded-full hover:bg-gray-100"
       >
         <Icon className="w-5 h-5 stroke-1 shrink-0" />
 
@@ -63,7 +66,10 @@ function SidebarLink({
 
   return (
     <div
-      onClick={() => openModal('create')}
+      onClick={() => {
+        openModal('create')
+        onClick?.()
+      }}
       className="flex relative group items-center p-2 text-gray-700 rounded-lg hover:bg-gray-100 group cursor-pointer"
     >
       <Icon className="w-5 h-5 stroke-1 shrink-0" />
@@ -89,6 +95,8 @@ export default function Sidebar() {
   const isModalOpen = useUIStore((state) => state.isModalOpen)
   const modalType = useUIStore((state) => state.modalType)
   const isProfileOpen = useUIStore((state) => state.isProfileOpen)
+  const isMobileMenuOpen = useUIStore((state) => state.isMobileMenuOpen)
+  const closeMobileMenu = useUIStore((state) => state.closeMobileMenu)
   const reset = useUIStore((state) => state.reset)
   const resetFile = useFileStore((state) => state.reset)
   const {data} = useSession()
@@ -96,8 +104,68 @@ export default function Sidebar() {
 
   return (
     <>
+      {/* Mobile Sidebar Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={closeMobileMenu}
+        />
+      )}
+
+      {/* Mobile Sidebar Panel */}
+      <div className={`
+        fixed top-0 left-0 bottom-0 w-64 bg-white z-50 p-4 shadow-xl transition-transform duration-300 ease-in-out lg:hidden
+        ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
+      `}>
+        <div className="flex justify-between items-center mb-8">
+           <span className="text-xl font-semibold text-gray-800">Menu</span>
+           <button onClick={closeMobileMenu} className="p-1 hover:bg-gray-100 rounded-full">
+             <PanelLeftClose className="w-6 h-6" />
+           </button>
+        </div>
+        
+        <nav className="flex flex-col gap-2">
+          <SidebarLink
+            icon={Home}
+            text="Home"
+            isCollapsed={false}
+            href="/"
+            onClick={closeMobileMenu}
+          />
+          <SidebarLink
+            icon={PlusSquare}
+            text="Create"
+            isCollapsed={false}
+            href="create"
+            onClick={closeMobileMenu}
+          />
+          <SidebarLink
+            icon={BookMarked}
+            text="Recipes"
+            isCollapsed={false}
+            href="/recipes"
+            onClick={closeMobileMenu}
+          />
+          <SidebarLink
+            icon={Carrot}
+            text="Ingredients"
+            isCollapsed={false}
+            href="/ingredients"
+            onClick={closeMobileMenu}
+          />
+          <SidebarLink
+            icon={Users}
+            text="Suppliers"
+            isCollapsed={false}
+            href="/suppliers"
+            onClick={closeMobileMenu}
+          />
+        </nav>
+      </div>
+
+      {/* Desktop Sidebar */}
       <aside
-        className={`bg-white border-r border-gray-200 justify-between hidden md:flex flex-col gap-8 p-2 transition-all duration-300 ease-in-out ${
+        className={`bg-white border-r border-gray-200 justify-between hidden lg:flex flex-col gap-8 p-2 transition-all duration-300 ease-in-out ${
           isCollapsed ? 'w-15' : 'w-40' // Adjusted width for better spacing
         }`}
       >
