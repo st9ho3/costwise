@@ -20,7 +20,7 @@ import { useFileStore } from '@/app/stores/fileStore';
 
 import UserProfile from '../shared/profileModal';
 
-function SidebarLink({
+export function SidebarLink({
   icon: Icon,
   text,
   isCollapsed,
