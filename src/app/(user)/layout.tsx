@@ -9,6 +9,7 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { Poppins } from 'next/font/google'
 import Header from "../components/layout/header";
+import TabBar from "../components/layout/tabBar";
 
 export const metadata: Metadata = {
   title: "Costwise",
@@ -49,9 +50,10 @@ export default async function RootLayout({
           <HomeContextProvider>
             <div className="flex h-screen bg-[rgb(246,246,246)]">
               <Sidebar />
+              <TabBar />
               <div className="flex flex-col flex-1 w-full overflow-hidden">
                 <Header session={session} />
-                <main className="flex-1 overflow-auto flex flex-col">
+                <main className="flex-1 overflow-auto flex flex-col pb-24 md:pb-0">
                   {children}
                   <Analytics/>
                 </main>
