@@ -13,23 +13,33 @@ interface SearchResultsBoardProps {
   onClose: () => void
 }
 
-const SearchResultsBoard = ({ results, loading, onClose }: SearchResultsBoardProps) => {
+const SearchResultsBoard = ({ results, loading, onClose, isMobile = false }: SearchResultsBoardProps & { isMobile?: boolean }) => {
   const { recipes, ingredients } = results || {}
   const hasRecipes = recipes && recipes.length > 0
   const hasIngredients = ingredients && ingredients.length > 0
   const isEmpty = !loading && !hasRecipes && !hasIngredients
 
-  const containerClasses = `
-    absolute top-full left-0 right-0 mt-2
-    w-full bg-white 
+  // Desktop: Dropdown/Modal styles
+  const desktopClasses = `
+    hidden md:flex
+    absolute z-20 top-full left-0 right-0 mt-2
+    w-full bg-white
     rounded-[28px] border border-gray-100
     shadow-xl shadow-gray-200/50
     overflow-hidden flex flex-col
   `
 
+  // Mobile: Full width/height styles
+  const mobileClasses = `
+    flex flex-col w-full bg-white h-full
+    overflow-y-auto
+  `
+
+  const containerClasses = isMobile ? mobileClasses : desktopClasses
+
   if (loading) {
     return (
-      <div className={`${containerClasses} h-40 justify-center items-center gap-3 text-gray-400`}>
+      <div className={`${containerClasses} ${!isMobile ? 'h-30 md:h-40' : 'h-full'} justify-center items-center gap-3 text-gray-400`}>
         <Loader2 className='animate-spin text-blue-500' size={24} />
         <span className="text-sm font-medium">Finding delicious things...</span>
       </div>
@@ -38,7 +48,7 @@ const SearchResultsBoard = ({ results, loading, onClose }: SearchResultsBoardPro
 
   if (isEmpty) {
     return (
-      <div className={`${containerClasses} h-40 justify-center items-center gap-2 text-gray-400`}>
+      <div className={`${containerClasses} ${!isMobile ? 'h-full md:h-40' : 'h-full'} justify-center items-center gap-2 text-gray-400`}>
         <div className="p-3 bg-gray-50 rounded-full mb-1">
             <SearchX size={24} className="text-gray-400" />
         </div>
@@ -48,7 +58,7 @@ const SearchResultsBoard = ({ results, loading, onClose }: SearchResultsBoardPro
   }
 
   return (
-    <div className={`${containerClasses} max-h-[60vh] overflow-y-auto py-4`}>
+    <div className={`${containerClasses} ${!isMobile ? 'max-h-[60vh]' : ''} overflow-y-auto py-4`}>
       {hasRecipes && (
         <SearchResultsDisplay title='Recipes' total={recipes.length}>
           {recipes.map((recipe) => (

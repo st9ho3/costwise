@@ -1,14 +1,15 @@
 // src/components/SearchBar.jsx
 
 import React from 'react';
-import { Search } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 
 interface SearchBarProps {
   searchTerm: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClear: () => void;
 }
 
-const SearchBar = ({ searchTerm, onChange }: SearchBarProps) => {
+const SearchBar = ({ searchTerm, onChange, onClear }: SearchBarProps) => {
   return (
     // CONTAINER:
     // 1. 'rounded-full' creates Pill shape
@@ -16,8 +17,8 @@ const SearchBar = ({ searchTerm, onChange }: SearchBarProps) => {
     // 3. 'focus-within:' classes handle the transition to active state (White bg + Shadow)
     <div
       className={`
-        relative flex items-center w-full max-w-md h-12 px-5
-        rounded-full bg-gray-100
+        relative flex items-center w-5/6 max-w-md h-12 px-5 mt-2 md: m-0
+        rounded-full bg-white lg:bg-gray-100
         transition-all duration-300 ease-in-out
         
         /* Hover State: Subtle darkening to indicate interactivity */
@@ -51,6 +52,9 @@ const SearchBar = ({ searchTerm, onChange }: SearchBarProps) => {
         type="text"
         placeholder="Search..."
       />
+      <div className='flex justify-center items-center rounded-full bg-gray-700 p-1' onClick={onClear}>
+        <X size={16} color='white'/>
+      </div>
     </div>
   );
 };
