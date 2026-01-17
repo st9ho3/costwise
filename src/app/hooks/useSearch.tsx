@@ -26,6 +26,10 @@ const useSearch = () => {
         setResultsBoardOpen(false)
     }
 
+    const clearSearch = () => {
+        setSearchTerm('')
+    }
+
     useEffect(() => {
         if (searchTerm.trim() !== '') {
             setResultsBoardOpen(true)
@@ -70,7 +74,8 @@ const useSearch = () => {
         results,
         resultsBoardOpen,
         handleClose,
-        
+        setSearchTerm,
+        clearSearch
     }
 }
 
