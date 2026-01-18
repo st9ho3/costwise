@@ -51,7 +51,6 @@ export default async function RootLayout({
           <HomeContextProvider>
             <div className="flex h-screen bg-[rgb(246,246,246)]">
               <Sidebar />
-              <TabBar />
               <div className="relative flex flex-col flex-1 w-full overflow-hidden">
                 <MobileSearchBoard />
                 <Header session={session} />
@@ -59,7 +58,9 @@ export default async function RootLayout({
                   {children}
                   <Analytics/>
                 </main>
+                <TabBar />
               </div>
+              
             </div>
             <Chat />
           </HomeContextProvider>

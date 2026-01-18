@@ -31,7 +31,7 @@ const SearchResultsBoard = ({ results, loading, onClose, isMobile = false }: Sea
 
   // Mobile: Full width/height styles
   const mobileClasses = `
-    flex flex-col w-full bg-white h-full
+    flex flex-col w-full bg-white h-140
     overflow-y-auto
   `
 

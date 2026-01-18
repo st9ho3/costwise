@@ -1,14 +1,13 @@
 import React from 'react'
-import SearchResultsBoard from '../searchResultsBoard'
 import SearchBoard from '../searchBoard'
 
 const MobileSearchBoard = () => {
-    const mobileSearch = true
+    const mobileSearch = false
     if (!mobileSearch) {
         return
     } 
   return (
-    <div className='flex flex-col w-full h-full bg-white z-2 absolute'>
+    <div className='flex flex-col w-full h-full bg-white z-2 absolute md:hidden'>
         <SearchBoard isMobile={true} />
         </div>
     

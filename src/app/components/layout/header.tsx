@@ -1,7 +1,7 @@
 // src/components/Header.tsx
 "use client"
 import React from 'react'
-import { Bell, Menu } from 'lucide-react'
+import { Bell, Menu, Search } from 'lucide-react'
 import { Session } from 'next-auth'
 import NotificationsNumber from '../shared/notificationsNumber'
 import SearchBoard from '../shared/search/searchBoard'
@@ -36,9 +36,13 @@ const Header = ({ session }: { session: Session }) => {
       </div>
 
       {/* CENTER: Search Bar (Takes prominent space) */}
-      <div className="flex-1 flex justify-center px-4">
+      <div className="hidden md:flex-1 md:flex md:justify-center md:px-4">
         <SearchBoard />
       </div>
+
+     <div className='flex md:hidden'>
+      <Search />
+     </div>
 
       {/* RIGHT: Actions & Profile */}
       <div className="flex items-center justify-end gap-3 w-60">
