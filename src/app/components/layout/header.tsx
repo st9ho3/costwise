@@ -10,6 +10,7 @@ import { useUIStore } from '@/app/stores/uiStore'
 
 const Header = ({ session }: { session: Session }) => {
   const toggleMobileMenu = useUIStore((state) => state.toggleMobileMenu)
+  const openMobileSearch = useUIStore((state) => state.openMobileSearch)
 
   return (
     <header 
@@ -40,7 +41,7 @@ const Header = ({ session }: { session: Session }) => {
         <SearchBoard />
       </div>
 
-     <div className='flex md:hidden'>
+     <div className='flex md:hidden' onClick={openMobileSearch}>
       <Search />
      </div>
 
