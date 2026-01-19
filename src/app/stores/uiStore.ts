@@ -10,6 +10,7 @@ interface State {
   modalType: ModalType;
   isDeleteActive: boolean;
   isMobileMenuOpen: boolean;
+  isMobileSearchOpen: boolean;
 
   openModal: (type: string) => void;
   closeModal: () => void;
@@ -18,6 +19,8 @@ interface State {
   activateDelete: () => void;
   toggleMobileMenu: () => void;
   closeMobileMenu: () => void;
+  openMobileSearch: () => void;
+  closeMobileSearch: () => void;
   reset: () => void;
 }
 
@@ -28,7 +31,7 @@ export const useUIStore = create<State>((set) => ({
   modalType: { type: "" },
   isDeleteActive: false,
   isMobileMenuOpen: false,
-
+  isMobileSearchOpen: false,
   //Actions
   openModal: (type) =>
     set({
@@ -43,6 +46,8 @@ export const useUIStore = create<State>((set) => ({
   toggleMobileMenu: () =>
     set((state) => ({ isMobileMenuOpen: !state.isMobileMenuOpen })),
   closeMobileMenu: () => set({ isMobileMenuOpen: false }),
+  openMobileSearch: () => set({ isMobileSearchOpen: true }),
+  closeMobileSearch: () => set({ isMobileSearchOpen: false }),
 
   reset: () =>
     set({
@@ -51,5 +56,6 @@ export const useUIStore = create<State>((set) => ({
       modalType: { type: "" },
       isDeleteActive: false,
       isMobileMenuOpen: false,
+      isMobileSearchOpen: false,
     }),
 }));
