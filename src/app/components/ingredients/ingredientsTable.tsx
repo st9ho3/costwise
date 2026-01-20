@@ -12,6 +12,7 @@ import Notification from "../shared/notification";
 import MonetaryCell from "../shared/table/monetaryCell";
 import Modal from "../shared/modal";
 import DeleteConfirmationModal from "../shared/deleteConfirmationModal";
+import MobileListCard, { MobileCardRow } from "../shared/mobileListCard";
 
 const IngredientsTable = ({ items }: { items: IngredientToDisplay[] }) => {
   const {
@@ -26,7 +27,56 @@ const IngredientsTable = ({ items }: { items: IngredientToDisplay[] }) => {
 
   return (
     <div>
-      <table className="w-full table-fixed mb-2 ">
+      <div className="md:hidden">
+        {items.map((item) => (
+          <MobileListCard
+            key={item.id}
+            title={
+              <Link href={`/ingredients/${item.id}`}>
+                <TableClickableTitle
+                  title={item.name}
+                  icon={item.icon}
+                  category={item.category}
+                />
+              </Link>
+            }
+            actions={
+              <div className="flex gap-3">
+                <TableActions
+                  id={item.id}
+                  onDelete={askPermision}
+                  path="ingredients"
+                />
+              </div>
+            }
+          >
+            <MobileCardRow
+              label="Price"
+              value={
+                <MonetaryCell
+                  price={item.unitPrice}
+                  type="per_unit"
+                  unit={item.unit}
+                />
+              }
+            />
+            <MobileCardRow
+              label="Usage"
+              value={
+                <Label
+                  text={getUsageCategory(Number(item.usage))}
+                  type={getUsageCategory(Number(item.usage))}
+                />
+              }
+            />
+            <MobileCardRow
+              label="Category"
+              value={<Label text={item.categoryName} type={item.categoryName} />}
+            />
+          </MobileListCard>
+        ))}
+      </div>
+      <table className="w-full table-fixed mb-2 hidden md:table">
         <TableHead
           columns={ingredientColumns}
           sortedLinks={ingredientSortedLinks}

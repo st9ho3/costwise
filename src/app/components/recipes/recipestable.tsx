@@ -15,6 +15,7 @@ import MonetaryCell from "../shared/table/monetaryCell";
 import PercentilleCell from "../shared/table/percentilleCell";
 import Modal from "../shared/modal";
 import DeleteConfirmationModal from "../shared/deleteConfirmationModal";
+import MobileListCard, { MobileCardRow } from "../shared/mobileListCard";
 
 
 
@@ -33,18 +34,57 @@ const RecipesTable = ({items}: {items: Recipe[]}) => {
 
   return (
     <div>
-      <table className="w-full table-fixed mb-2">
-        <TableHead
-          columns={recipesColumns}
-          sortedLinks={recipeSortedLinks}
-        />
+      <div className="md:hidden">
+        {items.map((item) => (
+          <MobileListCard
+            key={item.id}
+            title={
+              <Link href={`/recipes/${item.id}`}>
+                <TableClickableTitle imgPath={item.imgPath} title={item.title} />
+              </Link>
+            }
+            actions={
+              <div className="flex gap-3">
+                <TableActions
+                  id={item.id}
+                  onDelete={askPermision}
+                  path="recipes"
+                />
+              </div>
+            }
+          >
+            <MobileCardRow
+              label="Tax"
+              value={<PercentilleCell percentage={item.tax} />}
+            />
+            <MobileCardRow
+              label="Selling Price"
+              value={<MonetaryCell type="absolute" price={item.sellingPrice} />}
+            />
+            <MobileCardRow
+              label="Profit Margin"
+              value={
+                <Label
+                  text={`${String(item.profitMargin)}%`}
+                  type={getProfitMarginType(item.profitMargin)}
+                />
+              }
+            />
+            <MobileCardRow
+              label="Total Cost"
+              value={<MonetaryCell type="absolute" price={item.totalCost} />}
+            />
+          </MobileListCard>
+        ))}
+      </div>
+      <table className="w-full table-fixed mb-2 hidden md:table">
+        <TableHead columns={recipesColumns} sortedLinks={recipeSortedLinks} />
         <tbody className="text-gray-500 text-md">
           {items.map((item) => (
             <tr
               key={item.id}
               className="border-b h-12.5 border-gray-200 text-sm"
             >
-
               <td className="pl-4 md:pl-0 pt-2">
                 <Link href={`/recipes/${item.id}`}>
                   <TableClickableTitle
@@ -55,16 +95,11 @@ const RecipesTable = ({items}: {items: Recipe[]}) => {
               </td>
 
               <td className="hidden md:table-cell pl-4">
-                <PercentilleCell
-                  percentage={item.tax}
-                 />
+                <PercentilleCell percentage={item.tax} />
               </td>
 
               <td className="hidden md:table-cell pl-4">
-                <MonetaryCell
-                  type="absolute"
-                  price={item.sellingPrice}
-                 />
+                <MonetaryCell type="absolute" price={item.sellingPrice} />
               </td>
 
               <td className="hidden md:table-cell pl-4">
@@ -75,10 +110,7 @@ const RecipesTable = ({items}: {items: Recipe[]}) => {
               </td>
 
               <td className="hidden md:table-cell pl-4">
-                <MonetaryCell
-                  type="absolute"
-                  price={item.totalCost}
-                 />
+                <MonetaryCell type="absolute" price={item.totalCost} />
               </td>
               <td className="align-middle text-center gap-5 flex justify-center md:text-start md:justify-start mt-4 md:pl-4">
                 <TableActions
