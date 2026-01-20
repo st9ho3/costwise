@@ -12,7 +12,7 @@ const MobileSearchBoard = () => {
         return
     } 
   return (
-    <div className='flex flex-col w-full h-full bg-white z-2 relative md:hidden'>
+    <div className=' flex flex-col w-full h-full bg-white z-2 absolute md:hidden'>
       <div className='absolute top-1 left-2'>
         <X onClick={onClose}/>
       </div>
