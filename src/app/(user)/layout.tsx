@@ -1,8 +1,8 @@
 import { Analytics } from "@vercel/analytics/next"
 import type { Metadata } from "next";
 import "../globals.css";
-import HomeContextProvider from "../context/homeContext/homeContext";
-import Chat from "../components/chatUI/chat";
+
+
 import Sidebar from "../components/layout/sideBar";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
@@ -48,7 +48,6 @@ export default async function RootLayout({
     <html lang="en" className={poppins.className}>
       <body>
         <SessionProvider session={session}>
-          <HomeContextProvider>
             <div className="flex h-screen bg-[rgb(246,246,246)]">
               <Sidebar />
               <div className="relative flex flex-col flex-1 w-full overflow-hidden">
@@ -62,8 +61,6 @@ export default async function RootLayout({
               </div>
               
             </div>
-            <Chat />
-          </HomeContextProvider>
         </SessionProvider>
       </body>
     </html>
