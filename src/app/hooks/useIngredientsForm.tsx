@@ -15,7 +15,7 @@ import { Ingredient, IngredientSchema } from '@/shemas/recipe';
 import { createEditIngredientPrototype, createIngredientPrototype } from '@/app/utils/transformers';
 import { sendIngredient, updateIngredient } from '../services/services';
 import useHelpers from './useHelpers';
-import { useForm } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
 
@@ -30,7 +30,7 @@ type UseIngredientFormProps = {
 
 export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFormProps) => {
 
-  const {register, handleSubmit, reset, formState: {isSubmitting}, watch, setValue} = useForm({
+  const {register, handleSubmit, control, reset, formState: {isSubmitting}, watch, setValue} = useForm({
     resolver: zodResolver(IngredientSchema),
     defaultValues: mode === 'edit'
     ? {
@@ -53,9 +53,12 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
       usage: 'low',
       userId: userId,
       icon: '',
-      category: 'ef45178d-e566-4637-b7f9-abcf6d575466'
+      category: 'ef45178d-e566-4637-b7f9-abcf6d575466',
+      suppliers: []
     }
   })
+
+  const {fields, append, remove} = useFieldArray({control, name: 'suppliers'})
   
   const router = useRouter();
   const { raiseNotification } = useHelpers({path: null});

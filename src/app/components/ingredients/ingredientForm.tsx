@@ -6,14 +6,15 @@ import {
   IngredientNameInput, 
   IngredientPriceInput, 
   IngredientSummary, 
-  IngredientUnitSelect, 
   AddIngredientButton, 
   FormErrors 
 } from '../../constants/components';
 import Incremental from '../shared/incremental';
 import { Ingredient } from '@/shemas/recipe';
 import { useIngredientForm } from '../../hooks/useIngredientsForm';
-import IngredientCatSelect from './ingredientsFormComponents/ingredientCatSelect';
+import FormSelect from './ingredientsFormComponents/FormSelect';
+import { categoryOptions, unitOptions } from './ingredientsFormComponents/selectOptions';
+import { Tag, Scale } from 'lucide-react';
 
 type AddIngredientProps = {
   ingredient: Ingredient | undefined
@@ -53,14 +54,31 @@ const IngredientForm = ({ ingredient, mode, userId }: AddIngredientProps) => {
              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5 ml-1">
                Category
              </label>
-             <IngredientCatSelect register={register} onKeyDown={handleKeyDown} />
+             <FormSelect 
+               fieldName="category"
+               options={categoryOptions}
+               placeholder="Select a Category"
+               icon={Tag}
+               register={register}
+               onKeyDown={handleKeyDown}
+             />
           </div>
 
 
           {/* --- ROW 2: Quantity, Unit, Price --- */}
-          
+         
+          {/* Supplier */}
+          <div className='md:col-span-3'>
+            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5 ml-1">
+              Supplier
+            </label>
+            <div className='w-full'>
+              <FormSelect />
+            </div>
+          </div>
+        
           {/* Quantity: Takes up ~33% */}
-          <div className="md:col-span-4">
+           <div className="md:col-span-3">
             <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5 ml-1">
               Quantity
             </label>
@@ -79,11 +97,18 @@ const IngredientForm = ({ ingredient, mode, userId }: AddIngredientProps) => {
             <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5 ml-1">
               Unit
             </label>
-            <IngredientUnitSelect register={register} onKeyDown={handleKeyDown} />
+            <FormSelect 
+               fieldName="unit"
+               options={unitOptions}
+               placeholder="Unit"
+               icon={Scale}
+               register={register}
+               onKeyDown={handleKeyDown}
+             />
           </div>
 
           {/* Price: Takes up ~42% (Remaining space) */}
-          <div className="md:col-span-5">
+          <div className="md:col-span-3">
             <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5 ml-1">
               Price / Unit
             </label>

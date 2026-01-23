@@ -18,7 +18,7 @@ export const UnitSchema = z.union(
       }
       return { message: ctx.defaultError };
     },
-  }
+  },
 );
 
 export type Unit = z.infer<typeof UnitSchema>;
@@ -41,7 +41,7 @@ export const IngredientCategorySchema = z.union(
   ],
   {
     errorMap: () => ({ message: "Invalid ingredient category." }),
-  }
+  },
 );
 
 // Inferred TypeScript type for an ingredient category
@@ -81,7 +81,7 @@ export const IngredientCategoryNameSchema = z.union(
   {
     // Add a custom error message for clarity
     errorMap: () => ({ message: "Invalid ingredient category name." }),
-  }
+  },
 );
 
 // Inferred TypeScript type
@@ -105,7 +105,7 @@ export const RecipeCategorySchema = z.union(
     errorMap: () => ({
       message: "Invalid category. Must be 'starter', 'main', or 'dessert'.",
     }),
-  }
+  },
 );
 
 export type RecipeCategory = z.infer<typeof RecipeCategorySchema>;
@@ -168,7 +168,7 @@ export const IngredientSchema = z.object({
   quantity: z.number().min(1, "Quantity must be non-negative"),
   usage: z.string(),
   userId: z.string(),
-
+  suppliers: z.array(z.string()),
   category: IngredientCategorySchema,
 });
 
