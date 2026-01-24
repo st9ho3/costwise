@@ -14,7 +14,7 @@ import { Ingredient } from '@/shemas/recipe';
 import { useIngredientForm } from '../../hooks/useIngredientsForm';
 import FormSelect, { SelectOption } from './ingredientsFormComponents/FormSelect';
 import { categoryOptions, unitOptions } from './ingredientsFormComponents/selectOptions';
-import { Tag, Scale, Truck } from 'lucide-react';
+import { Tag, Scale, Truck, Trash } from 'lucide-react';
 
 type AddIngredientProps = {
   ingredient: Ingredient | undefined
@@ -26,8 +26,9 @@ type AddIngredientProps = {
 const IngredientForm = ({ ingredient, mode, userId, supplierOptions = [] }: AddIngredientProps) => {
   const {
      price, error, register, quantity, unit, name,
-     setErrors, handleKeyDown, handleSubmit, onSubmit, setValue, isSubmitting
-  } = useIngredientForm({ ingredient, mode, userId });
+     setErrors, handleKeyDown, handleSubmit, onSubmit, setValue, isSubmitting,
+     fields, append, remove
+  } = useIngredientForm({ ingredient, mode, userId, supplierOptions });
 
   return (
     <form 
@@ -73,16 +74,21 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions = [] }: AddI
             <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5 ml-1">
               Supplier
             </label>
-            <div className='w-full'>
+            {fields.map((id, index) => (
+              <div className='w-full'>
               <FormSelect
+                key={id.id}
                 fieldName="suppliers.0.id"
                 options={supplierOptions}
-                placeholder="Select Supplier"
+                placeholder="Supplier"
                 icon={Truck}
                 register={register}
                 onKeyDown={handleKeyDown}
               />
+              <Trash onClick={() => remove(index)} />
             </div>
+            ))} 
+            
           </div>
         
           {/* Quantity: Takes up ~33% */}
