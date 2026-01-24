@@ -42,7 +42,8 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
       usage: ingredient?.usage,
       userId: ingredient?.userId,
       icon: ingredient?.icon,
-      category: ingredient?.category
+      category: ingredient?.category,
+      suppliers: []
       }
     : {
       id: uuidv4(),

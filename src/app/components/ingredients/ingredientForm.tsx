@@ -12,17 +12,18 @@ import {
 import Incremental from '../shared/incremental';
 import { Ingredient } from '@/shemas/recipe';
 import { useIngredientForm } from '../../hooks/useIngredientsForm';
-import FormSelect from './ingredientsFormComponents/FormSelect';
+import FormSelect, { SelectOption } from './ingredientsFormComponents/FormSelect';
 import { categoryOptions, unitOptions } from './ingredientsFormComponents/selectOptions';
-import { Tag, Scale } from 'lucide-react';
+import { Tag, Scale, Truck } from 'lucide-react';
 
 type AddIngredientProps = {
   ingredient: Ingredient | undefined
   mode: 'create' | 'edit'
   userId: string
+  supplierOptions?: SelectOption[]
 };
 
-const IngredientForm = ({ ingredient, mode, userId }: AddIngredientProps) => {
+const IngredientForm = ({ ingredient, mode, userId, supplierOptions = [] }: AddIngredientProps) => {
   const {
      price, error, register, quantity, unit, name,
      setErrors, handleKeyDown, handleSubmit, onSubmit, setValue, isSubmitting
@@ -65,7 +66,7 @@ const IngredientForm = ({ ingredient, mode, userId }: AddIngredientProps) => {
           </div>
 
 
-          {/* --- ROW 2: Quantity, Unit, Price --- */}
+          {/* --- ROW 2: Supplier, Quantity, Unit, Price --- */}
          
           {/* Supplier */}
           <div className='md:col-span-3'>
@@ -73,7 +74,14 @@ const IngredientForm = ({ ingredient, mode, userId }: AddIngredientProps) => {
               Supplier
             </label>
             <div className='w-full'>
-              <FormSelect />
+              <FormSelect
+                fieldName="suppliers.0.id"
+                options={supplierOptions}
+                placeholder="Select Supplier"
+                icon={Truck}
+                register={register}
+                onKeyDown={handleKeyDown}
+              />
             </div>
           </div>
         
@@ -82,7 +90,7 @@ const IngredientForm = ({ ingredient, mode, userId }: AddIngredientProps) => {
             <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5 ml-1">
               Quantity
             </label>
-            <div className="w-full">
+            <div className="w-full flex justify-center">
               <Incremental 
                 onIngredientChange={setValue} 
                 count={quantity} 
