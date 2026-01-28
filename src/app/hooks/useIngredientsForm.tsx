@@ -26,11 +26,10 @@ type UseIngredientFormProps = {
   mode: 'create' | 'edit';
   ingredient: Ingredient | undefined;
   userId: string;
-  supplierOptions: {id: string}[]
 };
 
 
-export const useIngredientForm = ({ mode, ingredient, userId, supplierOptions }: UseIngredientFormProps) => {
+export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFormProps) => {
 
   const {register, handleSubmit, control, reset, formState: {isSubmitting}, watch, setValue} = useForm({
     resolver: zodResolver(IngredientSchema),
@@ -61,7 +60,6 @@ export const useIngredientForm = ({ mode, ingredient, userId, supplierOptions }:
     }
   })
 
-  const {fields, append, remove} = useFieldArray({control, name: 'suppliers'})
   
   const router = useRouter();
   const { raiseNotification } = useHelpers({path: null});
