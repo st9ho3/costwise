@@ -18,7 +18,7 @@ import { useSession } from 'next-auth/react';
 import { useUIStore } from '@/app/stores/uiStore';
 import { useFileStore } from '@/app/stores/fileStore';
 
-import UserProfile from '../shared/profileModal';
+
 
 export function SidebarLink({
   icon: Icon,
@@ -219,27 +219,14 @@ export default function Sidebar() {
       {/* Modal for 'create' action */}
       <Modal
         type='create'
-        isOpen={isModalOpen}
+        isOpen={isModalOpen && modalType.type === 'create'} // Added specific check
         onClose={() => {
           reset()
           resetFile()
         }}
       >
-        {modalType.type === 'create' 
-        && <OptionsModal />
-        }
+        <OptionsModal />
       </Modal>
-
-      {isProfileOpen && 
-        <Modal
-        isOpen={isModalOpen}
-        onClose={() => {
-          reset()
-        }}
-        >
-          <UserProfile name={data?.user?.name || "Unknown name"} email={data?.user?.email || "Unknown email"} avatar={data?.user?.image} />
-        </Modal>
-      }
     </>
   );
 }
