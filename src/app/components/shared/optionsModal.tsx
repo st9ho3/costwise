@@ -21,10 +21,10 @@ const OptionItem = ({ href, icon: Icon, label, description, closeModal, colorCla
     return (
         <Link 
             href={href} 
-            onClick={(e) => {
-                // Keep your existing delay logic
-                e.stopPropagation();
-                setTimeout(() => closeModal(), 300); 
+            onClick={() => {
+                setTimeout(() => {
+                    closeModal()
+                }, 200)
             }}
             className="block w-full"
         >

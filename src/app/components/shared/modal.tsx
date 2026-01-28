@@ -38,8 +38,9 @@ const Modal= ({ isOpen, onClose, children, type }: ModalProps) => {
   return (
     <div
       onClick={handleClose}
-      className={`fixed inset-0 z-55 flex items-center justify-center ${type === 'delete' ? 'bg-white/30' : 'bg-black/30' }  backdrop-blur-sm transition-opacity duration-300`}>
+      className={`fixed inset-0 z-55 flex items-center justify-center ${type === 'delete' ? 'bg-white/30' : 'bg-gray-600/30' }  backdrop-blur-sm transition-opacity duration-300`}>
       <div
+        onClick={(e) => e.stopPropagation()}
         ref={modalRef}
         className={`relative w-full max-w-fit ${type === 'create' ? 'p-9' : 'pt-9'} mx-4 transform transition-all duration-300 bg-white rounded-2xl shadow-xl`} >
         {type === 'delete' && <AlertCircleIcon className="absolute top-3 left-3" color="red" size={28} /> }
