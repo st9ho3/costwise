@@ -38,6 +38,14 @@ const useSuppliersForm = ({userId, mode, supplier}: UseSuppliersFormProps) => {
         setTempCategories(filteredCategories)
       }
     } 
+
+    /**
+     * Clears all temporary categories.
+     * Used when closing the modal without submitting.
+     */
+    const clearTempCategories = () => {
+      setTempCategories(INITIAL_STATE)
+    }
     
     const resetForm = () => {
       setTimeout(() => {
@@ -81,7 +89,8 @@ const useSuppliersForm = ({userId, mode, supplier}: UseSuppliersFormProps) => {
     formState,
     onSubmit,
     selectCategory,
-    tempCategories
+    tempCategories,
+    clearTempCategories
   }
 }
 

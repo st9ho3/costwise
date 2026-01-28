@@ -15,10 +15,9 @@ import { Ingredient, IngredientSchema } from '@/shemas/recipe';
 import { createEditIngredientPrototype, createIngredientPrototype } from '@/app/utils/transformers';
 import { sendIngredient, updateIngredient } from '../services/services';
 import useHelpers from './useHelpers';
-import { useFieldArray, useForm } from 'react-hook-form';
+import {  useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
-import { SelectOption } from '../components/ingredients/ingredientsFormComponents/FormSelect';
 
 export type IngredientFormFields = z.infer<typeof IngredientSchema>
 
@@ -56,7 +55,7 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
       userId: userId,
       icon: '',
       category: 'ef45178d-e566-4637-b7f9-abcf6d575466',
-      suppliers: supplierOptions
+      suppliers: []
     }
   })
 
@@ -148,9 +147,7 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
     handleKeyDown,
     setValue,
     isSubmitting,
-    fields,
-    append,
-    remove
+    
   
   };
 };

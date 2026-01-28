@@ -28,7 +28,15 @@ export const getDefaultSupplierValues = () => ({
   dateAdded: new Date(),
 });
 
-export const INGREDIENT_CATEGORIES: SelectableItem[] = [
+/**
+ * Category item specifically for ingredients.
+ * Extends SelectableItem but with a more specific ID type.
+ */
+export interface IngredientCategoryItem extends Omit<SelectableItem, "id"> {
+  id: IngredientCategory;
+}
+
+export const INGREDIENT_CATEGORIES: IngredientCategoryItem[] = [
   { name: "Produce", id: "5dee106a-5050-443e-8368-03397e02af6d", icon: "🥕" },
   {
     name: "Meat & Poultry",

@@ -2,16 +2,17 @@
 import React from 'react'
 import ExitButton from '../shared/exitButton'
 import Input from './suppliersFormComponents/input'
-import { AtSign, Banknote, BookCopy, ChevronDown, Globe, LetterText, Phone, Pin, Tag, Truck } from 'lucide-react'
+import { AtSign, Banknote, BookCopy, Globe, LetterText, Phone, Pin, Tag, Truck } from 'lucide-react'
 import Select from './suppliersFormComponents/select'
 import { deliveryOptions, paymentTermsOptions } from '@/app/constants/data'
 import useSuppliersForm from '@/app/hooks/useSuppliersForm'
 import { INGREDIENT_CATEGORIES as categories } from '@/app/constants/supplierDeafaultValues'
 import { Supplier } from '@/shemas/recipe'
-import SelectStore from '../shared/SelectStore'
 import Modal from '../shared/modal'
 import { useUIStore } from '@/app/stores/uiStore'
 import { SubmitButton } from '@/app/constants/components'
+import ItemsStore from '../shared/itemsStore'
+import MultipleSelect from '../shared/multipleSelect'
 
 interface SuppliersFormProps {
   userId: string 
@@ -21,17 +22,19 @@ interface SuppliersFormProps {
 
 const SuppliersForm = ({userId, mode, supplier}: SuppliersFormProps) => {
   
-  const {register, handleSubmit, onSubmit, formState: {isSubmitting}, selectCategory, tempCategories} = useSuppliersForm({userId, mode, supplier})
-  const { isModalOpen, modalType, openModal, closeModal } = useUIStore()
-console.log(isModalOpen, modalType)
-  // Get names of selected categories for display
-  const selectedNames = categories
-    .filter((cat) => tempCategories.includes(cat.id))
-    .map((cat) => cat.name);
+  const {register, handleSubmit, onSubmit, formState: {isSubmitting}, selectCategory, tempCategories, clearTempCategories} = useSuppliersForm({userId, mode, supplier})
+  const { isModalOpen, modalType, closeModal } = useUIStore()
 
-  const displayText = selectedNames.length > 0 
-    ? selectedNames.slice(0, 2).join(', ') + (selectedNames.length > 2 ? ` +${selectedNames.length - 2}` : '')
-    : 'Επιλέξτε κατηγορίες...';
+  /**
+   * Handle modal close with cleanup logic.
+   * If tempCategories exist, clear them before closing.
+   */
+  const handleCloseModal = () => {
+    if (tempCategories.length > 0) {
+      clearTempCategories()
+    }
+    closeModal()
+  }
 
   return (
     <div className='flex w-5xl h-fit'>
@@ -151,52 +154,27 @@ console.log(isModalOpen, modalType)
         
 
         {/* Categories Input Trigger */}
-        <div className='flex flex-col gap-1 mt-4'>
-          <label className="text-sm font-medium text-gray-600 ml-1">Κατηγορίες</label>
-          <div
-            onClick={() => openModal('categories')}
-            className="flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg bg-white cursor-pointer hover:border-gray-300 transition-colors"
-          >
-            <div className="flex items-center gap-2 overflow-hidden">
-              <Tag className="w-4 h-4 text-gray-400 flex-shrink-0" />
-              <span className={`text-sm truncate ${selectedNames.length > 0 ? 'text-gray-700' : 'text-gray-400'}`}>
-                {displayText}
-              </span>
-            </div>
-            <ChevronDown className="w-4 h-4 text-gray-400 flex-shrink-0" />
-          </div>
-          {tempCategories.length > 0 && (
-            <span className="text-xs text-emerald-600 ml-1">
-              {tempCategories.length} επιλεγμένα
-            </span>
-          )}
-        </div>
+        <MultipleSelect
+          selectedItems={categories.filter((cat) => tempCategories.includes(cat.id))}
+          label="Κατηγορίες"
+          placeholder="Επιλέξτε κατηγορίες..."
+          modalType="categories"
+          icon={Tag}
+          getDisplayNames={(items) => items.map((item) => item.name)}
+        />
         <SubmitButton mode={mode} isSubmitting={isSubmitting} />
       </form>
 
       {/* Categories Selection Modal */}
-      <Modal isOpen={isModalOpen && modalType.type === 'categories'} onClose={closeModal} type="create">
-        <div className="w-full max-w-md">
-          <div className="mb-4">
-            <h3 className="text-xl font-bold text-gray-800 tracking-tight">Επιλογή Κατηγοριών</h3>
-            <p className="text-sm text-gray-400 mt-1">Επιλέξτε τις κατηγορίες που προμηθεύει</p>
-          </div>
-          <SelectStore 
-            items={categories} 
-            selected={tempCategories} 
-            onSelect={selectCategory}
-            className="flex flex-wrap gap-2 justify-center"
-          />
-          <div className="flex justify-end mt-6">
-            <button
-              type="button"
-              onClick={closeModal}
-              className="px-4 py-2 bg-emerald-500 text-white text-sm font-medium rounded-lg hover:bg-emerald-600 transition-colors"
-            >
-              Επιβεβαίωση
-            </button>
-          </div>
-        </div>
+      <Modal isOpen={isModalOpen && modalType.type === 'categories'} onClose={handleCloseModal} type="create">
+        <ItemsStore
+          items={categories}
+          selected={tempCategories}
+          onSelect={selectCategory}
+          title="Επιλογή Κατηγοριών"
+          description="Επιλέξτε τις κατηγορίες που προμηθεύει"
+          onClose={closeModal}
+        />
       </Modal>
     </div>
   )
