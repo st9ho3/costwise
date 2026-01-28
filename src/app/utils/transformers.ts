@@ -1,6 +1,23 @@
-import { DBIngredient, DBRecipe, Ingredient, IngredientCategory, IngredientCategoryName, IngredientCategorySchema, IngredientToDisplay, Recipe, RecipeIngredients, Supplier, SupplierSchema, Unit } from "@/shemas/recipe";
+import {
+  DBIngredient,
+  DBRecipe,
+  Ingredient,
+  IngredientCategory,
+  IngredientCategoryName,
+  IngredientCategorySchema,
+  IngredientToDisplay,
+  Recipe,
+  RecipeIngredients,
+  Supplier,
+  SupplierSchema,
+  Unit,
+} from "@/shemas/recipe";
 import { SupplierUpdatePayload } from "@/types/context";
-import { DestructuredSupplier, RawDBSupplier, RecipeIngredientFromDB } from "@/types/specialTypes";
+import {
+  DestructuredSupplier,
+  RawDBSupplier,
+  RecipeIngredientFromDB,
+} from "@/types/specialTypes";
 import { validateComplexEntity } from "../services/validationService";
 import { normalizePrice } from "./pricing";
 import { IngredientFormFields } from "../hooks/useIngredientsForm";
@@ -8,40 +25,45 @@ import { createIngredientIcon } from "./uiHelpers";
 
 export const transformRecipeFromDB = (recipeFromDb: DBRecipe): Recipe => ({
   ...recipeFromDb,
-    totalCost: Number(recipeFromDb.totalCost),
-    tax: Number(recipeFromDb.tax),
-    sellingPrice: Number(recipeFromDb.sellingPrice),
-    profitMargin: Number(recipeFromDb.profitMargin),
-    foodCost: Number(recipeFromDb.foodCost),
-    dateCreated: new Date(recipeFromDb.dateCreated),
-    imgPath: recipeFromDb.imgPath,
-}) 
+  totalCost: Number(recipeFromDb.totalCost),
+  tax: Number(recipeFromDb.tax),
+  sellingPrice: Number(recipeFromDb.sellingPrice),
+  profitMargin: Number(recipeFromDb.profitMargin),
+  foodCost: Number(recipeFromDb.foodCost),
+  dateCreated: new Date(recipeFromDb.dateCreated),
+  imgPath: recipeFromDb.imgPath,
+});
 
 export const transformRecipeToDB = (recipe: Recipe): DBRecipe => ({
-          ...recipe,
-          totalCost: recipe.totalCost.toString(),
-          dateCreated: recipe.dateCreated.toISOString().split('T')[0],
-          tax: recipe.tax.toString(),
-          sellingPrice: recipe.sellingPrice ? recipe.sellingPrice.toString() : "0",
-          profitMargin: recipe.profitMargin ? recipe.profitMargin.toString() : "0",
-          foodCost: recipe.foodCost ? recipe.foodCost.toString() : "0"
-}) 
+  ...recipe,
+  totalCost: recipe.totalCost.toString(),
+  dateCreated: recipe.dateCreated.toISOString().split("T")[0],
+  tax: recipe.tax.toString(),
+  sellingPrice: recipe.sellingPrice ? recipe.sellingPrice.toString() : "0",
+  profitMargin: recipe.profitMargin ? recipe.profitMargin.toString() : "0",
+  foodCost: recipe.foodCost ? recipe.foodCost.toString() : "0",
+});
 
-export const transformIngredientFromDB = (ingredient: DBIngredient, category?: IngredientCategoryName): IngredientToDisplay => ({
+export const transformIngredientFromDB = (
+  ingredient: DBIngredient,
+  category?: IngredientCategoryName,
+): IngredientToDisplay => ({
   ...ingredient,
-  categoryName: category ? category : 'Other',
+  categoryName: category ? category : "Other",
   unitPrice: Number(ingredient.unitPrice),
-  quantity: Number(ingredient.quantity)
-})
+  quantity: Number(ingredient.quantity),
+});
 
-export const transformIngredientToDB = (ingredient: Ingredient): DBIngredient => ({
+export const transformIngredientToDB = (
+  ingredient: Ingredient,
+): DBIngredient => ({
   ...ingredient,
   unitPrice: ingredient.unitPrice.toString(),
-  quantity: ingredient.quantity.toString()
-})
+  quantity: ingredient.quantity.toString(),
+});
 
 export const transformRecipeIngredentFromDB = (
-  ingredient: RecipeIngredientFromDB
+  ingredient: RecipeIngredientFromDB,
 ): RecipeIngredients => {
   return {
     name: ingredient.ingredients.name,
@@ -69,13 +91,15 @@ export const transformSupplierFromDB = (raw: RawDBSupplier): Supplier => {
     notes: "", // 'notes' exists in Supplier but is missing from RawDBSupplier interface
 
     // 2. Transform Address (Take first element)
-    address: raw.supplierAddresses[0] ? {
-      street: raw.supplierAddresses[0].street || undefined,
-      city: raw.supplierAddresses[0].city || undefined,
-      state: raw.supplierAddresses[0].state || undefined,
-      postalCode: raw.supplierAddresses[0].postalCode || undefined,
-      country: raw.supplierAddresses[0].country || undefined,
-    } : undefined,
+    address: raw.supplierAddresses[0]
+      ? {
+          street: raw.supplierAddresses[0].street || undefined,
+          city: raw.supplierAddresses[0].city || undefined,
+          state: raw.supplierAddresses[0].state || undefined,
+          postalCode: raw.supplierAddresses[0].postalCode || undefined,
+          country: raw.supplierAddresses[0].country || undefined,
+        }
+      : undefined,
 
     // 3. Transform Financial Data (Rename and extract)
     financialData: {
@@ -84,103 +108,146 @@ export const transformSupplierFromDB = (raw: RawDBSupplier): Supplier => {
     },
 
     // 4. Transform Categories (Map objects to strings)
-    category: raw.supplierCategories
-      .map(c => c.categoryId) as IngredientCategory[]
-      
+    category: raw.supplierCategories.map(
+      (c) => c.categoryId,
+    ) as IngredientCategory[],
   };
 };
 
-export const createIngredientPrototype = (data: IngredientFormFields, userId: string) => {
-
+export const createIngredientPrototype = (
+  data: IngredientFormFields,
+  userId: string,
+) => {
   if (data) {
-    const normalizedUnitPrice = normalizePrice(data.unitPrice, data.unit as Unit, data.quantity);
+    const normalizedUnitPrice = normalizePrice(
+      data.unitPrice,
+      data.unit as Unit,
+      data.quantity,
+    );
 
-      const ingredientPrototype: Ingredient = {
-        id: data.id,
-        icon: createIngredientIcon(data.category),
-        name: data.name,
-        unit: data.unit === 'g' || data.unit === 'kg' ? 'g' : data.unit === 'L' || data.unit === 'ml' ? 'ml' : 'piece',
-        unitPrice: normalizedUnitPrice,
-        quantity: data.quantity,
-        usage: '0',
-        userId: userId,
-        category: data.category
-      };
-      return ingredientPrototype
+    const ingredientPrototype: Ingredient = {
+      id: data.id,
+      icon: createIngredientIcon(data.category),
+      name: data.name,
+      unit:
+        data.unit === "g" || data.unit === "kg"
+          ? "g"
+          : data.unit === "L" || data.unit === "ml"
+            ? "ml"
+            : "piece",
+      unitPrice: normalizedUnitPrice,
+      quantity: data.quantity,
+      usage: "0",
+      userId: userId,
+      category: data.category,
+    };
+    return ingredientPrototype;
   }
-  
+};
 
-      
-}
+export const createEditIngredientPrototype = (
+  data: IngredientFormFields,
+  ingredient: Ingredient,
+  userId: string,
+) => {
+  const normalizedUnitPrice = normalizePrice(
+    data.unitPrice,
+    data.unit as Unit,
+    data.quantity,
+  );
+  // Edit mode logic
+  const updatedIngredient: Ingredient = {
+    id: ingredient.id,
+    icon: ingredient.icon,
+    name: data.name,
+    unit:
+      data.unit === "g" || data.unit === "kg"
+        ? "g"
+        : data.unit === "L" || data.unit === "ml"
+          ? "ml"
+          : "piece",
+    unitPrice: normalizedUnitPrice,
+    quantity: data.quantity,
+    usage: ingredient.usage || "0",
+    userId: userId,
+    category: data.category,
+  };
 
-export const createEditIngredientPrototype = (data: IngredientFormFields, ingredient: Ingredient, userId: string) => {
-
-  const normalizedUnitPrice = normalizePrice(data.unitPrice, data.unit as Unit, data.quantity);
-      // Edit mode logic
-      const updatedIngredient: Ingredient = {
-        id: ingredient.id,
-        icon: ingredient.icon,
-        name: data.name,
-        unit: data.unit === 'g' || data.unit === 'kg' ? 'g' : data.unit === 'L' || data.unit === 'ml' ? 'ml' : 'piece',
-        unitPrice: normalizedUnitPrice,
-        quantity: data.quantity,
-        usage: ingredient.usage || '0',
-        userId: userId,
-        category: data.category
-      };
-
-      return updatedIngredient
-}
+  return updatedIngredient;
+};
 
 export const destructureSupplier = (supplier: Supplier) => {
-        const dbSupplier: DestructuredSupplier = {
-          id: supplier.id,
-          userId: supplier.userId,
-          name: supplier.name,
-          contactPerson: supplier.contactPerson,
-          email: supplier.email,
-          phone: supplier.phone,
-          website: supplier.website,
-          isActive: supplier.isActive,
-          dateAdded: supplier.dateAdded,
-          deliveryTime: supplier.deliveryTime === '' || !supplier.deliveryTime ? null : supplier.deliveryTime 
-        }
-        const categories = supplier.category
-        // In the address table will propably have options in order to add multiple addresses after. So maybe we will iterate on the address service through the addresses array. Hoever now we will use an object so a simple address.
-        const address = {
-          street: !supplier.address?.street ? null : supplier.address.street,
-          city: !supplier.address?.city ? null : supplier.address.city,
-          state: !supplier.address?.state ? null : supplier.address.state,
-          postalCode: !supplier.address?.postalCode ? null : supplier.address.postalCode,
-          country: !supplier.address?.country ? null : supplier.address.country,
-        
-        }
-        const financialData = {
-           vatNumber: !supplier.financialData.vatNumber ? null : supplier.financialData.vatNumber,
-           paymentTerms: supplier.financialData.paymentTerms === '' || !supplier.financialData.paymentTerms ? null : supplier.financialData.paymentTerms,
-           supplierId: supplier.id,
-           defaultCurrency: 'EUR'
-          }
-        return {categories, address, financialData, dbSupplier}
-}
+  const dbSupplier: DestructuredSupplier = {
+    id: supplier.id,
+    userId: supplier.userId,
+    name: supplier.name,
+    contactPerson: supplier.contactPerson,
+    email: supplier.email,
+    phone: supplier.phone,
+    website: supplier.website,
+    isActive: supplier.isActive,
+    dateAdded: supplier.dateAdded,
+    deliveryTime:
+      supplier.deliveryTime === "" || !supplier.deliveryTime
+        ? null
+        : supplier.deliveryTime,
+  };
+  const categories = supplier.category;
+  // In the address table will propably have options in order to add multiple addresses after. So maybe we will iterate on the address service through the addresses array. Hoever now we will use an object so a simple address.
+  const address = {
+    street: !supplier.address?.street ? null : supplier.address.street,
+    city: !supplier.address?.city ? null : supplier.address.city,
+    state: !supplier.address?.state ? null : supplier.address.state,
+    postalCode: !supplier.address?.postalCode
+      ? null
+      : supplier.address.postalCode,
+    country: !supplier.address?.country ? null : supplier.address.country,
+  };
+  const financialData = {
+    vatNumber: !supplier.financialData.vatNumber
+      ? null
+      : supplier.financialData.vatNumber,
+    paymentTerms:
+      supplier.financialData.paymentTerms === "" ||
+      !supplier.financialData.paymentTerms
+        ? null
+        : supplier.financialData.paymentTerms,
+    supplierId: supplier.id,
+    defaultCurrency: "EUR",
+  };
+  return { categories, address, financialData, dbSupplier };
+};
 
-export const prepareSupplierForDB = (supplier: SupplierUpdatePayload, mode: 'create' | 'update') => {
+export const prepareSupplierForDB = (
+  supplier: SupplierUpdatePayload,
+  mode: "create" | "update",
+) => {
+  const { validatedEntity, validatedAddedItems, validatedRemovedItems } =
+    validateComplexEntity(
+      supplier.supplier,
+      SupplierSchema,
+      IngredientCategorySchema,
+      "dateAdded",
+      supplier.addedCategories,
+      supplier.removedCategories,
+    );
+  const destructuredSupplier = destructureSupplier(validatedEntity);
 
-  const {validatedEntity, validatedAddedItems, validatedRemovedItems} = validateComplexEntity(supplier.supplier, SupplierSchema, IngredientCategorySchema, 'dateAdded', supplier.addedCategories, supplier.removedCategories)
-  const destructuredSupplier = destructureSupplier(validatedEntity)
+  if (!validatedEntity) {
+    throw new Error("Supplier Service, Error with validating supplier");
+  }
+  if (mode === "create") {
+    return {
+      destructuredSupplier,
+      validatedAddedItems: undefined,
+      validatedRemovedItems: undefined,
+    };
+  } else {
+    return { destructuredSupplier, validatedAddedItems, validatedRemovedItems };
+  }
+};
 
-          if (!validatedEntity) {
-              throw new Error('Supplier Service, Error with validating supplier')
-          }
-          if (mode === 'create') {
-              return {destructuredSupplier, validatedAddedItems: undefined, validatedRemovedItems: undefined }
-          } else {
-
-            return { destructuredSupplier, validatedAddedItems, validatedRemovedItems}
-          }
-}
-
-export const getArrayChanges = <T,>(originalArray: T[], newArray: T[]) => {
+export const getArrayChanges = <T>(originalArray: T[], newArray: T[]) => {
   const added = newArray.filter((item) => !originalArray.includes(item));
   const removed = originalArray.filter((item) => !newArray.includes(item));
   return { added, removed };

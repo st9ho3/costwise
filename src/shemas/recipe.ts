@@ -168,17 +168,13 @@ export const IngredientSchema = z.object({
   quantity: z.number().min(1, "Quantity must be non-negative"),
   usage: z.string(),
   userId: z.string(),
-  suppliers: z.array(
-    z.object({
-      id: z.string(),
-    }),
-  ),
+  suppliers: z.array(z.string()),
   category: IngredientCategorySchema,
 });
 
 export type Ingredient = z.infer<typeof IngredientSchema>;
 
-export type IngredientToDisplay = Ingredient & {
+export type IngredientToDisplay = Omit<Ingredient, "suppliers"> & {
   categoryName: IngredientCategoryName;
 };
 
