@@ -1,7 +1,7 @@
 // src/components/ingredients/IngredientForm.tsx
 
 "use client"
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   IngredientNameInput, 
   IngredientPriceInput, 
@@ -14,7 +14,11 @@ import { Ingredient } from '@/shemas/recipe';
 import { useIngredientForm } from '../../hooks/useIngredientsForm';
 import FormSelect, { SelectOption } from './ingredientsFormComponents/FormSelect';
 import { categoryOptions, unitOptions } from './ingredientsFormComponents/selectOptions';
-import { Tag, Scale, Truck, Trash, Plus } from 'lucide-react';
+import { Tag, Scale, Truck } from 'lucide-react';
+import Modal from '../shared/modal';
+import ItemsStore from '../shared/itemsStore';
+import { useUIStore } from '@/app/stores/uiStore';
+import MultipleSelect from '../shared/multipleSelect';
 
 type AddIngredientProps = {
   ingredient: Ingredient | undefined
@@ -27,8 +31,22 @@ const IngredientForm = ({ ingredient, mode, userId}: AddIngredientProps) => {
   const {
      price, error, register, quantity, unit, name,
      setErrors, handleKeyDown, handleSubmit, onSubmit, setValue, isSubmitting,
-     fields, append, remove
   } = useIngredientForm({ ingredient, mode, userId });
+
+  // Supplier selection state and modal management
+  const { isModalOpen, modalType, closeModal } = useUIStore();
+  const [tempSuppliers, setTempSuppliers] = useState<string[]>([]);
+
+  // Empty suppliers array - will be populated later
+  const suppliers: any[] = [];
+
+  const selectSupplier = (id: string) => {
+    if (!tempSuppliers.includes(id)) {
+      setTempSuppliers([...tempSuppliers, id]);
+    } else {
+      setTempSuppliers(tempSuppliers.filter((supplierId) => supplierId !== id));
+    }
+  };
 
   return (
     <form 
@@ -71,11 +89,14 @@ const IngredientForm = ({ ingredient, mode, userId}: AddIngredientProps) => {
          
           {/* Supplier */}
           <div className='md:col-span-3'>
-            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5 ml-1">
-              Supplier
-            </label>
-            
-            
+            <MultipleSelect
+              selectedItems={suppliers.filter((sup) => tempSuppliers.includes(sup.id))}
+              label="SUPPLIERS"
+              placeholder="Select suppliers..."
+              modalType="suppliers"
+              icon={Truck}
+              getDisplayNames={(items) => items.map((item) => item.name)}
+            />
           </div>
         
           {/* Quantity: Takes up ~33% */}
@@ -138,6 +159,18 @@ const IngredientForm = ({ ingredient, mode, userId}: AddIngredientProps) => {
             </div>
         </div>
       </div>
+
+      {/* Suppliers Selection Modal */}
+      <Modal isOpen={isModalOpen && modalType.type === 'suppliers'} onClose={closeModal} type="create">
+        <ItemsStore
+          items={suppliers}
+          selected={tempSuppliers}
+          onSelect={selectSupplier}
+          title="Select Suppliers"
+          description="Choose suppliers for this ingredient"
+          onClose={closeModal}
+        />
+      </Modal>
     </form>
   );
 };

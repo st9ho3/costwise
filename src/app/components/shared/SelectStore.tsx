@@ -8,7 +8,7 @@ import React from 'react'
  * Any item passed to SelectStore must have at least these fields.
  */
 export interface SelectableItem {
-  id: IngredientCategory;
+  id: string;
   name: string;
   icon?: string;
 }
@@ -16,10 +16,10 @@ export interface SelectableItem {
 interface SelectStoreProps<T extends SelectableItem> {
   /** All available items to display as pills */
   items: T[];
-  /** Currently selected item IDs */
-  selected: string[];
-  /** Callback when an item is clicked */
-  onSelect: (item: IngredientCategory ) => void;
+  /** Currently selected item IDs - uses the same ID type as the items */
+  selected: T['id'][];
+  /** Callback when an item is clicked - receives the ID in the same type as the items */
+  onSelect: (item: T['id']) => void;
   /** Optional: Custom container className */
   className?: string;
 }
