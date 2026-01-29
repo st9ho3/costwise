@@ -3,12 +3,13 @@ import React from 'react'
 import { Ingredient } from '@/shemas/recipe'
 import { ExitButton, IngredientForm } from '@/app/constants/components'
 import { SelectOption } from './ingredientsFormComponents/FormSelect'
+import { SelectableItem } from '../shared/SelectStore'
 
 interface Props {
   mode: 'create' | 'edit'
   ingredient: Ingredient | undefined
   userId: string
-  supplierOptions?: SelectOption[]
+  supplierOptions?: SelectableItem[]
 }
 
 const IngredientModal = ({ingredient, mode, userId, supplierOptions = []}: Props) => {

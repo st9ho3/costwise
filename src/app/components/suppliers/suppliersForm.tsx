@@ -9,7 +9,6 @@ import useSuppliersForm from '@/app/hooks/useSuppliersForm'
 import { INGREDIENT_CATEGORIES as categories } from '@/app/constants/supplierDeafaultValues'
 import { Supplier } from '@/shemas/recipe'
 import Modal from '../shared/modal'
-import { useUIStore } from '@/app/stores/uiStore'
 import { SubmitButton } from '@/app/constants/components'
 import ItemsStore from '../shared/itemsStore'
 import MultipleSelect from '../shared/multipleSelect'
@@ -22,19 +21,20 @@ interface SuppliersFormProps {
 
 const SuppliersForm = ({userId, mode, supplier}: SuppliersFormProps) => {
   
-  const {register, handleSubmit, onSubmit, formState: {isSubmitting}, selectCategory, tempCategories, clearTempCategories} = useSuppliersForm({userId, mode, supplier})
-  const { isModalOpen, modalType, closeModal } = useUIStore()
-
-  /**
-   * Handle modal close with cleanup logic.
-   * If tempCategories exist, clear them before closing.
-   */
-  const handleCloseModal = () => {
-    if (tempCategories.length > 0) {
-      clearTempCategories()
-    }
-    closeModal()
-  }
+  // All modal/category logic now managed by the hook
+  const {
+    register, 
+    handleSubmit, 
+    onSubmit, 
+    formState: {isSubmitting}, 
+    selectCategory, 
+    tempCategories,
+    getSelectedCategoryItems,
+    confirmCategories,
+    handleCloseModal,
+    isModalOpen,
+    modalType
+  } = useSuppliersForm({userId, mode, supplier})
 
   return (
     <div className='flex w-5xl h-fit'>
@@ -153,9 +153,9 @@ const SuppliersForm = ({userId, mode, supplier}: SuppliersFormProps) => {
         </div>
         
 
-        {/* Categories Input Trigger */}
+        {/* Categories Input Trigger - uses confirmed categories for display */}
         <MultipleSelect
-          selectedItems={categories.filter((cat) => tempCategories.includes(cat.id))}
+          selectedItems={getSelectedCategoryItems()}
           label="Κατηγορίες"
           placeholder="Επιλέξτε κατηγορίες..."
           modalType="categories"
@@ -173,7 +173,7 @@ const SuppliersForm = ({userId, mode, supplier}: SuppliersFormProps) => {
           onSelect={selectCategory}
           title="Επιλογή Κατηγοριών"
           description="Επιλέξτε τις κατηγορίες που προμηθεύει"
-          onClose={closeModal}
+          onClose={confirmCategories}
         />
       </Modal>
     </div>

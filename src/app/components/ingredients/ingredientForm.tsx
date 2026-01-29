@@ -1,7 +1,7 @@
 // src/components/ingredients/IngredientForm.tsx
 
 "use client"
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   IngredientNameInput, 
   IngredientPriceInput, 
@@ -17,36 +17,29 @@ import { categoryOptions, unitOptions } from './ingredientsFormComponents/select
 import { Tag, Scale, Truck } from 'lucide-react';
 import Modal from '../shared/modal';
 import ItemsStore from '../shared/itemsStore';
-import { useUIStore } from '@/app/stores/uiStore';
 import MultipleSelect from '../shared/multipleSelect';
+import { SelectableItem } from '../shared/SelectStore';
 
 type AddIngredientProps = {
   ingredient: Ingredient | undefined
   mode: 'create' | 'edit'
   userId: string
-  supplierOptions?: SelectOption[]
+  supplierOptions: SelectableItem[]
 };
 
-const IngredientForm = ({ ingredient, mode, userId}: AddIngredientProps) => {
+const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredientProps) => {
+  // All supplier selection and modal logic now managed by the hook
   const {
      price, error, register, quantity, unit, name,
      setErrors, handleKeyDown, handleSubmit, onSubmit, setValue, isSubmitting,
-  } = useIngredientForm({ ingredient, mode, userId });
-
-  // Supplier selection state and modal management
-  const { isModalOpen, modalType, closeModal } = useUIStore();
-  const [tempSuppliers, setTempSuppliers] = useState<string[]>([]);
-
-  // Empty suppliers array - will be populated later
-  const suppliers: any[] = [];
-
-  const selectSupplier = (id: string) => {
-    if (!tempSuppliers.includes(id)) {
-      setTempSuppliers([...tempSuppliers, id]);
-    } else {
-      setTempSuppliers(tempSuppliers.filter((supplierId) => supplierId !== id));
-    }
-  };
+     tempSuppliers,
+     selectSupplier,
+     confirmSuppliers,
+     handleCloseModal,
+     getSelectedSupplierItems,
+     isModalOpen,
+     modalType
+  } = useIngredientForm({ ingredient, mode, userId, supplierOptions });
 
   return (
     <form 
@@ -87,10 +80,10 @@ const IngredientForm = ({ ingredient, mode, userId}: AddIngredientProps) => {
 
           {/* --- ROW 2: Supplier, Quantity, Unit, Price --- */}
          
-          {/* Supplier */}
+          {/* Supplier - uses confirmed suppliers for display */}
           <div className='md:col-span-3'>
             <MultipleSelect
-              selectedItems={suppliers.filter((sup) => tempSuppliers.includes(sup.id))}
+              selectedItems={getSelectedSupplierItems()}
               label="SUPPLIERS"
               placeholder="Select suppliers..."
               modalType="suppliers"
@@ -161,14 +154,14 @@ const IngredientForm = ({ ingredient, mode, userId}: AddIngredientProps) => {
       </div>
 
       {/* Suppliers Selection Modal */}
-      <Modal isOpen={isModalOpen && modalType.type === 'suppliers'} onClose={closeModal} type="create">
+      <Modal isOpen={isModalOpen && modalType.type === 'suppliers'} onClose={handleCloseModal} type="create">
         <ItemsStore
-          items={suppliers}
+          items={supplierOptions}
           selected={tempSuppliers}
           onSelect={selectSupplier}
           title="Select Suppliers"
           description="Choose suppliers for this ingredient"
-          onClose={closeModal}
+          onClose={confirmSuppliers}
         />
       </Modal>
     </form>
