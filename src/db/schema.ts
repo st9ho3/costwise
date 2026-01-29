@@ -20,6 +20,7 @@ import {
 } from "drizzle-orm/node-postgres";
 import type { AdapterAccountType } from "@auth/core/adapters";
 import * as schema from "./schema";
+import IngredientsTable from "@/app/components/ingredients/ingredientsTable";
 
 export type Database = NodePgDatabase<typeof schema>;
 export type Transaction = PgTransaction<NodePgQueryResultHKT, typeof schema>;
@@ -90,11 +91,7 @@ export const ingredientsTable = pgTable("ingredients", {
   id: uuid("id").primaryKey(),
   icon: varchar("icon"),
   name: varchar("name", { length: 255 }).notNull(),
-  unit: unitEnum("unit").notNull(),
-  unitPrice: numeric("unit_price", { precision: 10, scale: 5 }).notNull(),
-  quantity: numeric("quantity").notNull(),
   usage: numeric("usage").notNull().default("1"),
-
   userId: text("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
@@ -155,6 +152,23 @@ export const supplierFinancialData = pgTable("supplier_financial_data", {
   defaultCurrency: varchar("default_currency", { length: 3 }).default("EUR"),
 });
 
+export const supplierIngredients = pgTable(
+  "supplier_ingredients",
+  {
+    suplierId: uuid("suplier_id").references(() => suppliers.id, {
+      onDelete: "cascade",
+    }),
+    ingredientId: uuid("suplier_id").references(() => ingredientsTable.id, {
+      onDelete: "cascade",
+    }),
+    unit: unitEnum("unit").notNull(),
+    unitPrice: numeric("unit_price", { precision: 10, scale: 5 }).notNull(),
+    quantity: numeric("quantity").notNull(),
+    isActive: boolean("is_active"),
+  },
+  (t) => [primaryKey({ columns: [t.ingredientId, t.suplierId] })],
+);
+
 export const supplierCategories = pgTable(
   "supplier_categories",
   {
@@ -165,7 +179,7 @@ export const supplierCategories = pgTable(
       onDelete: "cascade",
     }),
   },
-  (t) => [primaryKey({ columns: [t.suplierId, t.categoryId] })]
+  (t) => [primaryKey({ columns: [t.suplierId, t.categoryId] })],
 );
 
 export const ingredientCategories = pgTable(
@@ -178,7 +192,7 @@ export const ingredientCategories = pgTable(
       onDelete: "cascade",
     }),
   },
-  (t) => [primaryKey({ columns: [t.ingredientId, t.categoryId] })]
+  (t) => [primaryKey({ columns: [t.ingredientId, t.categoryId] })],
 );
 
 export const categories = pgTable("categories", {
@@ -198,11 +212,12 @@ export const ingredientRelations = relations(
   ingredientsTable,
   ({ many, one }) => ({
     recipeIngredients: many(recipeIngredientsTable),
+    supplierIngredients: many(supplierIngredients),
     user: one(users, {
       fields: [ingredientsTable.userId],
       references: [users.id],
     }),
-  })
+  }),
 );
 
 export const recipeIngredientsRelations = relations(
@@ -216,7 +231,7 @@ export const recipeIngredientsRelations = relations(
       fields: [recipeIngredientsTable.ingredientId],
       references: [ingredientsTable.id],
     }),
-  })
+  }),
 );
 
 export const suppliersRelations = relations(suppliers, ({ one, many }) => ({
@@ -226,6 +241,7 @@ export const suppliersRelations = relations(suppliers, ({ one, many }) => ({
   }),
   supplierAddresses: many(supplierAddresses),
   supplierCategories: many(supplierCategories),
+  supplierIngredients: many(supplierIngredients),
 }));
 
 export const supplierAddressesRelations = relations(
@@ -235,7 +251,7 @@ export const supplierAddressesRelations = relations(
       fields: [supplierAddresses.suppliersId],
       references: [suppliers.id],
     }),
-  })
+  }),
 );
 
 export const supplierCategoriesRelations = relations(
@@ -249,7 +265,21 @@ export const supplierCategoriesRelations = relations(
       fields: [supplierCategories.categoryId],
       references: [categories.id],
     }),
-  })
+  }),
+);
+
+export const supplierIngredientrelations = relations(
+  supplierIngredients,
+  ({ one }) => ({
+    ingredients: one(ingredientsTable, {
+      fields: [supplierIngredients.ingredientId],
+      references: [ingredientsTable.id],
+    }),
+    suppliers: one(suppliers, {
+      fields: [supplierIngredients.suplierId],
+      references: [suppliers.id],
+    }),
+  }),
 );
 
 export const categoriesRelations = relations(categories, ({ many }) => ({
@@ -298,7 +328,7 @@ export const accounts = pgTable(
         columns: [account.provider, account.providerAccountId],
       }),
     },
-  ]
+  ],
 );
 
 export const sessions = pgTable("session", {
@@ -322,7 +352,7 @@ export const verificationTokens = pgTable(
         columns: [verificationToken.identifier, verificationToken.token],
       }),
     },
-  ]
+  ],
 );
 
 export const authenticators = pgTable(
@@ -345,5 +375,5 @@ export const authenticators = pgTable(
         columns: [authenticator.userId, authenticator.credentialID],
       }),
     },
-  ]
+  ],
 );

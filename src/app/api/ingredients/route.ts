@@ -22,7 +22,7 @@ export const POST = async (req: NextRequest) => {
     }
     const ingredient: Ingredient = await req.json();
     const service = new IngredientService(session.user.id);
-    console.log(ingredient);
+
     const response = await service.create(ingredient);
 
     return sendSuccess("Ingredient successfully created", response, 201);
