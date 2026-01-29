@@ -18,6 +18,8 @@ import useHelpers from './useHelpers';
 import {  useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
+import { useUIStore } from '../stores/uiStore';
+import { SelectableItem } from '../components/shared/SelectStore';
 
 export type IngredientFormFields = z.infer<typeof IngredientSchema>
 
@@ -25,10 +27,11 @@ type UseIngredientFormProps = {
   mode: 'create' | 'edit';
   ingredient: Ingredient | undefined;
   userId: string;
+  supplierOptions: SelectableItem[];
 };
 
 
-export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFormProps) => {
+export const useIngredientForm = ({ mode, ingredient, userId, supplierOptions }: UseIngredientFormProps) => {
 
   const {register, handleSubmit, control, reset, formState: {isSubmitting}, watch, setValue} = useForm({
     resolver: zodResolver(IngredientSchema),
@@ -62,14 +65,54 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
   
   const router = useRouter();
   const { raiseNotification } = useHelpers({path: null});
+  const { isModalOpen, modalType, closeModal } = useUIStore();
   const [error, setErrors] = useState<string[]>([])
+
+  // Supplier selection state - temp for modal selections, confirmed for persisted selections
+  const INITIAL_SUPPLIERS: string[] = mode === 'edit' && ingredient?.suppliers ? ingredient.suppliers : [];
+  const [tempSuppliers, setTempSuppliers] = useState<string[]>(INITIAL_SUPPLIERS);
+  const [confirmedSuppliers, setConfirmedSuppliers] = useState<string[]>(INITIAL_SUPPLIERS);
 
   const price = watch('unitPrice')
   const name = watch('name')
   const unit = watch('unit')
   const quantity = watch('quantity')
-  
-  
+
+  /**
+   * Toggle supplier selection in temp state
+   */
+  const selectSupplier = (id: string) => {
+    if (!tempSuppliers.includes(id)) {
+      setTempSuppliers([...tempSuppliers, id]);
+    } else {
+      setTempSuppliers(tempSuppliers.filter((supplierId) => supplierId !== id));
+    }
+  };
+
+  /**
+   * Confirms the current temp suppliers selection.
+   * Called when user clicks "Confirm" in the modal.
+   */
+  const confirmSuppliers = () => {
+    setConfirmedSuppliers([...tempSuppliers]);
+    closeModal();
+  };
+
+  /**
+   * Handles modal close without confirming.
+   * Restores temp suppliers from confirmed state.
+   */
+  const handleCloseModal = () => {
+    setTempSuppliers([...confirmedSuppliers]);
+    closeModal();
+  };
+
+  /**
+   * Gets the supplier items that are currently confirmed for display
+   */
+  const getSelectedSupplierItems = () => {
+    return supplierOptions.filter((sup) => confirmedSuppliers.includes(sup.id));
+  };
 
 
 /* const ingredientsToSend = ingredients.map((ing) => createIngredientPrototype(ing, userId))
@@ -95,6 +138,8 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
         
         raiseNotification(response); // Pass the entire response
         reset();
+        setTempSuppliers([]);
+        setConfirmedSuppliers([]);
         if (router) {
           router.replace('/ingredients');
           router.refresh();
@@ -114,6 +159,8 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
         const response = await updateIngredient(validatedIngredient.data);
         raiseNotification(response); // Pass the entire response
         reset();
+        setTempSuppliers([]);
+        setConfirmedSuppliers([]);
         if (router) {
           router.replace('/ingredients');
           router.refresh();
@@ -147,7 +194,14 @@ export const useIngredientForm = ({ mode, ingredient, userId }: UseIngredientFor
     handleKeyDown,
     setValue,
     isSubmitting,
-    
-  
+    // Supplier selection exports
+    tempSuppliers,
+    confirmedSuppliers,
+    selectSupplier,
+    confirmSuppliers,
+    handleCloseModal,
+    getSelectedSupplierItems,
+    isModalOpen,
+    modalType
   };
 };
