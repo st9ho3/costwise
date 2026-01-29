@@ -127,8 +127,9 @@ export const useIngredientForm = ({ mode, ingredient, userId, supplierOptions }:
 
     if (mode === 'create') {
       // Create mode logic
-      const ingredientPrototype = createIngredientPrototype(data, userId)
+      const ingredientPrototype = createIngredientPrototype(data, confirmedSuppliers, userId)
       const validatedIngredient = IngredientSchema.safeParse(ingredientPrototype);
+      console.log(validatedIngredient)
       if (!validatedIngredient.success) {
         setErrors([]);
         const zodErrors = validatedIngredient.error.errors;

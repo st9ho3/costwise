@@ -116,6 +116,7 @@ export const transformSupplierFromDB = (raw: RawDBSupplier): Supplier => {
 
 export const createIngredientPrototype = (
   data: IngredientFormFields,
+  confirmedSuppliers: string[],
   userId: string,
 ) => {
   if (data) {
@@ -140,6 +141,7 @@ export const createIngredientPrototype = (
       usage: "0",
       userId: userId,
       category: data.category,
+      suppliers: confirmedSuppliers,
     };
     return ingredientPrototype;
   }
