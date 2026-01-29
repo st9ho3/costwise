@@ -43,7 +43,7 @@ export class IngredientService implements IIngredientService {
 
   async findAll(
     userId: string,
-    metadata: Metadata
+    metadata: Metadata,
   ): Promise<
     { ingredients: IngredientToDisplay[]; count: { count: number } } | undefined
   > {
@@ -60,12 +60,12 @@ export class IngredientService implements IIngredientService {
   async create(ingredient: Ingredient): Promise<OperationResult | undefined> {
     const ingredientExists = await checkIfIngredientExists(
       ingredient.name,
-      ingredient.userId
+      ingredient.userId,
     );
     const validatedIngredient =
       zodValidateIngredientBeforeAddItToDatabase(ingredient);
     const DBIngredient = transformIngredientToDB(validatedIngredient);
-
+    console.log("Service: ", DBIngredient);
     if (!ingredientExists && DBIngredient) {
       const result = await this.ingredientRepository.create(DBIngredient);
 
@@ -95,7 +95,7 @@ export class IngredientService implements IIngredientService {
             await this.recipeService.updateRecipeAfterIngredientsChange(
               dbRecipe,
               DBIngredient,
-              tx
+              tx,
             );
           }
         }
@@ -110,7 +110,7 @@ export class IngredientService implements IIngredientService {
   }
 
   async getIngredientAnalytics(
-    userId: string
+    userId: string,
   ): Promise<IngredientAnalytics | undefined> {
     const ingredientAnalytics =
       await this.ingredientRepository.getIngredientAnalytics(userId);

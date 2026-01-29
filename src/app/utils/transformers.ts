@@ -150,6 +150,7 @@ export const createIngredientPrototype = (
 export const createEditIngredientPrototype = (
   data: IngredientFormFields,
   ingredient: Ingredient,
+  confirmedSuppliers: string[],
   userId: string,
 ) => {
   const normalizedUnitPrice = normalizePrice(
@@ -173,6 +174,7 @@ export const createEditIngredientPrototype = (
     usage: ingredient.usage || "0",
     userId: userId,
     category: data.category,
+    suppliers: confirmedSuppliers,
   };
 
   return updatedIngredient;
