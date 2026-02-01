@@ -40,7 +40,7 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
      isModalOpen,
      modalType
   } = useIngredientForm({ ingredient, mode, userId, supplierOptions });
-
+  console.log(error)
   return (
     <form 
       className="w-full max-w-3xl mx-auto p-2 md:mt-4" 
