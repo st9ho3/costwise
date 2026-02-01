@@ -168,7 +168,7 @@ export const IngredientSchema = z.object({
   quantity: z.number().min(1, "Quantity must be non-negative"),
   usage: z.string(),
   userId: z.string(),
-  suppliers: z.array(z.string()),
+  suppliers: z.array(z.string()).min(1, "Suppliers required"),
   category: IngredientCategorySchema,
 });
 

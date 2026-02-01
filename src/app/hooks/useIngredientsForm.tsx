@@ -33,7 +33,7 @@ type UseIngredientFormProps = {
 
 export const useIngredientForm = ({ mode, ingredient, userId, supplierOptions }: UseIngredientFormProps) => {
 
-  const {register, handleSubmit, control, reset, formState: {isSubmitting}, watch, setValue} = useForm({
+  const {register, handleSubmit, reset, formState: {isSubmitting, errors}, watch, setValue} = useForm({
     resolver: zodResolver(IngredientSchema),
     defaultValues: mode === 'edit'
     ? {
@@ -70,18 +70,19 @@ export const useIngredientForm = ({ mode, ingredient, userId, supplierOptions }:
 
   // Supplier selection state - temp for modal selections, confirmed for persisted selections
   const INITIAL_SUPPLIERS: string[] = mode === 'edit' && ingredient?.suppliers ? ingredient.suppliers : [];
-  const [tempSuppliers, setTempSuppliers] = useState<string[]>(INITIAL_SUPPLIERS);
-  const [confirmedSuppliers, setConfirmedSuppliers] = useState<string[]>(INITIAL_SUPPLIERS);
+  const [tempSuppliers, setTempSuppliers] = useState<string[]>([]);
+  const [confirmedSuppliers, setConfirmedSuppliers] = useState<string[]>([]);
 
   const price = watch('unitPrice')
   const name = watch('name')
   const unit = watch('unit')
   const quantity = watch('quantity')
-
+console.log(tempSuppliers)
   /**
    * Toggle supplier selection in temp state
    */
   const selectSupplier = (id: string) => {
+    console.log('selectSupplier',id)
     if (!tempSuppliers.includes(id)) {
       setTempSuppliers([...tempSuppliers, id]);
     } else {
@@ -95,6 +96,7 @@ export const useIngredientForm = ({ mode, ingredient, userId, supplierOptions }:
    */
   const confirmSuppliers = () => {
     setConfirmedSuppliers([...tempSuppliers]);
+    setValue('suppliers', [...tempSuppliers], { shouldValidate: true });
     closeModal();
   };
 
@@ -122,12 +124,15 @@ export const useIngredientForm = ({ mode, ingredient, userId, supplierOptions }:
     }
     await sendIngredient(ing)
    }) */
-
+  
+console.log(errors)
   const onSubmit = async (data: IngredientFormFields) => {
 
     if (mode === 'create') {
       // Create mode logic
+      
       const ingredientPrototype = createIngredientPrototype(data, confirmedSuppliers, userId)
+      console.log(ingredientPrototype)
       const validatedIngredient = IngredientSchema.safeParse(ingredientPrototype);
       console.log(validatedIngredient)
       if (!validatedIngredient.success) {
@@ -148,7 +153,7 @@ export const useIngredientForm = ({ mode, ingredient, userId, supplierOptions }:
       }
     } else if (mode === 'edit' && ingredient) {
 
-      const updatedIngredient = createEditIngredientPrototype(data, ingredient, userId)
+      const updatedIngredient = createEditIngredientPrototype(data, ingredient, confirmedSuppliers, userId)
 
       const validatedIngredient = IngredientSchema.safeParse(updatedIngredient);
 
@@ -203,6 +208,6 @@ export const useIngredientForm = ({ mode, ingredient, userId, supplierOptions }:
     handleCloseModal,
     getSelectedSupplierItems,
     isModalOpen,
-    modalType
+    modalType,
   };
 };

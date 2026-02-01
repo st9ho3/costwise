@@ -51,6 +51,8 @@ function SelectStore<T extends SelectableItem>({
   onSelect,
   className = 'flex flex-wrap w-80 gap-2',
 }: SelectStoreProps<T>) {
+  console.log('Items:', items)
+  console.log(selected)
   return (
     <div className={className}>
       {items.map((item) => {
