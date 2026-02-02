@@ -19,7 +19,10 @@ import { Ingredient, IngredientToDisplay } from "@/shemas/recipe";
 import { checkIfIngredientExists } from "@/db/helpers";
 import { zodValidateIngredientBeforeAddItToDatabase } from "./validationService";
 import { RecipeRepository } from "../repositories/recipeRepository";
-import { transformIngredientToDB } from "../utils/transformers";
+import {
+  destructureIngredient,
+  transformIngredientToDB,
+} from "../utils/transformers";
 import { RecipeService } from "./recipeService";
 import { db } from "@/db/db";
 import { Database } from "@/db/schema";
@@ -64,10 +67,10 @@ export class IngredientService implements IIngredientService {
     );
     const validatedIngredient =
       zodValidateIngredientBeforeAddItToDatabase(ingredient);
-    const DBIngredient = transformIngredientToDB(validatedIngredient);
-    console.log("Service: ", DBIngredient);
-    if (!ingredientExists && DBIngredient) {
-      const result = await this.ingredientRepository.create(DBIngredient);
+    const { dbIngredient } = destructureIngredient(validatedIngredient);
+    console.log("Service: ", dbIngredient);
+    if (!ingredientExists && dbIngredient) {
+      const result = await this.ingredientRepository.create(dbIngredient);
 
       return result;
     } else {

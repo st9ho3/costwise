@@ -256,3 +256,59 @@ export const getArrayChanges = <T>(originalArray: T[], newArray: T[]) => {
   const removed = originalArray.filter((item) => !newArray.includes(item));
   return { added, removed };
 };
+
+// Type for the ingredients table (without unit, unitPrice, quantity - those are in supplier_ingredients)
+export type DBIngredientForTable = {
+  id: string;
+  icon?: string | null;
+  name: string;
+  usage: string;
+  userId: string;
+  category: IngredientCategory;
+};
+
+// Type for the supplier_ingredients join table
+export type SupplierIngredientData = {
+  suplierId: string;
+  ingredientId: string;
+  unit: Unit;
+  unitPrice: string;
+  quantity: string;
+  isActive: boolean;
+};
+
+/**
+ * Destructures an Ingredient into two objects:
+ * 1. dbIngredient - for the ingredients table
+ * 2. supplierIngredients - array for the supplier_ingredients table (one entry per supplier)
+ */
+export const destructureIngredient = (
+  ingredient: Ingredient,
+): {
+  dbIngredient: DBIngredientForTable;
+  supplierIngredients: SupplierIngredientData[];
+} => {
+  const { suppliers, unit, unitPrice, quantity, ...rest } = ingredient;
+
+  const dbIngredient: DBIngredientForTable = {
+    id: rest.id,
+    icon: rest.icon,
+    name: rest.name,
+    usage: rest.usage,
+    userId: rest.userId,
+    category: rest.category,
+  };
+
+  const supplierIngredients: SupplierIngredientData[] = suppliers.map(
+    (supplierId) => ({
+      suplierId: supplierId,
+      ingredientId: ingredient.id,
+      unit: unit,
+      unitPrice: unitPrice.toString(),
+      quantity: quantity.toString(),
+      isActive: true,
+    }),
+  );
+
+  return { dbIngredient, supplierIngredients };
+};
