@@ -158,7 +158,7 @@ export const supplierIngredients = pgTable(
     suplierId: uuid("suplier_id").references(() => suppliers.id, {
       onDelete: "cascade",
     }),
-    ingredientId: uuid("suplier_id").references(() => ingredientsTable.id, {
+    ingredientId: uuid("ingredient_id").references(() => ingredientsTable.id, {
       onDelete: "cascade",
     }),
     unit: unitEnum("unit").notNull(),
@@ -185,7 +185,7 @@ export const supplierCategories = pgTable(
 export const ingredientCategories = pgTable(
   "ingredient_categories",
   {
-    ingredientId: uuid("suplier_id").references(() => ingredientsTable.id, {
+    ingredientId: uuid("ingredient_id").references(() => ingredientsTable.id, {
       onDelete: "cascade",
     }),
     categoryId: uuid("category_id").references(() => categories.id, {
