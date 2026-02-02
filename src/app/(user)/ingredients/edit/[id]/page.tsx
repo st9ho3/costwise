@@ -13,6 +13,7 @@ import { SupplierService } from '@/app/services/suppliersService'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { Metadata } from '@/types/specialTypes'
+import { Ingredient } from '@/shemas/recipe'
 
 export interface Params {
     params: Promise<{
@@ -48,7 +49,7 @@ const IngredientEditPage = async ({params}: Params ) => {
     
     // Transform suppliers for the select options
     const supplierOptions = result?.suppliers?.map((supplier) => ({
-        value: supplier.id,
+        id: supplier.id,
         name: supplier.name,
     })) ?? []
 
