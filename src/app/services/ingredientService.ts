@@ -29,12 +29,13 @@ import { Database } from "@/db/schema";
 import { IngredientAnalytics, OperationResult } from "@/types/repositories";
 import { ConflictError } from "../utils/errors";
 import { Metadata } from "@/types/specialTypes";
+import { SupplierIngredientRepository } from "../repositories/supplierIngredientsRepository";
 
 export class IngredientService implements IIngredientService {
   private ingredientRepository: IngredientRepository;
   private recipeRepository: RecipeRepository;
   private recipeService: RecipeService;
-
+  private supplierIngredientRepository: SupplierIngredientRepository;
   private currentUserId: string;
 
   constructor(userId: string) {
@@ -42,6 +43,7 @@ export class IngredientService implements IIngredientService {
     this.recipeRepository = new RecipeRepository();
     this.recipeService = new RecipeService(userId);
     this.currentUserId = userId;
+    this.supplierIngredientRepository = new SupplierIngredientRepository();
   }
 
   async findAll(
@@ -67,12 +69,16 @@ export class IngredientService implements IIngredientService {
     );
     const validatedIngredient =
       zodValidateIngredientBeforeAddItToDatabase(ingredient);
-    const { dbIngredient } = destructureIngredient(validatedIngredient);
-    console.log("Service: ", dbIngredient);
-    if (!ingredientExists && dbIngredient) {
-      const result = await this.ingredientRepository.create(dbIngredient);
+    const { dbIngredient, supplierIngredients } =
+      destructureIngredient(validatedIngredient);
 
-      return result;
+    if (!ingredientExists && dbIngredient) {
+      const trResult = await db.transaction(async (tx) => {
+        const result = await this.ingredientRepository.create(dbIngredient);
+        await this.supplierIngredientRepository.create(tx, supplierIngredients);
+        return result;
+      });
+      console.log(trResult);
     } else {
       if (ingredientExists) {
         throw new ConflictError("Ingredient", "name");

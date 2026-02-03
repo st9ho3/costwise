@@ -22,7 +22,10 @@ import {
 } from "@/types/repositories";
 import { db } from "@/db/db";
 import { categories, Database, ingredientsTable } from "@/db/schema";
-import { transformIngredientFromDB } from "../utils/transformers";
+import {
+  DBIngredientForTable,
+  transformIngredientFromDB,
+} from "../utils/transformers";
 import { and, asc, countDistinct, desc, eq, sql } from "drizzle-orm";
 import { DatabaseError } from "../utils/errors";
 import { ingredientSortColumns, Metadata } from "@/types/specialTypes";
@@ -30,7 +33,7 @@ import { ingredientSortColumns, Metadata } from "@/types/specialTypes";
 export class IngredientRepository implements IIngredientRepository {
   async findAll(
     userId: string,
-    { itemsPerPage, order, sort, offset }: Metadata
+    { itemsPerPage, order, sort, offset }: Metadata,
   ): Promise<
     { ingredients: IngredientToDisplay[]; count: { count: number } } | undefined
   > {
@@ -62,8 +65,8 @@ export class IngredientRepository implements IIngredientRepository {
       const ingredients = dbIngredients.map((dbIngredient) =>
         transformIngredientFromDB(
           dbIngredient.ingredientsTable as DBIngredient,
-          dbIngredient.categories.category
-        )
+          dbIngredient.categories.category,
+        ),
       );
       return { ingredients, count };
     } catch (err) {
@@ -85,7 +88,7 @@ export class IngredientRepository implements IIngredientRepository {
       }
       const ingredient = transformIngredientFromDB(
         dbIngredient.ingredients as DBIngredient,
-        dbIngredient.categories.category
+        dbIngredient.categories.category,
       );
       return ingredient;
     } catch (err) {
@@ -94,7 +97,9 @@ export class IngredientRepository implements IIngredientRepository {
     }
   }
 
-  async create(ingredient: DBIngredient): Promise<OperationResult | undefined> {
+  async create(
+    ingredient: DBIngredientForTable,
+  ): Promise<OperationResult | undefined> {
     try {
       const [result] = await db
         .insert(ingredientsTable)
@@ -112,7 +117,7 @@ export class IngredientRepository implements IIngredientRepository {
 
   async update(
     ingredient: DBIngredient,
-    tx?: Database
+    tx?: Database,
   ): Promise<OperationResult | undefined> {
     const dbConnection = tx || db;
 
@@ -151,7 +156,7 @@ export class IngredientRepository implements IIngredientRepository {
   async updateUsage(
     id: string,
     tx: Database,
-    action: "+" | "-"
+    action: "+" | "-",
   ): Promise<undefined> {
     try {
       await tx
@@ -170,7 +175,7 @@ export class IngredientRepository implements IIngredientRepository {
   }
 
   async getIngredientAnalytics(
-    userId: string
+    userId: string,
   ): Promise<IngredientAnalytics | undefined> {
     try {
       const [ingredientAnalytics] = await db
@@ -185,14 +190,14 @@ export class IngredientRepository implements IIngredientRepository {
       console.error("Failed to get ingredient analytics:", err);
       throw new DatabaseError(
         "IngredientRepository.getIngredientAnalytics",
-        err
+        err,
       );
     }
   }
 
   async findByName(
     ingredientsName: string,
-    userId: string
+    userId: string,
   ): Promise<{ name: string; id: string } | undefined> {
     const [result] = await db
       .select({
@@ -203,8 +208,8 @@ export class IngredientRepository implements IIngredientRepository {
       .where(
         and(
           eq(ingredientsTable.userId, userId),
-          eq(ingredientsTable.name, ingredientsName)
-        )
+          eq(ingredientsTable.name, ingredientsName),
+        ),
       );
 
     return result ? result : undefined;
