@@ -14,6 +14,10 @@ import {
   RawDBSupplier,
   RecipeWithQuery,
 } from "./specialTypes";
+import {
+  DBIngredientForTable,
+  SupplierIngredientData,
+} from "@/app/utils/transformers";
 
 export interface RecipeAnalytics {
   avgProfitMargin: string | null;
@@ -34,20 +38,20 @@ export interface IRecipeRepository {
   findAllByIngredientId(id: string): Promise<DBRecipe[] | undefined>;
   findAll(
     userId: string,
-    metadata: Metadata
+    metadata: Metadata,
   ): Promise<{ recipes: Recipe[]; count: { count: number } } | undefined>;
   create(recipe: DBRecipe, tx: Database): Promise<string | undefined>;
   update(
     id: string,
     recipe: Recipe,
-    tx?: Database
+    tx?: Database,
   ): Promise<OperationResult | undefined>;
   delete(id: string, tx: Database): Promise<OperationResult | undefined>;
 
   getRecipesAnalytics(userId: string): Promise<RecipeAnalytics | undefined>;
   findByName(
     recipesName: string,
-    userId: string | undefined
+    userId: string | undefined,
   ): Promise<{ name: string; id: string } | undefined>;
 }
 
@@ -55,12 +59,12 @@ export interface IRecipeIngredientsRepository {
   create(
     recipeIngredient: RecipeIngredients,
     userId: string,
-    tx: Database
+    tx: Database,
   ): Promise<OperationResult | null>;
   delete(
     recipeId: string,
     ingredientId: string,
-    tx?: Database
+    tx?: Database,
   ): Promise<OperationResult | null>;
 }
 
@@ -68,27 +72,27 @@ export interface IIngredientRepository {
   findById(id: string): Promise<IngredientToDisplay | undefined>;
   findByName(
     ingredientsName: string,
-    userId: string
+    userId: string,
   ): Promise<{ name: string; id: string } | undefined>;
   findAll(
     userId: string,
-    metadata: Metadata
+    metadata: Metadata,
   ): Promise<
     { ingredients: IngredientToDisplay[]; count: { count: number } } | undefined
   >;
   create(
-    ingredient: DBIngredient,
-    tx: Database
+    ingredient: DBIngredientForTable,
+    tx: Database,
   ): Promise<OperationResult | undefined>;
   update(
     ingredient: DBIngredient,
-    tx?: Database
+    tx?: Database,
   ): Promise<OperationResult | undefined>;
   delete(id: string): Promise<OperationResult | undefined>;
 
   updateUsage(id: string, tx: Database, action: "+" | "-"): Promise<undefined>;
   getIngredientAnalytics(
-    userId: string
+    userId: string,
   ): Promise<IngredientAnalytics | undefined>;
 }
 
@@ -96,26 +100,26 @@ export interface ISupplierRepository {
   findById(supplierId: string): Promise<RawDBSupplier | undefined>;
   findByName(
     suppliersName: string,
-    userId: string | undefined
+    userId: string | undefined,
   ): Promise<{ name: string; id: string } | undefined>;
   findAll(
     userId: string,
-    metadata: Metadata
+    metadata: Metadata,
   ): Promise<
     { suppliers: RawDBSupplier[]; count: { count: number } } | undefined
   >;
   create(
     supplier: DestructuredSupplier,
-    tx: Database
+    tx: Database,
   ): Promise<OperationResult | undefined>;
   update(
     supplierId: string,
     supplier: DestructuredSupplier,
-    tx: Database
+    tx: Database,
   ): Promise<OperationResult | undefined>;
   delete(
     supplierId: string,
-    db: Database
+    db: Database,
   ): Promise<OperationResult | undefined>;
 }
 
@@ -123,30 +127,40 @@ export interface IAddressesRepository {
   create(
     address: DBSupplierAddress,
     tx: Database,
-    suppliersId: string
+    suppliersId: string,
   ): Promise<OperationResult | undefined>;
   update(
     supplierId: string,
     address: DBSupplierAddress,
-    tx: Database
+    tx: Database,
   ): Promise<OperationResult | undefined>;
 }
 export interface ISupplierFinancialDataRepository {
   create(
     finData: DBSupplierFinancialData,
     tx: Database,
-    suppliersId: string
+    suppliersId: string,
   ): Promise<OperationResult | undefined>;
   update(
     supplierId: string,
     finData: DBSupplierFinancialData,
-    tx: Database
+    tx: Database,
   ): Promise<OperationResult | undefined>;
 }
 
 export interface ISuppliersCategoryRepository {
   create(category: string, tx: Database, suppliersId: string): Promise<void>;
   delete(category: string, tx: Database, suppliersId: string): Promise<void>;
+}
+
+export interface ISupplierIngredientRepository {
+  create(tx: Database, data: SupplierIngredientData[]): Promise<string[]>;
+  update(
+    tx: Database,
+    supplierId: string,
+    data: SupplierIngredientData[],
+  ): Promise<void>;
+  delete(tx: Database, supplierId: string, ingreientId: string): Promise<void>;
 }
 
 export interface ISearchRepository {
