@@ -155,16 +155,20 @@ export const supplierFinancialData = pgTable("supplier_financial_data", {
 export const supplierIngredients = pgTable(
   "supplier_ingredients",
   {
-    suplierId: uuid("suplier_id").references(() => suppliers.id, {
-      onDelete: "cascade",
-    }),
-    ingredientId: uuid("ingredient_id").references(() => ingredientsTable.id, {
-      onDelete: "cascade",
-    }),
+    suplierId: uuid("suplier_id")
+      .notNull()
+      .references(() => suppliers.id, {
+        onDelete: "cascade",
+      }),
+    ingredientId: uuid("ingredient_id")
+      .notNull()
+      .references(() => ingredientsTable.id, {
+        onDelete: "cascade",
+      }),
     unit: unitEnum("unit").notNull(),
     unitPrice: numeric("unit_price", { precision: 10, scale: 5 }).notNull(),
     quantity: numeric("quantity").notNull(),
-    isActive: boolean("is_active"),
+    isActive: boolean("is_active").notNull(),
   },
   (t) => [primaryKey({ columns: [t.ingredientId, t.suplierId] })],
 );

@@ -154,7 +154,10 @@ export interface ISuppliersCategoryRepository {
 }
 
 export interface ISupplierIngredientRepository {
-  create(tx: Database, data: SupplierIngredientData[]): Promise<string[]>;
+  create(
+    tx: Database,
+    data: SupplierIngredientData[],
+  ): Promise<SupplierIngredientData[]>;
   update(
     tx: Database,
     supplierId: string,

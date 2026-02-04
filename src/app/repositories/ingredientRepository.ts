@@ -99,9 +99,10 @@ export class IngredientRepository implements IIngredientRepository {
 
   async create(
     ingredient: DBIngredientForTable,
+    tx: Database,
   ): Promise<OperationResult | undefined> {
     try {
-      const [result] = await db
+      const [result] = await tx
         .insert(ingredientsTable)
         .values(ingredient)
         .returning({

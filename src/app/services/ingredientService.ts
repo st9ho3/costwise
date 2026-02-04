@@ -74,11 +74,16 @@ export class IngredientService implements IIngredientService {
 
     if (!ingredientExists && dbIngredient) {
       const trResult = await db.transaction(async (tx) => {
-        const result = await this.ingredientRepository.create(dbIngredient);
-        await this.supplierIngredientRepository.create(tx, supplierIngredients);
+        console.log("initiate transaction");
+        const result = await this.ingredientRepository.create(dbIngredient, tx);
+        console.log("ingredient", result);
+        const resultS = await this.supplierIngredientRepository.create(
+          tx,
+          supplierIngredients,
+        );
+        console.log("sIngredient", resultS);
         return result;
       });
-      console.log(trResult);
     } else {
       if (ingredientExists) {
         throw new ConflictError("Ingredient", "name");
