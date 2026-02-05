@@ -83,7 +83,6 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
 
           {/* --- ROW 2: Supplier, Quantity, Unit, Price --- */}
         {fields.map((field) => 
-        <div className='md:grid'>
 
         
           <div className='md:flex '>
@@ -141,7 +140,7 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
           </div>
           <button onClick={() => append()}>Add</button>
         </div>
-        </div>
+        
         )}
         
         </div> 
