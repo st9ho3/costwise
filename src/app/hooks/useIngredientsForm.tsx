@@ -11,11 +11,11 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
-import { Ingredient, IngredientSchema } from '@/shemas/recipe';
+import { Ingredient, IngredientSchema, IngredientSuppliers } from '@/shemas/recipe';
 import { createEditIngredientPrototype, createIngredientPrototype } from '@/app/utils/transformers';
 import { sendIngredient, updateIngredient } from '../services/services';
 import useHelpers from './useHelpers';
-import {  useForm } from 'react-hook-form';
+import {  useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
 import { useUIStore } from '../stores/uiStore';
@@ -33,7 +33,7 @@ type UseIngredientFormProps = {
 
 export const useIngredientForm = ({ mode, ingredient, userId, supplierOptions }: UseIngredientFormProps) => {
 
-  const {register, handleSubmit, reset, formState: {isSubmitting, errors}, watch, setValue} = useForm({
+  const {register, handleSubmit, reset, formState: {isSubmitting, errors},control ,watch, setValue} = useForm({
     resolver: zodResolver(IngredientSchema),
     defaultValues: mode === 'edit'
     ? {
@@ -58,7 +58,7 @@ export const useIngredientForm = ({ mode, ingredient, userId, supplierOptions }:
       userId: userId,
       icon: '',
       category: 'ef45178d-e566-4637-b7f9-abcf6d575466',
-      suppliers: []
+      suppliers: [{ suppliersId: "", unit: "", quantity: 1, price: 0, isActive: true }]
     }
   })
 
@@ -67,9 +67,9 @@ export const useIngredientForm = ({ mode, ingredient, userId, supplierOptions }:
   const { raiseNotification } = useHelpers({path: null});
   const { isModalOpen, modalType, closeModal } = useUIStore();
   const [error, setErrors] = useState<string[]>([])
-
+  const {fields, append, remove} = useFieldArray({control, name: "suppliers"})
   // Supplier selection state - temp for modal selections, confirmed for persisted selections
-  const INITIAL_SUPPLIERS: string[] = mode === 'edit' && ingredient?.suppliers ? ingredient.suppliers : [];
+  const INITIAL_SUPPLIERS: IngredientSuppliers[] = mode === 'edit' && ingredient?.suppliers ? ingredient.suppliers : [];
   const [tempSuppliers, setTempSuppliers] = useState<string[]>([]);
   const [confirmedSuppliers, setConfirmedSuppliers] = useState<string[]>([]);
 
@@ -209,5 +209,8 @@ console.log(errors)
     getSelectedSupplierItems,
     isModalOpen,
     modalType,
+    fields,
+    append,
+    remove
   };
 };

@@ -38,7 +38,10 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
      handleCloseModal,
      getSelectedSupplierItems,
      isModalOpen,
-     modalType
+     modalType,
+     fields,
+     append,
+     remove
   } = useIngredientForm({ ingredient, mode, userId, supplierOptions });
   console.log(error)
   return (
@@ -79,9 +82,13 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
 
 
           {/* --- ROW 2: Supplier, Quantity, Unit, Price --- */}
-         
+        {fields.map((field) => 
+        <div className='md:grid'>
+
+        
+          <div className='md:flex '>
           {/* Supplier - uses confirmed suppliers for display */}
-          <div className='md:col-span-3'>
+          <div className='md:row-span-3'>
             <MultipleSelect
               selectedItems={getSelectedSupplierItems()}
               label="SUPPLIERS"
@@ -132,7 +139,13 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
               price={price}
             />
           </div>
+          <button onClick={() => append()}>Add</button>
         </div>
+        </div>
+        )}
+        
+        </div> 
+          
 
         {/* --- FOOTER SECTION: Summary & Actions --- */}
         <div className="mt-6 space-y-4">
