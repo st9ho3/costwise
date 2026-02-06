@@ -84,7 +84,6 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
           {/* --- ROW 2: Supplier, Quantity, Unit, Price --- */}
         {fields.map((field) => 
 
-        
           <div className='md:flex '>
           {/* Supplier - uses confirmed suppliers for display */}
           <div className='md:row-span-3'>
