@@ -69,9 +69,9 @@ export const useIngredientForm = ({ mode, ingredient, userId, supplierOptions }:
   const [error, setErrors] = useState<string[]>([])
   const {fields, append, remove} = useFieldArray({control, name: "suppliers"})
   // Supplier selection state - temp for modal selections, confirmed for persisted selections
-  const INITIAL_SUPPLIERS: IngredientSuppliers[] = mode === 'edit' && ingredient?.suppliers ? ingredient.suppliers : [];
-  const [tempSuppliers, setTempSuppliers] = useState<string[]>([]);
-  const [confirmedSuppliers, setConfirmedSuppliers] = useState<string[]>([]);
+  const INITIAL_SUPPLIERS: IngredientSuppliers = mode === 'edit' && ingredient?.suppliers ? ingredient.suppliers : [];
+  const [tempSuppliers, setTempSuppliers] = useState<IngredientSuppliers>(INITIAL_SUPPLIERS);
+  const [confirmedSuppliers, setConfirmedSuppliers] = useState<IngredientSuppliers>([]);
 
   const price = watch('unitPrice')
   const name = watch('name')
@@ -83,10 +83,10 @@ console.log(tempSuppliers)
    */
   const selectSupplier = (id: string) => {
     console.log('selectSupplier',id)
-    if (!tempSuppliers.includes(id)) {
+    if (tempSuppliers.filter((supplier) => supplier.suppliersId === id).length === 0) {
       setTempSuppliers([...tempSuppliers, id]);
     } else {
-      setTempSuppliers(tempSuppliers.filter((supplierId) => supplierId !== id));
+      setTempSuppliers(tempSuppliers.filter((supplierId) => supplierId.suppliersId !== id));
     }
   };
 
