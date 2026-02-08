@@ -33,7 +33,7 @@ type UseIngredientFormProps = {
 
 export const useIngredientForm = ({ mode, ingredient, userId, supplierOptions }: UseIngredientFormProps) => {
 
-  const {register, handleSubmit, reset, formState: {isSubmitting, errors},control ,watch, setValue} = useForm<IngredientFormFields>({
+  const {register, handleSubmit, reset, formState: {isSubmitting, errors},control ,watch, setValue} = useForm({
     resolver: zodResolver(IngredientSchema),
     defaultValues: mode === 'edit'
     ? {
@@ -58,7 +58,7 @@ export const useIngredientForm = ({ mode, ingredient, userId, supplierOptions }:
       userId: userId,
       icon: '',
       category: 'ef45178d-e566-4637-b7f9-abcf6d575466',
-      suppliers: [{ suppliersId: "", unit: "", quantity: 1, price: 0, isActive: true }]
+      suppliers: [{suppliersId: '', quantity: 1, unit: '', price: 0, isActive: false }]
     }
   })
 
@@ -69,9 +69,9 @@ export const useIngredientForm = ({ mode, ingredient, userId, supplierOptions }:
   const [error, setErrors] = useState<string[]>([])
   const {fields, append, remove} = useFieldArray({control, name: "suppliers"})
   // Supplier selection state - temp for modal selections, confirmed for persisted selections
-  const INITIAL_SUPPLIERS: IngredientSuppliers = mode === 'edit' && ingredient?.suppliers ? ingredient.suppliers : [];
-  const [tempSuppliers, setTempSuppliers] = useState<IngredientSuppliers>(INITIAL_SUPPLIERS);
-  const [confirmedSuppliers, setConfirmedSuppliers] = useState<IngredientSuppliers>([]);
+  const INITIAL_SUPPLIERS = mode === 'edit' && ingredient?.suppliers ? ingredient.suppliers.map((supplier) => supplier.suppliersId) : [];
+  const [tempSuppliers, setTempSuppliers] = useState(INITIAL_SUPPLIERS);
+  const [confirmedSuppliers, setConfirmedSuppliers] = useState<string[]>([]);
 
   const price = watch('unitPrice')
   const name = watch('name')
@@ -83,10 +83,10 @@ console.log(tempSuppliers)
    */
   const selectSupplier = (id: string) => {
     console.log('selectSupplier',id)
-    if (tempSuppliers.filter((supplier) => supplier.suppliersId === id).length === 0) {
+    if (!tempSuppliers.includes(id)) {
       setTempSuppliers([...tempSuppliers, id]);
     } else {
-      setTempSuppliers(tempSuppliers.filter((supplierId) => supplierId.suppliersId !== id));
+      setTempSuppliers(tempSuppliers.filter((supplierId) => supplierId !== id));
     }
   };
 
