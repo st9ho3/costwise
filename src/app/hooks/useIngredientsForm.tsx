@@ -33,7 +33,7 @@ type UseIngredientFormProps = {
 
 export const useIngredientForm = ({ mode, ingredient, userId, supplierOptions }: UseIngredientFormProps) => {
 
-  const {register, handleSubmit, reset, formState: {isSubmitting, errors},control ,watch, setValue} = useForm({
+  const {register, handleSubmit, reset, formState: {isSubmitting, errors},control ,watch, setValue} = useForm<IngredientFormFields>({
     resolver: zodResolver(IngredientSchema),
     defaultValues: mode === 'edit'
     ? {

@@ -175,7 +175,7 @@ export const IngredientSchema = z.object({
         unit: UnitSchema,
         quantity: z.coerce.number(),
         price: z.coerce.number(),
-        isActive: z.boolean().default(true),
+        isActive: z.boolean(),
       }),
     )
     .min(1),

@@ -12,7 +12,7 @@ import {
 import Incremental from '../shared/incremental';
 import { Ingredient } from '@/shemas/recipe';
 import { useIngredientForm } from '../../hooks/useIngredientsForm';
-import FormSelect, { SelectOption } from './ingredientsFormComponents/FormSelect';
+import FormSelect from './ingredientsFormComponents/FormSelect';
 import { categoryOptions, unitOptions } from './ingredientsFormComponents/selectOptions';
 import { Tag, Scale, Truck } from 'lucide-react';
 import Modal from '../shared/modal';
@@ -137,7 +137,7 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
               price={price}
             />
           </div>
-          <button onClick={() => append()}>Add</button>
+          <button onClick={() => append({ suppliersId: "", unit: "", quantity: 1, price: 0, isActive: true })}>Add</button>
         </div>
         
         )}
