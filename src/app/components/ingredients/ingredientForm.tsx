@@ -82,19 +82,19 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
 
 
           {/* --- ROW 2: Supplier, Quantity, Unit, Price --- */}
-        {fields.map((field) => 
+        {fields.map((field, index) => 
 
-          <div className='md:flex '>
+          <div key={field.id} className='md:flex '>
           {/* Supplier - uses confirmed suppliers for display */}
           <div className='md:row-span-3'>
-            <MultipleSelect
-              selectedItems={getSelectedSupplierItems()}
-              label="SUPPLIERS"
-              placeholder="Select suppliers..."
-              modalType="suppliers"
-              icon={Truck}
-              getDisplayNames={(items) => items.map((item) => item.name)}
-            />
+            <FormSelect 
+               fieldName={`suppliers.${index}.suppliersId`}
+               options={supplierOptions}
+               placeholder="Supplier"
+               icon={Scale}
+               register={register}
+               onKeyDown={handleKeyDown}
+             />
           </div>
         
           {/* Quantity: Takes up ~33% */}
@@ -137,7 +137,7 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
               price={price}
             />
           </div>
-          <button onClick={() => append({ suppliersId: "", unit: "", quantity: 1, price: 0, isActive: true })}>Add</button>
+          <button onClick={() => append({ suppliersId: "", unit: "", quantity: 1, price: 0, isActive: false })}>Add</button>
         </div>
         
         )}

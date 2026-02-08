@@ -4,29 +4,32 @@ import { IngredientFormFields } from '@/app/hooks/useIngredientsForm';
 import { LucideIcon } from 'lucide-react';
 import { memo } from 'react';
 import { UseFormRegister, Path } from 'react-hook-form';
+import { SelectableItem } from '../../shared/SelectStore';
 
 export type SelectOption = {
   name: string;
   value: string;
 };
 
-type FormSelectProps = {
+interface FormSelectProps <T extends Record<string, any>> {
   fieldName: Path<IngredientFormFields>;
-  options: SelectOption[];
+  options: T[];
   placeholder: string;
   icon: LucideIcon;
   register: UseFormRegister<IngredientFormFields>;
   onKeyDown: (e: React.KeyboardEvent<HTMLSelectElement>) => void;
+  value: string[] | number[]
 };
 
-const FormSelect = memo(({ 
+const FormSelect = <T extends Record<string, any>>({ 
   fieldName, 
   options, 
   placeholder, 
   icon: Icon, 
   register, 
-  onKeyDown 
-}: FormSelectProps) => (
+  onKeyDown ,
+  value
+}: FormSelectProps<T>) => (
   <div className={`
     flex items-center w-full px-4 h-12
     bg-white border border-gray-200 rounded-xl
@@ -61,8 +64,8 @@ const FormSelect = memo(({
       ))}
     </select>
   </div>
-));
+);
 
-FormSelect.displayName = "FormSelect";
+
 
 export default FormSelect;
