@@ -37,7 +37,7 @@ const Page = async () => {
     // Transform suppliers for the select options
     const supplierOptions = result?.suppliers?.map((supplier) => ({
         id: supplier.id,
-        name: supplier.name,
+        name: supplier.name
     })) ?? [];
 
     return (

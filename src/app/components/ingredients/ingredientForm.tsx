@@ -17,7 +17,6 @@ import { categoryOptions, unitOptions } from './ingredientsFormComponents/select
 import { Tag, Scale, Truck } from 'lucide-react';
 import Modal from '../shared/modal';
 import ItemsStore from '../shared/itemsStore';
-import MultipleSelect from '../shared/multipleSelect';
 import { SelectableItem } from '../shared/SelectStore';
 
 type AddIngredientProps = {
@@ -77,6 +76,8 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
                icon={Tag}
                register={register}
                onKeyDown={handleKeyDown}
+               getValue={(opt) => opt.value}
+               getLabel={(opt) => opt.name}
              />
           </div>
 
@@ -94,6 +95,8 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
                icon={Scale}
                register={register}
                onKeyDown={handleKeyDown}
+               getValue={(opt) => opt.id}
+               getLabel={(opt) => opt.name}
              />
           </div>
         
@@ -124,6 +127,8 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
                icon={Scale}
                register={register}
                onKeyDown={handleKeyDown}
+               getValue={(opt) => opt.value}
+               getLabel={(opt) => opt.name}
              />
           </div>
 
