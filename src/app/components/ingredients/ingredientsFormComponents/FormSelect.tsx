@@ -18,7 +18,8 @@ interface FormSelectProps <T extends Record<string, any>> {
   icon: LucideIcon;
   register: UseFormRegister<IngredientFormFields>;
   onKeyDown: (e: React.KeyboardEvent<HTMLSelectElement>) => void;
-  value: string[] | number[]
+  getValue: (option: T) => string;
+  getLabel: (option: T) => string;
 };
 
 const FormSelect = <T extends Record<string, any>>({ 
@@ -27,8 +28,9 @@ const FormSelect = <T extends Record<string, any>>({
   placeholder, 
   icon: Icon, 
   register, 
-  onKeyDown ,
-  value
+  onKeyDown,
+  getValue,
+  getLabel 
 }: FormSelectProps<T>) => (
   <div className={`
     flex items-center w-full px-4 h-12
@@ -58,8 +60,8 @@ const FormSelect = <T extends Record<string, any>>({
     >
       <option value="" disabled className="text-gray-400">{placeholder}</option>
       {options.map((option) => (
-        <option key={option.value} value={option.value}>
-          {option.name}
+        <option key={getValue(option)} value={getValue(option)}>
+          {getLabel(option)}
         </option>
       ))}
     </select>
