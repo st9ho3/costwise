@@ -14,7 +14,7 @@ import { Ingredient } from '@/shemas/recipe';
 import { useIngredientForm } from '../../hooks/useIngredientsForm';
 import FormSelect from './ingredientsFormComponents/FormSelect';
 import { categoryOptions, unitOptions } from './ingredientsFormComponents/selectOptions';
-import { Tag, Scale } from 'lucide-react';
+import { Tag, Scale, Trash2 } from 'lucide-react';
 import { Card } from '../ui/card';
 import { Label } from '../ui/label';
 import { Button } from '../ui/button';
@@ -41,7 +41,8 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
      isModalOpen,
      modalType,
      fields,
-     append
+     append,
+     remove
   } = useIngredientForm({ ingredient, mode, userId, supplierOptions });
   
   return (
@@ -139,7 +140,7 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
                 </div>
 
                 {/* Price: Price / Unit */}
-                <div className="col-span-1 md:col-span-3">
+                <div className="col-span-1 md:col-span-2">
                   <Label className="mb-1.5 ml-1 block">Price / Unit</Label>
                   <IngredientPriceInput
                     onChange={setValue}
@@ -157,6 +158,20 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
                     className="w-full"
                   >
                     Add
+                  </Button>
+                </div>
+
+                {/* Action button to delete supplier row */}
+                <div className="col-span-1 md:col-span-1 flex items-end">
+                  <Button 
+                    type="button"
+                    variant="destructive"
+                    size="icon"
+                    onClick={() => remove(index)}
+                    className="w-full h-10 rounded-full"
+                    aria-label="Delete supplier"
+                  >
+                    <Trash2 className="size-4" />
                   </Button>
                 </div>
               </div>
