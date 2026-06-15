@@ -1,32 +1,33 @@
 "use client";
-import React,{ memo } from 'react';
-import Button from './button';
+import React, { memo } from 'react';
+import { Pencil, Plus, Loader2 } from 'lucide-react';
+import { Button } from '@/app/components/ui/button';
 
 type AddIngredientButtonProps = {
   mode: 'create' | 'edit';
-  isSubmitting: boolean
+  isSubmitting: boolean;
 };
 
-const AddIngredientButton = memo(({  mode, isSubmitting }: AddIngredientButtonProps) => {
-
+const AddIngredientButton = memo(({ mode, isSubmitting }: AddIngredientButtonProps) => {
   const isEditMode = mode === 'edit';
+  const label = isEditMode
+    ? (isSubmitting ? 'Updating' : 'Update')
+    : (isSubmitting ? 'Adding' : 'Add');
 
-  if (isEditMode) {
-     if (isSubmitting) {
-      return <Button isEditMode={isEditMode} text='Updating' />
-     } else {
-      return <Button isEditMode={isEditMode} text='Update' />
-     }
-  } else {
-    if (isSubmitting) {
-      return <Button isEditMode={isEditMode} text='Adding' />
-    } else {
-      return <Button isEditMode={isEditMode} text='Add' />
-    }
-  }
-
+  return (
+    <Button type="submit" size="lg" disabled={isSubmitting} className="w-full">
+      {isSubmitting ? (
+        <Loader2 className="animate-spin" />
+      ) : isEditMode ? (
+        <Pencil />
+      ) : (
+        <Plus />
+      )}
+      <span>{label}</span>
+    </Button>
+  );
 });
 
-AddIngredientButton.displayName = "AddIngredientButton"
+AddIngredientButton.displayName = 'AddIngredientButton';
 
 export default AddIngredientButton;

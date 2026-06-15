@@ -1,17 +1,13 @@
-// src/components/ingredients/ingredientsFormComponents/FormSelect.tsx
-
 import { IngredientFormFields } from '@/app/hooks/useIngredientsForm';
 import { LucideIcon } from 'lucide-react';
-import { memo } from 'react';
 import { UseFormRegister, Path } from 'react-hook-form';
-import { SelectableItem } from '../../shared/SelectStore';
 
 export type SelectOption = {
   name: string;
   value: string;
 };
 
-interface FormSelectProps <T extends Record<string, any>> {
+interface FormSelectProps <T extends Record<string, unknown>> {
   fieldName: Path<IngredientFormFields>;
   options: T[];
   placeholder: string;
@@ -20,9 +16,9 @@ interface FormSelectProps <T extends Record<string, any>> {
   onKeyDown: (e: React.KeyboardEvent<HTMLSelectElement>) => void;
   getValue: (option: T) => string;
   getLabel: (option: T) => string;
-};
+}
 
-const FormSelect = <T extends Record<string, any>>({ 
+const FormSelect = <T extends Record<string, unknown>>({ 
   fieldName, 
   options, 
   placeholder, 
@@ -33,17 +29,15 @@ const FormSelect = <T extends Record<string, any>>({
   getLabel 
 }: FormSelectProps<T>) => (
   <div className={`
-    flex items-center w-full px-4 h-12
-    bg-white border border-gray-200 rounded-xl
-    transition-all duration-200 ease-in-out
-    hover:border-gray-300
-    focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10 
-    relative
+    flex items-center w-full px-4 h-10
+    bg-card border border-input rounded-md
+    transition-colors
+    focus-within:ring-2 focus-within:ring-ring relative
   `}>
     
     <Icon 
       size={20} 
-      className="text-gray-400 mr-3 shrink-0" 
+      className="text-muted-foreground mr-3 shrink-0" 
       strokeWidth={2}
     />
 
@@ -53,12 +47,12 @@ const FormSelect = <T extends Record<string, any>>({
       onKeyDown={onKeyDown}
       className="
         w-full h-full bg-transparent border-none outline-none
-        text-sm font-medium text-gray-900 cursor-pointer
-        placeholder:text-gray-400 appearance-none
+        text-sm font-medium text-foreground cursor-pointer
+        placeholder:text-muted-foreground appearance-none
       "
       defaultValue=""
     >
-      <option value="" disabled className="text-gray-400">{placeholder}</option>
+      <option value="" disabled className="text-muted-foreground">{placeholder}</option>
       {options.map((option) => (
         <option key={getValue(option)} value={getValue(option)}>
           {getLabel(option)}
@@ -67,7 +61,5 @@ const FormSelect = <T extends Record<string, any>>({
     </select>
   </div>
 );
-
-
 
 export default FormSelect;

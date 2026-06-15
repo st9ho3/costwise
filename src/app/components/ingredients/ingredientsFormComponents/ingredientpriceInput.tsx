@@ -32,16 +32,15 @@ const IngredientPriceInput = ({ onChange, price }: IngredientPriceInputProps) =>
     // Matches the height (h-12) and rounded style of Name/Unit inputs.
     // Full width allows it to fill the grid cell perfectly.
     <div className={`
-      flex items-center w-full px-4 h-12
-      bg-white border border-gray-200 rounded-xl
-      transition-all duration-200 ease-in-out
-      hover:border-gray-300
-      focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10
+      flex items-center w-full px-4 h-10
+      bg-card border border-input rounded-md
+      transition-colors
+      focus-within:ring-2 focus-within:ring-ring
     `}>
       {/* ICON: Visual Context */}
       <Euro 
         size={20} 
-        className="text-gray-400 mr-3 shrink-0" 
+        className="text-muted-foreground mr-3 shrink-0" 
         strokeWidth={2} 
       />
 
@@ -57,7 +56,7 @@ const IngredientPriceInput = ({ onChange, price }: IngredientPriceInputProps) =>
         onChange={handleChange}
         className="
           w-full h-full bg-transparent border-none outline-none
-          text-sm font-medium text-gray-900 placeholder:text-gray-400
+          text-sm font-medium text-foreground placeholder:text-muted-foreground
           [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
         "
         placeholder="0.00"

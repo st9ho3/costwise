@@ -15,6 +15,8 @@ import { useIngredientForm } from '../../hooks/useIngredientsForm';
 import FormSelect from './ingredientsFormComponents/FormSelect';
 import { categoryOptions, unitOptions } from './ingredientsFormComponents/selectOptions';
 import { Tag, Scale, Truck } from 'lucide-react';
+import { Card } from '../ui/card';
+import { Label } from '../ui/label';
 import Modal from '../shared/modal';
 import ItemsStore from '../shared/itemsStore';
 import { SelectableItem } from '../shared/SelectStore';
@@ -42,14 +44,14 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
      append,
      remove
   } = useIngredientForm({ ingredient, mode, userId, supplierOptions });
-  console.log(error)
+  
   return (
     <form 
       className="w-full max-w-3xl mx-auto p-2 md:mt-4" 
       onSubmit={handleSubmit(onSubmit)}
     >
       {/* SINGLE CARD CONTAINER: Fits content efficiently */}
-      <div className="bg-white p-6 rounded-[28px] shadow-sm border border-gray-100">
+      <Card className="p-6">
         
         {/* GRID LAYOUT: 12-column grid for precise sizing */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-end">
@@ -58,17 +60,13 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
           
           {/* Name: Takes up ~60% of width */}
           <div className="md:col-span-7">
-            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5 ml-1">
-              Ingredient Name
-            </label>
+            <Label className="mb-1.5 ml-1 block">Ingredient Name</Label>
             <IngredientNameInput register={register} onKeyDown={handleKeyDown} />
           </div>
 
           {/* Category: Takes up ~40% of width */}
-          <div className="md:col-span-5">
-             <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5 ml-1">
-               Category
-             </label>
+          <div className="md:col-span-5"> 
+             <Label className="mb-1.5 ml-1 block">Category</Label>
              <FormSelect 
                fieldName="category"
                options={categoryOptions}
@@ -83,9 +81,10 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
 
 
           {/* --- ROW 2: Supplier, Quantity, Unit, Price --- */}
-        {fields.map((field, index) => 
+          <div className='w-full flex flex-col'>
+            {fields.map((field, index) => 
 
-          <div key={field.id} className='md:flex '>
+          <div key={field.id} className='w-full md:flex items-center border'>
           {/* Supplier - uses confirmed suppliers for display */}
           <div className='md:row-span-3'>
             <FormSelect 
@@ -102,9 +101,7 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
         
           {/* Quantity: Takes up ~33% */}
            <div className="md:col-span-3">
-            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5 ml-1">
-              Quantity
-            </label>
+            <Label className="mb-1.5 ml-1 block">Quantity</Label>
             <div className="w-full flex justify-center">
               <Incremental 
                 onIngredientChange={setValue} 
@@ -117,9 +114,7 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
 
           {/* Unit: Takes up ~25% */}
           <div className="md:col-span-3">
-            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5 ml-1">
-              Unit
-            </label>
+            <Label className="mb-1.5 ml-1 block">Unit</Label>
             <FormSelect 
                fieldName="unit"
                options={unitOptions}
@@ -134,9 +129,7 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
 
           {/* Price: Takes up ~42% (Remaining space) */}
           <div className="md:col-span-3">
-            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5 ml-1">
-              Price / Unit
-            </label>
+            <Label className="mb-1.5 ml-1 block">Price / Unit</Label>
             <IngredientPriceInput
               onChange={setValue}
               price={price}
@@ -146,6 +139,8 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
         </div>
         
         )}
+          </div>
+        
         
         </div> 
           
@@ -167,7 +162,7 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
                 </div>
             </div>
         </div>
-      </div>
+      </Card>
 
       {/* Suppliers Selection Modal */}
       <Modal isOpen={isModalOpen && modalType.type === 'suppliers'} onClose={handleCloseModal} type="create">

@@ -14,23 +14,23 @@ const FormErrors = ({ errors }: FormErrorsProps) => {
   return (
     <div className="
       flex items-start gap-3 w-full 
-      p-4 rounded-xl mt-4
-      bg-red-50 border border-red-100
+      p-4 rounded-md mt-4
+      bg-destructive/10 border border-destructive/20
       animate-in fade-in slide-in-from-top-1 duration-300
     ">
       {/* Icon: Immediate visual cue for 'Error' */}
-      <div className="mt-0.5 text-red-600">
+      <div className="mt-0.5 text-destructive">
         <AlertCircle size={20} strokeWidth={2} />
       </div>
       
       {/* Content Container */}
       <div className="flex flex-col gap-1 w-full">
-        <h4 className="text-sm font-bold text-red-900">
+        <h4 className="text-sm font-bold text-destructive">
           Please fix the following:
         </h4>
         
         {/* Styled List */}
-        <ul className="list-disc list-inside text-sm text-red-700/90 space-y-1">
+        <ul className="list-disc list-inside text-sm text-destructive/90 space-y-1">
           {errors.map((err, index) => (
             <li key={index} className="leading-snug">
               {err}
