@@ -20,9 +20,8 @@ const IngredientNameInput = ({ register, onKeyDown }: IngredientNameInputProps) 
     // 2. focus-within: Handles the active state (Blue border + Ring)
     <div className={`
       flex items-center w-full px-4 h-10
-      bg-card border border-input rounded-md
-      transition-colors
-      focus-within:ring-2 focus-within:ring-ring
+      bg-card border border-primary rounded-md
+      brutalist-focus-within
     `}>
       {/* ICON:
           Visual cue for the input type. 

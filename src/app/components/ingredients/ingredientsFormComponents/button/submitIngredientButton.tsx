@@ -1,6 +1,6 @@
 "use client";
 import React, { memo } from 'react';
-import { Pencil, Plus, Loader2 } from 'lucide-react';
+import { ArrowUpRight, Loader2 } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
 
 type AddIngredientButtonProps = {
@@ -18,10 +18,8 @@ const AddIngredientButton = memo(({ mode, isSubmitting }: AddIngredientButtonPro
     <Button type="submit" size="lg" disabled={isSubmitting} className="w-full">
       {isSubmitting ? (
         <Loader2 className="animate-spin" />
-      ) : isEditMode ? (
-        <Pencil />
       ) : (
-        <Plus />
+        <ArrowUpRight className="size-5 shrink-0" />
       )}
       <span>{label}</span>
     </Button>

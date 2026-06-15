@@ -10,10 +10,10 @@ const ExitButton = () => {
   return (
     <button
       onClick={() => router.back()}
-      className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-offset-2 transition-colors"
+      className="absolute top-4 right-4 flex items-center justify-center size-8 rounded-full border border-primary bg-card text-foreground hover:bg-neutral-100 active:translate-y-[1px] active:translate-x-[1px] transition-all focus:outline-none focus:ring-2 focus:ring-focus-accent"
       aria-label="Close modal"
     >
-      <X />
+      <X className="size-4" />
     </button>
   )
 }

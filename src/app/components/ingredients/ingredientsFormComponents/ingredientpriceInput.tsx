@@ -33,9 +33,8 @@ const IngredientPriceInput = ({ onChange, price }: IngredientPriceInputProps) =>
     // Full width allows it to fill the grid cell perfectly.
     <div className={`
       flex items-center w-full px-4 h-10
-      bg-card border border-input rounded-md
-      transition-colors
-      focus-within:ring-2 focus-within:ring-ring
+      bg-card border border-primary rounded-md
+      brutalist-focus-within
     `}>
       {/* ICON: Visual Context */}
       <Euro 

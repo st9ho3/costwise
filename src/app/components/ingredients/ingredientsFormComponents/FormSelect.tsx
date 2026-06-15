@@ -7,7 +7,7 @@ export type SelectOption = {
   value: string;
 };
 
-interface FormSelectProps <T extends Record<string, unknown>> {
+interface FormSelectProps <T> {
   fieldName: Path<IngredientFormFields>;
   options: T[];
   placeholder: string;
@@ -18,7 +18,7 @@ interface FormSelectProps <T extends Record<string, unknown>> {
   getLabel: (option: T) => string;
 }
 
-const FormSelect = <T extends Record<string, unknown>>({ 
+const FormSelect = <T,>({ 
   fieldName, 
   options, 
   placeholder, 
@@ -30,9 +30,8 @@ const FormSelect = <T extends Record<string, unknown>>({
 }: FormSelectProps<T>) => (
   <div className={`
     flex items-center w-full px-4 h-10
-    bg-card border border-input rounded-md
-    transition-colors
-    focus-within:ring-2 focus-within:ring-ring relative
+    bg-card border border-primary rounded-md
+    brutalist-focus-within relative
   `}>
     
     <Icon 

@@ -4,14 +4,14 @@ import { cn } from '@/app/utils/cn'
 function Card({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
-      className={cn("rounded-lg border border-border bg-card text-card-foreground shadow-soft-sm", className)}
+      className={cn("rounded-lg border-2 border-primary bg-card text-card-foreground", className)}
       {...props}
     />
   )
 }
 
 function CardHeader({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div className={cn("flex flex-col gap-1 border-b border-border px-5 py-4", className)} {...props} />
+  return <div className={cn("flex flex-col gap-1 border-b-2 border-primary px-5 py-4", className)} {...props} />
 }
 
 function CardTitle({ className, ...props }: React.ComponentProps<'div'>) {
@@ -27,7 +27,7 @@ function CardContent({ className, ...props }: React.ComponentProps<'div'>) {
 }
 
 function CardFooter({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div className={cn("flex items-center border-t border-border px-5 py-4", className)} {...props} />
+  return <div className={cn("flex items-center border-t-2 border-primary px-5 py-4", className)} {...props} />
 }
 
 export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }

@@ -9,9 +9,9 @@
   --popover: 0 0% 100%;
   --popover-foreground: 222 47% 11%;
 
-  /* brand / intent */
-  --primary: 222 47% 31%;
-  --primary-foreground: 210 20% 98%;
+  /* brand / intent (Neo-Brutalist pure black primary) */
+  --primary: 0 0% 0%;
+  --primary-foreground: 0 0% 100%;
   --secondary: 210 20% 94%;
   --secondary-foreground: 222 47% 18%;
   --muted: 210 20% 96%;
@@ -23,12 +23,16 @@
   --success: 160 84% 30%;
   --success-foreground: 210 20% 98%;
 
-  /* lines & focus */
-  --border: 214 20% 88%;
-  --input: 214 20% 88%;
+  /* lines & focus (Neo-Brutalist pure black borders) */
+  --border: 0 0% 0%;
+  --input: 0 0% 0%;
   --ring: 222 47% 31%;
 
   --radius: 6px;
+
+  /* custom variables */
+  --focus-accent: #4F46E5;
+  --grid-line: #EBEBEB;
 }
 
 @theme inline {
@@ -54,11 +58,15 @@
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
 
+  --color-focus-accent: var(--focus-accent);
+  --color-grid-line: var(--grid-line);
+
   --radius-sm: calc(var(--radius) - 2px);
   --radius-md: var(--radius);
   --radius-lg: calc(var(--radius) + 4px);
 
   --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+  --font-sora: var(--font-sora), sans-serif;
 
   --shadow-soft-sm: 0 1px 2px 0 rgb(15 23 42 / 0.06);
   --shadow-soft-md: 0 2px 8px -2px rgb(15 23 42 / 0.10);
@@ -75,6 +83,32 @@
 @layer utilities {
   .shadow-soft-sm { box-shadow: var(--shadow-soft-sm); }
   .shadow-soft-md { box-shadow: var(--shadow-soft-md); }
+
+  .bg-grid {
+    background-image: linear-gradient(var(--grid-line) 1px, transparent 1px),
+                      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 24px 24px;
+    background-color: #f9f9f9;
+  }
+
+  .brutalist-focus {
+    transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
+  }
+  .brutalist-focus:focus,
+  .brutalist-focus:focus-visible {
+    outline: none !important;
+    border-color: var(--focus-accent) !important;
+    box-shadow: 2px 2px 0px 0px var(--focus-accent) !important;
+  }
+
+  .brutalist-focus-within {
+    transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
+  }
+  .brutalist-focus-within:focus-within {
+    outline: none !important;
+    border-color: var(--focus-accent) !important;
+    box-shadow: 2px 2px 0px 0px var(--focus-accent) !important;
+  }
 }
 
 /* Chrome, Safari, Edge, Opera: hide number input spinners */

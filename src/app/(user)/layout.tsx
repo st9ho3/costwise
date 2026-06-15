@@ -9,10 +9,11 @@ import Sidebar from "../components/layout/sideBar";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import { Poppins } from 'next/font/google'
+import { Poppins, Sora } from 'next/font/google'
 import Header from "../components/layout/header";
 import TabBar from "../components/layout/tabBar";
 import MobileSearchBoard from "../components/shared/search/mobileSearch/mobileSearchBoard";
+import { cn } from '@/app/utils/cn';
 
 export const metadata: Metadata = {
   title: "Costwise",
@@ -35,6 +36,12 @@ const poppins = Poppins({
   weight: ['400', '500', '600']
 });
 
+const sora = Sora({
+  subsets: ['latin'],
+  weight: ['400', '600', '700', '800'],
+  variable: '--font-sora'
+});
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -47,7 +54,7 @@ export default async function RootLayout({
   }
   
   return (
-    <html lang="en" className={poppins.className}>
+    <html lang="en" className={cn(poppins.className, sora.variable)}>
       <body>
         <SessionProvider session={session}>
             <div className="flex h-screen bg-[rgb(246,246,246)]">
