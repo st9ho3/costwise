@@ -8,7 +8,7 @@ interface DataProps {
     category: IngredientCategoryType
 }
 
-const Data = ({label, text, category }: DataProps) => {
+const Data = ({label, text}: DataProps) => {
   const isUsage = label === 'Usage';
   const isCategory = label === 'Category';
   const isBadge = isUsage || isCategory;

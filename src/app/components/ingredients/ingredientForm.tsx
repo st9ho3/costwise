@@ -14,7 +14,7 @@ import { Ingredient } from '@/shemas/recipe';
 import { useIngredientForm } from '../../hooks/useIngredientsForm';
 import FormSelect from './ingredientsFormComponents/FormSelect';
 import { categoryOptions, unitOptions } from './ingredientsFormComponents/selectOptions';
-import { Tag, Scale, Truck } from 'lucide-react';
+import { Tag, Scale } from 'lucide-react';
 import { Card } from '../ui/card';
 import { Label } from '../ui/label';
 import Modal from '../shared/modal';
@@ -37,12 +37,10 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
      selectSupplier,
      confirmSuppliers,
      handleCloseModal,
-     getSelectedSupplierItems,
      isModalOpen,
      modalType,
      fields,
-     append,
-     remove
+     append
   } = useIngredientForm({ ingredient, mode, userId, supplierOptions });
   
   return (
