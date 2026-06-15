@@ -93,10 +93,10 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
           {/* --- ROW 2: Supplier, Quantity, Unit, Price --- */}
           <div className='w-full md:col-span-12 flex flex-col'>
             {fields.map((field, index) => (
-              <div key={field.id} className='w-full flex flex-col md:flex-row md:items-end gap-4 p-4 border border-primary rounded-md bg-accent/20 mb-4'>
+              <div key={field.id} className='w-full grid grid-cols-1 md:grid-cols-12 gap-4 p-4 border border-primary rounded-md bg-accent/20 mb-4 items-end'>
                 
                 {/* Supplier Selection */}
-                <div className='flex-1 min-w-[200px]'>
+                <div className='col-span-1 md:col-span-3'>
                   <Label className="mb-1.5 ml-1 block">Supplier</Label>
                   <FormSelect 
                      fieldName={`suppliers.${index}.suppliersId`}
@@ -111,7 +111,7 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
                 </div>
               
                 {/* Quantity */}
-                 <div className="w-full md:w-32 shrink-0">
+                 <div className="col-span-1 md:col-span-2">
                   <Label className="mb-1.5 ml-1 block">Quantity</Label>
                   <div className="w-full flex justify-center">
                     <Incremental 
@@ -124,7 +124,7 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
                 </div>
 
                 {/* Unit */}
-                <div className="w-full md:w-32 shrink-0">
+                <div className="col-span-1 md:col-span-2">
                   <Label className="mb-1.5 ml-1 block">Unit</Label>
                   <FormSelect 
                      fieldName="unit"
@@ -139,7 +139,7 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
                 </div>
 
                 {/* Price: Price / Unit */}
-                <div className="w-full md:w-36 shrink-0">
+                <div className="col-span-1 md:col-span-3">
                   <Label className="mb-1.5 ml-1 block">Price / Unit</Label>
                   <IngredientPriceInput
                     onChange={setValue}
@@ -148,13 +148,13 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
                 </div>
 
                 {/* Action button to add supplier row */}
-                <div className="w-full md:w-auto flex items-end pt-5 md:pt-0 shrink-0">
+                <div className="col-span-1 md:col-span-2 flex items-end">
                   <Button 
                     type="button"
                     variant="outline"
                     size="default"
                     onClick={() => append({ suppliersId: "", unit: "", quantity: 1, price: 0, isActive: false })}
-                    className="w-full md:w-auto"
+                    className="w-full"
                   >
                     Add
                   </Button>
