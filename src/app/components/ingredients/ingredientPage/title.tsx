@@ -7,7 +7,7 @@ interface TitleProps {
 const Title = ({title}: TitleProps) => {
 
   return (
-    <div className='text-xl text-gray-600'>
+    <div className='text-xl text-muted-foreground'>
       {title}
     </div>
   )
