@@ -1,3 +1,5 @@
+import '@fontsource/jetbrains-mono/400.css'
+import '@fontsource/jetbrains-mono/500.css'
 import { Analytics } from "@vercel/analytics/next"
 import type { Metadata } from "next";
 import "../globals.css";

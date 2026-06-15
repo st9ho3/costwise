@@ -4,6 +4,8 @@
  * - Applies global styles via `../globals.css`.
  * - Wraps child pages in a semantic HTML structure with a main container that prevents vertical overflow.
  */
+import '@fontsource/jetbrains-mono/400.css'
+import '@fontsource/jetbrains-mono/500.css'
 import type { Metadata } from "next";
 import "../globals.css";
 
