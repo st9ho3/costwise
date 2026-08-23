@@ -18,7 +18,11 @@ This loop applies to ALL work in this repository, no exceptions:
 
 1. **ClickUp task** — every unit of work starts as a task in the ClickUp
    `Costwise` folder (Panos Workspace). One task = one spec = one plan =
-   one execute-and-verify cycle.
+   one execute-and-verify cycle. Tasks follow the **CostWise task
+   contract** (ClickUp doc in the Costwise folder): template blocks
+   (Context, Anchors, Acceptance criteria, Out of scope, Links) plus four
+   fields — Type, Area (which layer/packages the change lands in),
+   Surface (where the user feels it), Priority.
 2. **Spec** — written to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
    and approved by Panos before planning.
 3. **Plan** — written to `docs/superpowers/plans/YYYY-MM-DD-<topic>.md`
@@ -31,6 +35,11 @@ Fable 5 model (`claude-fable-5`). All other models are executors: they
 implement an existing approved plan and MUST NOT create, rewrite, or
 re-scope specs or plans. If an executor finds a plan wrong, blocked, or
 incomplete, it stops and reports back instead of improvising.
+Fable 5 itself does NOT execute plans. The single exception: a task
+Fable 5 explicitly declares **super-complex** in the spec and plan
+header, with its reasoning stated — the bar is high (novel architecture
+or judgment-dense work a plan cannot make executor-safe), and Fable 5
+states the call outright either way.
 
 **TDD rule:** the canonical definition is the
 `superpowers:test-driven-development` skill — its Iron Law applies: no
