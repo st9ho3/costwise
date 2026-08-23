@@ -396,6 +396,7 @@ app.route("/v1", v1);
 `index.ts` wires real services: `makeRecipeService: (userId) => new RecipeService(userId)` (import from `@costwise/domain/services/recipeService`). Verify GREEN; workspace gates green. Commit `feat(api): /v1/recipes endpoints`.
 
 - [x] **⛔ CHECKPOINT — push and stop.** This task established THE TEMPLATE that Tasks 6–9 mass-produce. A flaw here multiplies by four domains; it gets reviewed before replication.
+- [ ] **Remediation (added at checkpoint-2 review, Fable 5):** `Deps.makeRecipeService` was implemented as optional (`?`) with `!` assertions in every handler — the plan specified it required. Optional deps turn a production wiring omission into a runtime crash instead of a compile error, and the pattern would replicate ×4. Fix now: in `apps/api/src/app.ts` make every `Deps` member required (remove `?`), and remove all `!` assertions in `routes/recipes.ts`. `fakeDeps()` and `index.ts` must satisfy the full interface (they already do). As `Deps` grows in Tasks 6–9, every new member is REQUIRED — same rule. Verify `pnpm build && pnpm --filter api test` green, commit `fix(api): make Deps members required, drop non-null assertions`, push, then proceed to Task 6. **Approved deviation, no action:** PATCH returns 200 (web's old route used a quirky 201 for updates) — the API's 200 is the documented contract going forward; Task 4 rewires the web against it.
 
 ---
 
