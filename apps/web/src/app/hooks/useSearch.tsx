@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { search } from '../services/services'
-import { Ingredient, Recipe } from '@costwise/shared/recipe'
+import { Ingredient, IngredientToDisplay, Recipe } from '@costwise/shared/recipe'
 import useDebounce from './useDebounce'
 
 export interface Results {
-    ingredients: Ingredient[] | undefined
-    recipes: Recipe[] | undefined
+    ingredients?: (Ingredient | IngredientToDisplay)[]
+    recipes?: Recipe[]
 }
 
 const useSearch = () => {

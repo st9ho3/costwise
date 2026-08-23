@@ -2,7 +2,7 @@ import React from 'react';
 import { getServerSession } from '@/app/lib/serverSession';
 import { redirect, notFound } from 'next/navigation';
 import IngredientDetailView from '@/app/components/ingredients/ingredientPage/IngredientDetailView';
-import { apiServer } from '@/app/lib/api';
+import { apiServer } from '@/app/lib/apiServer';
 
 interface PageProps {
   params: Promise<{ id: string }>;

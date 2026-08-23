@@ -3,7 +3,7 @@ import { getServerSession } from '@/app/lib/serverSession';
 import { redirect } from 'next/navigation';
 import { Metadata } from '@costwise/shared/specialTypes';
 import IngredientForm from '@/app/components/ingredients/ingredientForm';
-import { apiServer } from '@/app/lib/api';
+import { apiServer } from '@/app/lib/apiServer';
 
 const Page = async () => {
   const session = await getServerSession();

@@ -1,17 +1,18 @@
 /**
- * - Provides a reusable hook for uploading files to Vercel Blob storage via a `/api/upload` endpoint.
- * - Manages upload state (loading, error) and returns the uploaded file’s public URL on success.
+ * - Provides a reusable hook for uploading files via the `/v1/uploads` api-client endpoint.
+ * - Manages upload state (loading, error) and returns the uploaded file's public URL on success.
  * - Integrates with `useHelpers` to display user notifications for errors.
  * - Exposes both an `uploadFile` function and a `handleFileUpload` wrapper for convenience.
  */
 "use client"
 import { useState } from 'react';
-import type { PutBlobResult } from '@vercel/blob';
 import useHelpers from './useHelpers';
+import { apiBrowser } from '../lib/api';
+
 export const useFileUpload = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { raiseNotification } = useHelpers({path: null});
+  const { raiseNotification } = useHelpers({ path: null });
   
   const uploadFile = async (file: File) => {
     setIsLoading(true);
@@ -20,15 +21,15 @@ export const useFileUpload = () => {
       if (!file) {
         throw new Error('No file selected.');
       }
-      const response = await fetch(`/api/upload?filename=${file.name}`, {
-        method: 'POST',
-        body: file,
+      const { data, error: apiError } = await apiBrowser.POST('/v1/uploads', {
+        params: { query: { filename: file.name } },
+        body: file as never,
+        bodySerializer: (b) => b as unknown as BodyInit,
       });
-      if (!response.ok) {
-        throw new Error('Failed to upload file.');
+      if (apiError || !data?.url) {
+        throw new Error(apiError?.error?.message ?? 'Failed to upload file.');
       }
-      const newBlob = (await response.json()) as PutBlobResult;
-      return newBlob.url;
+      return data.url;
     } catch (e: unknown) {
       if (e instanceof Error) {
         setError(e.message);
@@ -37,6 +38,7 @@ export const useFileUpload = () => {
       setIsLoading(false);
     }
   };
+
   const handleFileUpload = async (file: File) => {
     if (file) {
       try {
@@ -51,6 +53,7 @@ export const useFileUpload = () => {
       }
     }
   };
+
   return {
     uploadFile,
     isLoading,

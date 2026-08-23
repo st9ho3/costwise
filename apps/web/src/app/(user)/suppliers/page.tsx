@@ -6,7 +6,7 @@ import Pagination from '@/app/components/recipes/pagination';
 import { getServerSession } from '@/app/lib/serverSession';
 import { redirect } from 'next/navigation';
 import { Button } from '@/app/components/ui/button';
-import { apiServer } from '@/app/lib/api';
+import { apiServer } from '@/app/lib/apiServer';
 import { Supplier } from '@costwise/shared/recipe';
 
 export const dynamic = 'force-dynamic';

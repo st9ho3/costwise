@@ -2,7 +2,7 @@ import SuppliersForm from '@/app/components/suppliers/suppliersForm';
 import { getServerSession } from '@/app/lib/serverSession';
 import { redirect, notFound } from 'next/navigation';
 import React from 'react';
-import { apiServer } from '@/app/lib/api';
+import { apiServer } from '@/app/lib/apiServer';
 import { Supplier } from '@costwise/shared/recipe';
 
 export interface Params {

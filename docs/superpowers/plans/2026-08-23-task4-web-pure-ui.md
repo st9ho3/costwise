@@ -203,7 +203,7 @@ Drop the now-unused `RecipeService`/`Metadata` imports (Metadata may still come 
 
 **Files:** Rewrite `apps/web/src/app/services/services.ts` internals; touch the 5 hooks only where refresh is needed; modify `apps/web/src/app/hooks/useFileUpload.tsx`.
 
-- [ ] **Step 1:** Rewrite each `services.ts` function body onto `apiBrowser` with the SAME name/signature/return contract the hooks expect (inspect each current function's return usage first; preserve it). Example:
+- [x] **Step 1:** Rewrite each `services.ts` function body onto `apiBrowser` with the SAME name/signature/return contract the hooks expect (inspect each current function's return usage first; preserve it). Example:
 
 ```ts
 export const sendRecipe = async (/* unchanged args */) => {
@@ -215,9 +215,9 @@ export const sendRecipe = async (/* unchanged args */) => {
 
 `search` → `GET /v1/search` with `params: { query: { q: searchTerm } }`.
 
-- [ ] **Step 2:** Refresh behavior: find every hook path that previously depended on `revalidatePath` (recipe create/update/delete at minimum — `useRecipeForm`, `useHelpers`): after the awaited mutation succeeds, call `router.refresh()` (add `useRouter` where missing) unless the hook already `router.push`es to a page that will render fresh (force-dynamic pages refetch on navigation — verify by testing create→list flow in the browser).
-- [ ] **Step 3:** `useFileUpload`: open `apps/api/src/routes/uploads.ts` FIRST and mirror its actual contract (Task 2 mirrored the old web route: `?filename=` + raw body vs multipart — whichever it implements). Point the hook at `${NEXT_PUBLIC_API_URL}/v1/uploads` with `credentials: "include"`; if the route is multipart, use the api-client `POST` with FormData; if raw-body+query, a direct `fetch` via `apiBrowser`'s baseUrl is acceptable — note which in the commit.
-- [ ] **Step 4:** Gates + full manual flow of one create/edit/delete per domain + search + upload on `pnpm dev`. Commit `refactor(web): client mutations through api-client`.
+- [x] **Step 2:** Refresh behavior: find every hook path that previously depended on `revalidatePath` (recipe create/update/delete at minimum — `useRecipeForm`, `useHelpers`): after the awaited mutation succeeds, call `router.refresh()` (add `useRouter` where missing) unless the hook already `router.push`es to a page that will render fresh (force-dynamic pages refetch on navigation — verify by testing create→list flow in the browser).
+- [x] **Step 3:** `useFileUpload`: open `apps/api/src/routes/uploads.ts` FIRST and mirror its actual contract (Task 2 mirrored the old web route: `?filename=` + raw body vs multipart — whichever it implements). Point the hook at `${NEXT_PUBLIC_API_URL}/v1/uploads` with `credentials: "include"`; if the route is multipart, use the api-client `POST` with FormData; if raw-body+query, a direct `fetch` via `apiBrowser`'s baseUrl is acceptable — note which in the commit.
+- [x] **Step 4:** Gates + full manual flow of one create/edit/delete per domain + search + upload on `pnpm dev`. Commit `refactor(web): client mutations through api-client`.
 
 ---
 

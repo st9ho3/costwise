@@ -1,10 +1,10 @@
-import { Ingredient } from '@costwise/shared/recipe';
+import { Ingredient, IngredientToDisplay } from '@costwise/shared/recipe';
 import Link from 'next/link';
 import React from 'react';
 import { CategoryThumbnail } from '@/app/utils/uiHelpers';
 
 interface IngredientSearchResultProps {
-  item: Ingredient;
+  item: Ingredient | IngredientToDisplay;
   onClose: () => void;
 }
 

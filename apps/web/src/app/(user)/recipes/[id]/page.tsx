@@ -1,7 +1,7 @@
 import React from 'react';
 import { getServerSession } from '@/app/lib/serverSession';
 import { notFound, redirect } from 'next/navigation';
-import { apiServer } from '@/app/lib/api';
+import { apiServer } from '@/app/lib/apiServer';
 
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const session = await getServerSession();

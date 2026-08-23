@@ -4,7 +4,7 @@ import { transformRecipeFromDB, transformRecipeIngredentFromDB } from '@costwise
 import { Metadata, RecipeIngredientFromDB } from '@costwise/shared/specialTypes';
 import { getServerSession } from '@/app/lib/serverSession';
 import { redirect, notFound } from 'next/navigation';
-import { apiServer } from '@/app/lib/api';
+import { apiServer } from '@/app/lib/apiServer';
 
 interface Params {
   params: Promise<{

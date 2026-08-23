@@ -2,7 +2,7 @@ import { getServerSession } from "@/app/lib/serverSession";
 import { redirect } from "next/navigation";
 import React from "react";
 import TodayView from "@/app/components/home/TodayView";
-import { apiServer } from "@/app/lib/api";
+import { apiServer } from "@/app/lib/apiServer";
 
 const HomePage = async () => {
   const session = await getServerSession();
