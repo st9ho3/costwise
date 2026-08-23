@@ -20,7 +20,7 @@ export type RecipeServiceLike = {
 };
 
 export interface Deps {
-  makeRecipeService?: (userId: string) => RecipeServiceLike;
+  makeRecipeService: (userId: string) => RecipeServiceLike;
 }
 
 export const createApp = (deps: Deps) => {

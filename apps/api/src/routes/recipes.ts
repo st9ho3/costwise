@@ -32,7 +32,7 @@ export const recipesRoutes = (deps: Deps) => {
     },
   });
   router.openapi(listRecipes, async (c) => {
-    const svc = deps.makeRecipeService!(c.var.userId);
+    const svc = deps.makeRecipeService(c.var.userId);
     const q = c.req.valid("query");
     const result = await svc.findAll(c.var.userId, toMetadata(q));
     return c.json(result ?? { recipes: [], count: { count: 0 } }, 200);
@@ -58,7 +58,7 @@ export const recipesRoutes = (deps: Deps) => {
     },
   });
   router.openapi(createRecipe, async (c) => {
-    const svc = deps.makeRecipeService!(c.var.userId);
+    const svc = deps.makeRecipeService(c.var.userId);
     const body = c.req.valid("json");
     await svc.create(body);
     return c.json({ message: "Recipe successfully created!" }, 201);
@@ -80,7 +80,7 @@ export const recipesRoutes = (deps: Deps) => {
     },
   });
   router.openapi(getRecipe, async (c) => {
-    const svc = deps.makeRecipeService!(c.var.userId);
+    const svc = deps.makeRecipeService(c.var.userId);
     const { id } = c.req.valid("param");
     const recipe = await svc.findById(id);
     if (!recipe) {
@@ -111,7 +111,7 @@ export const recipesRoutes = (deps: Deps) => {
     },
   });
   router.openapi(updateRecipe, async (c) => {
-    const svc = deps.makeRecipeService!(c.var.userId);
+    const svc = deps.makeRecipeService(c.var.userId);
     const { id } = c.req.valid("param");
     const body = c.req.valid("json");
     await svc.update(
@@ -139,7 +139,7 @@ export const recipesRoutes = (deps: Deps) => {
     },
   });
   router.openapi(deleteRecipe, async (c) => {
-    const svc = deps.makeRecipeService!(c.var.userId);
+    const svc = deps.makeRecipeService(c.var.userId);
     const { id } = c.req.valid("param");
     await svc.delete(id);
     return c.json({ id }, 200);
