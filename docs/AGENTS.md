@@ -18,7 +18,11 @@ This loop applies to ALL work in this repository, no exceptions:
 
 1. **ClickUp task** — every unit of work starts as a task in the ClickUp
    `Costwise` folder (Panos Workspace). One task = one spec = one plan =
-   one execute-and-verify cycle.
+   one execute-and-verify cycle. Tasks follow the **CostWise task
+   contract** (ClickUp doc in the Costwise folder): template blocks
+   (Context, Anchors, Acceptance criteria, Out of scope, Links) plus four
+   fields — Type, Area (which layer/packages the change lands in),
+   Surface (where the user feels it), Priority.
 2. **Spec** — written to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
    and approved by Panos before planning.
 3. **Plan** — written to `docs/superpowers/plans/YYYY-MM-DD-<topic>.md`
