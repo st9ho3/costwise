@@ -30,8 +30,8 @@
 
 ### Task 1: Preflight
 
-- [ ] `git fetch origin && git merge-base --is-ancestor origin/feature/better-auth origin/main && echo OK` → `OK`, else STOP.
-- [ ] Own clone/worktree, clean tree, branch `feature/web-pure-ui` off pulled `main`.
+- [x] `git fetch origin && git merge-base --is-ancestor origin/feature/better-auth origin/main && echo OK` → `OK`, else STOP.
+- [x] Own clone/worktree, clean tree, branch `feature/web-pure-ui` off pulled `main`.
 
 ---
 
@@ -41,7 +41,7 @@
 
 **Interfaces produced:** `createApiClient(opts: { baseUrl: string; fetch?: typeof fetch; headers?: Record<string, string>; credentials?: RequestCredentials }): Client<paths>` — an `openapi-fetch` client; consumers call `client.GET("/v1/recipes", { params: { query } })` etc. with full typing. Regen: `pnpm --filter api emit-openapi && pnpm --filter @costwise/api-client gen`.
 
-- [ ] **Step 1:** `apps/api/scripts/emit-openapi.ts`:
+- [x] **Step 1:** `apps/api/scripts/emit-openapi.ts`:
 
 ```ts
 import { writeFileSync } from "node:fs";
@@ -59,7 +59,7 @@ console.log("openapi.json written");
 
 (If `getOpenAPI31Document` doesn't exist in the installed `@hono/zod-openapi`, use `getOpenAPIDocument` with the same config — check the version's exports, STOP if neither.) Add `"emit-openapi": "tsx scripts/emit-openapi.ts"` to `apps/api` scripts; run it once — expect `packages/api-client/openapi.json` containing all 13 `/v1` paths (verify: `grep -c '"/v1/' packages/api-client/openapi.json` ≥ 13).
 
-- [ ] **Step 2:** Package scaffold. `packages/api-client/package.json`:
+- [x] **Step 2:** Package scaffold. `packages/api-client/package.json`:
 
 ```json
 {
@@ -79,7 +79,7 @@ console.log("openapi.json written");
 
 `tsconfig.json`: copy from `packages/db`, include `["src"]`. Add a `vitest.config.ts` like `apps/api`'s. Run `pnpm install`, then `pnpm --filter @costwise/api-client gen` — expect `src/schema.d.ts` with a `paths` interface.
 
-- [ ] **Step 3 (RED):** `src/index.test.ts` — mock fetch, no network:
+- [x] **Step 3 (RED):** `src/index.test.ts` — mock fetch, no network:
 
 ```ts
 import { describe, it, expect, vi } from "vitest";
@@ -116,7 +116,7 @@ describe("createApiClient", () => {
 
 Run → FAIL (`./index` missing).
 
-- [ ] **Step 4 (GREEN):** `src/index.ts`:
+- [x] **Step 4 (GREEN):** `src/index.ts`:
 
 ```ts
 import createClient, { type Client } from "openapi-fetch";
