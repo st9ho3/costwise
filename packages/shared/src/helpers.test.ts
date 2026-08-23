@@ -1,21 +1,28 @@
 import { describe, test, expect } from "vitest";
 import {
   calculateProfitMargin,
+  calculateRecipeData,
   calculateSellingPrice,
+  formatPrice,
+  getDisplayUnit,
   getTotalPrice,
   normalizePrice,
 } from "./pricing";
 import {
+  createEditIngredientPrototype,
+  createIngredientPrototype,
   transformIngredientFromDB,
   transformIngredientToDB,
   transformRecipeFromDB,
   transformRecipeIngredentFromDB,
   transformRecipeToDB,
+  destructureIngredient,
 } from "./transformers";
 import {
   DBIngredient,
   DBRecipe,
   Ingredient,
+  IngredientSchema,
   Recipe,
   RecipeIngredients,
 } from "./recipe";
@@ -376,5 +383,211 @@ describe("transformIngredientToDB", () => {
     const result = transformIngredientToDB(mockIngredient);
 
     expect(result).toStrictEqual(mockDBIngredient);
+  });
+});
+
+describe("getDisplayUnit", () => {
+  test("returns correct display unit for metric weight and volume", () => {
+    expect(getDisplayUnit("kg")).toBe("g");
+    expect(getDisplayUnit("g")).toBe("g");
+    expect(getDisplayUnit("L")).toBe("ml");
+    expect(getDisplayUnit("ml")).toBe("ml");
+    expect(getDisplayUnit("piece")).toBe("piece");
+  });
+
+  test("falls back to 'g' when unit is undefined or empty string instead of returning 'undefined'", () => {
+    expect(getDisplayUnit(undefined)).toBe("g");
+    expect(getDisplayUnit("")).toBe("g");
+  });
+});
+
+describe("createIngredientPrototype & IngredientSchema", () => {
+  const sampleFormData: any = {
+    id: "123e4567-e89b-12d3-a456-426614174000",
+    name: "Pecorino Romano",
+    unit: "kg",
+    unitPrice: 12.4,
+    quantity: 1,
+    usage: "0",
+    category: "80662af1-1943-4168-8549-ef721b0e9f54",
+  };
+  const supplierId = "55555555-5555-5555-5555-555555555555";
+  const userId = "u1";
+
+  test("populates suppliers array with proper shape in create prototype", () => {
+    const prototype = createIngredientPrototype(sampleFormData, [supplierId], userId);
+    expect(prototype).toBeDefined();
+    expect(prototype?.suppliers).toHaveLength(1);
+    expect(prototype?.suppliers[0]).toEqual({
+      suppliersId: supplierId,
+      unit: "kg",
+      quantity: 1,
+      price: 12.4,
+      isActive: true,
+    });
+    expect(prototype?.unit).toBe("g");
+    expect(prototype?.unitPrice).toBe(0.0124);
+
+    const parseResult = IngredientSchema.safeParse(prototype);
+    expect(parseResult.success).toBe(true);
+  });
+
+  test("IngredientSchema produces human-readable error 'Add at least one supplier' when suppliers is empty", () => {
+    const prototype = createIngredientPrototype(sampleFormData, [], userId);
+    const parseResult = IngredientSchema.safeParse(prototype);
+    expect(parseResult.success).toBe(false);
+    if (!parseResult.success) {
+      const supplierError = parseResult.error.errors.find((e) =>
+        e.path.includes("suppliers"),
+      );
+      expect(supplierError?.message).toBe("Add at least one supplier");
+    }
+  });
+
+  test("populates suppliers array with proper shape in edit prototype", () => {
+    const existingIngredient: Ingredient = {
+      id: sampleFormData.id,
+      name: "Old Name",
+      unit: "g",
+      unitPrice: 0.01,
+      quantity: 1,
+      usage: "2",
+      userId,
+      category: sampleFormData.category,
+      suppliers: [],
+    };
+
+    const prototype = createEditIngredientPrototype(
+      sampleFormData,
+      existingIngredient,
+      [supplierId],
+      userId,
+    );
+    expect(prototype.suppliers).toHaveLength(1);
+    expect(prototype.suppliers[0]).toEqual({
+      suppliersId: supplierId,
+      unit: "kg",
+      quantity: 1,
+      price: 12.4,
+      isActive: true,
+    });
+    expect(prototype.usage).toBe("2");
+
+    const parseResult = IngredientSchema.safeParse(prototype);
+    expect(parseResult.success).toBe(true);
+  });
+});
+
+describe("formatPrice", () => {
+  test("formats 0 as '0.00' instead of 'Unavailable'", () => {
+    expect(formatPrice(0)).toBe("0.00");
+    expect(formatPrice("0")).toBe("0.00");
+    expect(formatPrice(0.0)).toBe("0.00");
+  });
+
+  test("formats prices under 1 with 3 decimals", () => {
+    expect(formatPrice(0.0125)).toBe("0.013");
+    expect(formatPrice(0.0025)).toBe("0.003");
+    expect(formatPrice(0.5)).toBe("0.500");
+  });
+
+  test("formats prices 1 and above with 2 decimals", () => {
+    expect(formatPrice(12.5)).toBe("12.50");
+    expect(formatPrice(1.5)).toBe("1.50");
+    expect(formatPrice(100)).toBe("100.00");
+  });
+
+  test("returns 'Unavailable' for undefined, null, empty string, or NaN", () => {
+    expect(formatPrice(undefined)).toBe("Unavailable");
+    expect(formatPrice(null as any)).toBe("Unavailable");
+    expect(formatPrice("")).toBe("Unavailable");
+    expect(formatPrice("not-a-number")).toBe("Unavailable");
+  });
+});
+
+describe("calculateRecipeData", () => {
+  const sampleIngredients: RecipeIngredients[] = [
+    {
+      recipeId: "r1",
+      ingredientId: "i1",
+      name: "Pecorino",
+      unit: "g",
+      unitPrice: 0.0125,
+      quantity: 100, // 100g * 0.0125 = €1.25
+    },
+    {
+      recipeId: "r1",
+      ingredientId: "i2",
+      name: "Guanciale",
+      unit: "kg",
+      unitPrice: 0.02, // €0.02 per g -> 0.1kg = 100g * 0.02 = €2.00
+      quantity: 0.1,
+    },
+  ];
+
+  test("computes total cost accurately from mixed unit ingredients", () => {
+    const data: any = {
+      tax: 0.13,
+      sellingPrice: 10,
+    };
+    const result = calculateRecipeData(data, undefined, sampleIngredients);
+    expect(result.newCost).toBe(3.25); // 1.25 + 2.00
+    expect(result.newTax).toBe(0.13);
+    expect(result.foodCost).toBeCloseTo(32.5); // (3.25 / 10) * 100
+  });
+
+  test("recalculates selling price and margin based on VAT rates", () => {
+    const dataWithMargin: any = {
+      tax: 0.24,
+      profitMargin: 60,
+    };
+    const result = calculateRecipeData(dataWithMargin, undefined, sampleIngredients);
+    expect(result.newCost).toBe(3.25);
+    expect(result.newTax).toBe(0.24);
+    expect(result.newPrice).toBeDefined();
+    // denominator = 1 - 0.24 - 0.60 = 0.16 => price = 3.25 / 0.16 = 20.3125
+    expect(result.newPrice).toBeCloseTo(20.3125);
+  });
+});
+
+
+describe("destructureIngredient", () => {
+  const base: Ingredient = {
+    id: "0b7f43cd-6c9e-4a02-9c1a-6f2b8f9d1e11",
+    icon: "Other",
+    name: "Feta",
+    unit: "g",
+    unitPrice: 0.0125,
+    quantity: 1,
+    usage: "0",
+    userId: "user-1",
+    category: "ef45178d-e566-4637-b7f9-abcf6d575466",
+    suppliers: [
+      {
+        suppliersId: "1c2d3e4f-5a6b-4c7d-8e9f-0a1b2c3d4e5f",
+        unit: "g",
+        quantity: 1,
+        price: 0.0125,
+        isActive: true,
+      },
+    ],
+  };
+
+  test("keeps unit, unitPrice and quantity on the ingredient row", () => {
+    const { dbIngredient, supplierIngredients } = destructureIngredient(base);
+    expect(dbIngredient.unit).toBe("g");
+    expect(dbIngredient.unitPrice).toBe("0.0125");
+    expect(dbIngredient.quantity).toBe("1");
+    expect(supplierIngredients).toHaveLength(1);
+    expect(supplierIngredients[0].unitPrice).toBe("0.0125");
+  });
+
+  test("keeps the price on the row when there are no suppliers", () => {
+    const { dbIngredient, supplierIngredients } = destructureIngredient({
+      ...base,
+      suppliers: [],
+    });
+    expect(dbIngredient.unitPrice).toBe("0.0125");
+    expect(supplierIngredients).toHaveLength(0);
   });
 });

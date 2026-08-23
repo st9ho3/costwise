@@ -9,7 +9,9 @@
     "build": "tsc --noEmit",
     "generate": "drizzle-kit generate",
     "push": "drizzle-kit push",
-    "migrate-auth": "tsx scripts/migrate-auth.ts"
+    "migrate-auth": "tsx scripts/migrate-auth.ts",
+    "restore-ingredient-price-columns": "tsx scripts/restore-ingredient-price-columns.ts",
+    "backfill-ingredient-prices": "tsx scripts/backfill-ingredient-prices.ts"
   },
   "dependencies": {
     "dotenv": "^17.2.0",

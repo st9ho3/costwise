@@ -174,14 +174,18 @@ export const IngredientSchema = z.object({
   suppliers: z
     .array(
       z.object({
-        suppliersId: z.string().uuid(),
+        suppliersId: z.string().uuid("Invalid supplier ID"),
         unit: UnitSchema,
         quantity: z.coerce.number(),
         price: z.coerce.number(),
         isActive: z.boolean(),
       }),
+      {
+        required_error: "Add at least one supplier",
+        invalid_type_error: "Add at least one supplier",
+      },
     )
-    .min(1),
+    .min(1, "Add at least one supplier"),
   category: IngredientCategorySchema,
 });
 

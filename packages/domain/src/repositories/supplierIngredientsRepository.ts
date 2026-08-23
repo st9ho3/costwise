@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { eq } from "drizzle-orm";
 import { Database, supplierIngredients } from "@costwise/db/schema";
 import { ISupplierIngredientRepository } from "../types/repositories";
 import { SupplierIngredientData } from "@costwise/shared/transformers";
+import { Unit } from "@costwise/shared/recipe";
 
 export class SupplierIngredientRepository implements ISupplierIngredientRepository {
   async create(
@@ -14,11 +16,16 @@ export class SupplierIngredientRepository implements ISupplierIngredientReposito
       .returning();
     return response;
   }
-  async update(
+  async updateByIngredientId(
     tx: Database,
-    supplierId: string,
-    data: SupplierIngredientData[],
-  ): Promise<void> {}
+    ingredientId: string,
+    data: { unit: Unit; unitPrice: string; quantity: string },
+  ): Promise<void> {
+    await tx
+      .update(supplierIngredients)
+      .set(data)
+      .where(eq(supplierIngredients.ingredientId, ingredientId));
+  }
   async delete(
     tx: Database,
     supplierId: string,

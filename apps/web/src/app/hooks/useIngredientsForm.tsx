@@ -7,21 +7,21 @@
  * - Shows user notifications via `useHelpers` and redirects to `/ingredients` on success.
  * - Supports keyboard-driven submission (Enter key) and dynamic price input handling.
  */
-"use client"
+"use client";
+
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
-import { Ingredient, IngredientSchema, IngredientToDisplay } from '@costwise/shared/recipe';
+import { Ingredient, IngredientSchema, IngredientToDisplay, Unit } from '@costwise/shared/recipe';
 import { createEditIngredientPrototype, createIngredientPrototype } from '@costwise/shared/transformers';
 import { sendIngredient, updateIngredient } from '../services/services';
 import useHelpers from './useHelpers';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
 import { useUIStore } from '../stores/uiStore';
 import { SelectableItem } from '../components/shared/SelectStore';
 
-export type IngredientFormFields = z.infer<typeof IngredientSchema>
+export type IngredientFormFields = z.infer<typeof IngredientSchema>;
 
 type UseIngredientFormProps = {
   mode: 'create' | 'edit';
@@ -30,77 +30,105 @@ type UseIngredientFormProps = {
   supplierOptions: SelectableItem[];
 };
 
-
 export const useIngredientForm = ({ mode, ingredient, userId, supplierOptions }: UseIngredientFormProps) => {
+  const ingredientWithSuppliers =
+    mode === 'edit' && ingredient && 'suppliers' in ingredient && Array.isArray((ingredient as Ingredient).suppliers)
+      ? (ingredient as Ingredient)
+      : undefined;
+  const initialSupplierId = ingredientWithSuppliers?.suppliers?.[0]?.suppliersId;
 
-  const {register, handleSubmit, reset, formState: {isSubmitting, errors}, watch, setValue} = useForm({
-    resolver: zodResolver(IngredientSchema),
-    defaultValues: mode === 'edit'
-    ? {
-      id: ingredient?.id,
-      name: ingredient?.name,
-      unit: ingredient?.unit,
-      unitPrice: ingredient?.unitPrice,
-      quantity: 1, // Here I insert manually the 1 value because the quantity on the db is the initial quantity that used to measure. the db ingredient has the unitPrice based on 1 but as quantity has the quantity we used to measure it.
-      usage: ingredient?.usage,
-      userId: ingredient?.userId,
-      icon: ingredient?.icon,
-      category: ingredient?.category,
-      suppliers: []
-      }
-    : {
-      id: uuidv4(),
-      name: '',
-      unit: '',
-      unitPrice: 0,
-      quantity: 0,
-      usage: 'low',
-      userId: userId,
-      icon: '',
-      category: 'ef45178d-e566-4637-b7f9-abcf6d575466',
-      suppliers: [{suppliersId: '', quantity: 1, unit: '', price: 0, isActive: false }]
-    }
-  })
+  const [confirmedSuppliers, setConfirmedSuppliers] = useState<string[]>(
+    initialSupplierId ? [initialSupplierId] : []
+  );
+  const [tempSuppliers, setTempSuppliers] = useState<string[]>(
+    initialSupplierId ? [initialSupplierId] : []
+  );
 
-  
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { isSubmitting },
+    watch,
+    setValue,
+  } = useForm<IngredientFormFields>({
+    defaultValues:
+      mode === 'edit'
+        ? {
+            id: ingredient?.id,
+            name: ingredient?.name ?? '',
+            unit: ingredient?.unit ?? 'kg',
+            unitPrice: ingredient?.unitPrice ?? 0,
+            quantity: ingredient?.quantity ? Number(ingredient.quantity) : 1,
+            usage: ingredient?.usage ?? '0',
+            userId: ingredient?.userId ?? userId,
+            icon: ingredient?.icon ?? '',
+            category: ingredient?.category ?? 'ef45178d-e566-4637-b7f9-abcf6d575466',
+            suppliers: initialSupplierId
+              ? [
+                  {
+                    suppliersId: initialSupplierId,
+                    unit: (ingredient?.unit as Unit) ?? 'kg',
+                    quantity: ingredient?.quantity ? Number(ingredient.quantity) : 1,
+                    price: ingredient?.unitPrice ? Number(ingredient.unitPrice) : 0,
+                    isActive: true,
+                  },
+                ]
+              : [],
+          }
+        : {
+            id: uuidv4(),
+            name: '',
+            unit: 'kg',
+            unitPrice: 0,
+            quantity: 1,
+            usage: '0',
+            userId: userId,
+            icon: '',
+            category: 'ef45178d-e566-4637-b7f9-abcf6d575466',
+            suppliers: [],
+          },
+  });
+
   const router = useRouter();
-  const { raiseNotification } = useHelpers({path: null});
+  const { raiseNotification } = useHelpers({ path: null });
   const { isModalOpen, modalType, closeModal } = useUIStore();
-  const [error, setErrors] = useState<string[]>([])
-  // Supplier selection state - temp for modal selections, confirmed for persisted selections
-  const INITIAL_SUPPLIERS =
-    mode === 'edit' && ingredient && 'suppliers' in ingredient && Array.isArray((ingredient as { suppliers?: { suppliersId: string }[] }).suppliers)
-      ? (ingredient as { suppliers: { suppliersId: string }[] }).suppliers.map((supplier) => supplier.suppliersId)
-      : [];
-  const [tempSuppliers, setTempSuppliers] = useState(INITIAL_SUPPLIERS);
-  const [confirmedSuppliers, setConfirmedSuppliers] = useState<string[]>([]);
+  const [error, setErrors] = useState<string[]>([]);
 
-  const price = watch('unitPrice')
-  const name = watch('name')
-  const unit = watch('unit')
-  const quantity = watch('quantity')
-console.log(tempSuppliers)
-  /**
-   * Toggle supplier selection in temp state
-   */
+  const price = watch('unitPrice');
+  const name = watch('name');
+  const unit = watch('unit');
+  const quantity = watch('quantity');
+
   const selectSupplier = (id: string) => {
-    console.log('selectSupplier',id)
-    if (!tempSuppliers.includes(id)) {
-      setTempSuppliers([...tempSuppliers, id]);
+    if (id) {
+      setConfirmedSuppliers([id]);
+      setTempSuppliers([id]);
+      setValue(
+        'suppliers',
+        [
+          {
+            suppliersId: id,
+            unit: (watch('unit') as Unit) || 'kg',
+            quantity: Number(watch('quantity')) || 1,
+            price: Number(watch('unitPrice')) || 0,
+            isActive: true,
+          },
+        ],
+        { shouldValidate: true }
+      );
     } else {
-      setTempSuppliers(tempSuppliers.filter((supplierId) => supplierId !== id));
+      setConfirmedSuppliers([]);
+      setTempSuppliers([]);
+      setValue('suppliers', [], { shouldValidate: true });
     }
   };
 
-  /**
-   * Confirms the current temp suppliers selection.
-   * Called when user clicks "Confirm" in the modal.
-   */
   const confirmSuppliers = () => {
     setConfirmedSuppliers([...tempSuppliers]);
     const suppliersData = tempSuppliers.map((supplierId) => ({
       suppliersId: supplierId,
-      unit: unit || 'g',
+      unit: (unit as Unit) || 'g',
       quantity: Number(quantity) || 1,
       price: Number(price) || 0,
       isActive: true,
@@ -109,93 +137,107 @@ console.log(tempSuppliers)
     closeModal();
   };
 
-  /**
-   * Handles modal close without confirming.
-   * Restores temp suppliers from confirmed state.
-   */
   const handleCloseModal = () => {
     setTempSuppliers([...confirmedSuppliers]);
     closeModal();
   };
 
-  /**
-   * Gets the supplier items that are currently confirmed for display
-   */
   const getSelectedSupplierItems = () => {
     return supplierOptions.filter((sup) => confirmedSuppliers.includes(sup.id));
   };
 
-
-/* const ingredientsToSend = ingredients.map((ing) => createIngredientPrototype(ing, userId))
-   ingredientsToSend.forEach(async(ing) => {
-    if (!ing) {
-      return
-    }
-    await sendIngredient(ing)
-   }) */
-  
-console.log(errors)
   const onSubmit = async (data: IngredientFormFields) => {
+    setErrors([]);
+
+    const suppliersToUse: string[] = [];
+    if (confirmedSuppliers.length > 0) {
+      suppliersToUse.push(...confirmedSuppliers);
+    } else if (data.suppliers && Array.isArray(data.suppliers) && data.suppliers.length > 0) {
+      data.suppliers.forEach((s) => {
+        const supId = typeof s === 'string' ? s : s?.suppliersId;
+        if (supId) suppliersToUse.push(supId);
+      });
+    }
 
     if (mode === 'create') {
-      // Create mode logic
-      
-      const ingredientPrototype = createIngredientPrototype(data, confirmedSuppliers, userId)
-      console.log(ingredientPrototype)
+      const ingredientPrototype = createIngredientPrototype(data, suppliersToUse, userId);
       const validatedIngredient = IngredientSchema.safeParse(ingredientPrototype);
-      console.log(validatedIngredient)
+
       if (!validatedIngredient.success) {
-        setErrors([]);
         const zodErrors = validatedIngredient.error.errors;
-        zodErrors.forEach(error => setErrors(prev => [...prev, error.message]));
+        const messages = zodErrors.map((err) => {
+          if (
+            err.path.includes('suppliers') ||
+            err.message.includes('Array must contain') ||
+            err.message.includes('element(s)')
+          ) {
+            return 'Add at least one supplier';
+          }
+          return err.message;
+        });
+        setErrors(Array.from(new Set(messages)));
       } else {
         const response = await sendIngredient(validatedIngredient.data);
-        
-        raiseNotification(response); // Pass the entire response
-        reset();
-        setTempSuppliers([]);
-        setConfirmedSuppliers([]);
-        if (router) {
-          router.replace('/ingredients');
-          router.refresh();
+        raiseNotification(response);
+        if (response.success) {
+          reset();
+          setTempSuppliers([]);
+          setConfirmedSuppliers([]);
+          if (router) {
+            router.replace('/ingredients');
+            router.refresh();
+          }
+        } else {
+          if (response.error?.message) {
+            setErrors([response.error.message]);
+          }
         }
       }
     } else if (mode === 'edit' && ingredient) {
-
-      const updatedIngredient = createEditIngredientPrototype(data, ingredient, confirmedSuppliers, userId)
-
+      const updatedIngredient = createEditIngredientPrototype(data, ingredient, suppliersToUse, userId);
       const validatedIngredient = IngredientSchema.safeParse(updatedIngredient);
 
       if (!validatedIngredient.success) {
-        setErrors([]);
         const zodErrors = validatedIngredient.error.errors;
-        zodErrors.forEach(error => setErrors(prev => [...prev, error.message]));
+        const messages = zodErrors.map((err) => {
+          if (
+            err.path.includes('suppliers') ||
+            err.message.includes('Array must contain') ||
+            err.message.includes('element(s)')
+          ) {
+            return 'Add at least one supplier';
+          }
+          return err.message;
+        });
+        setErrors(Array.from(new Set(messages)));
       } else {
         const response = await updateIngredient(validatedIngredient.data);
-        raiseNotification(response); // Pass the entire response
-        reset();
-        setTempSuppliers([]);
-        setConfirmedSuppliers([]);
-        if (router) {
-          router.replace('/ingredients');
-          router.refresh();
+        raiseNotification(response);
+        if (response.success) {
+          reset();
+          setTempSuppliers([]);
+          setConfirmedSuppliers([]);
+          if (router) {
+            router.replace('/ingredients');
+            router.refresh();
+          }
+        } else {
+          if (response.error?.message) {
+            setErrors([response.error.message]);
+          }
         }
       }
     }
-  }
+  };
 
   const handleKeyDown = (
-    e:
-      | React.KeyboardEvent<HTMLInputElement>
-      | React.KeyboardEvent<HTMLSelectElement>,
+    e: React.KeyboardEvent<HTMLInputElement> | React.KeyboardEvent<HTMLSelectElement>
   ) => {
     if (e.key === 'Enter') {
       handleSubmit(onSubmit);
     }
   };
 
-
-  // Return all the state and functions the component will need
   return {
     price,
     quantity,
@@ -209,7 +251,6 @@ console.log(errors)
     handleKeyDown,
     setValue,
     isSubmitting,
-    // Supplier selection exports
     tempSuppliers,
     confirmedSuppliers,
     selectSupplier,

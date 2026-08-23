@@ -62,7 +62,7 @@ export const transformRecipeFromDB = (recipeFromDb: DBRecipe | any): Recipe => {
   return {
     ...recipeFromDb,
     totalCost: isNaN(totalCost) ? 0 : totalCost,
-    tax: isNaN(tax) ? 0 : tax,
+    tax: isNaN(tax) ? 0.13 : tax,
     sellingPrice:
       sellingPrice !== undefined && !isNaN(sellingPrice)
         ? sellingPrice
@@ -173,41 +173,39 @@ export const createIngredientPrototype = (
   data: IngredientFormFields,
   confirmedSuppliers: string[],
   userId: string,
-) => {
-  if (data) {
-    const normalizedUnitPrice = normalizePrice(
-      data.unitPrice,
-      data.unit as Unit,
-      data.quantity,
-    );
+): Ingredient => {
+  const normalizedUnitPrice = normalizePrice(
+    data.unitPrice,
+    data.unit as Unit,
+    data.quantity,
+  );
 
-    const supplierItems = confirmedSuppliers.map((supId) => ({
-      suppliersId: supId,
-      unit: (data.unit as Unit) || "g",
-      quantity: Number(data.quantity) || 1,
-      price: Number(data.unitPrice) || 0,
-      isActive: true,
-    }));
+  const supplierItems = (confirmedSuppliers || []).map((supId) => ({
+    suppliersId: supId,
+    unit: (data.unit as Unit) || "g",
+    quantity: Number(data.quantity) || 1,
+    price: Number(data.unitPrice) || 0,
+    isActive: true,
+  }));
 
-    const ingredientPrototype: Ingredient = {
-      id: data.id,
-      icon: createIngredientIcon(data.category),
-      name: data.name,
-      unit:
-        data.unit === "g" || data.unit === "kg"
-          ? "g"
-          : data.unit === "L" || data.unit === "ml"
-            ? "ml"
-            : "piece",
-      unitPrice: normalizedUnitPrice,
-      quantity: data.quantity,
-      usage: "0",
-      userId: userId,
-      category: data.category,
-      suppliers: supplierItems,
-    };
-    return ingredientPrototype;
-  }
+  const ingredientPrototype: Ingredient = {
+    id: data.id,
+    icon: createIngredientIcon(data.category),
+    name: data.name,
+    unit:
+      data.unit === "g" || data.unit === "kg"
+        ? "g"
+        : data.unit === "L" || data.unit === "ml"
+          ? "ml"
+          : "piece",
+    unitPrice: normalizedUnitPrice,
+    quantity: Number(data.quantity) || 1,
+    usage: "0",
+    userId: userId,
+    category: data.category,
+    suppliers: supplierItems,
+  };
+  return ingredientPrototype;
 };
 
 export const createEditIngredientPrototype = (
@@ -215,14 +213,14 @@ export const createEditIngredientPrototype = (
   ingredient: Ingredient | IngredientToDisplay,
   confirmedSuppliers: string[],
   userId: string,
-) => {
+): Ingredient => {
   const normalizedUnitPrice = normalizePrice(
     data.unitPrice,
     data.unit as Unit,
     data.quantity,
   );
 
-  const supplierItems = confirmedSuppliers.map((supId) => ({
+  const supplierItems = (confirmedSuppliers || []).map((supId) => ({
     suppliersId: supId,
     unit: (data.unit as Unit) || "g",
     quantity: Number(data.quantity) || 1,
@@ -242,7 +240,7 @@ export const createEditIngredientPrototype = (
           ? "ml"
           : "piece",
     unitPrice: normalizedUnitPrice,
-    quantity: data.quantity,
+    quantity: Number(data.quantity) || 1,
     usage: ingredient.usage || "0",
     userId: userId,
     category: data.category,
@@ -378,11 +376,15 @@ export const getArrayChanges = <T>(originalArray: T[], newArray: T[]) => {
   return { added, removed };
 };
 
-// Type for the ingredients table (without unit, unitPrice, quantity - those are in supplier_ingredients)
+// Type for the ingredients table row — carries the canonical unit/unitPrice/
+// quantity; supplier_ingredients duplicates them per supplier link.
 export type DBIngredientForTable = {
   id: string;
   icon?: string | null;
   name: string;
+  unit: Unit;
+  unitPrice: string;
+  quantity: string;
   usage: string;
   userId: string;
   category: IngredientCategory;
@@ -415,6 +417,9 @@ export const destructureIngredient = (
     id: rest.id,
     icon: rest.icon,
     name: rest.name,
+    unit: unit,
+    unitPrice: unitPrice.toString(),
+    quantity: quantity.toString(),
     usage: rest.usage,
     userId: rest.userId,
     category: rest.category,

@@ -8,12 +8,13 @@ interface MonetaryCellProps {
 }
 
 const MonetaryCell = ({ price, unit, type }: MonetaryCellProps) => {
-  const numPrice = Number(price || 0);
+  const numPrice = typeof price === 'string' && price.trim() !== '' ? Number(price) : price;
 
   if (type === 'absolute') {
+    const validNum = typeof numPrice === 'number' && !isNaN(numPrice) ? numPrice : 0;
     return (
       <span className="font-mono font-semibold text-[14px] tabular-nums text-ink-900">
-        €{numPrice.toFixed(2)}
+        €{validNum.toFixed(2)}
       </span>
     );
   }

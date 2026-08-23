@@ -14,6 +14,15 @@ const MoneyInput = React.forwardRef<HTMLInputElement, MoneyInputProps>(
     const generatedId = React.useId()
     const inputId = id || (label ? generatedId : undefined)
 
+    const safeDefaultValue =
+      typeof props.defaultValue === 'number' && isNaN(props.defaultValue)
+        ? ''
+        : props.defaultValue
+    const safeValue =
+      typeof props.value === 'number' && isNaN(props.value)
+        ? ''
+        : props.value
+
     return (
       <div className="flex flex-col gap-1.5 w-full">
         {label && (
@@ -48,6 +57,8 @@ const MoneyInput = React.forwardRef<HTMLInputElement, MoneyInputProps>(
               className
             )}
             {...props}
+            defaultValue={safeDefaultValue}
+            value={safeValue}
           />
           {per && (
             <span className="text-[12px] text-stone-500 font-body select-none ml-2 whitespace-nowrap">
