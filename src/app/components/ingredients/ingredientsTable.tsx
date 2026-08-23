@@ -81,11 +81,11 @@ const IngredientsTable = ({ items }: { items: IngredientToDisplay[] }) => {
           columns={ingredientColumns}
           sortedLinks={ingredientSortedLinks}
         />
-        <tbody className="text-gray-500 text-md">
+        <tbody className="text-muted-foreground text-sm">
           {items.map((item) => (
             <tr
               key={item.id}
-              className="border-b h-12.5 border-gray-200 text-sm"
+              className="border-b h-12.5 border-border text-sm"
             >
               <td className="pl-4 md:pl-0 pt-2">
                 <Link href={`/ingredients/${item.id}`}>

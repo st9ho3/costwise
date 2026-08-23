@@ -14,7 +14,10 @@ import { Ingredient } from '@/shemas/recipe';
 import { useIngredientForm } from '../../hooks/useIngredientsForm';
 import FormSelect from './ingredientsFormComponents/FormSelect';
 import { categoryOptions, unitOptions } from './ingredientsFormComponents/selectOptions';
-import { Tag, Scale, Truck } from 'lucide-react';
+import { Tag, Scale, Trash2 } from 'lucide-react';
+import { Card } from '../ui/card';
+import { Label } from '../ui/label';
+import { Button } from '../ui/button';
 import Modal from '../shared/modal';
 import ItemsStore from '../shared/itemsStore';
 import { SelectableItem } from '../shared/SelectStore';
@@ -35,22 +38,32 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
      selectSupplier,
      confirmSuppliers,
      handleCloseModal,
-     getSelectedSupplierItems,
      isModalOpen,
      modalType,
      fields,
      append,
      remove
   } = useIngredientForm({ ingredient, mode, userId, supplierOptions });
-  console.log(error)
+  
   return (
     <form 
-      className="w-full max-w-3xl mx-auto p-2 md:mt-4" 
+      className="w-full max-w-3xl mx-auto p-2 md:mt-2" 
       onSubmit={handleSubmit(onSubmit)}
     >
       {/* SINGLE CARD CONTAINER: Fits content efficiently */}
-      <div className="bg-white p-6 rounded-[28px] shadow-sm border border-gray-100">
+      <Card className="p-6">
         
+        {/* Title Header */}
+        <div className="mb-6 border-b-2 border-primary pb-4">
+          <h2 className="font-sora font-extrabold text-2xl uppercase tracking-tight text-foreground">
+            {mode === 'edit' ? 'Edit Ingredient' : 'Create Ingredient'}
+            <span className="text-focus-accent">.</span>
+          </h2>
+          <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground mt-1">
+            Ingredient profile & supplier pricing
+          </p>
+        </div>
+
         {/* GRID LAYOUT: 12-column grid for precise sizing */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-end">
           
@@ -58,17 +71,13 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
           
           {/* Name: Takes up ~60% of width */}
           <div className="md:col-span-7">
-            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5 ml-1">
-              Ingredient Name
-            </label>
+            <Label className="mb-1.5 ml-1 block">Ingredient Name</Label>
             <IngredientNameInput register={register} onKeyDown={handleKeyDown} />
           </div>
 
           {/* Category: Takes up ~40% of width */}
-          <div className="md:col-span-5">
-             <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5 ml-1">
-               Category
-             </label>
+          <div className="md:col-span-5"> 
+             <Label className="mb-1.5 ml-1 block">Category</Label>
              <FormSelect 
                fieldName="category"
                options={categoryOptions}
@@ -83,69 +92,91 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
 
 
           {/* --- ROW 2: Supplier, Quantity, Unit, Price --- */}
-        {fields.map((field, index) => 
+          <div className='w-full md:col-span-12 flex flex-col'>
+            {fields.map((field, index) => (
+              <div key={field.id} className='w-full grid grid-cols-1 md:grid-cols-12 gap-4 p-4 border border-primary rounded-md bg-accent/20 mb-4 items-end'>
+                
+                {/* Supplier Selection */}
+                <div className='col-span-1 md:col-span-3'>
+                  <Label className="mb-1.5 ml-1 block">Supplier</Label>
+                  <FormSelect 
+                     fieldName={`suppliers.${index}.suppliersId`}
+                     options={supplierOptions}
+                     placeholder="Select Supplier"
+                     icon={Scale}
+                     register={register}
+                     onKeyDown={handleKeyDown}
+                     getValue={(opt) => opt.id}
+                     getLabel={(opt) => opt.name}
+                   />
+                </div>
+              
+                {/* Quantity */}
+                 <div className="col-span-1 md:col-span-2">
+                  <Label className="mb-1.5 ml-1 block">Quantity</Label>
+                  <div className="w-full flex justify-center">
+                    <Incremental 
+                      onIngredientChange={setValue} 
+                      count={quantity} 
+                      onKeyDown={handleKeyDown} 
+                      setErrors={setErrors} 
+                    />
+                  </div>
+                </div>
 
-          <div key={field.id} className='md:flex '>
-          {/* Supplier - uses confirmed suppliers for display */}
-          <div className='md:row-span-3'>
-            <FormSelect 
-               fieldName={`suppliers.${index}.suppliersId`}
-               options={supplierOptions}
-               placeholder="Supplier"
-               icon={Scale}
-               register={register}
-               onKeyDown={handleKeyDown}
-               getValue={(opt) => opt.id}
-               getLabel={(opt) => opt.name}
-             />
-          </div>
-        
-          {/* Quantity: Takes up ~33% */}
-           <div className="md:col-span-3">
-            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5 ml-1">
-              Quantity
-            </label>
-            <div className="w-full flex justify-center">
-              <Incremental 
-                onIngredientChange={setValue} 
-                count={quantity} 
-                onKeyDown={handleKeyDown} 
-                setErrors={setErrors} 
-              />
-            </div>
-          </div>
+                {/* Unit */}
+                <div className="col-span-1 md:col-span-2">
+                  <Label className="mb-1.5 ml-1 block">Unit</Label>
+                  <FormSelect 
+                     fieldName="unit"
+                     options={unitOptions}
+                     placeholder="Unit"
+                     icon={Scale}
+                     register={register}
+                     onKeyDown={handleKeyDown}
+                     getValue={(opt) => opt.value}
+                     getLabel={(opt) => opt.name}
+                   />
+                </div>
 
-          {/* Unit: Takes up ~25% */}
-          <div className="md:col-span-3">
-            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5 ml-1">
-              Unit
-            </label>
-            <FormSelect 
-               fieldName="unit"
-               options={unitOptions}
-               placeholder="Unit"
-               icon={Scale}
-               register={register}
-               onKeyDown={handleKeyDown}
-               getValue={(opt) => opt.value}
-               getLabel={(opt) => opt.name}
-             />
-          </div>
+                {/* Price: Price / Unit */}
+                <div className="col-span-1 md:col-span-2">
+                  <Label className="mb-1.5 ml-1 block">Price / Unit</Label>
+                  <IngredientPriceInput
+                    onChange={setValue}
+                    price={price}
+                  />
+                </div>
 
-          {/* Price: Takes up ~42% (Remaining space) */}
-          <div className="md:col-span-3">
-            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5 ml-1">
-              Price / Unit
-            </label>
-            <IngredientPriceInput
-              onChange={setValue}
-              price={price}
-            />
+                {/* Action button to add supplier row */}
+                <div className="col-span-1 md:col-span-2 flex items-end">
+                  <Button 
+                    type="button"
+                    variant="outline"
+                    size="default"
+                    onClick={() => append({ suppliersId: "", unit: "", quantity: 1, price: 0, isActive: false })}
+                    className="w-full"
+                  >
+                    Add
+                  </Button>
+                </div>
+
+                {/* Action button to delete supplier row */}
+                <div className="col-span-1 md:col-span-1 flex items-end">
+                  <Button 
+                    type="button"
+                    variant="destructive"
+                    size="icon"
+                    onClick={() => remove(index)}
+                    className="w-full h-10 rounded-full"
+                    aria-label="Delete supplier"
+                  >
+                    <Trash2 className="size-4" />
+                  </Button>
+                </div>
+              </div>
+            ))}
           </div>
-          <button onClick={() => append({ suppliersId: "", unit: "", quantity: 1, price: 0, isActive: false })}>Add</button>
-        </div>
-        
-        )}
         
         </div> 
           
@@ -167,7 +198,7 @@ const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredi
                 </div>
             </div>
         </div>
-      </div>
+      </Card>
 
       {/* Suppliers Selection Modal */}
       <Modal isOpen={isModalOpen && modalType.type === 'suppliers'} onClose={handleCloseModal} type="create">

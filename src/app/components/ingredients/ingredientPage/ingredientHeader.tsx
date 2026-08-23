@@ -23,8 +23,8 @@ const IngredientHeader = ({name, icon, type}: IngredientHeaderProps) => {
   'Coffee & Tea': 'bg-stone-300/30 text-stone-500',
   'Beverages (Other)': 'bg-cyan-300/30 text-cyan-500',
   'Bakery': 'bg-rose-300/30 text-rose-500',
-  'Other': 'bg-gray-300/30 text-gray-500',
-  '': 'bg-gray-300/30 text-gray-500', // Fallback for empty string
+  'Other': 'bg-muted/30 text-muted-foreground',
+  '': 'bg-muted/30 text-muted-foreground', // Fallback for empty string
 };
 
   return (
