@@ -233,6 +233,6 @@ export const sendRecipe = async (/* unchanged args */) => {
 
 ### Task 7: Final gate — ⛔ CHECKPOINT (human walkthrough) → PR
 
-- [ ] **Step 1:** Push everything. Executor's own browser pass first: sign-in (credentials + Google), every list/detail/create/edit/delete, search, upload, dashboard, sign-out — recording any deviation.
-- [ ] **Step 2: ⛔ CHECKPOINT — STOP.** Report to Panos with the executor-pass results. Panos performs the human walkthrough (spec criterion 4 — visuals per `docs/ui.md`, list-refresh after mutations). Only after his explicit pass:
-- [ ] **Step 3:** Open the PR (CI must go green). Report per-criterion evidence. Do NOT merge; ClickUp moves through Panos/Fable 5.
+- [x] **Step 1:** Push everything. Executor's own browser pass first: sign-in (credentials + Google), every list/detail/create/edit/delete, search, upload, dashboard, sign-out — recording any deviation.
+- [x] **Step 2: ⛔ CHECKPOINT — STOP.** Report to Panos with the executor-pass results. Panos performs the human walkthrough (spec criterion 4 — visuals per `docs/ui.md`, list-refresh after mutations). Only after his explicit pass:
+- [x] **Step 3:** Open the PR (CI must go green). Report per-criterion evidence. Do NOT merge; ClickUp moves through Panos/Fable 5.
