@@ -1,0 +1,99 @@
+import { z } from "@hono/zod-openapi";
+import {
+  RecipeSchema,
+  type Recipe,
+  RecipeIngredientsSchema,
+} from "@costwise/shared/recipe";
+import type { Metadata, RecipeWithQuery } from "@costwise/domain/types/specialTypes";
+import type { CreateRequest } from "@costwise/domain/types/services";
+import type { RecipeUpdatePayload } from "@costwise/domain/types/context";
+
+export const ErrorEnvelope = z.object({
+  error: z.object({
+    code: z.string(),
+    message: z.string(),
+    fieldErrors: z.record(z.string()).optional(),
+  }),
+});
+export const ErrRes = {
+  content: { "application/json": { schema: ErrorEnvelope } },
+  description: "Error",
+};
+
+export const MetadataQuery = z.object({
+  page: z.coerce.number().int().positive().optional(),
+  order: z.enum(["asc", "desc"]).optional(),
+  sort: z.string().optional(),
+  itemsPerPage: z.coerce.number().int().positive().default(10),
+  offset: z.coerce.number().int().min(0).default(0),
+});
+export const toMetadata = (q: z.infer<typeof MetadataQuery>): Metadata => ({
+  page: q.page,
+  order: q.order,
+  sort: q.sort,
+  itemsPerPage: q.itemsPerPage,
+  offset: q.offset,
+});
+
+export const IdParam = z.object({ id: z.string() });
+
+export const CountSchema = z.object({ count: z.object({ count: z.number() }) });
+
+export const RecipeListResponse = z
+  .object({ recipes: z.array(RecipeSchema) })
+  .merge(CountSchema) satisfies z.ZodType<{
+  recipes: Recipe[];
+  count: { count: number };
+}>;
+
+export const RecipeWithQueryResponse = z.object({
+  id: z.string(),
+  title: z.string(),
+  totalCost: z.string(),
+  createdBy: z.string(),
+  dateCreated: z.string(),
+  category: z.enum(["starter", "main", "dessert"]),
+  tax: z.string(),
+  imgPath: z.string(),
+  sellingPrice: z.string(),
+  profitMargin: z.string(),
+  foodCost: z.string(),
+  userId: z.string(),
+  recipeIngredients: z.array(
+    z.object({
+      id: z.number(),
+      recipeId: z.string(),
+      ingredientId: z.string(),
+      quantity: z.string(),
+      ingredients: z.object({
+        id: z.string(),
+        name: z.string(),
+        unit: z.string(),
+        unitPrice: z.string(),
+        quantity: z.string(),
+        icon: z.string().nullable(),
+        usage: z.string(),
+      }),
+    })
+  ),
+}) satisfies z.ZodType<RecipeWithQuery>;
+
+export const CreateRecipeBody = z.object({
+  recipe: RecipeSchema,
+  addedIngredients: z.array(RecipeIngredientsSchema),
+  removedIngredients: z.array(RecipeIngredientsSchema),
+}) satisfies z.ZodType<CreateRequest>;
+
+export const UpdateRecipeBody = z.object({
+  recipe: RecipeSchema,
+  addedIngredients: z.array(RecipeIngredientsSchema),
+  removedIngredients: z.array(RecipeIngredientsSchema),
+}) satisfies z.ZodType<RecipeUpdatePayload>;
+
+export const MessageResponse = z.object({
+  message: z.string(),
+}) satisfies z.ZodType<{ message: string }>;
+
+export const DeleteResponse = z.object({
+  id: z.string(),
+}) satisfies z.ZodType<{ id: string }>;

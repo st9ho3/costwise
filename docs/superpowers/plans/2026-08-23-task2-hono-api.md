@@ -323,7 +323,7 @@ router.openapi(listRecipes, async (c) => {
 });
 ```
 
-- [ ] **Step 1:** Write `schemas.ts` with, binding response schemas to real types:
+- [x] **Step 1:** Write `schemas.ts` with, binding response schemas to real types:
 
 ```ts
 import { z } from "@hono/zod-openapi";
@@ -353,7 +353,7 @@ export const RecipeListResponse = z.object({ recipes: z.array(RecipeSchema) }).m
 
 If `tsc` rejects a `satisfies` binding, the schema is wrong — fix the schema to match the type, never cast. `RecipeWithQuery` (findById) and mutation responses: read the service return types and bind the same way (`GET /:id` → schema for `RecipeWithQuery`; `POST`/`PATCH` mirror today's web behavior — POST returns 201 with `{message: string}`, PATCH 200 `{message: string}`, DELETE 200 `{id: string}` — confirm against `sendSuccess` usage in the current web routes and the service return types; mirror exactly).
 
-- [ ] **Step 2 (RED):** `apps/api/src/testing/fakes.ts` + `recipes.test.ts`. Fakes: plain objects implementing the `*ServiceLike` picks over an in-memory array keyed by userId; throwing `NotFoundError` where the real service does. Tests — for EVERY recipes endpoint the trio, e.g.:
+- [x] **Step 2 (RED):** `apps/api/src/testing/fakes.ts` + `recipes.test.ts`. Fakes: plain objects implementing the `*ServiceLike` picks over an in-memory array keyed by userId; throwing `NotFoundError` where the real service does. Tests — for EVERY recipes endpoint the trio, e.g.:
 
 ```ts
 import { describe, it, expect } from "vitest";
@@ -384,7 +384,7 @@ describe("/v1/recipes", () => {
 
 Write ALL of them now; run → FAIL (module missing).
 
-- [ ] **Step 3 (GREEN):** `routes/recipes.ts` — `export const recipesRoutes = (deps: Deps) => {...}` returning an `OpenAPIHono` with the five endpoints via the TEMPLATE; mount in `app.ts`:
+- [x] **Step 3 (GREEN):** `routes/recipes.ts` — `export const recipesRoutes = (deps: Deps) => {...}` returning an `OpenAPIHono` with the five endpoints via the TEMPLATE; mount in `app.ts`:
 
 ```ts
 const v1 = new OpenAPIHono<{ Variables: { userId: string } }>();
@@ -395,7 +395,7 @@ app.route("/v1", v1);
 
 `index.ts` wires real services: `makeRecipeService: (userId) => new RecipeService(userId)` (import from `@costwise/domain/services/recipeService`). Verify GREEN; workspace gates green. Commit `feat(api): /v1/recipes endpoints`.
 
-- [ ] **⛔ CHECKPOINT — push and stop.** This task established THE TEMPLATE that Tasks 6–9 mass-produce. A flaw here multiplies by four domains; it gets reviewed before replication.
+- [x] **⛔ CHECKPOINT — push and stop.** This task established THE TEMPLATE that Tasks 6–9 mass-produce. A flaw here multiplies by four domains; it gets reviewed before replication.
 
 ---
 

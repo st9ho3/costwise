@@ -122,7 +122,7 @@ export const RecipeSchema = z.object({
     .max(200, "Title cannot exceed 200 characters"),
   totalCost: z.number().min(0, "Total cost cannot be negative"),
   createdBy: z.string().min(1, "Creator ID is required"),
-  dateCreated: z.date(),
+  dateCreated: z.coerce.date(),
   category: RecipeCategorySchema,
   tax: z
     .number()
@@ -318,7 +318,7 @@ export const SupplierSchema = z.object({
   // Status & Metadata
   isActive: z.boolean(),
 
-  dateAdded: z.date().optional(),
+  dateAdded: z.coerce.date().optional(),
 });
 
 export type Supplier = z.infer<typeof SupplierSchema>;
