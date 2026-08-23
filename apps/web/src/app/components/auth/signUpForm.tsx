@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { signIn } from 'next-auth/react';
+import { authClient } from '@/app/lib/authClient';
 import useSignUp from '@/app/hooks/useSignUp';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
@@ -73,7 +73,7 @@ const SignUpForm = () => {
         variant="outline"
         block
         size="lg"
-        onClick={() => signIn('google', { redirectTo: '/' })}
+        onClick={() => authClient.signIn.social({ provider: 'google', callbackURL: '/' })}
         iconLeft={<GoogleIcon />}
       >
         Continue with Google

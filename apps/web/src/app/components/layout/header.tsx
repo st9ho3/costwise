@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Bell, Menu } from 'lucide-react';
-import { Session } from 'next-auth';
+import { Session } from '@/app/lib/serverSession';
 import SearchBoard from '../shared/search/searchBoard';
 import { useUIStore } from '@/app/stores/uiStore';
 import UserProfile from '../shared/profileModal';

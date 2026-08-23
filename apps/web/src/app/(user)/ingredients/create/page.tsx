@@ -1,12 +1,12 @@
 import React from 'react';
-import { auth } from '@/auth';
+import { getServerSession } from '@/app/lib/serverSession';
 import { redirect } from 'next/navigation';
 import { SupplierService } from '@costwise/domain/services/suppliersService';
 import { Metadata } from '@costwise/domain/types/specialTypes';
 import IngredientForm from '@/app/components/ingredients/ingredientForm';
 
 const Page = async () => {
-  const session = await auth();
+  const session = await getServerSession();
 
   if (!session?.user?.id) {
     redirect('/signin');

@@ -1,6 +1,6 @@
 import { useUIStore } from '@/app/stores/uiStore'
 import { CircleUserRound } from 'lucide-react'
-import { Session } from 'next-auth'
+import { Session } from '@/app/lib/serverSession'
 import Image from 'next/image'
 import React from 'react'
 

@@ -1,10 +1,10 @@
 import SuppliersForm from '@/app/components/suppliers/suppliersForm';
-import { auth } from '@/auth';
+import { getServerSession } from '@/app/lib/serverSession';
 import { redirect } from 'next/navigation';
 import React from 'react';
 
 const SuppliersCreatePage = async () => {
-  const session = await auth();
+  const session = await getServerSession();
 
   if (!session?.user?.id) {
     redirect('/signin');

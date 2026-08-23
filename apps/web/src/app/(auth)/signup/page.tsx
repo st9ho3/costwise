@@ -1,10 +1,10 @@
 import React from 'react';
-import { auth } from '@/auth';
+import { getServerSession } from '@/app/lib/serverSession';
 import { redirect } from 'next/navigation';
 import SignUpForm from '@/app/components/auth/signUpForm';
 
 const SignUpPage = async () => {
-  const session = await auth();
+  const session = await getServerSession();
 
   if (session?.user) {
     redirect('/');

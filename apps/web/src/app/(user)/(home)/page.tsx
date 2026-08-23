@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { getServerSession } from "@/app/lib/serverSession";
 import { redirect } from "next/navigation";
 import React from "react";
 import { RecipeService } from "@costwise/domain/services/recipeService";
@@ -7,7 +7,7 @@ import { SupplierService } from "@costwise/domain/services/suppliersService";
 import TodayView from "@/app/components/home/TodayView";
 
 const HomePage = async () => {
-  const session = await auth();
+  const session = await getServerSession();
 
   if (!session?.user?.id) {
     redirect("/signin");

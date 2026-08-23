@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { getServerSession } from "@/app/lib/serverSession";
 import { sendSuccess } from "../utils/responses";
 import { NextRequest } from "next/server";
 import { SupplierService } from "@costwise/domain/services/suppliersService";
@@ -9,7 +9,7 @@ import { revalidatePath } from "next/cache";
 
 export const POST = async (req: NextRequest) => {
   try {
-    const session = await auth();
+    const session = await getServerSession();
 
     if (!session?.user?.id) {
       throw new AuthenticationError();

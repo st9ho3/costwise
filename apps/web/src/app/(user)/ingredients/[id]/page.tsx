@@ -1,5 +1,5 @@
 import React from 'react';
-import { auth } from '@/auth';
+import { getServerSession } from '@/app/lib/serverSession';
 import { redirect, notFound } from 'next/navigation';
 import { IngredientService } from '@costwise/domain/services/ingredientService';
 import IngredientDetailView from '@/app/components/ingredients/ingredientPage/IngredientDetailView';
@@ -10,7 +10,7 @@ interface PageProps {
 
 const IngredientDetailPage = async ({ params }: PageProps) => {
   const { id } = await params;
-  const session = await auth();
+  const session = await getServerSession();
 
   if (!session?.user?.id) {
     redirect('/signin');

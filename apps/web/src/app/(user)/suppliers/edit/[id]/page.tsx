@@ -1,6 +1,6 @@
 import SuppliersForm from '@/app/components/suppliers/suppliersForm';
 import { SupplierService } from '@costwise/domain/services/suppliersService';
-import { auth } from '@/auth';
+import { getServerSession } from '@/app/lib/serverSession';
 import { redirect, notFound } from 'next/navigation';
 import React from 'react';
 
@@ -11,7 +11,7 @@ export interface Params {
 }
 
 const EditPage = async ({ params }: Params) => {
-  const session = await auth();
+  const session = await getServerSession();
   if (!session?.user?.id) {
     redirect('/signin');
   }

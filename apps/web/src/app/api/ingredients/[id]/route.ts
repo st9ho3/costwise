@@ -15,12 +15,12 @@ import { NextRequest } from "next/server";
 import { sendSuccess } from "../../utils/responses";
 import { IngredientService } from "@costwise/domain/services/ingredientService";
 import { Ingredient } from "@costwise/shared/recipe";
-import { auth } from "@/auth";
+import { getServerSession } from "@/app/lib/serverSession";
 import { AuthenticationError } from "@costwise/domain/utils/errors";
 import { errorHandler } from "@/app/utils/errorHandler";
 
 export const PATCH = async (req: NextRequest) => {
-  const session = await auth();
+  const session = await getServerSession();
 
   try {
     if (!session?.user?.id) {
@@ -41,7 +41,7 @@ export const DELETE = async (
   req: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) => {
-  const session = await auth();
+  const session = await getServerSession();
   try {
     if (!session?.user?.id) {
       throw new AuthenticationError();

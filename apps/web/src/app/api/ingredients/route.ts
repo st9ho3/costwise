@@ -9,12 +9,12 @@ import { NextRequest } from "next/server";
 import { sendSuccess } from "../utils/responses";
 import { IngredientService } from "@costwise/domain/services/ingredientService";
 import { Ingredient } from "@costwise/shared/recipe";
-import { auth } from "@/auth";
+import { getServerSession } from "@/app/lib/serverSession";
 import { errorHandler } from "@/app/utils/errorHandler";
 import { AuthenticationError } from "@costwise/domain/utils/errors";
 
 export const POST = async (req: NextRequest) => {
-  const session = await auth();
+  const session = await getServerSession();
 
   try {
     if (!session?.user?.id) {

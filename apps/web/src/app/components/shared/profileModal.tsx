@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { LogOut, CircleUserRound } from 'lucide-react';
-import { signOut } from 'next-auth/react';
+import { authClient } from '@/app/lib/authClient';
 import { Avatar } from '../ui/avatar';
 
 interface UserProfileProps {
@@ -40,7 +40,10 @@ const UserProfile = ({ name, email, avatar }: UserProfileProps) => {
 
         <button
           type="button"
-          onClick={() => signOut()}
+          onClick={async () => {
+            await authClient.signOut();
+            window.location.href = '/signin';
+          }}
           className="flex items-center gap-3 w-full px-3.5 py-2.5 rounded-full text-[15px] font-semibold text-tomato-700 hover:bg-tomato-100 transition-colors cursor-pointer"
         >
           <LogOut className="size-5 text-tomato-600 shrink-0" strokeWidth={1.75} />

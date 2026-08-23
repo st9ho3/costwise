@@ -4,12 +4,12 @@
  * - Uses Next.js App Router's async params handling to extract the `id` from the URL.
  */
 import React from 'react'
-import { auth } from '@/auth'
+import { getServerSession } from '@/app/lib/serverSession'
 import { redirect } from 'next/navigation'
 
 const page = async({params}: {params: Promise<{id: string}>}) => {
 
-  const session = await auth()
+  const session = await getServerSession()
     
     if (!session?.user) {
       redirect("/signin")

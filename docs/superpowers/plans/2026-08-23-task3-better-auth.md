@@ -338,7 +338,7 @@ getSessionUserId: async (headers) =>
 
 **Steps:**
 
-- [ ] **Step 1:** `pnpm --filter web add better-auth` (client comes from the same package). Create `lib/authClient.ts`:
+- [x] **Step 1:** `pnpm --filter web add better-auth` (client comes from the same package). Create `lib/authClient.ts`:
 
 ```ts
 import { createAuthClient } from "better-auth/react";
@@ -348,7 +348,7 @@ export const authClient = createAuthClient({
 });
 ```
 
-- [ ] **Step 2:** `lib/serverSession.ts` — the one server-side session door (layout + web api routes):
+- [x] **Step 2:** `lib/serverSession.ts` — the one server-side session door (layout + web api routes):
 
 ```ts
 import { headers } from "next/headers";
@@ -367,15 +367,15 @@ export const getServerSession = async (): Promise<{ user: SessionUser } | null> 
 };
 ```
 
-- [ ] **Step 3:** Rewire, file by file:
+- [x] **Step 3:** Rewire, file by file:
   - `layout.tsx`: `const session = await getServerSession(); if (!session?.user) redirect("/signin");` — remove `SessionProvider` and the `next-auth/react` import (Header already takes `session` as a prop; pass the same shape).
   - `useSignIn.tsx`: replace `signIn("credentials", {...})` with `const { error } = await authClient.signIn.email({ email, password, callbackURL: "/" });` — surface `error.message` through the hook's existing error state.
   - `useSignUp.tsx`: replace the `/api/auth/signup` fetch with `authClient.signUp.email({ email, password, name: email.split("@")[0], callbackURL: "/" })` (Better Auth requires `name`; email-prefix matches the migration backfill).
   - `authButton.tsx`: `signIn("google")` → `authClient.signIn.social({ provider: "google", callbackURL: process.env.NEXT_PUBLIC_WEB_ORIGIN ?? "http://localhost:3000" })`.
   - `profileModal.tsx`: `signOut()` → `await authClient.signOut(); window.location.href = "/signin";`
   - Each web api route: replace `const session = await auth()` with `const session = await getServerSession()` (import from `@/app/lib/serverSession`) — the `session?.user?.id` checks that follow are shape-compatible and stay.
-- [ ] **Step 4:** Delete: `apps/web/src/auth.ts`, `apps/web/src/app/api/auth/` entirely. Then `grep -rn "authservice\|authRepository" apps packages` — expected: only the domain files themselves; delete `packages/domain/src/services/authservice.ts` and `packages/domain/src/repositories/authRepository.ts`. If ANY other file imports them, STOP and report instead. Remove deps: `pnpm --filter web remove next-auth @auth/drizzle-adapter` and `pnpm --filter @costwise/db remove @auth/core 2>/dev/null || true` (also drop the `AdapterAccountType` import in schema.ts if still present).
-- [ ] **Step 5:** Gates: `pnpm build && pnpm test && pnpm lint` green; `grep -rn "next-auth\|@auth/" apps packages` → empty. Commit `feat(web): switch to better-auth client, remove NextAuth`.
+- [x] **Step 4:** Delete: `apps/web/src/auth.ts`, `apps/web/src/app/api/auth/` entirely. Then `grep -rn "authservice\|authRepository" apps packages` — expected: only the domain files themselves; delete `packages/domain/src/services/authservice.ts` and `packages/domain/src/repositories/authRepository.ts`. If ANY other file imports them, STOP and report instead. Remove deps: `pnpm --filter web remove next-auth @auth/drizzle-adapter` and `pnpm --filter @costwise/db remove @auth/core 2>/dev/null || true` (also drop the `AdapterAccountType` import in schema.ts if still present).
+- [x] **Step 5:** Gates: `pnpm build && pnpm test && pnpm lint` green; `grep -rn "next-auth\|@auth/" apps packages` → empty. Commit `feat(web): switch to better-auth client, remove NextAuth`.
 
 ---
 

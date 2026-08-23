@@ -4,7 +4,7 @@ import { transformRecipeFromDB, transformRecipeIngredentFromDB } from '@costwise
 import { IngredientService } from '@costwise/domain/services/ingredientService';
 import { RecipeService } from '@costwise/domain/services/recipeService';
 import { Metadata, RecipeIngredientFromDB } from '@costwise/domain/types/specialTypes';
-import { auth } from '@/auth';
+import { getServerSession } from '@/app/lib/serverSession';
 import { redirect, notFound } from 'next/navigation';
 
 interface Params {
@@ -14,7 +14,7 @@ interface Params {
 }
 
 const EditPage = async ({ params }: Params) => {
-  const session = await auth();
+  const session = await getServerSession();
 
   if (!session?.user?.id) {
     redirect('/signin');
