@@ -32,12 +32,19 @@ implement an existing approved plan and MUST NOT create, rewrite, or
 re-scope specs or plans. If an executor finds a plan wrong, blocked, or
 incomplete, it stops and reports back instead of improvising.
 
-**TDD rule:** any plan step that adds or changes behavior is written
-red-green: failing test (code included in the plan) → confirm it fails →
-minimal implementation → confirm it passes → commit. Executors MUST NOT
-reorder or skip the test-first steps. Pure refactors/moves carry no new
-tests; their gate is the existing suite plus build passing at every task
-boundary.
+**TDD rule:** the canonical definition is the
+`superpowers:test-driven-development` skill — its Iron Law applies: no
+production code without a failing test first; code written before its
+test is deleted and redone. Project bindings on top of the skill:
+- Plans embed the RED test code verbatim, plus the verify-fail and
+  verify-pass steps. Executors MUST NOT reorder, skip, or weaken them.
+- The skill's exceptions (config files, generated code, pure file moves)
+  are granted ONLY by being declared in the Fable 5-authored plan that
+  Panos approved — an executor never self-declares an exception. Excepted
+  steps still gate on the existing suite and build passing.
+- Refactor steps follow the skill's refactor discipline: tests stay green
+  throughout; any behavior change discovered mid-refactor gets its own
+  RED test first.
 
 Working rules:
 - Prefer the smallest file that owns the change.
