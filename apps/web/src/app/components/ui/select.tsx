@@ -252,6 +252,11 @@ export function Select({
   const normalizedValue = value !== undefined ? (value === '' ? undefined : String(value)) : undefined
   const normalizedDefaultValue = defaultValue !== undefined ? (defaultValue === '' ? undefined : String(defaultValue)) : undefined
 
+  // A controlled value cleared to '' maps to undefined above, which flips Radix
+  // to uncontrolled — its internal state keeps the last UI selection on screen.
+  // Remounting the Root on clear snaps the trigger back to the placeholder.
+  const clearKey = value === '' ? 'cleared' : 'set'
+
   // Compound component mode (if children provided and no options)
   if (!options && children) {
     return (
@@ -263,6 +268,7 @@ export function Select({
           </label>
         )}
         <SelectPrimitive.Root
+          key={clearKey}
           value={normalizedValue}
           defaultValue={normalizedDefaultValue}
           onValueChange={handleValueChange}
@@ -286,6 +292,7 @@ export function Select({
         </label>
       )}
       <SelectPrimitive.Root
+        key={clearKey}
         value={normalizedValue}
         defaultValue={normalizedDefaultValue}
         onValueChange={handleValueChange}
