@@ -157,7 +157,7 @@ Verify GREEN (adapt only to `openapi-fetch`'s actual option names for the instal
 
 **Files:** Create `apps/web/src/app/lib/api.ts`; modify every page under `apps/web/src/app/(user)/` that instantiates a service, `apps/web/next.config.ts` (transpilePackages + add `@costwise/api-client`), `apps/web/package.json` (add the dep).
 
-- [ ] **Step 1:** `apps/web/src/app/lib/api.ts`:
+- [x] **Step 1:** `apps/web/src/app/lib/api.ts`:
 
 ```ts
 import { headers } from "next/headers";
@@ -175,7 +175,7 @@ export const apiBrowser = createApiClient({ baseUrl, credentials: "include" });
 
 `pnpm --filter web add "@costwise/api-client@workspace:*"`; add it to `transpilePackages`.
 
-- [ ] **Step 2 (worked example — recipes list page, apply the same shape everywhere):** in `(user)/recipes/page.tsx`, replace the service block:
+- [x] **Step 2 (worked example — recipes list page, apply the same shape everywhere):** in `(user)/recipes/page.tsx`, replace the service block:
 
 ```ts
 // BEFORE: new RecipeService(session.user.id); await service.findAll(session.user.id, metadata)
@@ -190,7 +190,7 @@ const recipes = rawRecipes ? rawRecipes.recipes : [];
 
 Drop the now-unused `RecipeService`/`Metadata` imports (Metadata may still come from `@costwise/shared` where a type annotation remains). The session gate (`getServerSession` + redirect) stays as-is.
 
-- [ ] **Step 3:** Apply per domain, one commit each, existing UI behavior identical:
+- [x] **Step 3:** Apply per domain, one commit each, existing UI behavior identical:
   - recipes: list, `[id]` detail (`GET /v1/recipes/{id}`), create/edit pages (they fetch ingredients for the selector — use `GET /v1/ingredients`), then commit.
   - ingredients: list/detail/create/edit → `GET /v1/ingredients`, `/v1/ingredients/{id}`; commit.
   - suppliers: list/edit → `GET /v1/suppliers`, `/v1/suppliers/{id}`; commit.
