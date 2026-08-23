@@ -470,7 +470,7 @@ app.get("/docs", Scalar({ url: "/openapi.json" }));
 
 ### Task 11: Full acceptance gate + report
 
-- [ ] **Step 1:** Workspace gates: `pnpm build && pnpm test && pnpm lint` green.
-- [ ] **Step 2:** Greps: `grep -rn "next/" packages/` → empty; `grep -rn "from \"\.\./services/\|from \"\.\./repositories/" apps/web/src` → empty (module-local UI helpers excepted); every `/v1` path from the spec's Decision 7 appears in `curl -s localhost:3001/openapi.json`.
-- [ ] **Step 3:** Manual: `pnpm dev`; `curl localhost:3001/v1/recipes` → 401; `curl -H "x-user-id: <real user id from your db>" localhost:3001/v1/recipes` → 200 with real data; `/docs` renders in a browser. Web smoke unchanged (spec criterion 5) including a real upload and recipe create/delete with list refresh.
-- [ ] **Step 4:** Push `feature/hono-api`, open PR to `main` (CI must go green), report to Panos: gates, any STOP-and-report items resolved, PR URL, reminder that ClickUp 868kv7taa moves through Panos/Fable 5. Do NOT merge.
+- [x] **Step 1:** Workspace gates: `pnpm build && pnpm test && pnpm lint` green.
+- [x] **Step 2:** Greps: `grep -rn "next/" packages/` → empty; `grep -rn "from \"\.\./services/\|from \"\.\./repositories/" apps/web/src` → empty (module-local UI helpers excepted); every `/v1` path from the spec's Decision 7 appears in `curl -s localhost:3001/openapi.json`.
+- [x] **Step 3:** Manual: `pnpm dev`; `curl localhost:3001/v1/recipes` → 401; `curl -H "x-user-id: <real user id from your db>" localhost:3001/v1/recipes` → 200 with real data; `/docs` renders in a browser. Web smoke unchanged (spec criterion 5) including a real upload and recipe create/delete with list refresh.
+- [x] **Step 4:** Push `feature/hono-api`, open PR to `main` (CI must go green), report to Panos: gates, any STOP-and-report items resolved, PR URL, reminder that ClickUp 868kv7taa moves through Panos/Fable 5. Do NOT merge.
