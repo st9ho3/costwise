@@ -223,11 +223,11 @@ export const sendRecipe = async (/* unchanged args */) => {
 
 ### Task 6: Deletions and dependency slimming
 
-- [ ] **Step 1:** Delete `apps/web/src/app/api/` entirely (`git rm -r`). Anything still importing from it → fix (should be nothing after Tasks 4–5; STOP if judgment needed).
-- [ ] **Step 2:** `pnpm --filter web remove @costwise/domain`; remove `@costwise/domain` from `transpilePackages`. Then grep-gate each candidate dep before removing from web `package.json`: `drizzle-orm`, `pg`, `bcrypt`, `@types/bcrypt`, `uid`, `uuid` — remove ONLY those with zero references in `apps/web/src`.
-- [ ] **Step 3:** Task 3 debris cleanup: in `packages/db/src/db.ts` and `apps/api/src/auth.ts` delete the triple `dotenv.config(...)` blocks (and their `dotenv`/`path` imports); in `apps/api/src/index.ts` replace the triple block with a single `import "dotenv/config";` first line. **Restart dev**; verify `pnpm dev` still boots both servers with working DB (turbo `globalEnv` provides the vars).
-- [ ] **Step 4:** Codify the ops lesson: in `docs/AGENTS.md`, append to the "Working rules" list: `- Dev-server rule: after ANY edit under packages/*, restart pnpm dev — Turbopack wedges on hot-reloading transpiled workspace packages and presents as blank 500s on every route.`
-- [ ] **Step 5:** Acceptance greps: `grep -rn "@costwise/domain" apps/web` → empty; `ls apps/web/src/app/api` → does not exist; `grep -rn "revalidatePath" apps/web` → empty. Full gates. Commit `chore(web): delete legacy api routes and backend deps — web is pure UI`.
+- [x] **Step 1:** Delete `apps/web/src/app/api/` entirely (`git rm -r`). Anything still importing from it → fix (should be nothing after Tasks 4–5; STOP if judgment needed).
+- [x] **Step 2:** `pnpm --filter web remove @costwise/domain`; remove `@costwise/domain` from `transpilePackages`. Then grep-gate each candidate dep before removing from web `package.json`: `drizzle-orm`, `pg`, `bcrypt`, `@types/bcrypt`, `uid`, `uuid` — remove ONLY those with zero references in `apps/web/src`.
+- [x] **Step 3:** Task 3 debris cleanup: in `packages/db/src/db.ts` and `apps/api/src/auth.ts` delete the triple `dotenv.config(...)` blocks (and their `dotenv`/`path` imports); in `apps/api/src/index.ts` replace the triple block with a single `import "dotenv/config";` first line. **Restart dev**; verify `pnpm dev` still boots both servers with working DB (turbo `globalEnv` provides the vars).
+- [x] **Step 4:** Codify the ops lesson: in `docs/AGENTS.md`, append to the "Working rules" list: `- Dev-server rule: after ANY edit under packages/*, restart pnpm dev — Turbopack wedges on hot-reloading transpiled workspace packages and presents as blank 500s on every route.`
+- [x] **Step 5:** Acceptance greps: `grep -rn "@costwise/domain" apps/web` → empty; `ls apps/web/src/app/api` → does not exist; `grep -rn "revalidatePath" apps/web` → empty. Full gates. Commit `chore(web): delete legacy api routes and backend deps — web is pure UI`.
 
 ---
 

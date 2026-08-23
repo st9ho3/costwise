@@ -83,6 +83,7 @@ Working rules:
 - Before adding or restyling any UI, read `docs/ui.md` and use the primitives in `src/app/components/ui/`.
 - If a rule becomes outdated, update this file instead of adding a second copy elsewhere.
 - When in doubt, follow the layer order: UI -> hooks/stores -> services -> repositories -> database.
+- Dev-server rule: after ANY edit under packages/*, restart pnpm dev — Turbopack wedges on hot-reloading transpiled workspace packages and presents as blank 500s on every route.
 
 Project shape:
 - Next.js App Router application
