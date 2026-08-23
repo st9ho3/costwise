@@ -14,12 +14,20 @@ import type {
   CreateResponse,
 } from "@costwise/domain/types/services";
 import type { SupplierUpdatePayload } from "@costwise/domain/types/context";
+import type {
+  RecipeAnalytics,
+  CategoryAnalytics,
+  MarginHighlights,
+  HighImpactIngredient,
+  IngredientAnalytics,
+} from "@costwise/domain/types/repositories";
 import { NotFoundError } from "@costwise/domain/utils/errors";
 import type {
   Deps,
   RecipeServiceLike,
   IngredientServiceLike,
   SupplierServiceLike,
+  SearchServiceLike,
 } from "../app";
 
 export interface FakeState {
@@ -224,6 +232,27 @@ export const fakeDeps = (): Deps => {
       state.recipeDetails.delete(id);
       return { id };
     },
+    async getRecipesAnalytics(uId: string): Promise<RecipeAnalytics> {
+      const userRecipes = state.recipes.filter((r) => r.userId === uId);
+      return {
+        avgProfitMargin: "25",
+        avgFoodCost: "15",
+        totalRecipes: userRecipes.length,
+      };
+    },
+    async getCategoryAnalytics(uId: string): Promise<CategoryAnalytics[]> {
+      return [
+        { category: "starter", count: 1, avgFoodCost: "10" },
+        { category: "main", count: 2, avgFoodCost: "20" },
+      ];
+    },
+    async getMarginHighlights(uId: string): Promise<MarginHighlights> {
+      const userRecipes = state.recipes.filter((r) => r.userId === uId);
+      return {
+        topPerformers: userRecipes,
+        attentionNeeded: [],
+      };
+    },
   });
 
   const makeIngredientService = (userId: string): IngredientServiceLike => ({
@@ -265,6 +294,25 @@ export const fakeDeps = (): Deps => {
       if (idx === -1) throw new NotFoundError("Ingredient", id);
       state.ingredients.splice(idx, 1);
     },
+    async getIngredientAnalytics(uId: string): Promise<IngredientAnalytics> {
+      const userIngredients = state.ingredients.filter((i) => i.userId === uId);
+      return {
+        totalIngredients: userIngredients.length,
+      };
+    },
+    async getHighImpactIngredients(
+      uId: string,
+      limit: number = 5
+    ): Promise<HighImpactIngredient[]> {
+      const userIngredients = state.ingredients.filter((i) => i.userId === uId);
+      return userIngredients.slice(0, limit).map((i) => ({
+        id: i.id,
+        name: i.name,
+        icon: i.icon ?? null,
+        usage: Number(i.usage) || 0,
+        category: i.category,
+      }));
+    },
   });
 
   const makeSupplierService = (userId: string): SupplierServiceLike => ({
@@ -302,10 +350,31 @@ export const fakeDeps = (): Deps => {
     },
   });
 
+  const makeSearchService = (
+    term: string,
+    userId: string
+  ): SearchServiceLike => ({
+    async findRecipe() {
+      return state.recipes.filter(
+        (r) => r.userId === userId && r.title.toLowerCase().includes(term.toLowerCase())
+      );
+    },
+    async findIngredient() {
+      const matching = state.ingredients.filter(
+        (i) => i.userId === userId && i.name.toLowerCase().includes(term.toLowerCase())
+      );
+      return matching.map((i) => {
+        const { suppliers, ...rest } = i;
+        return { ...rest, categoryName: "Produce" as const };
+      });
+    },
+  });
+
   const deps: Deps = {
     makeRecipeService,
     makeIngredientService,
     makeSupplierService,
+    makeSearchService,
   };
   (deps as any)._state = state;
   return deps;

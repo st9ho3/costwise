@@ -4,6 +4,8 @@ import { requireUser } from "./middleware/auth";
 import { recipesRoutes } from "./routes/recipes";
 import { ingredientsRoutes } from "./routes/ingredients";
 import { suppliersRoutes } from "./routes/suppliers";
+import { searchRoutes } from "./routes/search";
+import { analyticsRoutes } from "./routes/analytics";
 import type {
   Recipe,
   RecipeIngredients,
@@ -20,6 +22,13 @@ import type {
   CreateResponse,
 } from "@costwise/domain/types/services";
 import type { SupplierUpdatePayload } from "@costwise/domain/types/context";
+import type {
+  RecipeAnalytics,
+  CategoryAnalytics,
+  MarginHighlights,
+  HighImpactIngredient,
+  IngredientAnalytics,
+} from "@costwise/domain/types/repositories";
 
 export type RecipeServiceLike = {
   findAll(
@@ -35,6 +44,9 @@ export type RecipeServiceLike = {
     addedIngredients: RecipeIngredients[]
   ): Promise<{ id: string } | undefined>;
   delete(id: string): Promise<{ id: string } | undefined>;
+  getRecipesAnalytics(userId: string): Promise<RecipeAnalytics | undefined>;
+  getCategoryAnalytics(userId: string): Promise<CategoryAnalytics[]>;
+  getMarginHighlights(userId: string): Promise<MarginHighlights>;
 };
 
 export type IngredientServiceLike = {
@@ -48,6 +60,11 @@ export type IngredientServiceLike = {
   create(ingredient: Ingredient): Promise<{ id: string } | undefined>;
   update(ingredient: Ingredient): Promise<{ id: string } | undefined>;
   delete(id: string): Promise<void>;
+  getIngredientAnalytics(userId: string): Promise<IngredientAnalytics | undefined>;
+  getHighImpactIngredients(
+    userId: string,
+    limit?: number
+  ): Promise<HighImpactIngredient[]>;
 };
 
 export type SupplierServiceLike = {
@@ -61,10 +78,16 @@ export type SupplierServiceLike = {
   delete(supplierId: string): Promise<{ id: string } | undefined>;
 };
 
+export type SearchServiceLike = {
+  findRecipe(): Promise<Recipe[] | undefined>;
+  findIngredient(): Promise<IngredientToDisplay[] | undefined>;
+};
+
 export interface Deps {
   makeRecipeService: (userId: string) => RecipeServiceLike;
   makeIngredientService: (userId: string) => IngredientServiceLike;
   makeSupplierService: (userId: string) => SupplierServiceLike;
+  makeSearchService: (term: string, userId: string) => SearchServiceLike;
 }
 
 export const createApp = (deps: Deps) => {
@@ -78,6 +101,8 @@ export const createApp = (deps: Deps) => {
   v1.route("/recipes", recipesRoutes(deps));
   v1.route("/ingredients", ingredientsRoutes(deps));
   v1.route("/suppliers", suppliersRoutes(deps));
+  v1.route("/search", searchRoutes(deps));
+  v1.route("/analytics", analyticsRoutes(deps));
   app.route("/v1", v1);
 
   return app;

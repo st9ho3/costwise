@@ -17,6 +17,13 @@ import type {
   RecipeUpdatePayload,
   SupplierUpdatePayload,
 } from "@costwise/domain/types/context";
+import type {
+  RecipeAnalytics,
+  CategoryAnalytics,
+  MarginHighlights,
+  HighImpactIngredient,
+  IngredientAnalytics,
+} from "@costwise/domain/types/repositories";
 
 export const ErrorEnvelope = z.object({
   error: z.object({
@@ -134,3 +141,53 @@ export const SupplierListResponse = z
   z.ZodTypeDef,
   any
 >;
+
+export const SearchQuery = z.object({
+  q: z.string().min(1),
+});
+
+export const SearchResponse = z.object({
+  ingredients: z.array(IngredientToDisplaySchema).optional(),
+  recipes: z.array(RecipeSchema).optional(),
+}) satisfies z.ZodType<{
+  ingredients?: IngredientToDisplay[];
+  recipes?: Recipe[];
+}>;
+
+export const RecipeAnalyticsResponse = z.object({
+  avgProfitMargin: z.string().nullable(),
+  avgFoodCost: z.string().nullable(),
+  totalRecipes: z.number(),
+}) satisfies z.ZodType<RecipeAnalytics>;
+
+export const CategoryAnalyticsResponse = z.array(
+  z.object({
+    category: z.enum(["starter", "main", "dessert"]),
+    count: z.number(),
+    avgFoodCost: z.string().nullable(),
+  })
+) satisfies z.ZodType<CategoryAnalytics[]>;
+
+export const MarginHighlightsResponse = z.object({
+  topPerformers: z.array(RecipeSchema),
+  attentionNeeded: z.array(RecipeSchema),
+}) satisfies z.ZodType<MarginHighlights>;
+
+export const IngredientAnalyticsResponse = z.object({
+  totalIngredients: z.number(),
+}) satisfies z.ZodType<IngredientAnalytics>;
+
+export const HighImpactQuery = z.object({
+  limit: z.coerce.number().int().positive().optional(),
+});
+
+export const HighImpactIngredientsResponse = z.array(
+  z.object({
+    id: z.string(),
+    name: z.string(),
+    icon: z.string().nullable(),
+    usage: z.number(),
+    category: z.string(),
+  })
+) satisfies z.ZodType<HighImpactIngredient[]>;
+
