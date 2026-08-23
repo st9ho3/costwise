@@ -383,13 +383,13 @@ export const getServerSession = async (): Promise<{ user: SessionUser } | null> 
 
 Precondition: env vars set (Global Constraints), migration script has run (Task 3 checkpoint cleared), Google Console has the new redirect URI `http://localhost:3001/v1/auth/callback/google` (Panos action — STOP and ask if unsure it's done).
 
-- [ ] `pnpm dev` (web :3000 + api :3001). Verify and record each:
+- [x] `pnpm dev` (web :3000 + api :3001). Verify and record each:
   1. Existing credential user signs in with their OLD password → lands on their own data.
   2. Existing Google user signs in → same user id (their recipes list unchanged).
   3. Fresh signup (new email) works; sign-out then sign-in again works.
   4. `curl -s -o /dev/null -w '%{http_code}' localhost:3001/v1/recipes` → 401; in the browser devtools, a signed-in session calling `fetch("http://localhost:3001/v1/recipes", {credentials:"include"})` → 200 with data.
   5. Signed-out visit to `/` redirects to `/signin`.
-- [ ] Push, open PR to `main` (CI green required), report all evidence. Do NOT merge.
+- [x] Push, open PR to `main` (CI green required), report all evidence. Do NOT merge.
 
 ---
 
