@@ -32,6 +32,13 @@ implement an existing approved plan and MUST NOT create, rewrite, or
 re-scope specs or plans. If an executor finds a plan wrong, blocked, or
 incomplete, it stops and reports back instead of improvising.
 
+**TDD rule:** any plan step that adds or changes behavior is written
+red-green: failing test (code included in the plan) → confirm it fails →
+minimal implementation → confirm it passes → commit. Executors MUST NOT
+reorder or skip the test-first steps. Pure refactors/moves carry no new
+tests; their gate is the existing suite plus build passing at every task
+boundary.
+
 Working rules:
 - Prefer the smallest file that owns the change.
 - Keep behavior, architecture, and routing guidance in `docs/` only.
