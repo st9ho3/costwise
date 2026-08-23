@@ -28,6 +28,7 @@ import type {
   IngredientServiceLike,
   SupplierServiceLike,
   SearchServiceLike,
+  PutBlobFn,
 } from "../app";
 
 export interface FakeState {
@@ -35,6 +36,7 @@ export interface FakeState {
   recipeDetails: Map<string, RecipeWithQuery>;
   ingredients: Ingredient[];
   suppliers: Supplier[];
+  uploadedBlobs: Map<string, { name: string; body: any }>;
 }
 
 export const createFakeState = (): FakeState => ({
@@ -42,6 +44,7 @@ export const createFakeState = (): FakeState => ({
   recipeDetails: new Map(),
   ingredients: [],
   suppliers: [],
+  uploadedBlobs: new Map(),
 });
 
 export const seedRecipe = (
@@ -356,12 +359,16 @@ export const fakeDeps = (): Deps => {
   ): SearchServiceLike => ({
     async findRecipe() {
       return state.recipes.filter(
-        (r) => r.userId === userId && r.title.toLowerCase().includes(term.toLowerCase())
+        (r) =>
+          r.userId === userId &&
+          r.title.toLowerCase().includes(term.toLowerCase())
       );
     },
     async findIngredient() {
       const matching = state.ingredients.filter(
-        (i) => i.userId === userId && i.name.toLowerCase().includes(term.toLowerCase())
+        (i) =>
+          i.userId === userId &&
+          i.name.toLowerCase().includes(term.toLowerCase())
       );
       return matching.map((i) => {
         const { suppliers, ...rest } = i;
@@ -370,11 +377,17 @@ export const fakeDeps = (): Deps => {
     },
   });
 
+  const putBlob: PutBlobFn = async (name, body) => {
+    state.uploadedBlobs.set(name, { name, body });
+    return { url: `https://blob.test/${name}` };
+  };
+
   const deps: Deps = {
     makeRecipeService,
     makeIngredientService,
     makeSupplierService,
     makeSearchService,
+    putBlob,
   };
   (deps as any)._state = state;
   return deps;

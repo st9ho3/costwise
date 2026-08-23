@@ -191,3 +191,12 @@ export const HighImpactIngredientsResponse = z.array(
   })
 ) satisfies z.ZodType<HighImpactIngredient[]>;
 
+export const UploadQuery = z.object({
+  filename: z.string().min(1),
+});
+
+export const UploadResponse = z.object({
+  url: z.string(),
+}) satisfies z.ZodType<{ url: string }>;
+
+

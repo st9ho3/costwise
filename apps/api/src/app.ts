@@ -6,6 +6,7 @@ import { ingredientsRoutes } from "./routes/ingredients";
 import { suppliersRoutes } from "./routes/suppliers";
 import { searchRoutes } from "./routes/search";
 import { analyticsRoutes } from "./routes/analytics";
+import { uploadsRoutes } from "./routes/uploads";
 import type {
   Recipe,
   RecipeIngredients,
@@ -83,11 +84,18 @@ export type SearchServiceLike = {
   findIngredient(): Promise<IngredientToDisplay[] | undefined>;
 };
 
+export type PutBlobFn = (
+  name: string,
+  body: any,
+  opts: { access: "public"; addRandomSuffix?: boolean }
+) => Promise<{ url: string }>;
+
 export interface Deps {
   makeRecipeService: (userId: string) => RecipeServiceLike;
   makeIngredientService: (userId: string) => IngredientServiceLike;
   makeSupplierService: (userId: string) => SupplierServiceLike;
   makeSearchService: (term: string, userId: string) => SearchServiceLike;
+  putBlob: PutBlobFn;
 }
 
 export const createApp = (deps: Deps) => {
@@ -103,6 +111,7 @@ export const createApp = (deps: Deps) => {
   v1.route("/suppliers", suppliersRoutes(deps));
   v1.route("/search", searchRoutes(deps));
   v1.route("/analytics", analyticsRoutes(deps));
+  v1.route("/uploads", uploadsRoutes(deps));
   app.route("/v1", v1);
 
   return app;
