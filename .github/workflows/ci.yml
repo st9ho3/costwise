@@ -1,0 +1,42 @@
+name: ci
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DATABASE_URL: postgres://ci:ci@localhost:5432/ci
+  AUTH_SECRET: ci-placeholder-secret
+  AUTH_GOOGLE_ID: ci-placeholder
+  AUTH_GOOGLE_SECRET: ci-placeholder
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ github.ref_name }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ github.ref_name }}-
+            turbo-
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm exec turbo run build test lint --cache-dir=.turbo

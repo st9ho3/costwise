@@ -5,6 +5,8 @@
 > **Authority note (docs/AGENTS.md Delivery Process):** authored by Fable 5; executors implement as written and STOP on anything the plan doesn't cover.
 >
 > **TDD note:** this task is a declared configuration exception (spec, Decision 7). No new tests; the gate is the workflow running green on a real PR.
+>
+> **Executor mode:** supervised or external (docs/AGENTS.md, "Executor modes"). External executors: push every task-boundary commit with gate output in the commit body and tick the plan checkboxes in the same commit. This plan needs no mid-run `⛔ CHECKPOINT` — the PR opened in Task 3 IS the visible review surface, and its green→red(canary)→green check history is the evidence.
 
 **Goal:** Gate every PR to `main` with `turbo run build test lint` in GitHub Actions.
 

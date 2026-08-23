@@ -5,6 +5,8 @@
 > **Authority (docs/AGENTS.md):** authored by Fable 5; executors implement as written, STOP-and-report on anything uncovered. **Execution: executor models** — Fable 5 judged this task not super-complex.
 >
 > **TDD:** Tasks 3–10 are behavioral — strict red-green per `superpowers:test-driven-development`; every test is watched failing first. Task 2 (domain extraction) is a **declared refactor exception**: no new tests; gate = existing suite + build green, zero behavior diff.
+>
+> **Executor mode:** may be run supervised OR external (docs/AGENTS.md, "Executor modes"). External executors: push every task-boundary commit with gate output in the commit body, tick the checkboxes in the same commit, and STOP at each `⛔ CHECKPOINT` below until Panos or Fable 5 reviews the pushed work.
 
 **Goal:** `apps/api` (Hono, port 3001) exposes every web-app operation as a documented `/v1` endpoint; domain layer extracted to `@costwise/domain`; web app unchanged.
 
@@ -76,6 +78,7 @@ and `packages/domain/tsconfig.json` — copy `packages/db/tsconfig.json` exactly
 - [ ] **Step 5:** Wire web: `pnpm --filter web add "@costwise/domain@workspace:*"`; add `"@costwise/domain"` to `transpilePackages` in `apps/web/next.config.ts`. Rewrite web imports of the moved modules — every `@/app/services/X` → `@costwise/domain/services/X` (except `services` itself), `@/app/repositories/X` → `@costwise/domain/repositories/X`, `@/types/X` → `@costwise/domain/types/X` (except `pg`), `@/app/utils/{errors,pricing,transformers}` → `@costwise/domain/utils/...`. Relative-path variants (`../../utils/errors` etc.) too — find with `grep -rn "utils/errors\|utils/pricing\|utils/transformers\|/services/\|/repositories/\|types/specialTypes\|types/repositories\|types/services\|types/context" apps/web/src | grep -v "@costwise" | grep -v "components/"` and iterate until only legitimate hits remain (UI files like `services.ts`, `utils/{cn,formatters,pagination,errorHandler,uiHelpers}` stay web-local).
 - [ ] **Step 6:** Gates: `pnpm install && pnpm build && pnpm test && pnpm lint` all green; `grep -rn "next/" packages/` empty; web dev smoke: recipes/ingredients/suppliers/dashboard pages render, create+delete a recipe works and the list refreshes (revalidatePath relocation proof). Anything failing that Steps 1–5 don't explain: STOP and report.
 - [ ] **Step 7:** Commit: `git add -A && git commit -m "refactor: extract domain layer into @costwise/domain"`.
+- [ ] **Step 8: ⛔ CHECKPOINT — push `feature/hono-api` and stop.** This task rewired the entire web app's imports; it gets reviewed before anything is built on top. Report the gate outputs and wait for Panos/Fable 5 sign-off (external mode) or Fable 5's between-task review (supervised).
 
 ---
 
@@ -390,6 +393,8 @@ app.route("/v1", v1);
 ```
 
 `index.ts` wires real services: `makeRecipeService: (userId) => new RecipeService(userId)` (import from `@costwise/domain/services/recipeService`). Verify GREEN; workspace gates green. Commit `feat(api): /v1/recipes endpoints`.
+
+- [ ] **⛔ CHECKPOINT — push and stop.** This task established THE TEMPLATE that Tasks 6–9 mass-produce. A flaw here multiplies by four domains; it gets reviewed before replication.
 
 ---
 
