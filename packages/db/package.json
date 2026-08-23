@@ -8,10 +8,10 @@
   "scripts": {
     "build": "tsc --noEmit",
     "generate": "drizzle-kit generate",
-    "push": "drizzle-kit push"
+    "push": "drizzle-kit push",
+    "migrate-auth": "tsx scripts/migrate-auth.ts"
   },
   "dependencies": {
-    "@auth/core": "^0.41.3",
     "dotenv": "^17.2.0",
     "drizzle-orm": "^0.44.5",
     "pg": "^8.16.3"
@@ -19,6 +19,7 @@
   "devDependencies": {
     "@types/node": "^20.19.43",
     "drizzle-kit": "^0.31.4",
+    "tsx": "^4.23.12",
     "typescript": "^5"
   }
 }

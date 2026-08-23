@@ -1,7 +1,7 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { Scalar } from "@scalar/hono-api-reference";
 import { errorHandler } from "./middleware/errors";
-import { requireUser } from "./middleware/auth";
+import { makeRequireUser } from "./middleware/auth";
 import { recipesRoutes } from "./routes/recipes";
 import { ingredientsRoutes } from "./routes/ingredients";
 import { suppliersRoutes } from "./routes/suppliers";
@@ -91,12 +91,16 @@ export type PutBlobFn = (
   opts: { access: "public"; addRandomSuffix?: boolean }
 ) => Promise<{ url: string }>;
 
+import { cors } from "hono/cors";
+import { auth } from "./auth";
+
 export interface Deps {
   makeRecipeService: (userId: string) => RecipeServiceLike;
   makeIngredientService: (userId: string) => IngredientServiceLike;
   makeSupplierService: (userId: string) => SupplierServiceLike;
   makeSearchService: (term: string, userId: string) => SearchServiceLike;
   putBlob: PutBlobFn;
+  getSessionUserId: (headers: Headers) => Promise<string | null>;
 }
 
 export const createApp = (deps: Deps) => {
@@ -105,8 +109,17 @@ export const createApp = (deps: Deps) => {
 
   app.get("/health", (c) => c.json({ status: "ok" }));
 
+  app.use(
+    "/v1/*",
+    cors({
+      origin: process.env.WEB_ORIGIN ?? "http://localhost:3000",
+      credentials: true,
+    })
+  );
+  app.on(["GET", "POST"], "/v1/auth/*", (c) => auth.handler(c.req.raw));
+
   const v1 = new OpenAPIHono<{ Variables: { userId: string } }>();
-  v1.use("*", requireUser);
+  v1.use("*", makeRequireUser(deps.getSessionUserId));
   v1.route("/recipes", recipesRoutes(deps));
   v1.route("/ingredients", ingredientsRoutes(deps));
   v1.route("/suppliers", suppliersRoutes(deps));

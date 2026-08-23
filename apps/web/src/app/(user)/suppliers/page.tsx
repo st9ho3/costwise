@@ -4,7 +4,7 @@ import { Plus } from 'lucide-react';
 import SuppliersTable from '@/app/components/suppliers/suppliersTable';
 import Pagination from '@/app/components/recipes/pagination';
 import { SupplierService } from '@costwise/domain/services/suppliersService';
-import { auth } from '@/auth';
+import { getServerSession } from '@/app/lib/serverSession';
 import { redirect } from 'next/navigation';
 import { Metadata } from '@costwise/domain/types/specialTypes';
 import { Button } from '@/app/components/ui/button';
@@ -20,7 +20,7 @@ interface Props {
 }
 
 const SuppliersPage = async ({ searchParams }: Props) => {
-  const session = await auth();
+  const session = await getServerSession();
 
   if (!session?.user?.id) {
     redirect('/signin');

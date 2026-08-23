@@ -388,6 +388,7 @@ export const fakeDeps = (): Deps => {
     makeSupplierService,
     makeSearchService,
     putBlob,
+    getSessionUserId: async (h) => h.get("x-user-id"),
   };
   (deps as any)._state = state;
   return deps;

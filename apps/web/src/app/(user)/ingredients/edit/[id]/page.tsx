@@ -1,7 +1,7 @@
 import React from 'react';
 import { IngredientService } from '@costwise/domain/services/ingredientService';
 import { SupplierService } from '@costwise/domain/services/suppliersService';
-import { auth } from '@/auth';
+import { getServerSession } from '@/app/lib/serverSession';
 import { redirect, notFound } from 'next/navigation';
 import { Metadata } from '@costwise/domain/types/specialTypes';
 import IngredientForm from '@/app/components/ingredients/ingredientForm';
@@ -13,7 +13,7 @@ export interface Params {
 }
 
 const IngredientEditPage = async ({ params }: Params) => {
-  const session = await auth();
+  const session = await getServerSession();
   if (!session?.user?.id) {
     redirect('/signin');
   }

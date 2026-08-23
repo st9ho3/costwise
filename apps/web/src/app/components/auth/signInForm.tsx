@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { signIn } from 'next-auth/react';
+import { authClient } from '@/app/lib/authClient';
 import useSignIn from '@/app/hooks/useSignIn';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
@@ -10,7 +10,7 @@ import { Logo } from '../ui/logo';
 import GoogleIcon from './authComponents/googleComponent';
 
 const SignInForm = () => {
-  const { register, handleSubmit, onSubmit } = useSignIn({ isSignIn: true });
+  const { register, handleSubmit, onSubmit, authError, formState: { errors } } = useSignIn({ isSignIn: true });
 
   return (
     <div className="w-full max-w-[420px] p-6 sm:p-8 bg-white rounded-[28px] shadow-[0_4px_8px_rgba(27,26,22,0.05),0_20px_40px_-12px_rgba(27,26,22,0.16)] border border-[#EFE8DA] flex flex-col gap-6">
@@ -34,6 +34,7 @@ const SignInForm = () => {
           type="email"
           placeholder="name@example.com"
           size="lg"
+          error={errors.email?.message}
           {...register('email')}
         />
 
@@ -47,6 +48,7 @@ const SignInForm = () => {
             type="password"
             placeholder="••••••••"
             size="lg"
+            error={errors.password?.message}
             {...register('password')}
           />
         </div>
@@ -56,6 +58,12 @@ const SignInForm = () => {
             Sign in
           </Button>
         </div>
+
+        {authError && (
+          <div className="p-3 rounded-[12px] bg-tomato-50 border border-tomato-200 text-tomato-700 text-[13px] font-medium text-center">
+            {authError}
+          </div>
+        )}
       </form>
 
       {/* Divider */}
@@ -71,7 +79,7 @@ const SignInForm = () => {
         variant="outline"
         block
         size="lg"
-        onClick={() => signIn('google', { redirectTo: '/' })}
+        onClick={() => authClient.signIn.social({ provider: 'google', callbackURL: '/' })}
         iconLeft={<GoogleIcon />}
       >
         Continue with Google

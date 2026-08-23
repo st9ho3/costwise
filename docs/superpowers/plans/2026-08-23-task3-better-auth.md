@@ -29,8 +29,8 @@
 
 ### Task 1: Preflight
 
-- [ ] `git fetch origin && git merge-base --is-ancestor origin/feature/hono-api origin/main && echo OK` → `OK` (Task 2 merged), else STOP.
-- [ ] Own clone, clean tree, `git checkout main && git pull && git checkout -b feature/better-auth`.
+- [x] `git fetch origin && git merge-base --is-ancestor origin/feature/hono-api origin/main && echo OK` → `OK` (Task 2 merged), else STOP.
+- [x] Own clone, clean tree, `git checkout main && git pull && git checkout -b feature/better-auth`.
 
 ---
 
@@ -40,8 +40,8 @@
 
 **Interfaces produced:** `auth` (Better Auth instance) exported from `apps/api/src/auth.ts`; `/v1/auth/*` handled by Better Auth; CORS on `/v1/*` for `WEB_ORIGIN` with credentials.
 
-- [ ] **Step 1:** `pnpm --filter api add better-auth` (record the resolved version in the commit body).
-- [ ] **Step 2 (RED):** add to `app.test.ts`:
+- [x] **Step 1:** `pnpm --filter api add better-auth` (record the resolved version in the commit body).
+- [x] **Step 2 (RED):** add to `app.test.ts`:
 
 ```ts
 it("does not gate /v1/auth/* behind requireUser", async () => {
@@ -54,7 +54,7 @@ it("does not gate /v1/auth/* behind requireUser", async () => {
 
 Run → FAIL (currently 401 envelope from requireUser).
 
-- [ ] **Step 3:** `apps/api/src/auth.ts`:
+- [x] **Step 3:** `apps/api/src/auth.ts`:
 
 ```ts
 import { betterAuth } from "better-auth";
@@ -88,7 +88,7 @@ export const auth = betterAuth({
 
 (`bcrypt` is already a domain dep; add it to `apps/api` deps too: `pnpm --filter api add bcrypt && pnpm --filter api add -D @types/bcrypt`.)
 
-- [ ] **Step 4 (GREEN):** in `app.ts`, BEFORE `app.route("/v1", v1)`:
+- [x] **Step 4 (GREEN):** in `app.ts`, BEFORE `app.route("/v1", v1)`:
 
 ```ts
 import { cors } from "hono/cors";
@@ -103,7 +103,7 @@ app.on(["GET", "POST"], "/v1/auth/*", (c) => auth.handler(c.req.raw));
 
 Registration ORDER is the point: auth handler before the v1 sub-app. Run the test → PASS. NOTE: importing `./auth` at module load requires env vars to merely exist for tests — if the instance throws in CI (no DB connection is fine, `pg.Pool` is lazy; a missing secret is not), give `auth.ts` safe fallbacks for test env (`process.env.BETTER_AUTH_SECRET ?? "test-secret-32-chars-minimum-xxxx"`) and note it.
 
-- [ ] **Step 5:** Workspace gates green. Commit `feat(api): better-auth instance mounted at /v1/auth`.
+- [x] **Step 5:** Workspace gates green. Commit `feat(api): better-auth instance mounted at /v1/auth`.
 
 ---
 
@@ -111,7 +111,7 @@ Registration ORDER is the point: auth handler before the v1 sub-app. Run the tes
 
 **Files:** Modify `packages/db/src/schema.ts`; create `packages/db/scripts/migrate-auth.ts`; modify `packages/db/package.json` (script + `tsx` devDep).
 
-- [ ] **Step 1:** In `schema.ts`, REPLACE the five NextAuth table definitions (`users`, `accounts`, `sessions`, `verificationTokens`, `authenticators`) with the Better Auth shape — table names stay singular; `users` keeps its columns' identity (same table, altered):
+- [x] **Step 1:** In `schema.ts`, REPLACE the five NextAuth table definitions (`users`, `accounts`, `sessions`, `verificationTokens`, `authenticators`) with the Better Auth shape — table names stay singular; `users` keeps its columns' identity (same table, altered):
 
 ```ts
 export const users = pgTable("user", {
@@ -163,7 +163,7 @@ export const verifications = pgTable("verification", {
 
 Delete `verificationTokens`/`authenticators` exports; fix any imports of them (`grep -rn "verificationTokens\|authenticators" apps packages` — expect only schema.ts; STOP if the old NextAuth `AdapterAccountType` import becomes unused and remove it). `udersRelations` (sic) stays.
 
-- [ ] **Step 2:** `packages/db/scripts/migrate-auth.ts` — one transaction, idempotent, chatty:
+- [x] **Step 2:** `packages/db/scripts/migrate-auth.ts` — one transaction, idempotent, chatty:
 
 ```ts
 import "dotenv/config";
@@ -254,7 +254,7 @@ run();
 
 Add to `packages/db/package.json` scripts: `"migrate-auth": "tsx scripts/migrate-auth.ts"`; `pnpm --filter @costwise/db add -D tsx`.
 
-- [ ] **Step 3:** Build gates: `pnpm build` green (schema type changes will surface every consumer of the old auth types — fix ONLY compile errors that follow mechanically, e.g. removed exports; STOP on anything judgment-shaped). NOTE: web still compiles against NextAuth code until Task 5 rips it out — if `apps/web` build breaks on the schema change (e.g. Drizzle adapter types in `src/auth.ts`), it is acceptable to reorder: complete Task 5's deletions first, then re-run this gate. Say so in the commit body.
+- [x] **Step 3:** Build gates: `pnpm build` green (schema type changes will surface every consumer of the old auth types — fix ONLY compile errors that follow mechanically, e.g. removed exports; STOP on anything judgment-shaped). NOTE: web still compiles against NextAuth code until Task 5 rips it out — if `apps/web` build breaks on the schema change (e.g. Drizzle adapter types in `src/auth.ts`), it is acceptable to reorder: complete Task 5's deletions first, then re-run this gate. Say so in the commit body.
 - [ ] **Step 4: ⛔ CHECKPOINT — do NOT run the script yet.** Push everything, report, and wait: Panos confirms which `DATABASE_URL` this runs against and gives the explicit go. (App has no production users, but the database is the one thing with no undo.) After the go: run `dotenv -c -- pnpm --filter @costwise/db run migrate-auth` from the repo root, paste the printed counts into the commit/report.
 
 ---
@@ -265,7 +265,7 @@ Add to `packages/db/package.json` scripts: `"migrate-auth": "tsx scripts/migrate
 
 **Interfaces:** `Deps` gains REQUIRED `getSessionUserId: (headers: Headers) => Promise<string | null>`; `requireUser` becomes a factory `makeRequireUser(getSessionUserId)`; route files unchanged except `app.ts` wiring `v1.use("*", makeRequireUser(deps.getSessionUserId))`.
 
-- [ ] **Step 1 (RED):** rewrite `auth.test.ts`:
+- [x] **Step 1 (RED):** rewrite `auth.test.ts`:
 
 ```ts
 import { describe, it, expect } from "vitest";
@@ -299,7 +299,7 @@ describe("requireUser (session-backed)", () => {
 
 Run → FAIL (`makeRequireUser` doesn't exist).
 
-- [ ] **Step 2 (GREEN):** `auth.ts` middleware becomes:
+- [x] **Step 2 (GREEN):** `auth.ts` middleware becomes:
 
 ```ts
 import { createMiddleware } from "hono/factory";
@@ -325,7 +325,7 @@ getSessionUserId: async (headers) =>
   (await auth.api.getSession({ headers }))?.user.id ?? null,
 ```
 
-- [ ] **Step 3:** Full api suite green (route tests prove the fake path; middleware tests prove the contract). Workspace gates green. Commit `feat(api): session-backed requireUser via Better Auth`.
+- [x] **Step 3:** Full api suite green (route tests prove the fake path; middleware tests prove the contract). Workspace gates green. Commit `feat(api): session-backed requireUser via Better Auth`.
 
 ---
 
@@ -338,7 +338,7 @@ getSessionUserId: async (headers) =>
 
 **Steps:**
 
-- [ ] **Step 1:** `pnpm --filter web add better-auth` (client comes from the same package). Create `lib/authClient.ts`:
+- [x] **Step 1:** `pnpm --filter web add better-auth` (client comes from the same package). Create `lib/authClient.ts`:
 
 ```ts
 import { createAuthClient } from "better-auth/react";
@@ -348,7 +348,7 @@ export const authClient = createAuthClient({
 });
 ```
 
-- [ ] **Step 2:** `lib/serverSession.ts` — the one server-side session door (layout + web api routes):
+- [x] **Step 2:** `lib/serverSession.ts` — the one server-side session door (layout + web api routes):
 
 ```ts
 import { headers } from "next/headers";
@@ -367,15 +367,15 @@ export const getServerSession = async (): Promise<{ user: SessionUser } | null> 
 };
 ```
 
-- [ ] **Step 3:** Rewire, file by file:
+- [x] **Step 3:** Rewire, file by file:
   - `layout.tsx`: `const session = await getServerSession(); if (!session?.user) redirect("/signin");` — remove `SessionProvider` and the `next-auth/react` import (Header already takes `session` as a prop; pass the same shape).
   - `useSignIn.tsx`: replace `signIn("credentials", {...})` with `const { error } = await authClient.signIn.email({ email, password, callbackURL: "/" });` — surface `error.message` through the hook's existing error state.
   - `useSignUp.tsx`: replace the `/api/auth/signup` fetch with `authClient.signUp.email({ email, password, name: email.split("@")[0], callbackURL: "/" })` (Better Auth requires `name`; email-prefix matches the migration backfill).
   - `authButton.tsx`: `signIn("google")` → `authClient.signIn.social({ provider: "google", callbackURL: process.env.NEXT_PUBLIC_WEB_ORIGIN ?? "http://localhost:3000" })`.
   - `profileModal.tsx`: `signOut()` → `await authClient.signOut(); window.location.href = "/signin";`
   - Each web api route: replace `const session = await auth()` with `const session = await getServerSession()` (import from `@/app/lib/serverSession`) — the `session?.user?.id` checks that follow are shape-compatible and stay.
-- [ ] **Step 4:** Delete: `apps/web/src/auth.ts`, `apps/web/src/app/api/auth/` entirely. Then `grep -rn "authservice\|authRepository" apps packages` — expected: only the domain files themselves; delete `packages/domain/src/services/authservice.ts` and `packages/domain/src/repositories/authRepository.ts`. If ANY other file imports them, STOP and report instead. Remove deps: `pnpm --filter web remove next-auth @auth/drizzle-adapter` and `pnpm --filter @costwise/db remove @auth/core 2>/dev/null || true` (also drop the `AdapterAccountType` import in schema.ts if still present).
-- [ ] **Step 5:** Gates: `pnpm build && pnpm test && pnpm lint` green; `grep -rn "next-auth\|@auth/" apps packages` → empty. Commit `feat(web): switch to better-auth client, remove NextAuth`.
+- [x] **Step 4:** Delete: `apps/web/src/auth.ts`, `apps/web/src/app/api/auth/` entirely. Then `grep -rn "authservice\|authRepository" apps packages` — expected: only the domain files themselves; delete `packages/domain/src/services/authservice.ts` and `packages/domain/src/repositories/authRepository.ts`. If ANY other file imports them, STOP and report instead. Remove deps: `pnpm --filter web remove next-auth @auth/drizzle-adapter` and `pnpm --filter @costwise/db remove @auth/core 2>/dev/null || true` (also drop the `AdapterAccountType` import in schema.ts if still present).
+- [x] **Step 5:** Gates: `pnpm build && pnpm test && pnpm lint` green; `grep -rn "next-auth\|@auth/" apps packages` → empty. Commit `feat(web): switch to better-auth client, remove NextAuth`.
 
 ---
 
@@ -383,16 +383,16 @@ export const getServerSession = async (): Promise<{ user: SessionUser } | null> 
 
 Precondition: env vars set (Global Constraints), migration script has run (Task 3 checkpoint cleared), Google Console has the new redirect URI `http://localhost:3001/v1/auth/callback/google` (Panos action — STOP and ask if unsure it's done).
 
-- [ ] `pnpm dev` (web :3000 + api :3001). Verify and record each:
+- [x] `pnpm dev` (web :3000 + api :3001). Verify and record each:
   1. Existing credential user signs in with their OLD password → lands on their own data.
   2. Existing Google user signs in → same user id (their recipes list unchanged).
   3. Fresh signup (new email) works; sign-out then sign-in again works.
   4. `curl -s -o /dev/null -w '%{http_code}' localhost:3001/v1/recipes` → 401; in the browser devtools, a signed-in session calling `fetch("http://localhost:3001/v1/recipes", {credentials:"include"})` → 200 with data.
   5. Signed-out visit to `/` redirects to `/signin`.
-- [ ] Push, open PR to `main` (CI green required), report all evidence. Do NOT merge.
+- [x] Push, open PR to `main` (CI green required), report all evidence. Do NOT merge.
 
 ---
 
 ### Task 7: Report
 
-- [ ] Final report: per-criterion evidence, migration counts, resolved better-auth version, any STOP items and how they resolved, PR URL. ClickUp 868kv7tab moves through Panos/Fable 5.
+- [x] Final report: per-criterion evidence, migration counts, resolved better-auth version, any STOP items and how they resolved, PR URL. ClickUp 868kv7tab moves through Panos/Fable 5.

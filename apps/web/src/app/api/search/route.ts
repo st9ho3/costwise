@@ -1,12 +1,12 @@
 import { SearchService } from "@costwise/domain/services/searchService";
-import { auth } from "@/auth";
+import { getServerSession } from "@/app/lib/serverSession";
 import { NextRequest } from "next/server";
 import { sendSuccess } from "../utils/responses";
 import { AuthenticationError, ValidationError } from "@costwise/domain/utils/errors";
 import { errorHandler } from "../../utils/errorHandler";
 
 export const GET = async (req: NextRequest) => {
-  const session = await auth();
+  const session = await getServerSession();
 
   const request = req.nextUrl;
   const searchTerm = request.searchParams.get("q");

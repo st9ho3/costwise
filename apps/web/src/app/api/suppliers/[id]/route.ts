@@ -1,13 +1,13 @@
 import { NextRequest } from "next/server";
 import { sendSuccess } from "../../utils/responses";
 import { SupplierService } from "@costwise/domain/services/suppliersService";
-import { auth } from "@/auth";
+import { getServerSession } from "@/app/lib/serverSession";
 import { AuthenticationError } from "@costwise/domain/utils/errors";
 import { errorHandler } from "@/app/utils/errorHandler";
 
 export const PATCH = async (req: NextRequest) => {
   try {
-    const session = await auth();
+    const session = await getServerSession();
 
     if (!session?.user?.id) {
       throw new AuthenticationError();
@@ -27,7 +27,7 @@ export const DELETE = async (
   context: { params: Promise<{ id: string }> }
 ) => {
   try {
-    const session = await auth();
+    const session = await getServerSession();
 
     if (!session?.user?.id) {
       throw new AuthenticationError();

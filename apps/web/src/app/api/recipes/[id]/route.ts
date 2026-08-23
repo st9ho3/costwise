@@ -15,7 +15,7 @@ import { revalidatePath } from "next/cache";
 import { RecipeUpdatePayload } from "@costwise/domain/types/context";
 import { sendSuccess } from "../../utils/responses";
 import { RecipeService } from "@costwise/domain/services/recipeService";
-import { auth } from "@/auth";
+import { getServerSession } from "@/app/lib/serverSession";
 import { AuthenticationError } from "@costwise/domain/utils/errors";
 import { errorHandler } from "@/app/utils/errorHandler";
 
@@ -23,7 +23,7 @@ export const PATCH = async (
   req: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) => {
-  const session = await auth();
+  const session = await getServerSession();
   try {
     if (!session?.user?.id) {
       throw new AuthenticationError();
@@ -49,7 +49,7 @@ export const DELETE = async (
   req: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) => {
-  const session = await auth();
+  const session = await getServerSession();
   try {
     if (!session?.user?.id) {
       throw new AuthenticationError();

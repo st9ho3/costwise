@@ -1,60 +1,57 @@
-"use client"
-/**
- * This custom React hook manages the authentication process for a Next.js application,
- * specifically for user sign-in.
- * The `useSignIn` hook provides the necessary state management and functions for a sign-in form.
- * It integrates with `react-hook-form` for efficient form handling, `zod` for robust data validation,
- * and `next-auth` for credential-based authentication. The hook handles the form submission
- * logic, validates user input, and attempts to sign the user in with the provided credentials.
- * It is designed to be used on the client side.
- */
-import { useForm } from 'react-hook-form'
-import { SignInCredentials, signInCredentialsSchema } from '@costwise/shared/auth'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { signInCredentials, signUpCredentials } from '../constants/uathFormdefaultValues'
-import { signIn } from 'next-auth/react'
+"use client";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { SignInCredentials, signInCredentialsSchema } from "@costwise/shared/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signInCredentials, signUpCredentials } from "../constants/uathFormdefaultValues";
+import { authClient } from "../lib/authClient";
 
 export interface AuthProps {
-    isSignIn: boolean
+  isSignIn: boolean;
 }
 
 const useSignIn = ({ isSignIn }: AuthProps) => {
+  const [authError, setAuthError] = useState<string | null>(null);
 
-    const { register, handleSubmit } = useForm<SignInCredentials>({
-        defaultValues: isSignIn ? signInCredentials : signUpCredentials,
-        resolver: zodResolver(signInCredentialsSchema)
-    })
+  const { register, handleSubmit, formState } = useForm<SignInCredentials>({
+    defaultValues: isSignIn ? signInCredentials : signUpCredentials,
+    resolver: zodResolver(signInCredentialsSchema),
+  });
 
-    const onSubmit = async (formData: SignInCredentials) => {
+  const onSubmit = async (formData: SignInCredentials) => {
+    setAuthError(null);
+    try {
+      const { data, success, error } = signInCredentialsSchema.safeParse(formData);
 
-        try {
-            const {data, success, error} = signInCredentialsSchema.safeParse(formData)
-
-            if (success) {
-                 const user = await signIn("credentials", {
-                    email: data.email,
-                    password: data.password,
-                    redirectTo: "/" 
-                 })
-                 return user
-                 
-            }
-           
-            if (error) {
-
-                throw new Error(`${error}`)
-            }
-        } catch(err) {
-
-            throw new Error(`${err}`)
+      if (success) {
+        const { error: signInError } = await authClient.signIn.email({
+          email: data.email,
+          password: data.password,
+          callbackURL: "/",
+        });
+        if (signInError) {
+          setAuthError(signInError.message || "Invalid email or password");
+          return;
         }
-    }
+        return;
+      }
 
-    return {
-        register,
-        handleSubmit,
-        onSubmit
+      if (error) {
+        setAuthError(error.errors[0]?.message || "Invalid credentials");
+      }
+    } catch (err) {
+      setAuthError(err instanceof Error ? err.message : "Failed to sign in. Please try again.");
     }
-}
+  };
+
+  return {
+    register,
+    handleSubmit,
+    onSubmit,
+    authError,
+    formState,
+    errors: formState.errors,
+  };
+};
 
 export default useSignIn;

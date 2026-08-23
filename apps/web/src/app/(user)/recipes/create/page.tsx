@@ -2,12 +2,12 @@ import React from 'react';
 import RecipeForm from '@/app/components/recipes/recipeForm/recipeForm';
 import { IngredientService } from '@costwise/domain/services/ingredientService';
 import { RecipeIngredients } from '@costwise/shared/recipe';
-import { auth } from '@/auth';
+import { getServerSession } from '@/app/lib/serverSession';
 import { redirect } from 'next/navigation';
 import { Metadata } from '@costwise/domain/types/specialTypes';
 
 const Page = async () => {
-  const session = await auth();
+  const session = await getServerSession();
 
   if (!session?.user?.id) {
     redirect('/signin');
