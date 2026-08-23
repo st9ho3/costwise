@@ -1,6 +1,8 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
+import { useState } from 'react'
 import '@testing-library/jest-dom'
 import { Input } from './input'
+import { MoneyInput } from './moneyInput'
 import { Label } from './label'
 import { Badge } from './badge'
 import { Card, CardTitle } from './card'
@@ -17,6 +19,24 @@ describe('primitives', () => {
     const input = container.querySelector('input')!
     expect(input).toBeTruthy()
     expect(input.className).toContain('custom-in')
+  })
+
+  it('Input safely converts NaN defaultValue to empty string to prevent React warning', () => {
+    const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {})
+    const { container } = render(<Input defaultValue={NaN} />)
+    const input = container.querySelector('input')!
+    expect(input.value).toBe('')
+    expect(consoleError).not.toHaveBeenCalled()
+    consoleError.mockRestore()
+  })
+
+  it('MoneyInput safely converts NaN defaultValue to empty string to prevent React warning', () => {
+    const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {})
+    const { container } = render(<MoneyInput defaultValue={NaN} />)
+    const input = container.querySelector('input')!
+    expect(input.value).toBe('')
+    expect(consoleError).not.toHaveBeenCalled()
+    consoleError.mockRestore()
   })
 
   it('Label renders mono uppercase styling', () => {
@@ -64,6 +84,68 @@ describe('primitives', () => {
       />
     )
     expect(screen.getByText('Kilos (kg)')).toBeTruthy()
+  })
+
+  it('controlled Select returns to the placeholder when its value is cleared', () => {
+    const opts = [{ value: 'feta', label: 'Feta (€12.50/kg)' }]
+    const { rerender } = render(
+      <Select label="Ingredient" placeholder="Pick an ingredient" value="feta" onValueChange={() => {}} options={opts} />
+    )
+    expect(screen.getByText('Feta (€12.50/kg)')).toBeTruthy()
+    rerender(
+      <Select label="Ingredient" placeholder="Pick an ingredient" value="" onValueChange={() => {}} options={opts} />
+    )
+    expect(screen.getByText('Pick an ingredient')).toBeTruthy()
+    expect(screen.queryByText('Feta (€12.50/kg)')).toBeNull()
+  })
+
+  it('controlled Select clears after a real UI selection when value resets to ""', async () => {
+    // radix select needs these DOM APIs that jsdom lacks
+    window.HTMLElement.prototype.scrollIntoView = jest.fn()
+    window.HTMLElement.prototype.hasPointerCapture = jest.fn()
+    window.HTMLElement.prototype.releasePointerCapture = jest.fn()
+    class MockPointerEvent extends MouseEvent {
+      pointerId: number
+      pointerType: string
+      constructor(type: string, props: PointerEventInit = {}) {
+        super(type, props)
+        this.pointerId = props.pointerId ?? 1
+        this.pointerType = props.pointerType ?? 'mouse'
+      }
+    }
+    window.PointerEvent = MockPointerEvent as unknown as typeof PointerEvent
+
+    const Harness = () => {
+      const [val, setVal] = useState('')
+      return (
+        <>
+          <Select
+            label="Ingredient"
+            placeholder="Pick an ingredient"
+            value={val}
+            onValueChange={setVal}
+            options={[{ value: 'feta', label: 'Feta' }]}
+          />
+          <button onClick={() => setVal('')}>clear</button>
+        </>
+      )
+    }
+    render(<Harness />)
+
+    const trigger = screen.getByRole('combobox')
+    fireEvent.pointerDown(trigger, { button: 0, ctrlKey: false, pointerId: 1 })
+    const item = await screen.findByRole('option', { name: 'Feta' })
+    fireEvent.pointerUp(item)
+    fireEvent.click(item)
+    // selection took: the placeholder is no longer rendered in the trigger
+    // (jsdom can't reflect the chosen label after a remount, so assert on the
+    // placeholder; re-query — clearing remounts the trigger node)
+    expect(screen.getByRole('combobox').textContent).not.toContain('Pick an ingredient')
+
+    fireEvent.click(screen.getByText('clear'))
+    const clearedTrigger = screen.getByRole('combobox')
+    expect(clearedTrigger.textContent).toContain('Pick an ingredient')
+    expect(clearedTrigger.textContent).not.toContain('Feta')
   })
 
   it('Select renders error message when error prop is provided', () => {

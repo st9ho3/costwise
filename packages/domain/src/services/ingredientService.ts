@@ -105,6 +105,16 @@ export class IngredientService implements IIngredientService {
     const transactionResponse = await db.transaction(async (tx: Database) => {
       const result = await this.ingredientRepository.update(DBIngredient, tx);
 
+      await this.supplierIngredientRepository.updateByIngredientId(
+        tx,
+        DBIngredient.id,
+        {
+          unit: DBIngredient.unit,
+          unitPrice: DBIngredient.unitPrice,
+          quantity: DBIngredient.quantity,
+        },
+      );
+
       const recipes = result
         ? await this.recipeRepository.findAllByIngredientId(result?.id)
         : [];

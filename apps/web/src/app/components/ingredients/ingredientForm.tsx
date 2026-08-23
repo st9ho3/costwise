@@ -43,12 +43,13 @@ export default function IngredientForm({
     isSubmitting,
     setErrors,
     onSubmit,
+    selectSupplier,
   } = useIngredientForm({ ingredient, mode, userId, supplierOptions });
 
   const numPrice = Number(price || 0);
   const numQty = Number(quantity || 1);
-  const normalized = normalizePrice(numPrice, (unit as Unit) || 'g', numQty);
-  const displayUnit = getDisplayUnit(unit);
+  const normalized = normalizePrice(numPrice, (unit as Unit) || 'kg', numQty);
+  const displayUnit = getDisplayUnit(unit || 'kg');
 
   const categoryList = Object.values(CATEGORIES).map((cat) => ({
     value: cat.id,
@@ -111,7 +112,7 @@ export default function IngredientForm({
               placeholder="Pick a supplier"
               defaultValue={initialSupplierId}
               options={supplierOptions.map((s) => ({ value: s.id, label: s.name }))}
-              onValueChange={(val) => setValue('suppliers.0.suppliersId', val, { shouldValidate: true })}
+              onValueChange={(val) => selectSupplier(val)}
             />
 
             <div className="flex flex-col gap-1.5">

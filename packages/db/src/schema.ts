@@ -89,6 +89,11 @@ export const ingredientsTable = pgTable("ingredients", {
   id: uuid("id").primaryKey(),
   icon: varchar("icon"),
   name: varchar("name", { length: 255 }).notNull(),
+  unit: unitEnum("unit").notNull().default(""),
+  unitPrice: numeric("unit_price", { precision: 10, scale: 5 })
+    .notNull()
+    .default("0"),
+  quantity: numeric("quantity").notNull().default("1"),
   usage: numeric("usage").notNull().default("1"),
   userId: text("user_id")
     .notNull()

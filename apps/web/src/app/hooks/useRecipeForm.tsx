@@ -52,17 +52,22 @@ const useRecipeForm = ({mode, recipe, recipeIngredients, userId}: RecipeFormProp
   const { errors, isSubmitting } = formState;
 
   const handleAddIngredient = useCallback((ing: RecipeIngredients) => {
-    const newIngredients = [...tempIngredients, ing];
-    const totalPrice = getTotalPrice(newIngredients);
-    setTempIngredients(newIngredients);
-    setValue("totalCost", totalPrice);
-  },[tempIngredients, setValue]);
+    setTempIngredients((prev) => {
+      const newIngredients = [...prev, ing];
+      const totalPrice = getTotalPrice(newIngredients);
+      setValue("totalCost", totalPrice);
+      return newIngredients;
+    });
+  }, [setValue]);
 
   const handleRemoveIngredient = useCallback((id: string) => {
-    const newIngredients = tempIngredients.filter((ing) => ing.ingredientId !== id);
-    setTempIngredients(newIngredients);
-    setValue("totalCost", getTotalPrice(newIngredients));
-  },[setValue, tempIngredients]);
+    setTempIngredients((prev) => {
+      const newIngredients = prev.filter((ing) => ing.ingredientId !== id);
+      const totalPrice = getTotalPrice(newIngredients);
+      setValue("totalCost", totalPrice);
+      return newIngredients;
+    });
+  }, [setValue]);
 
   const resetForm = useCallback(() => {
     if (mode === 'create') {
@@ -81,7 +86,7 @@ const useRecipeForm = ({mode, recipe, recipeIngredients, userId}: RecipeFormProp
 
   const onSubmit = useCallback( async (data: FormFields) => {
 
-    const {newCost, newMargin, newPrice, foodCost} = calculateRecipeData(data, recipe, tempIngredients);
+    const { newCost, newMargin, newPrice, foodCost, newTax } = calculateRecipeData(data, recipe, tempIngredients);
     
     const {added, removed} = getArrayChanges(recipeIngredients, tempIngredients)
 
@@ -99,9 +104,10 @@ const useRecipeForm = ({mode, recipe, recipeIngredients, userId}: RecipeFormProp
           ...data, 
           userId: userId,
           totalCost: newCost,
+          tax: newTax,
           imgPath: url || data.imgPath,
-          profitMargin: newMargin,
-          sellingPrice: newPrice,
+          profitMargin: newMargin !== undefined ? newMargin : (data.profitMargin ? Number(data.profitMargin) : 0),
+          sellingPrice: newPrice !== undefined ? newPrice : (data.sellingPrice ? Number(data.sellingPrice) : 0),
           foodCost: foodCost
         };
           
@@ -115,8 +121,11 @@ const useRecipeForm = ({mode, recipe, recipeIngredients, userId}: RecipeFormProp
           ...data,
           id: newId,
           userId: userId,
+          totalCost: newCost,
+          tax: newTax,
           imgPath: url || data.imgPath,
-          profitMargin: data.profitMargin ? data.profitMargin : 0,
+          profitMargin: newMargin !== undefined ? newMargin : (data.profitMargin ? Number(data.profitMargin) : 0),
+          sellingPrice: newPrice !== undefined ? newPrice : (data.sellingPrice ? Number(data.sellingPrice) : 0),
           foodCost: foodCost
         };
 

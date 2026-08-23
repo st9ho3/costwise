@@ -13,7 +13,7 @@ export const defaultValues: FormFields = {
       category: 'starter',
       createdBy: 'User',
       dateCreated: new Date(),
-      tax: 0,
+      tax: 0.13,
       sellingPrice: 0, 
       profitMargin: 0,
       foodCost: 0, 
