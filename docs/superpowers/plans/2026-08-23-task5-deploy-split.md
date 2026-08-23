@@ -138,7 +138,7 @@ git push
 
 ### Task 5: Railway service (Panos, guided)
 
-- [ ] In Railway: New Project → Deploy from GitHub repo → `st9ho3/chat-agent`, branch `main`. Leave root at the repo root (`railway.json` is read from there).
+- [ ] In Railway: New Project → Deploy from GitHub repo → `st9ho3/costwise` (renamed from `chat-agent` on GitHub; the Vercel project keeps the old name), branch `main`. Leave root at the repo root (`railway.json` is read from there).
 - [ ] Service → Variables — set exactly (spec Decision 6):
   `DATABASE_URL` (same value as today's `.env`), `BETTER_AUTH_SECRET` (fresh: `openssl rand -base64 32`), `BETTER_AUTH_URL=https://api.<apex>`, `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`, `WEB_ORIGIN=https://app.<apex>`, `COOKIE_DOMAIN=.<apex>`, `BLOB_READ_WRITE_TOKEN` (Vercel → Storage → Blob store token), `NODE_ENV=production`.
 - [ ] Deploy; open the build log. Verify: Railpack uses Node ≥ 20 and pnpm 11 (from `packageManager`), runs `pnpm install --frozen-lockfile`, and the deploy log shows `api listening on :<railway port>` with the health check passing. STOP-and-report on any builder misdetection.

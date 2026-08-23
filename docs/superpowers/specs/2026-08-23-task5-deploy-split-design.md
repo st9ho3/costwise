@@ -41,7 +41,8 @@ the split origins; the production app passes a full end-to-end walkthrough
 - Postgres: `pg` Pool on `DATABASE_URL`, no pool tuning (default max 10).
   The DB is already remote (dev connects over the internet), so the API host
   only needs the same URL. Parent ADR 10: **Postgres unchanged**.
-- Vercel project **chat-agent** (repo `st9ho3/chat-agent`): Root Directory
+- Vercel project **chat-agent** (repo `st9ho3/costwise`, renamed on GitHub
+  from `chat-agent`): Root Directory
   `apps/web` set, deploys green; **production env vars not set yet**.
 - `/health` returns `{"status":"ok"}` unauthenticated — ready-made health
   check endpoint.
