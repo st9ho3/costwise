@@ -89,7 +89,7 @@ and `packages/domain/tsconfig.json` — copy `packages/db/tsconfig.json` exactly
 
 **Interfaces produced:** `createApp(deps: Deps): OpenAPIHono` (all later route tasks register into it); `Deps` type; dev server on `:3001`.
 
-- [ ] **Step 1:** `apps/api/package.json`:
+- [x] **Step 1:** `apps/api/package.json`:
 
 ```json
 {
@@ -122,7 +122,7 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({ test: { environment: "node" } });
 ```
 
-- [ ] **Step 2 (RED):** `apps/api/src/app.test.ts`:
+- [x] **Step 2 (RED):** `apps/api/src/app.test.ts`:
 
 ```ts
 import { describe, it, expect } from "vitest";
@@ -139,7 +139,7 @@ describe("health", () => {
 
 Run `pnpm --filter api test` → expect FAIL: cannot resolve `./app`.
 
-- [ ] **Step 3 (GREEN):** `apps/api/src/app.ts`:
+- [x] **Step 3 (GREEN):** `apps/api/src/app.ts`:
 
 ```ts
 import { OpenAPIHono } from "@hono/zod-openapi";
@@ -164,8 +164,8 @@ serve({ fetch: createApp({}).fetch, port: 3001 }, (i) =>
 );
 ```
 
-- [ ] **Step 4:** `pnpm install`; `pnpm --filter api test` → PASS. `pnpm dev` starts web (3000) AND api (3001); `curl localhost:3001/health` → `{"status":"ok"}`. Stop dev.
-- [ ] **Step 5:** `pnpm build && pnpm test && pnpm lint` green (workspace). Commit `feat(api): scaffold hono app with health route`.
+- [x] **Step 4:** `pnpm install`; `pnpm --filter api test` → PASS. `pnpm dev` starts web (3000) AND api (3001); `curl localhost:3001/health` → `{"status":"ok"}`. Stop dev.
+- [x] **Step 5:** `pnpm build && pnpm test && pnpm lint` green (workspace). Commit `feat(api): scaffold hono app with health route`.
 
 ---
 
