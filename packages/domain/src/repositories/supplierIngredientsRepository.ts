@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Database, supplierIngredients } from "@costwise/db/schema";
-import { ISupplierIngredientRepository } from "@/types/repositories";
+import { ISupplierIngredientRepository } from "../types/repositories";
 import { SupplierIngredientData } from "../utils/transformers";
 
 export class SupplierIngredientRepository implements ISupplierIngredientRepository {

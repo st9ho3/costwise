@@ -1,4 +1,4 @@
-import { ISupplierService } from "@/types/services";
+import { ISupplierService } from "../types/services";
 import {
   prepareSupplierForDB,
   transformSupplierFromDB,
@@ -9,9 +9,9 @@ import { IngredientCategory, Supplier } from "@costwise/shared/recipe";
 import { SupplierAddressRepository } from "../repositories/addressesRepository";
 import { SupplierFinDataRepository } from "../repositories/supplierFinancialDataRepository";
 import { SuppliersCategoryRepository } from "../repositories/suppliersCategory";
-import { SupplierUpdatePayload } from "@/types/context";
+import { SupplierUpdatePayload } from "../types/context";
 import { ConflictError, ForbiddenError, NotFoundError } from "../utils/errors";
-import { Metadata } from "@/types/specialTypes";
+import { Metadata } from "../types/specialTypes";
 
 export class SupplierService implements ISupplierService {
   private supplierRepository: SupplierRepository;

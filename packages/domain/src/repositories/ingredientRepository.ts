@@ -20,7 +20,7 @@ import {
   IngredientAnalytics,
   OperationResult,
   HighImpactIngredient,
-} from "@/types/repositories";
+} from "../types/repositories";
 import { db } from "@costwise/db/db";
 import { categories, Database, ingredientsTable } from "@costwise/db/schema";
 import {
@@ -29,7 +29,7 @@ import {
 } from "../utils/transformers";
 import { and, asc, countDistinct, desc, eq, sql } from "drizzle-orm";
 import { DatabaseError } from "../utils/errors";
-import { ingredientSortColumns, Metadata } from "@/types/specialTypes";
+import { ingredientSortColumns, Metadata } from "../types/specialTypes";
 
 export class IngredientRepository implements IIngredientRepository {
   async findAll(

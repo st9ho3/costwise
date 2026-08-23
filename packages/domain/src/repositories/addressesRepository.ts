@@ -1,6 +1,6 @@
 import { Database, supplierAddresses } from "@costwise/db/schema";
-import { IAddressesRepository, OperationResult } from "@/types/repositories";
-import { DBSupplierAddress } from "@/types/specialTypes";
+import { IAddressesRepository, OperationResult } from "../types/repositories";
+import { DBSupplierAddress } from "../types/specialTypes";
 import { eq } from "drizzle-orm";
 import { DatabaseError } from "../utils/errors";
 

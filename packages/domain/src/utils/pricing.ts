@@ -1,5 +1,6 @@
 import { Recipe, RecipeIngredients, Unit } from "@costwise/shared/recipe";
-import { FormFields } from "../hooks/useRecipeForm";
+
+export type FormFields = Recipe;
 
 export const getTotalPrice = (ingredients: RecipeIngredients[]): number => {
   return ingredients.reduce((sum, item) => {

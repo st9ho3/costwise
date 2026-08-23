@@ -27,7 +27,7 @@ import {
   CreateRequest,
   CreateResponse,
   IRecipeService,
-} from "@/types/services";
+} from "../types/services";
 import { db } from "@costwise/db/db";
 import {
   RecipeIngredientsRepository,
@@ -35,7 +35,7 @@ import {
 } from "../repositories/recipeRepository";
 import { IngredientRepository } from "../repositories/ingredientRepository";
 import { validateComplexEntity } from "./validationService";
-import { Metadata, RecipeWithQuery } from "@/types/specialTypes";
+import { Metadata, RecipeWithQuery } from "../types/specialTypes";
 import { calculateProfitMargin, getTotalPrice } from "../utils/pricing";
 import {
   transformRecipeFromDB,
@@ -47,7 +47,7 @@ import {
   RecipeAnalytics,
   CategoryAnalytics,
   MarginHighlights,
-} from "@/types/repositories";
+} from "../types/repositories";
 import {
   ConflictError,
   ForbiddenError,

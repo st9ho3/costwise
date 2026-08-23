@@ -18,7 +18,7 @@ import {
   signUpCredentialsSchema,
   User,
 } from "@costwise/shared/auth";
-import { AUTHService } from "@/types/auth";
+import { AUTHService } from "../types/auth";
 import { AuthRepository } from "../repositories/authRepository";
 import bcrypt from "bcrypt";
 import { ConflictError, ValidationError } from "../utils/errors";

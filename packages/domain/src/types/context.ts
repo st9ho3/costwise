@@ -1,10 +1,9 @@
 import { MessageType } from "@costwise/shared/chat";
-import { ReactNode } from "react";
 import { IngredientCategory, Recipe, RecipeIngredients, Supplier } from "@costwise/shared/recipe";
 
 export interface HomeContextProps {
     state: HomeState,
-    dispatch: React.Dispatch<Action>;
+    dispatch: (action: Action) => void;
 }
 
 export enum NotificationType {
@@ -60,12 +59,12 @@ export type IngredientsAction =
 export interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  children: ReactNode;
+  children: unknown;
   type?: string
 }
 
 export interface ButtonProps {
-  text: React.ReactNode;
+  text: unknown;
   action: () => void;
 }
 

@@ -9,7 +9,7 @@ import { IconButton } from '@/app/components/ui/iconButton';
 import { StatTile } from '@/app/components/ui/statTile';
 import { DataRow } from '@/app/components/ui/dataRow';
 import { CategoryChip, CategoryThumbnail, getCategoryDefinition } from '@/app/utils/uiHelpers';
-import { formatPrice, getDisplayUnit } from '@/app/utils/pricing';
+import { formatPrice, getDisplayUnit } from '@costwise/domain/utils/pricing';
 import useHelpers from '@/app/hooks/useHelpers';
 import Modal from '@/app/components/shared/modal';
 import DeleteConfirmationModal from '@/app/components/shared/deleteConfirmationModal';

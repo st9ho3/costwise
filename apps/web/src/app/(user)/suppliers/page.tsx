@@ -3,10 +3,10 @@ import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import SuppliersTable from '@/app/components/suppliers/suppliersTable';
 import Pagination from '@/app/components/recipes/pagination';
-import { SupplierService } from '@/app/services/suppliersService';
+import { SupplierService } from '@costwise/domain/services/suppliersService';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
-import { Metadata } from '@/types/specialTypes';
+import { Metadata } from '@costwise/domain/types/specialTypes';
 import { Button } from '@/app/components/ui/button';
 
 export const dynamic = 'force-dynamic';

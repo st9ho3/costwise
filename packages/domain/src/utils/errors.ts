@@ -1,5 +1,5 @@
-import { FieldError } from "@/types/errors"
-import { ZodError } from "zod"
+import { FieldError } from "../types/errors";
+import { ZodError } from "zod";
 
 export class AppError extends Error {
     public readonly statusCode: number

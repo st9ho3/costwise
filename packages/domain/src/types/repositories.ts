@@ -17,7 +17,7 @@ import {
 import {
   DBIngredientForTable,
   SupplierIngredientData,
-} from "@/app/utils/transformers";
+} from "../utils/transformers";
 
 export interface RecipeAnalytics {
   avgProfitMargin: string | null;

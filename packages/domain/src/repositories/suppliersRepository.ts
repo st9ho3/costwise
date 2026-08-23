@@ -1,12 +1,12 @@
 import { db } from "@costwise/db/db";
 import { Database, suppliers } from "@costwise/db/schema";
-import { ISupplierRepository } from "@/types/repositories";
+import { ISupplierRepository } from "../types/repositories";
 import {
   DestructuredSupplier,
   Metadata,
   RawDBSupplier,
   supplierSortColumns,
-} from "@/types/specialTypes";
+} from "../types/specialTypes";
 import { and, asc, countDistinct, desc, eq } from "drizzle-orm";
 import { DatabaseError } from "../utils/errors";
 

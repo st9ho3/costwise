@@ -5,7 +5,7 @@
  * - Dispatches a "show notification" action after a 1.5s delay and auto-hides it after 4s.
  * - Uses `NotificationType` for type-safe notification categorization.
  */
-import { NotificationType } from '@/types/context';
+import { NotificationType } from '@costwise/domain/types/context';
 import { useNotificationStore } from '../stores/notificationStore';
 import { useUIStore } from "@/app/stores/uiStore";
 import { useGeneralStore } from "@/app/stores/generalStore";

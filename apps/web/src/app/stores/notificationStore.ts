@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { type Notification, NotificationType } from "../../types/context";
+import { type Notification, NotificationType } from "@costwise/domain/types/context";
 
 interface State {
   notification: Notification;

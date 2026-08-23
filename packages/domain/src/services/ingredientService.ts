@@ -13,7 +13,7 @@
  * - Ingredient analytics aggregation
  * - Automatic recipe recalculation when ingredient data changes
  */
-import { IIngredientService } from "@/types/services";
+import { IIngredientService } from "../types/services";
 import { IngredientRepository } from "../repositories/ingredientRepository";
 import { Ingredient, IngredientToDisplay } from "@costwise/shared/recipe";
 import { checkIfIngredientExists } from "@costwise/db/helpers";
@@ -30,9 +30,9 @@ import {
   IngredientAnalytics,
   OperationResult,
   HighImpactIngredient,
-} from "@/types/repositories";
+} from "../types/repositories";
 import { ConflictError, ForbiddenError } from "../utils/errors";
-import { Metadata } from "@/types/specialTypes";
+import { Metadata } from "../types/specialTypes";
 import { SupplierIngredientRepository } from "../repositories/supplierIngredientsRepository";
 
 export class IngredientService implements IIngredientService {

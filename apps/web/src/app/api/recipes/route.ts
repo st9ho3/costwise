@@ -6,11 +6,12 @@
  * If the provided data is invalid or an error occurs during the process, it returns an appropriate error response with a 404 or 500 status code.
  */
 import { NextRequest } from "next/server";
+import { revalidatePath } from "next/cache";
 import { sendSuccess } from "../utils/responses";
-import { RecipeService } from "@/app/services/recipeService";
+import { RecipeService } from "@costwise/domain/services/recipeService";
 import { auth } from "@/auth";
 import { errorHandler } from "@/app/utils/errorHandler";
-import { AuthenticationError } from "@/app/utils/errors";
+import { AuthenticationError } from "@costwise/domain/utils/errors";
 
 export const POST = async (req: NextRequest) => {
   const session = await auth();
@@ -23,6 +24,7 @@ export const POST = async (req: NextRequest) => {
     const request = await req.json();
 
     await service.create(request);
+    revalidatePath("/recipes");
 
     return sendSuccess("Recipe successfully created!", null, 201);
   } catch (err) {

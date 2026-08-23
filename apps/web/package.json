@@ -13,6 +13,7 @@
   "dependencies": {
     "@auth/drizzle-adapter": "^1.10.0",
     "@costwise/db": "workspace:*",
+    "@costwise/domain": "workspace:*",
     "@costwise/shared": "workspace:*",
     "@fontsource/jetbrains-mono": "^5.2.8",
     "@hookform/resolvers": "^5.1.1",

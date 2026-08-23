@@ -1,5 +1,5 @@
 import SuppliersForm from '@/app/components/suppliers/suppliersForm';
-import { SupplierService } from '@/app/services/suppliersService';
+import { SupplierService } from '@costwise/domain/services/suppliersService';
 import { auth } from '@/auth';
 import { redirect, notFound } from 'next/navigation';
 import React from 'react';

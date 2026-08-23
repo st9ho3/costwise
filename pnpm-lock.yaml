@@ -23,6 +23,9 @@ importers:
       '@costwise/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@costwise/domain':
+        specifier: workspace:*
+        version: link:../../packages/domain
       '@costwise/shared':
         specifier: workspace:*
         version: link:../../packages/shared
@@ -181,6 +184,37 @@ importers:
       drizzle-kit:
         specifier: ^0.31.4
         version: 0.31.10
+      typescript:
+        specifier: ^5
+        version: 5.9.3
+
+  packages/domain:
+    dependencies:
+      '@costwise/db':
+        specifier: workspace:*
+        version: link:../db
+      '@costwise/shared':
+        specifier: workspace:*
+        version: link:../shared
+      bcrypt:
+        specifier: ^6.0.0
+        version: 6.0.0
+      drizzle-orm:
+        specifier: ^0.44.5
+        version: 0.44.7(pg@8.23.0)
+      uid:
+        specifier: ^2.0.2
+        version: 2.0.2
+      zod:
+        specifier: ^3.25.75
+        version: 3.25.76
+    devDependencies:
+      '@types/bcrypt':
+        specifier: ^6.0.0
+        version: 6.0.0
+      '@types/node':
+        specifier: ^20
+        version: 20.19.43
       typescript:
         specifier: ^5
         version: 5.9.3

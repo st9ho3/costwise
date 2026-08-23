@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@costwise/shared", "@costwise/db"],
+  transpilePackages: ["@costwise/shared", "@costwise/db", "@costwise/domain"],
   images: {
     remotePatterns: [
       {

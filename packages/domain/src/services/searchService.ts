@@ -1,6 +1,6 @@
 import { IngredientToDisplay, Recipe } from "@costwise/shared/recipe";
-import { ISearchRepository } from "@/types/repositories";
-import { ISearchService } from "@/types/services";
+import { ISearchRepository } from "../types/repositories";
+import { ISearchService } from "../types/services";
 import { SearchRepository } from "../repositories/searchRepository";
 import {
   transformIngredientFromDB,

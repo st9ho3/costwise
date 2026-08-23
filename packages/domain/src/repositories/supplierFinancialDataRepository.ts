@@ -2,8 +2,8 @@ import { Database, supplierFinancialData } from "@costwise/db/schema";
 import {
   ISupplierFinancialDataRepository,
   OperationResult,
-} from "@/types/repositories";
-import { DBSupplierFinancialData } from "@/types/specialTypes";
+} from "../types/repositories";
+import { DBSupplierFinancialData } from "../types/specialTypes";
 import { eq } from "drizzle-orm";
 import { DatabaseError } from "../utils/errors";
 

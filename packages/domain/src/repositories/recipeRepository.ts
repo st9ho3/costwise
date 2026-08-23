@@ -29,7 +29,7 @@ import {
   RecipeAnalytics,
   CategoryAnalytics,
   MarginHighlights,
-} from "@/types/repositories";
+} from "../types/repositories";
 import { db } from "@costwise/db/db";
 import { eq, and, avg, countDistinct, asc, desc } from "drizzle-orm";
 import { Database, recipesTable, recipeIngredientsTable } from "@costwise/db/schema";
@@ -37,9 +37,8 @@ import {
   transformRecipeFromDB,
   transformRecipeToDB,
 } from "../utils/transformers";
-import { revalidatePath } from "next/cache";
 import { checkIfIngredientExists } from "@costwise/db/helpers";
-import { Metadata, RecipeWithQuery, sortColumns } from "@/types/specialTypes";
+import { Metadata, RecipeWithQuery, sortColumns } from "../types/specialTypes";
 import { DatabaseError } from "../utils/errors";
 
 export class RecipeRepository implements IRecipeRepository {
@@ -166,7 +165,6 @@ export class RecipeRepository implements IRecipeRepository {
           id: recipesTable.id,
         });
 
-      revalidatePath("/recipes");
       return deleteReceipt;
     } catch (err) {
       console.error("Failed to delete recipe:", err);

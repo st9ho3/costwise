@@ -1,6 +1,6 @@
 import { Database, supplierCategories } from "@costwise/db/schema";
 import { IngredientCategory } from "@costwise/shared/recipe";
-import { ISuppliersCategoryRepository } from "@/types/repositories";
+import { ISuppliersCategoryRepository } from "../types/repositories";
 import { and, eq } from "drizzle-orm";
 import { DatabaseError } from "../utils/errors";
 
