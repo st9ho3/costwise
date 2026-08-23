@@ -11,6 +11,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@costwise/api-client": "workspace:*",
     "@costwise/db": "workspace:*",
     "@costwise/domain": "workspace:*",
     "@costwise/shared": "workspace:*",

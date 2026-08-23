@@ -1,11 +1,10 @@
 import React from 'react';
 import RecipeForm from '@/app/components/recipes/recipeForm/recipeForm';
 import { transformRecipeFromDB, transformRecipeIngredentFromDB } from '@costwise/shared/transformers';
-import { IngredientService } from '@costwise/domain/services/ingredientService';
-import { RecipeService } from '@costwise/domain/services/recipeService';
 import { Metadata, RecipeIngredientFromDB } from '@costwise/shared/specialTypes';
 import { getServerSession } from '@/app/lib/serverSession';
 import { redirect, notFound } from 'next/navigation';
+import { apiServer } from '@/app/lib/api';
 
 interface Params {
   params: Promise<{
@@ -20,14 +19,14 @@ const EditPage = async ({ params }: Params) => {
     redirect('/signin');
   }
 
-  const recipeService = new RecipeService(session.user.id);
-  const ingredientService = new IngredientService(session.user.id);
-
   const { id } = await params;
+  const api = await apiServer();
 
-  const dbRecipe = await recipeService.findById(id);
+  const { data: dbRecipe, error: recipeError } = await api.GET('/v1/recipes/{id}', {
+    params: { path: { id } },
+  });
 
-  if (!dbRecipe) {
+  if (recipeError || !dbRecipe) {
     notFound();
   }
 
@@ -46,7 +45,18 @@ const EditPage = async ({ params }: Params) => {
     offset: 0,
   };
 
-  const result = await ingredientService.findAll(session.user.id, dropdownMetadata);
+  const { data: result } = await api.GET('/v1/ingredients', {
+    params: {
+      query: {
+        page: dropdownMetadata.page,
+        order: dropdownMetadata.order,
+        sort: dropdownMetadata.sort,
+        itemsPerPage: dropdownMetadata.itemsPerPage,
+        offset: dropdownMetadata.offset,
+      },
+    },
+  });
+
   const ingredients = result ? result.ingredients : [];
 
   return (

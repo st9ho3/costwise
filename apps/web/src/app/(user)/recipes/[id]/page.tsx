@@ -1,27 +1,26 @@
-/**
- * - Requires an active user session; redirects to "/signin" if the user is not authenticated.
- * - Accepts a dynamic route parameter `id` (representing a recipe ID) and displays it on the page.
- * - Uses Next.js App Router's async params handling to extract the `id` from the URL.
- */
-import React from 'react'
-import { getServerSession } from '@/app/lib/serverSession'
-import { redirect } from 'next/navigation'
+import React from 'react';
+import { getServerSession } from '@/app/lib/serverSession';
+import { notFound, redirect } from 'next/navigation';
+import { apiServer } from '@/app/lib/api';
 
-const page = async({params}: {params: Promise<{id: string}>}) => {
+const page = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const session = await getServerSession();
 
-  const session = await getServerSession()
-    
-    if (!session?.user) {
-      redirect("/signin")
-    }
+  if (!session?.user) {
+    redirect('/signin');
+  }
 
-  const {id} = await params
+  const { id } = await params;
+  const api = await apiServer();
+  const { data: recipe, error } = await api.GET('/v1/recipes/{id}', {
+    params: { path: { id } },
+  });
 
-  return (
-    <div>
-      {`Recipe: ${id}`}
-    </div>
-  )
-}
+  if (error || !recipe) {
+    notFound();
+  }
 
-export default page
+  return <div>{`Recipe: ${id}`}</div>;
+};
+
+export default page;

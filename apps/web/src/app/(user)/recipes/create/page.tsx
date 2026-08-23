@@ -1,10 +1,10 @@
 import React from 'react';
 import RecipeForm from '@/app/components/recipes/recipeForm/recipeForm';
-import { IngredientService } from '@costwise/domain/services/ingredientService';
 import { RecipeIngredients } from '@costwise/shared/recipe';
 import { getServerSession } from '@/app/lib/serverSession';
 import { redirect } from 'next/navigation';
 import { Metadata } from '@costwise/shared/specialTypes';
+import { apiServer } from '@/app/lib/api';
 
 const Page = async () => {
   const session = await getServerSession();
@@ -12,8 +12,6 @@ const Page = async () => {
   if (!session?.user?.id) {
     redirect('/signin');
   }
-
-  const service = new IngredientService(session.user.id);
 
   // Use a high limit to get all ingredients for dropdown
   const dropdownMetadata: Metadata = {
@@ -24,7 +22,19 @@ const Page = async () => {
     offset: 0,
   };
 
-  const result = await service.findAll(session.user.id, dropdownMetadata);
+  const api = await apiServer();
+  const { data: result } = await api.GET('/v1/ingredients', {
+    params: {
+      query: {
+        page: dropdownMetadata.page,
+        order: dropdownMetadata.order,
+        sort: dropdownMetadata.sort,
+        itemsPerPage: dropdownMetadata.itemsPerPage,
+        offset: dropdownMetadata.offset,
+      },
+    },
+  });
+
   const ingredients = result ? result.ingredients : [];
   const recipeIngredients: RecipeIngredients[] = [];
 
