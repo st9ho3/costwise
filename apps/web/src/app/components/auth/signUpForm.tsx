@@ -83,7 +83,13 @@ const SignUpForm = () => {
         variant="outline"
         block
         size="lg"
-        onClick={() => authClient.signIn.social({ provider: 'google', callbackURL: webUrl('/') })}
+        onClick={() =>
+          authClient.signIn.social({
+            provider: 'google',
+            callbackURL: webUrl('/'),
+            errorCallbackURL: webUrl('/signin'),
+          })
+        }
         iconLeft={<GoogleIcon />}
       >
         Continue with Google

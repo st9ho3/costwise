@@ -2,19 +2,36 @@ import React from 'react';
 import { getServerSession } from '@/app/lib/serverSession';
 import { redirect } from 'next/navigation';
 import SignInForm from '@/app/components/auth/signInForm';
+import { authErrorMessage } from '@/app/lib/authErrorMessage';
 
-const SignInPage = async () => {
+const SignInPage = async ({
+  searchParams,
+}: {
+  searchParams?: Promise<{ error?: string }>;
+}) => {
   const session = await getServerSession();
 
   if (session?.user) {
     redirect('/');
   }
 
+  const errorMessage = authErrorMessage((await searchParams)?.error);
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen w-full bg-cream-50">
       {/* Left Panel: Sign In Form */}
       <div className="flex flex-col items-center justify-center p-6 sm:p-12 lg:p-16 w-full">
-        <SignInForm />
+        <div className="w-full max-w-[420px] flex flex-col gap-4">
+          {errorMessage && (
+            <div
+              role="alert"
+              className="p-3 rounded-[12px] bg-tomato-50 border border-tomato-200 text-tomato-700 text-[13px] font-medium text-center"
+            >
+              {errorMessage}
+            </div>
+          )}
+          <SignInForm />
+        </div>
       </div>
 
       {/* Right Panel: Green Brand Panel with 3D Produce Illustration */}
