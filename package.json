@@ -12,9 +12,16 @@
   },
   "devDependencies": {
     "dotenv-cli": "^8.0.0",
+    "fallow": "3.17.0",
     "turbo": "^2.5.0"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["bcrypt", "sharp", "@tailwindcss/oxide", "esbuild", "unrs-resolver"]
+    "onlyBuiltDependencies": [
+      "bcrypt",
+      "sharp",
+      "@tailwindcss/oxide",
+      "esbuild",
+      "unrs-resolver"
+    ]
   }
 }
