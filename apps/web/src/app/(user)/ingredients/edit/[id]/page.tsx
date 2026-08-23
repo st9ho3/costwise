@@ -1,10 +1,9 @@
 import React from 'react';
-import { IngredientService } from '@costwise/domain/services/ingredientService';
-import { SupplierService } from '@costwise/domain/services/suppliersService';
 import { getServerSession } from '@/app/lib/serverSession';
 import { redirect, notFound } from 'next/navigation';
 import { Metadata } from '@costwise/shared/specialTypes';
 import IngredientForm from '@/app/components/ingredients/ingredientForm';
+import { apiServer } from '@/app/lib/api';
 
 export interface Params {
   params: Promise<{
@@ -18,18 +17,9 @@ const IngredientEditPage = async ({ params }: Params) => {
     redirect('/signin');
   }
 
-  const ingredientService = new IngredientService(session.user.id);
-  const supplierService = new SupplierService(session.user.id);
-
   const { id } = await params;
+  const api = await apiServer();
 
-  // Fetch ingredient data
-  const ingredient = await ingredientService.findById(id);
-  if (!ingredient) {
-    notFound();
-  }
-
-  // Fetch all suppliers for the dropdown
   const dropdownMetadata: Metadata = {
     page: 1,
     order: 'asc',
@@ -38,10 +28,30 @@ const IngredientEditPage = async ({ params }: Params) => {
     offset: 0,
   };
 
-  const result = await supplierService.findAll(session.user.id, dropdownMetadata);
+  const [ingredientRes, suppliersRes] = await Promise.all([
+    api.GET('/v1/ingredients/{id}', {
+      params: { path: { id } },
+    }),
+    api.GET('/v1/suppliers', {
+      params: {
+        query: {
+          page: dropdownMetadata.page,
+          order: dropdownMetadata.order,
+          sort: dropdownMetadata.sort,
+          itemsPerPage: dropdownMetadata.itemsPerPage,
+          offset: dropdownMetadata.offset,
+        },
+      },
+    }),
+  ]);
+
+  const ingredient = ingredientRes.data;
+  if (!ingredient || ingredientRes.error) {
+    notFound();
+  }
 
   const supplierOptions =
-    result?.suppliers?.map((supplier) => ({
+    suppliersRes.data?.suppliers?.map((supplier) => ({
       id: supplier.id,
       name: supplier.name,
     })) ?? [];

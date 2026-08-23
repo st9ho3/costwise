@@ -3,12 +3,10 @@ import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import IngredientsTable from '@/app/components/ingredients/ingredientsTable';
 import Pagination from '@/app/components/recipes/pagination';
-import { IngredientService } from '@costwise/domain/services/ingredientService';
-import { SupplierService } from '@costwise/domain/services/suppliersService';
 import { getServerSession } from '@/app/lib/serverSession';
 import { redirect } from 'next/navigation';
-import { Metadata } from '@costwise/shared/specialTypes';
 import { Button } from '@/app/components/ui/button';
+import { apiServer } from '@/app/lib/api';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,27 +29,35 @@ const IngredientsPage = async ({ searchParams }: Props) => {
   const numericPage = parseInt(page || '1');
   const itemsPerPage = 9;
   const offset = (numericPage - 1) * itemsPerPage;
-  const metadata: Metadata = {
-    page: numericPage,
-    order,
-    sort,
-    itemsPerPage,
-    offset,
-  };
 
-  const service = new IngredientService(session.user.id);
-  const supplierService = new SupplierService(session.user.id);
-
-  const [rawIngredients, supplierData] = await Promise.all([
-    service.findAll(session.user.id, metadata),
-    supplierService.findAll(session.user.id, {
-      itemsPerPage: 1,
-      offset: 0,
-      page: 1,
-      order: 'desc',
-      sort: 'dateAdded',
+  const api = await apiServer();
+  const [ingredientsRes, suppliersRes] = await Promise.all([
+    api.GET('/v1/ingredients', {
+      params: {
+        query: {
+          page: numericPage,
+          order,
+          sort,
+          itemsPerPage,
+          offset,
+        },
+      },
+    }),
+    api.GET('/v1/suppliers', {
+      params: {
+        query: {
+          itemsPerPage: 1,
+          offset: 0,
+          page: 1,
+          order: 'desc',
+          sort: 'dateAdded',
+        },
+      },
     }),
   ]);
+
+  const rawIngredients = ingredientsRes.data;
+  const supplierData = suppliersRes.data;
 
   const totalItems = rawIngredients ? rawIngredients.count.count : 0;
   const supplierCount = supplierData ? supplierData.count.count : 0;
