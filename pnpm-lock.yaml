@@ -162,6 +162,9 @@ importers:
 
   packages/db:
     dependencies:
+      '@auth/core':
+        specifier: ^0.41.3
+        version: 0.41.3
       dotenv:
         specifier: ^17.2.0
         version: 17.4.2
