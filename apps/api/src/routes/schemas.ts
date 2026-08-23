@@ -3,6 +3,10 @@ import {
   RecipeSchema,
   type Recipe,
   RecipeIngredientsSchema,
+  IngredientSchema,
+  IngredientCategoryNameSchema,
+  type Ingredient,
+  type IngredientToDisplay,
 } from "@costwise/shared/recipe";
 import type { Metadata, RecipeWithQuery } from "@costwise/domain/types/specialTypes";
 import type { CreateRequest } from "@costwise/domain/types/services";
@@ -97,3 +101,16 @@ export const MessageResponse = z.object({
 export const DeleteResponse = z.object({
   id: z.string(),
 }) satisfies z.ZodType<{ id: string }>;
+
+export const IngredientToDisplaySchema = IngredientSchema.omit({
+  suppliers: true,
+}).extend({
+  categoryName: IngredientCategoryNameSchema,
+}) satisfies z.ZodType<IngredientToDisplay>;
+
+export const IngredientListResponse = z
+  .object({ ingredients: z.array(IngredientToDisplaySchema) })
+  .merge(CountSchema) satisfies z.ZodType<{
+  ingredients: IngredientToDisplay[];
+  count: { count: number };
+}>;

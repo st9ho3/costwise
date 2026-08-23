@@ -416,8 +416,8 @@ Instantiate the Task 5 TEMPLATE with these exact values — everything else iden
 
 `IngredientToDisplaySchema = IngredientSchema.omit({ suppliers: true }).extend({ categoryName: IngredientCategoryNameSchema }) satisfies z.ZodType<IngredientToDisplay>` — list response wraps `{ ingredients: [...] }.merge(CountSchema)`. `IngredientServiceLike = Pick<IngredientService, "findAll"|"findById"|"create"|"update"|"delete">`.
 
-- [ ] **Step 1 (RED):** full test file — the same trio set as recipes (401 / list / 400 query / 404 / POST 201 / POST 400 / PATCH 200 / DELETE 200), fixtures from `IngredientSchema`. Watch FAIL.
-- [ ] **Step 2 (GREEN):** implement, mount, watch PASS; workspace gates. Commit `feat(api): /v1/ingredients endpoints`.
+- [x] **Step 1 (RED):** full test file — the same trio set as recipes (401 / list / 400 query / 404 / POST 201 / POST 400 / PATCH 200 / DELETE 200), fixtures from `IngredientSchema`. Watch FAIL.
+- [x] **Step 2 (GREEN):** implement, mount, watch PASS; workspace gates. Commit `feat(api): /v1/ingredients endpoints`.
 
 ---
 

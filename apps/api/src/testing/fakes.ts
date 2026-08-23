@@ -1,17 +1,30 @@
-import type { Recipe, RecipeIngredients } from "@costwise/shared/recipe";
-import type { RecipeWithQuery, Metadata } from "@costwise/domain/types/specialTypes";
-import type { CreateRequest, CreateResponse } from "@costwise/domain/types/services";
+import type {
+  Recipe,
+  RecipeIngredients,
+  Ingredient,
+  IngredientToDisplay,
+} from "@costwise/shared/recipe";
+import type {
+  RecipeWithQuery,
+  Metadata,
+} from "@costwise/domain/types/specialTypes";
+import type {
+  CreateRequest,
+  CreateResponse,
+} from "@costwise/domain/types/services";
 import { NotFoundError } from "@costwise/domain/utils/errors";
-import type { Deps, RecipeServiceLike } from "../app";
+import type { Deps, RecipeServiceLike, IngredientServiceLike } from "../app";
 
 export interface FakeState {
   recipes: Recipe[];
   recipeDetails: Map<string, RecipeWithQuery>;
+  ingredients: Ingredient[];
 }
 
 export const createFakeState = (): FakeState => ({
   recipes: [],
   recipeDetails: new Map(),
+  ingredients: [],
 });
 
 export const seedRecipe = (
@@ -55,6 +68,37 @@ export const seedRecipe = (
   state.recipes.push(r);
   state.recipeDetails.set(r.id, d);
   return r;
+};
+
+export const seedIngredient = (
+  deps: Deps,
+  userId: string,
+  ingredient?: Partial<Ingredient>
+) => {
+  const ing: Ingredient = {
+    id: ingredient?.id ?? "44444444-4444-4444-4444-444444444444",
+    icon: ingredient?.icon ?? null,
+    name: ingredient?.name ?? "Flour",
+    unit: ingredient?.unit ?? "kg",
+    unitPrice: ingredient?.unitPrice ?? 1.5,
+    quantity: ingredient?.quantity ?? 10,
+    usage: ingredient?.usage ?? "0",
+    userId,
+    suppliers: ingredient?.suppliers ?? [
+      {
+        suppliersId: "55555555-5555-5555-5555-555555555555",
+        unit: "kg",
+        quantity: 10,
+        price: 15,
+        isActive: true,
+      },
+    ],
+    category: ingredient?.category ?? "5dee106a-5050-443e-8368-03397e02af6d",
+    ...ingredient,
+  };
+  const state = (deps as any)._state as FakeState;
+  state.ingredients.push(ing);
+  return ing;
 };
 
 export const fakeDeps = (): Deps => {
@@ -114,7 +158,9 @@ export const fakeDeps = (): Deps => {
       _removed: RecipeIngredients[],
       _added: RecipeIngredients[]
     ) {
-      const idx = state.recipes.findIndex((r) => r.id === id && r.userId === userId);
+      const idx = state.recipes.findIndex(
+        (r) => r.id === id && r.userId === userId
+      );
       if (idx === -1) {
         throw new NotFoundError("Recipe", id);
       }
@@ -122,7 +168,9 @@ export const fakeDeps = (): Deps => {
       return { id };
     },
     async delete(id: string) {
-      const idx = state.recipes.findIndex((r) => r.id === id && r.userId === userId);
+      const idx = state.recipes.findIndex(
+        (r) => r.id === id && r.userId === userId
+      );
       if (idx === -1) {
         throw new NotFoundError("Recipe", id);
       }
@@ -132,8 +180,50 @@ export const fakeDeps = (): Deps => {
     },
   });
 
+  const makeIngredientService = (userId: string): IngredientServiceLike => ({
+    async findAll(uId: string, metadata: Metadata) {
+      const userIngredients = state.ingredients.filter((i) => i.userId === uId);
+      const display: IngredientToDisplay[] = userIngredients.map((i) => {
+        const { suppliers, ...rest } = i;
+        return { ...rest, categoryName: "Produce" as const };
+      });
+      return {
+        ingredients: display,
+        count: { count: display.length },
+      };
+    },
+    async findById(id: string) {
+      const ing = state.ingredients.find(
+        (i) => i.id === id && i.userId === userId
+      );
+      if (!ing) return undefined;
+      const { suppliers, ...rest } = ing;
+      return { ...rest, categoryName: "Produce" as const };
+    },
+    async create(ingredient: Ingredient) {
+      state.ingredients.push(ingredient);
+      return { id: ingredient.id };
+    },
+    async update(ingredient: Ingredient) {
+      const idx = state.ingredients.findIndex(
+        (i) => i.id === ingredient.id && i.userId === userId
+      );
+      if (idx === -1) throw new NotFoundError("Ingredient", ingredient.id);
+      state.ingredients[idx] = ingredient;
+      return { id: ingredient.id };
+    },
+    async delete(id: string) {
+      const idx = state.ingredients.findIndex(
+        (i) => i.id === id && i.userId === userId
+      );
+      if (idx === -1) throw new NotFoundError("Ingredient", id);
+      state.ingredients.splice(idx, 1);
+    },
+  });
+
   const deps: Deps = {
     makeRecipeService,
+    makeIngredientService,
   };
   (deps as any)._state = state;
   return deps;
