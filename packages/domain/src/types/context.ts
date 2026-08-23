@@ -59,12 +59,12 @@ export type IngredientsAction =
 export interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  children: unknown;
+  children: any;
   type?: string
 }
 
 export interface ButtonProps {
-  text: unknown;
+  text: any;
   action: () => void;
 }
 

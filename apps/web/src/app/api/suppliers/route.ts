@@ -1,9 +1,9 @@
 import { auth } from "@/auth";
 import { sendSuccess } from "../utils/responses";
 import { NextRequest } from "next/server";
-import { SupplierService } from "@/app/services/suppliersService";
-import { SupplierUpdatePayload } from "@/types/context";
-import { AuthenticationError } from "@/app/utils/errors";
+import { SupplierService } from "@costwise/domain/services/suppliersService";
+import { SupplierUpdatePayload } from "@costwise/domain/types/context";
+import { AuthenticationError } from "@costwise/domain/utils/errors";
 import { errorHandler } from "@/app/utils/errorHandler";
 import { revalidatePath } from "next/cache";
 

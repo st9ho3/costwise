@@ -31,8 +31,8 @@
 
 ### Task 1: Preflight
 
-- [ ] **Step 1:** `git fetch origin && git merge-base --is-ancestor origin/chore/monorepo-scaffold origin/main && echo OK1; git merge-base --is-ancestor origin/chore/ci-pipeline origin/main && echo OK2` — expect `OK1` and `OK2` (scaffold AND ci merged). Otherwise STOP and report.
-- [ ] **Step 2:** `git status --porcelain | wc -l` → `0` (else STOP); then `git checkout main && git pull origin main && git checkout -b feature/hono-api`.
+- [x] **Step 1:** `git fetch origin && git merge-base --is-ancestor origin/chore/monorepo-scaffold origin/main && echo OK1; git merge-base --is-ancestor origin/chore/ci-pipeline origin/main && echo OK2` — expect `OK1` and `OK2` (scaffold AND ci merged). Otherwise STOP and report.
+- [x] **Step 2:** `git status --porcelain | wc -l` → `0` (else STOP); then `git checkout main && git pull origin main && git checkout -b feature/hono-api`.
 
 ---
 
@@ -49,7 +49,7 @@
 
 **Interfaces produced:** `@costwise/domain/services/<name>`, `@costwise/domain/repositories/<name>`, `@costwise/domain/types/<name>`, `@costwise/domain/utils/<name>` — wildcard exports, filenames unrenamed. Later tasks import e.g. `RecipeService` from `@costwise/domain/services/recipeService`, `AppError`/`ValidationError`/`AuthenticationError` from `@costwise/domain/utils/errors`, `Metadata` from `@costwise/domain/types/specialTypes`.
 
-- [ ] **Step 1:** Create `packages/domain/package.json`:
+- [x] **Step 1:** Create `packages/domain/package.json`:
 
 ```json
 {
@@ -72,13 +72,13 @@
 
 and `packages/domain/tsconfig.json` — copy `packages/db/tsconfig.json` exactly, but `"include": ["src"]` and add `"types": ["node"]` if not present.
 
-- [ ] **Step 2:** Perform the moves listed under **Files** with `git mv` (create the target dirs first).
-- [ ] **Step 3:** Fix intra-package imports: within `packages/domain/src`, rewrite `@/types/` → relative `../types/`, `../utils/` stays relative (verify), `@/app/...` aliases → relative paths. Command aid: `grep -rn "@/" packages/domain/src` must end empty.
-- [ ] **Step 4:** Remove the Next coupling: in `packages/domain/src/repositories/recipeRepository.ts` delete the `import { revalidatePath } from "next/cache";` line and the `revalidatePath("/recipes");` call (line ~169). Then add to BOTH `apps/web/src/app/api/recipes/route.ts` and `apps/web/src/app/api/recipes/[id]/route.ts`, after each successful service mutation call and before the success return: `revalidatePath("/recipes");` with `import { revalidatePath } from "next/cache";` at top.
-- [ ] **Step 5:** Wire web: `pnpm --filter web add "@costwise/domain@workspace:*"`; add `"@costwise/domain"` to `transpilePackages` in `apps/web/next.config.ts`. Rewrite web imports of the moved modules — every `@/app/services/X` → `@costwise/domain/services/X` (except `services` itself), `@/app/repositories/X` → `@costwise/domain/repositories/X`, `@/types/X` → `@costwise/domain/types/X` (except `pg`), `@/app/utils/{errors,pricing,transformers}` → `@costwise/domain/utils/...`. Relative-path variants (`../../utils/errors` etc.) too — find with `grep -rn "utils/errors\|utils/pricing\|utils/transformers\|/services/\|/repositories/\|types/specialTypes\|types/repositories\|types/services\|types/context" apps/web/src | grep -v "@costwise" | grep -v "components/"` and iterate until only legitimate hits remain (UI files like `services.ts`, `utils/{cn,formatters,pagination,errorHandler,uiHelpers}` stay web-local).
-- [ ] **Step 6:** Gates: `pnpm install && pnpm build && pnpm test && pnpm lint` all green; `grep -rn "next/" packages/` empty; web dev smoke: recipes/ingredients/suppliers/dashboard pages render, create+delete a recipe works and the list refreshes (revalidatePath relocation proof). Anything failing that Steps 1–5 don't explain: STOP and report.
-- [ ] **Step 7:** Commit: `git add -A && git commit -m "refactor: extract domain layer into @costwise/domain"`.
-- [ ] **Step 8: ⛔ CHECKPOINT — push `feature/hono-api` and stop.** This task rewired the entire web app's imports; it gets reviewed before anything is built on top. Report the gate outputs and wait for Panos/Fable 5 sign-off (external mode) or Fable 5's between-task review (supervised).
+- [x] **Step 2:** Perform the moves listed under **Files** with `git mv` (create the target dirs first).
+- [x] **Step 3:** Fix intra-package imports: within `packages/domain/src`, rewrite `@/types/` → relative `../types/`, `../utils/` stays relative (verify), `@/app/...` aliases → relative paths. Command aid: `grep -rn "@/" packages/domain/src` must end empty.
+- [x] **Step 4:** Remove the Next coupling: in `packages/domain/src/repositories/recipeRepository.ts` delete the `import { revalidatePath } from "next/cache";` line and the `revalidatePath("/recipes");` call (line ~169). Then add to BOTH `apps/web/src/app/api/recipes/route.ts` and `apps/web/src/app/api/recipes/[id]/route.ts`, after each successful service mutation call and before the success return: `revalidatePath("/recipes");` with `import { revalidatePath } from "next/cache";` at top.
+- [x] **Step 5:** Wire web: `pnpm --filter web add "@costwise/domain@workspace:*"`; add `"@costwise/domain"` to `transpilePackages` in `apps/web/next.config.ts`. Rewrite web imports of the moved modules — every `@/app/services/X` → `@costwise/domain/services/X` (except `services` itself), `@/app/repositories/X` → `@costwise/domain/repositories/X`, `@/types/X` → `@costwise/domain/types/X` (except `pg`), `@/app/utils/{errors,pricing,transformers}` → `@costwise/domain/utils/...`. Relative-path variants (`../../utils/errors` etc.) too — find with `grep -rn "utils/errors\|utils/pricing\|utils/transformers\|/services/\|/repositories/\|types/specialTypes\|types/repositories\|types/services\|types/context" apps/web/src | grep -v "@costwise" | grep -v "components/"` and iterate until only legitimate hits remain (UI files like `services.ts`, `utils/{cn,formatters,pagination,errorHandler,uiHelpers}` stay web-local).
+- [x] **Step 6:** Gates: `pnpm install && pnpm build && pnpm test && pnpm lint` all green; `grep -rn "next/" packages/` empty; web dev smoke: recipes/ingredients/suppliers/dashboard pages render, create+delete a recipe works and the list refreshes (revalidatePath relocation proof). Anything failing that Steps 1–5 don't explain: STOP and report.
+- [x] **Step 7:** Commit: `git add -A && git commit -m "refactor: extract domain layer into @costwise/domain"`.
+- [x] **Step 8: ⛔ CHECKPOINT — push `feature/hono-api` and stop.** This task rewired the entire web app's imports; it gets reviewed before anything is built on top. Report the gate outputs and wait for Panos/Fable 5 sign-off (external mode) or Fable 5's between-task review (supervised).
 
 ---
 

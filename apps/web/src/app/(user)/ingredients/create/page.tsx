@@ -1,8 +1,8 @@
 import React from 'react';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
-import { SupplierService } from '@/app/services/suppliersService';
-import { Metadata } from '@/types/specialTypes';
+import { SupplierService } from '@costwise/domain/services/suppliersService';
+import { Metadata } from '@costwise/domain/types/specialTypes';
 import IngredientForm from '@/app/components/ingredients/ingredientForm';
 
 const Page = async () => {

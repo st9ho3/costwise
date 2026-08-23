@@ -5,7 +5,6 @@ import {
   getTotalPrice,
   normalizePrice,
 } from "./pricing";
-import { paginationPages } from "./pagination";
 import {
   transformIngredientFromDB,
   transformIngredientToDB,
@@ -274,15 +273,6 @@ describe("calculateProfitMargin", () => {
 
 //////////
 
-describe("paginationPages", () => {
-  test("Should return an array with the pages", () => {
-    const totalPages = 1;
-
-    const result = paginationPages(totalPages);
-
-    expect(result).toStrictEqual([1]);
-  });
-});
 
 /////////
 

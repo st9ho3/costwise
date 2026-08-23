@@ -6,7 +6,7 @@ import {
   ForbiddenError,
   NotFoundError,
   ValidationError,
-} from "./errors";
+} from "@costwise/domain/utils/errors";
 
 export const errorHandler = (err: unknown) => {
   if (err instanceof ValidationError) {

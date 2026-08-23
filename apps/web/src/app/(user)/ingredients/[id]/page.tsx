@@ -1,7 +1,7 @@
 import React from 'react';
 import { auth } from '@/auth';
 import { redirect, notFound } from 'next/navigation';
-import { IngredientService } from '@/app/services/ingredientService';
+import { IngredientService } from '@costwise/domain/services/ingredientService';
 import IngredientDetailView from '@/app/components/ingredients/ingredientPage/IngredientDetailView';
 
 interface PageProps {

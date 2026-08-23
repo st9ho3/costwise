@@ -1,8 +1,8 @@
 import { NextRequest } from "next/server";
 import { sendSuccess } from "../../utils/responses";
-import { SupplierService } from "@/app/services/suppliersService";
+import { SupplierService } from "@costwise/domain/services/suppliersService";
 import { auth } from "@/auth";
-import { AuthenticationError } from "@/app/utils/errors";
+import { AuthenticationError } from "@costwise/domain/utils/errors";
 import { errorHandler } from "@/app/utils/errorHandler";
 
 export const PATCH = async (req: NextRequest) => {
