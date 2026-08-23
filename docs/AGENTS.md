@@ -56,6 +56,13 @@ modes, and the plan's header says which applies by default:
   for review by Panos or Fable 5 before continuing. Proceeding past a
   checkpoint unreviewed is a plan violation even if everything is green.
 
+**One writer per checkout:** an external executor MUST work in its own
+clone or `git worktree` (`git worktree add ../costwise-<task> main`),
+never in a directory another session is using. Two sessions sharing one
+checkout switch branches under each other and commits land on the wrong
+branch (this happened on 2026-08-23 during the CI task). The remote is
+the only shared surface.
+
 **TDD rule:** the canonical definition is the
 `superpowers:test-driven-development` skill — its Iron Law applies: no
 production code without a failing test first; code written before its
