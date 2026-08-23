@@ -1,4 +1,4 @@
-import { IngredientCategory, IngredientCategoryName } from '@/shemas/recipe';
+import { IngredientCategory, IngredientCategoryName } from '@costwise/shared/recipe';
 import React from 'react';
 import { getCategoryDefinition } from '@/app/utils/uiHelpers';
 

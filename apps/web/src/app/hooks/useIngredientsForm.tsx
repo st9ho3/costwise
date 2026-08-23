@@ -11,7 +11,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
-import { Ingredient, IngredientSchema, IngredientToDisplay } from '@/shemas/recipe';
+import { Ingredient, IngredientSchema, IngredientToDisplay } from '@costwise/shared/recipe';
 import { createEditIngredientPrototype, createIngredientPrototype } from '@/app/utils/transformers';
 import { sendIngredient, updateIngredient } from '../services/services';
 import useHelpers from './useHelpers';

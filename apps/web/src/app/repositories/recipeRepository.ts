@@ -21,7 +21,7 @@
  * - Ingredient existence validation and assignment
  */
 
-import { DBRecipe, Recipe, RecipeIngredients } from "@/shemas/recipe";
+import { DBRecipe, Recipe, RecipeIngredients } from "@costwise/shared/recipe";
 import {
   IRecipeIngredientsRepository,
   IRecipeRepository,

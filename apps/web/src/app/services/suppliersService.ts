@@ -5,7 +5,7 @@ import {
 } from "../utils/transformers";
 import { db } from "@/db/db";
 import { SupplierRepository } from "../repositories/suppliersRepository";
-import { IngredientCategory, Supplier } from "@/shemas/recipe";
+import { IngredientCategory, Supplier } from "@costwise/shared/recipe";
 import { SupplierAddressRepository } from "../repositories/addressesRepository";
 import { SupplierFinDataRepository } from "../repositories/supplierFinancialDataRepository";
 import { SuppliersCategoryRepository } from "../repositories/suppliersCategory";

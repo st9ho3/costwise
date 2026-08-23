@@ -7,7 +7,7 @@
  * and handles the response.
  */
 import { useForm } from 'react-hook-form'
-import { SignUpCredentials, signUpCredentialsSchema } from '@/shemas/auth'
+import { SignUpCredentials, signUpCredentialsSchema } from '@costwise/shared/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { signInCredentials, signUpCredentials } from '../constants/uathFormdefaultValues'
 

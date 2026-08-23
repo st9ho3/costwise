@@ -1,5 +1,5 @@
 import { ingredientsTable, recipesTable, suppliers } from "@/db/schema";
-import { Supplier } from "@/shemas/recipe";
+import { Supplier } from "@costwise/shared/recipe";
 
 export type RecipeIngredientFromDB = {
   id: number;

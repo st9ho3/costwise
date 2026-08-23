@@ -13,7 +13,7 @@
 
 import { db } from "@/db/db";
 import { users } from "@/db/schema";
-import { User } from "@/shemas/auth";
+import { User } from "@costwise/shared/auth";
 import { AUTHrepository } from "@/types/auth";
 import { eq } from "drizzle-orm";
 import { DatabaseError } from "../utils/errors";

@@ -1,5 +1,5 @@
 import { Database, supplierCategories } from "@/db/schema";
-import { IngredientCategory } from "@/shemas/recipe";
+import { IngredientCategory } from "@costwise/shared/recipe";
 import { ISuppliersCategoryRepository } from "@/types/repositories";
 import { and, eq } from "drizzle-orm";
 import { DatabaseError } from "../utils/errors";

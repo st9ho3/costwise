@@ -1,4 +1,4 @@
-import { IngredientCategory } from "@/shemas/recipe";
+import { IngredientCategory } from "@costwise/shared/recipe";
 import { v4 as uuidv4 } from "uuid";
 import { SelectableItem } from "../components/shared/SelectStore";
 

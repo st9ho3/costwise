@@ -15,7 +15,7 @@
  */
 import { IIngredientService } from "@/types/services";
 import { IngredientRepository } from "../repositories/ingredientRepository";
-import { Ingredient, IngredientToDisplay } from "@/shemas/recipe";
+import { Ingredient, IngredientToDisplay } from "@costwise/shared/recipe";
 import { checkIfIngredientExists } from "@/db/helpers";
 import { zodValidateIngredientBeforeAddItToDatabase } from "./validationService";
 import { RecipeRepository } from "../repositories/recipeRepository";

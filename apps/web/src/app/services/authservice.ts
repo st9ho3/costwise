@@ -17,7 +17,7 @@ import {
   SignUpCredentials,
   signUpCredentialsSchema,
   User,
-} from "@/shemas/auth";
+} from "@costwise/shared/auth";
 import { AUTHService } from "@/types/auth";
 import { AuthRepository } from "../repositories/authRepository";
 import bcrypt from "bcrypt";

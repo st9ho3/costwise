@@ -1,4 +1,4 @@
-import { RecipeIngredients } from '@/shemas/recipe'
+import { RecipeIngredients } from '@costwise/shared/recipe'
 import React from 'react'
 import { UseFormGetValues, UseFormSetValue, UseFormWatch } from 'react-hook-form'
 import { FormFields } from '../../recipeForm'

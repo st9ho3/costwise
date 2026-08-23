@@ -1,4 +1,4 @@
-import { DeliveryTimeSchema, SupplierSchema } from '@/shemas/recipe'
+import { DeliveryTimeSchema, SupplierSchema } from '@costwise/shared/recipe'
 import { DELIVERY_OPTIONS, PAYMENT_OPTIONS } from '@/app/constants/data'
 
 describe('Suppliers Delivery and Payment options validation', () => {

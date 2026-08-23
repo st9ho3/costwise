@@ -6,7 +6,7 @@ import {
   DBIngredient,
   IngredientToDisplay,
   Supplier,
-} from "@/shemas/recipe";
+} from "@costwise/shared/recipe";
 import { Metadata, RecipeWithQuery } from "./specialTypes";
 import { Database } from "@/db/schema";
 import {

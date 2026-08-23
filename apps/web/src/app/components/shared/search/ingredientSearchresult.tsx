@@ -1,4 +1,4 @@
-import { Ingredient } from '@/shemas/recipe';
+import { Ingredient } from '@costwise/shared/recipe';
 import Link from 'next/link';
 import React from 'react';
 import { CategoryThumbnail } from '@/app/utils/uiHelpers';

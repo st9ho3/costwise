@@ -2,7 +2,7 @@ import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import Google from "next-auth/providers/google"
 import { AuthService } from "./app/services/authservice"
-import { signInCredentialsSchema } from "./shemas/auth"
+import { signInCredentialsSchema } from "@costwise/shared/auth"
 import bcrypt from "bcrypt"
 
 export const service = new AuthService()

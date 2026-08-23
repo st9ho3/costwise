@@ -1,4 +1,4 @@
-import { SignInCredentials, SignUpCredentials } from '@/shemas/auth';
+import { SignInCredentials, SignUpCredentials } from '@costwise/shared/auth';
 import React from 'react';
 import { UseFormRegister } from 'react-hook-form';
 

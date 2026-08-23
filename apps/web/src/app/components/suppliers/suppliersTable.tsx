@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import useHelpers from '@/app/hooks/useHelpers';
-import { Supplier } from '@/shemas/recipe';
+import { Supplier } from '@costwise/shared/recipe';
 import TableHead from '../shared/table/tableHead';
 import { supplierColumns, supplierSortedLinks } from '@/app/constants/data';
 import Link from 'next/link';

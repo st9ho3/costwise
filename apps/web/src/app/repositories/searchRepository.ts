@@ -1,6 +1,6 @@
 import { db } from "@/db/db";
 import { ingredientsTable, recipesTable } from "@/db/schema";
-import { DBIngredient, DBRecipe } from "@/shemas/recipe";
+import { DBIngredient, DBRecipe } from "@costwise/shared/recipe";
 import { ISearchRepository } from "@/types/repositories";
 import { and, eq, ilike } from "drizzle-orm";
 import { DatabaseError } from "../utils/errors";

@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useMemo } from 'react';
-import { RecipeIngredients } from '@/shemas/recipe';
+import { RecipeIngredients } from '@costwise/shared/recipe';
 import { getTotalPrice } from '@/app/utils/pricing';
 import {  ShoppingBasket,TrendingUp, UtensilsCrossed, BadgeCent, Banknote } from 'lucide-react';
 import { UseFormGetValues, UseFormSetValue, UseFormWatch } from 'react-hook-form';

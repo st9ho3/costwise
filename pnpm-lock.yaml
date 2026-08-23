@@ -20,6 +20,9 @@ importers:
       '@auth/drizzle-adapter':
         specifier: ^1.10.0
         version: 1.11.3
+      '@costwise/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       '@fontsource/jetbrains-mono':
         specifier: ^5.2.8
         version: 5.3.0
@@ -150,6 +153,16 @@ importers:
       tsx:
         specifier: ^4.20.3
         version: 4.23.12
+      typescript:
+        specifier: ^5
+        version: 5.9.3
+
+  packages/shared:
+    dependencies:
+      zod:
+        specifier: ^3.25.75
+        version: 3.25.76
+    devDependencies:
       typescript:
         specifier: ^5
         version: 5.9.3

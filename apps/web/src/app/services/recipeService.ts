@@ -22,7 +22,7 @@ import {
   RecipeIngredients,
   RecipeIngredientsSchema,
   RecipeSchema,
-} from "@/shemas/recipe";
+} from "@costwise/shared/recipe";
 import {
   CreateRequest,
   CreateResponse,

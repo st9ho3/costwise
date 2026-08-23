@@ -1,6 +1,6 @@
 import React from 'react'
 import Title from '@/app/components/ingredients/ingredientPage/title'
-import { IngredientCategoryName } from '@/shemas/recipe'
+import { IngredientCategoryName } from '@costwise/shared/recipe'
 
 
 interface IngredientHeaderProps {

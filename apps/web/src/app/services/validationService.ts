@@ -1,4 +1,4 @@
-import { Ingredient, IngredientSchema } from "@/shemas/recipe";
+import { Ingredient, IngredientSchema } from "@costwise/shared/recipe";
 
 import { z } from "zod";
 import { ValidationError } from "../utils/errors";

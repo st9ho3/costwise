@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { search } from '../services/services'
-import { Ingredient, Recipe } from '@/shemas/recipe'
+import { Ingredient, Recipe } from '@costwise/shared/recipe'
 import useDebounce from './useDebounce'
 
 export interface Results {

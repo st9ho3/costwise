@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Sparkles } from 'lucide-react';
-import { Ingredient, IngredientCategory, IngredientToDisplay, Unit } from '@/shemas/recipe';
+import { Ingredient, IngredientCategory, IngredientToDisplay, Unit } from '@costwise/shared/recipe';
 import { useIngredientForm } from '@/app/hooks/useIngredientsForm';
 import { SelectableItem } from '../shared/SelectStore';
 import { Input } from '../ui/input';

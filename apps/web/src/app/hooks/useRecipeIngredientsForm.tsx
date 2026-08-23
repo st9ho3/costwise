@@ -8,7 +8,7 @@
  * through the `onAddIngredient` callback to update the main recipe form's state.
  */
 import { useState, useEffect } from 'react';
-import { Ingredient, RecipeIngredients, RecipeIngredientsSchema, Unit } from '@/shemas/recipe';
+import { Ingredient, RecipeIngredients, RecipeIngredientsSchema, Unit } from '@costwise/shared/recipe';
 
 type IngredientErrors = string[];
 

@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { Carrot } from 'lucide-react';
-import { Ingredient } from '@/shemas/recipe';
+import { Ingredient } from '@costwise/shared/recipe';
 
 import { Select } from '@/app/components/ui/select';
 

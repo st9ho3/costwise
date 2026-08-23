@@ -13,7 +13,7 @@
  */
 "use client"
 import { useCallback, useState } from 'react';
-import { RecipeIngredients, RecipeSchema } from '@/shemas/recipe';
+import { RecipeIngredients, RecipeSchema } from '@costwise/shared/recipe';
 import { v4 as uuidv4 } from "uuid";
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';

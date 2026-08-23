@@ -5,7 +5,7 @@ import {
   DBIngredient,
   DBRecipe,
   IngredientToDisplay,
-} from "@/shemas/recipe";
+} from "@costwise/shared/recipe";
 import {
   DBSupplierAddress,
   DBSupplierFinancialData,

@@ -1,4 +1,4 @@
-import { RecipeIngredients } from '@/shemas/recipe'
+import { RecipeIngredients } from '@costwise/shared/recipe'
 import React, { memo } from 'react'
 
 interface Props {

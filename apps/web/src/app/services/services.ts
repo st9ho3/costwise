@@ -20,7 +20,7 @@ import {
   Recipe,
   RecipeIngredients,
   Supplier,
-} from "@/shemas/recipe";
+} from "@costwise/shared/recipe";
 
 export const createMessage = (text: string, user: string) => {
   const message = {

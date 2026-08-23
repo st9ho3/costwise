@@ -1,6 +1,6 @@
 "use client"
 import React from 'react'
-import { Ingredient } from '@/shemas/recipe'
+import { Ingredient } from '@costwise/shared/recipe'
 import { ExitButton, IngredientForm } from '@/app/constants/components'
 import { SelectableItem } from '../shared/SelectStore'
 

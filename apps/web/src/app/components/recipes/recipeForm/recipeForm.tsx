@@ -11,7 +11,7 @@ import {
   Plus,
   Sparkles,
 } from 'lucide-react';
-import { Recipe, RecipeCategory, Ingredient, IngredientToDisplay, RecipeIngredients, RecipeSchema } from '@/shemas/recipe';
+import { Recipe, RecipeCategory, Ingredient, IngredientToDisplay, RecipeIngredients, RecipeSchema } from '@costwise/shared/recipe';
 import { z } from 'zod';
 import useRecipeForm from '@/app/hooks/useRecipeForm';
 

@@ -1,6 +1,6 @@
-import { MessageType } from "@/shemas/chat";
+import { MessageType } from "@costwise/shared/chat";
 import { ReactNode } from "react";
-import { IngredientCategory, Recipe, RecipeIngredients, Supplier } from "@/shemas/recipe";
+import { IngredientCategory, Recipe, RecipeIngredients, Supplier } from "@costwise/shared/recipe";
 
 export interface HomeContextProps {
     state: HomeState,

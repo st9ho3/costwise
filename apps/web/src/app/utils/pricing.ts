@@ -1,4 +1,4 @@
-import { Recipe, RecipeIngredients, Unit } from "@/shemas/recipe";
+import { Recipe, RecipeIngredients, Unit } from "@costwise/shared/recipe";
 import { FormFields } from "../hooks/useRecipeForm";
 
 export const getTotalPrice = (ingredients: RecipeIngredients[]): number => {

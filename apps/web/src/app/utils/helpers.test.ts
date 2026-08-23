@@ -18,7 +18,7 @@ import {
   Ingredient,
   Recipe,
   RecipeIngredients,
-} from "@/shemas/recipe";
+} from "@costwise/shared/recipe";
 
 const date = new Date("2025-09-22");
 

@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { Scale } from 'lucide-react';
-import { Unit } from '@/shemas/recipe';
+import { Unit } from '@costwise/shared/recipe';
 
 import { Select } from '@/app/components/ui/select';
 

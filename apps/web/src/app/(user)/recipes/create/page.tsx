@@ -1,7 +1,7 @@
 import React from 'react';
 import RecipeForm from '@/app/components/recipes/recipeForm/recipeForm';
 import { IngredientService } from '@/app/services/ingredientService';
-import { RecipeIngredients } from '@/shemas/recipe';
+import { RecipeIngredients } from '@costwise/shared/recipe';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { Metadata } from '@/types/specialTypes';

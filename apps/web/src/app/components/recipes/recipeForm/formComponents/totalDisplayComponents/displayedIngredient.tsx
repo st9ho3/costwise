@@ -1,7 +1,7 @@
 'use client'
 import { Apple, Trash2 } from 'lucide-react';
 import React from 'react';
-import { RecipeIngredients } from '@/shemas/recipe';
+import { RecipeIngredients } from '@costwise/shared/recipe';
 
 
 const DisplayedIngredientItem = ({

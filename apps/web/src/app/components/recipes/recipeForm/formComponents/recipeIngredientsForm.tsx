@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react';
-import { Ingredient, RecipeIngredients } from '@/shemas/recipe';
+import { Ingredient, RecipeIngredients } from '@costwise/shared/recipe';
 import Incremental from '../../../shared/incremental';
 import { useRecipeIngredientsForm } from '@/app/hooks/useRecipeIngredientsForm';
 import { 

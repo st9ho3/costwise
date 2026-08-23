@@ -11,7 +11,7 @@ import {
   Supplier,
   SupplierSchema,
   Unit,
-} from "@/shemas/recipe";
+} from "@costwise/shared/recipe";
 import { SupplierUpdatePayload } from "@/types/context";
 import {
   DestructuredSupplier,

@@ -1,5 +1,5 @@
 import React, { memo } from 'react'
-import { RecipeIngredients } from '@/shemas/recipe'
+import { RecipeIngredients } from '@costwise/shared/recipe'
 import { UseFormGetValues, UseFormSetValue, UseFormWatch } from 'react-hook-form'
 import { FormFields } from '../../recipeForm'
 import {OrderTotal, DisplayedIngredientItem} from '@/app/constants/components'

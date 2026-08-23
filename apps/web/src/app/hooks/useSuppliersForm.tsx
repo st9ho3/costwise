@@ -1,5 +1,5 @@
 'use client'
-import { IngredientCategory, Supplier, SupplierSchema } from '@/shemas/recipe';
+import { IngredientCategory, Supplier, SupplierSchema } from '@costwise/shared/recipe';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getDefaultSupplierValues, INGREDIENT_CATEGORIES as categories } from '../constants/supplierDeafaultValues';
 import { useForm } from 'react-hook-form';

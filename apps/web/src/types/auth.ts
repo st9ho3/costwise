@@ -1,4 +1,4 @@
-import { SignUpCredentials, User } from "@/shemas/auth";
+import { SignUpCredentials, User } from "@costwise/shared/auth";
 
 
 export interface AUTHService {

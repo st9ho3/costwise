@@ -14,7 +14,7 @@
 import { NextRequest } from "next/server";
 import { sendSuccess } from "../../utils/responses";
 import { IngredientService } from "@/app/services/ingredientService";
-import { Ingredient } from "@/shemas/recipe";
+import { Ingredient } from "@costwise/shared/recipe";
 import { auth } from "@/auth";
 import { AuthenticationError } from "@/app/utils/errors";
 import { errorHandler } from "@/app/utils/errorHandler";

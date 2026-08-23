@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { AlertCircle, Award, ArrowUpRight, CheckCircle2 } from "lucide-react";
-import { Recipe } from "@/shemas/recipe";
+import { Recipe } from "@costwise/shared/recipe";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/app/components/ui/card";
 import { Badge } from "@/app/components/ui/badge";
 

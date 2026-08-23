@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
- images: {
+  transpilePackages: ["@costwise/shared"],
+  images: {
     remotePatterns: [
       {
         protocol: 'https',

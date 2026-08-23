@@ -14,7 +14,7 @@
  * - Transaction support for atomic operations
  */
 
-import { DBIngredient, IngredientToDisplay } from "@/shemas/recipe";
+import { DBIngredient, IngredientToDisplay } from "@costwise/shared/recipe";
 import {
   IIngredientRepository,
   IngredientAnalytics,

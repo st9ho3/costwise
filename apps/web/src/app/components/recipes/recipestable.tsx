@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import { recipesColumns, recipeSortedLinks } from "@/app/constants/data";
-import { Recipe } from "@/shemas/recipe";
+import { Recipe } from "@costwise/shared/recipe";
 import Link from "next/link";
 import useHelpers from "@/app/hooks/useHelpers";
 import { useNotificationStore } from "@/app/stores/notificationStore";

@@ -9,7 +9,7 @@
  * It is designed to be used on the client side.
  */
 import { useForm } from 'react-hook-form'
-import { SignInCredentials, signInCredentialsSchema } from '@/shemas/auth'
+import { SignInCredentials, signInCredentialsSchema } from '@costwise/shared/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { signInCredentials, signUpCredentials } from '../constants/uathFormdefaultValues'
 import { signIn } from 'next-auth/react'

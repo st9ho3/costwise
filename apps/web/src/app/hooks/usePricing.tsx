@@ -12,7 +12,7 @@ import { useCallback, useState } from 'react';
 import { UseFormSetValue, UseFormGetValues } from 'react-hook-form';
 import { FormFields } from '@/app/components/recipes/recipeForm/recipeForm';
 import { getTotalPrice, calculateProfitMargin, calculateSellingPrice } from '../utils/pricing';
-import { RecipeIngredients } from '@/shemas/recipe';
+import { RecipeIngredients } from '@costwise/shared/recipe';
 
 
 export type PricingMethod = "price" | "profit" | "";

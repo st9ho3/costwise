@@ -5,7 +5,7 @@ import { UseFormRegister, FieldErrors, UseFormSetValue, UseFormGetValues, UseFor
 import { FormFields } from '../recipeForm';
 import { usePricing } from '@/app/hooks/usePricing';
 import {PricingRadioOption, CalculateButton, ErrorDisplay} from '@/app/constants/components'
-import { RecipeIngredients } from '@/shemas/recipe';
+import { RecipeIngredients } from '@costwise/shared/recipe';
 
 // Define props for the component
 type PricingCostsProps = {

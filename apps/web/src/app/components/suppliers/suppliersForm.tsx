@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Check } from 'lucide-react';
-import { Supplier, IngredientCategory, DeliveryTime } from '@/shemas/recipe';
+import { Supplier, IngredientCategory, DeliveryTime } from '@costwise/shared/recipe';
 import useSuppliersForm, { FormInput } from '@/app/hooks/useSuppliersForm';
 import { Input } from '../ui/input';
 import { Select } from '../ui/select';
