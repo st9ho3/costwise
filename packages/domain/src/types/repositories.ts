@@ -5,6 +5,7 @@ import {
   DBIngredient,
   DBRecipe,
   IngredientToDisplay,
+  Unit,
 } from "@costwise/shared/recipe";
 import {
   DBSupplierAddress,
@@ -165,10 +166,10 @@ export interface ISupplierIngredientRepository {
     tx: Database,
     data: SupplierIngredientData[],
   ): Promise<SupplierIngredientData[]>;
-  update(
+  updateByIngredientId(
     tx: Database,
-    supplierId: string,
-    data: SupplierIngredientData[],
+    ingredientId: string,
+    data: { unit: Unit; unitPrice: string; quantity: string },
   ): Promise<void>;
   delete(tx: Database, supplierId: string, ingreientId: string): Promise<void>;
 }

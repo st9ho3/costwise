@@ -16,6 +16,7 @@ import {
   transformRecipeFromDB,
   transformRecipeIngredentFromDB,
   transformRecipeToDB,
+  destructureIngredient,
 } from "./transformers";
 import {
   DBIngredient,
@@ -549,3 +550,44 @@ describe("calculateRecipeData", () => {
   });
 });
 
+
+describe("destructureIngredient", () => {
+  const base: Ingredient = {
+    id: "0b7f43cd-6c9e-4a02-9c1a-6f2b8f9d1e11",
+    icon: "Other",
+    name: "Feta",
+    unit: "g",
+    unitPrice: 0.0125,
+    quantity: 1,
+    usage: "0",
+    userId: "user-1",
+    category: "ef45178d-e566-4637-b7f9-abcf6d575466",
+    suppliers: [
+      {
+        suppliersId: "1c2d3e4f-5a6b-4c7d-8e9f-0a1b2c3d4e5f",
+        unit: "g",
+        quantity: 1,
+        price: 0.0125,
+        isActive: true,
+      },
+    ],
+  };
+
+  test("keeps unit, unitPrice and quantity on the ingredient row", () => {
+    const { dbIngredient, supplierIngredients } = destructureIngredient(base);
+    expect(dbIngredient.unit).toBe("g");
+    expect(dbIngredient.unitPrice).toBe("0.0125");
+    expect(dbIngredient.quantity).toBe("1");
+    expect(supplierIngredients).toHaveLength(1);
+    expect(supplierIngredients[0].unitPrice).toBe("0.0125");
+  });
+
+  test("keeps the price on the row when there are no suppliers", () => {
+    const { dbIngredient, supplierIngredients } = destructureIngredient({
+      ...base,
+      suppliers: [],
+    });
+    expect(dbIngredient.unitPrice).toBe("0.0125");
+    expect(supplierIngredients).toHaveLength(0);
+  });
+});

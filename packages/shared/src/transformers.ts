@@ -376,11 +376,15 @@ export const getArrayChanges = <T>(originalArray: T[], newArray: T[]) => {
   return { added, removed };
 };
 
-// Type for the ingredients table (without unit, unitPrice, quantity - those are in supplier_ingredients)
+// Type for the ingredients table row — carries the canonical unit/unitPrice/
+// quantity; supplier_ingredients duplicates them per supplier link.
 export type DBIngredientForTable = {
   id: string;
   icon?: string | null;
   name: string;
+  unit: Unit;
+  unitPrice: string;
+  quantity: string;
   usage: string;
   userId: string;
   category: IngredientCategory;
@@ -413,6 +417,9 @@ export const destructureIngredient = (
     id: rest.id,
     icon: rest.icon,
     name: rest.name,
+    unit: unit,
+    unitPrice: unitPrice.toString(),
+    quantity: quantity.toString(),
     usage: rest.usage,
     userId: rest.userId,
     category: rest.category,
