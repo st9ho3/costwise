@@ -41,6 +41,21 @@ header, with its reasoning stated — the bar is high (novel architecture
 or judgment-dense work a plan cannot make executor-safe), and Fable 5
 states the call outright either way.
 
+**Executor modes and checkpoints:** every plan is executed in one of two
+modes, and the plan's header says which applies by default:
+- **Supervised** — a subagent dispatched by Fable 5 in-session; Fable 5
+  reviews between plan tasks, no extra ceremony needed.
+- **External** — any executor whose work Fable 5 cannot observe live
+  (another session, another harness, e.g. Gemini on Antigravity). Git is
+  the ONLY visible surface, so external executors MUST: (1) commit at
+  every plan task boundary as the plans already require, AND push after
+  every such commit; (2) paste the verification-gate output (test/build
+  results, grep results) into the commit body so review needs no replay;
+  (3) tick the plan file's `- [ ]` checkboxes in the same commit;
+  (4) STOP at any step marked `⛔ CHECKPOINT` — push, report, and wait
+  for review by Panos or Fable 5 before continuing. Proceeding past a
+  checkpoint unreviewed is a plan violation even if everything is green.
+
 **TDD rule:** the canonical definition is the
 `superpowers:test-driven-development` skill — its Iron Law applies: no
 production code without a failing test first; code written before its
