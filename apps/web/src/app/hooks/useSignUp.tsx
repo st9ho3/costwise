@@ -43,6 +43,7 @@ const useSignUp = ({ isSignIn }: AuthProps) => {
     handleSubmit,
     onSubmit,
     formState,
+    errors: formState.errors,
     authError,
   };
 };

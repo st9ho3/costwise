@@ -13,7 +13,7 @@ export interface AuthProps {
 const useSignIn = ({ isSignIn }: AuthProps) => {
   const [authError, setAuthError] = useState<string | null>(null);
 
-  const { register, handleSubmit } = useForm<SignInCredentials>({
+  const { register, handleSubmit, formState } = useForm<SignInCredentials>({
     defaultValues: isSignIn ? signInCredentials : signUpCredentials,
     resolver: zodResolver(signInCredentialsSchema),
   });
@@ -49,6 +49,8 @@ const useSignIn = ({ isSignIn }: AuthProps) => {
     handleSubmit,
     onSubmit,
     authError,
+    formState,
+    errors: formState.errors,
   };
 };
 
