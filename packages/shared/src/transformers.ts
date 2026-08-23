@@ -42,16 +42,40 @@ const createIngredientIcon = (category: string | undefined): string => {
   return (category && CATEGORY_ID_TO_NAME[category]) || category || "Other";
 };
 
-export const transformRecipeFromDB = (recipeFromDb: DBRecipe): Recipe => ({
-  ...recipeFromDb,
-  totalCost: Number(recipeFromDb.totalCost),
-  tax: Number(recipeFromDb.tax),
-  sellingPrice: Number(recipeFromDb.sellingPrice),
-  profitMargin: Number(recipeFromDb.profitMargin),
-  foodCost: Number(recipeFromDb.foodCost),
-  dateCreated: new Date(recipeFromDb.dateCreated),
-  imgPath: recipeFromDb.imgPath,
-});
+export const transformRecipeFromDB = (recipeFromDb: DBRecipe | any): Recipe => {
+  const totalCost = Number(recipeFromDb.totalCost);
+  const tax = Number(recipeFromDb.tax);
+  const foodCost = Number(recipeFromDb.foodCost);
+  const sellingPrice =
+    recipeFromDb.sellingPrice !== undefined &&
+    recipeFromDb.sellingPrice !== null &&
+    recipeFromDb.sellingPrice !== ""
+      ? Number(recipeFromDb.sellingPrice)
+      : undefined;
+  const profitMargin =
+    recipeFromDb.profitMargin !== undefined &&
+    recipeFromDb.profitMargin !== null &&
+    recipeFromDb.profitMargin !== ""
+      ? Number(recipeFromDb.profitMargin)
+      : undefined;
+
+  return {
+    ...recipeFromDb,
+    totalCost: isNaN(totalCost) ? 0 : totalCost,
+    tax: isNaN(tax) ? 0 : tax,
+    sellingPrice:
+      sellingPrice !== undefined && !isNaN(sellingPrice)
+        ? sellingPrice
+        : undefined,
+    profitMargin:
+      profitMargin !== undefined && !isNaN(profitMargin)
+        ? profitMargin
+        : undefined,
+    foodCost: isNaN(foodCost) ? 0 : foodCost,
+    dateCreated: new Date(recipeFromDb.dateCreated),
+    imgPath: recipeFromDb.imgPath,
+  };
+};
 
 export const transformRecipeToDB = (recipe: Recipe): DBRecipe => ({
   ...recipe,
@@ -85,13 +109,22 @@ export const transformIngredientToDB = (
 };
 
 export const transformRecipeIngredentFromDB = (
-  ingredient: RecipeIngredientFromDB,
+  ingredient: RecipeIngredientFromDB | any,
+  matchedIngredient?: Ingredient | IngredientToDisplay,
 ): RecipeIngredients => {
+  const rawUnitPrice =
+    ingredient.ingredients?.unitPrice ?? matchedIngredient?.unitPrice ?? 0;
+  const unitPrice = Number(rawUnitPrice);
+  const quantity = Number(ingredient.quantity ?? 0);
+  const unit = (ingredient.ingredients?.unit ||
+    matchedIngredient?.unit ||
+    "g") as Unit;
+
   return {
-    name: ingredient.ingredients.name,
-    unit: ingredient.ingredients.unit,
-    unitPrice: parseFloat(ingredient.ingredients.unitPrice),
-    quantity: parseFloat(ingredient.quantity),
+    name: ingredient.ingredients?.name ?? matchedIngredient?.name ?? "",
+    unit,
+    unitPrice: isNaN(unitPrice) ? 0 : unitPrice,
+    quantity: isNaN(quantity) ? 0 : quantity,
     recipeId: ingredient.recipeId,
     ingredientId: ingredient.ingredientId,
   };

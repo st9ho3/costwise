@@ -1,7 +1,7 @@
 import React from 'react';
 import RecipeForm from '@/app/components/recipes/recipeForm/recipeForm';
 import { transformRecipeFromDB, transformRecipeIngredentFromDB } from '@costwise/shared/transformers';
-import { Metadata, RecipeIngredientFromDB } from '@costwise/shared/specialTypes';
+import { Metadata } from '@costwise/shared/specialTypes';
 import { getServerSession } from '@/app/lib/serverSession';
 import { redirect, notFound } from 'next/navigation';
 import { apiServer } from '@/app/lib/apiServer';
@@ -30,12 +30,6 @@ const EditPage = async ({ params }: Params) => {
     notFound();
   }
 
-  const { recipeIngredients, ...rawRecipe } = dbRecipe;
-  const recIngredients = recipeIngredients.map((ing: RecipeIngredientFromDB) =>
-    transformRecipeIngredentFromDB(ing)
-  );
-  const recipe = transformRecipeFromDB(rawRecipe);
-
   // Use a high limit to get all ingredients for dropdown
   const dropdownMetadata: Metadata = {
     page: 1,
@@ -58,6 +52,14 @@ const EditPage = async ({ params }: Params) => {
   });
 
   const ingredients = result ? result.ingredients : [];
+
+  const { recipeIngredients, ...rawRecipe } = dbRecipe;
+  const recIngredients = (recipeIngredients || []).map((ing) => {
+    const matched = ingredients.find((i) => i.id === ing.ingredientId);
+    return transformRecipeIngredentFromDB(ing, matched);
+  });
+
+  const recipe = transformRecipeFromDB(rawRecipe);
 
   return (
     <RecipeForm

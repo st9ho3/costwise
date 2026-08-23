@@ -9,6 +9,7 @@ import {
   transformIngredientFromDB,
   transformIngredientToDB,
   transformRecipeFromDB,
+  transformRecipeIngredentFromDB,
   transformRecipeToDB,
 } from "./transformers";
 import {
@@ -288,6 +289,69 @@ describe("transformRecipeFromDB", () => {
     const result = transformRecipeFromDB(mockDbRecipe);
 
     expect(result).toStrictEqual(mockRecipe);
+  });
+
+  test("Handles null or undefined optional values without NaN", () => {
+    const raw = {
+      id: "e446554b-d779-45e0-b615-1a89c379a957",
+      title: "Test Recipe",
+      totalCost: "10",
+      createdBy: "u1",
+      dateCreated: "2026-01-01",
+      category: "main",
+      tax: "0.13",
+      imgPath: "https://example.com/img.jpg",
+      sellingPrice: null,
+      profitMargin: null,
+      foodCost: "10",
+      userId: "u1",
+    };
+
+    const result = transformRecipeFromDB(raw);
+    expect(result.totalCost).toBe(10);
+    expect(result.sellingPrice).toBeUndefined();
+    expect(result.profitMargin).toBeUndefined();
+    expect(result.foodCost).toBe(10);
+    expect(isNaN(result.totalCost)).toBe(false);
+  });
+});
+
+describe("transformRecipeIngredentFromDB", () => {
+  test("Transforms DB recipe ingredient and falls back to matched ingredient for unitPrice", () => {
+    const rawIng = {
+      id: 1,
+      recipeId: "e446554b-d779-45e0-b615-1a89c379a957",
+      ingredientId: "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+      quantity: "200",
+      ingredients: {
+        id: "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+        name: "Flour",
+        icon: null,
+        usage: "1",
+        userId: "u1",
+        category: "ef45178d-e566-4637-b7f9-abcf6d575466",
+      },
+    };
+
+    const matched = {
+      id: "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+      name: "Flour",
+      unit: "g" as const,
+      unitPrice: 0.005,
+      quantity: 1000,
+      usage: "1",
+      userId: "u1",
+      category: "ef45178d-e566-4637-b7f9-abcf6d575466" as any,
+      suppliers: [],
+    };
+
+    const result = transformRecipeIngredentFromDB(rawIng, matched);
+    expect(result.name).toBe("Flour");
+    expect(result.unit).toBe("g");
+    expect(result.unitPrice).toBe(0.005);
+    expect(result.quantity).toBe(200);
+    expect(isNaN(result.unitPrice)).toBe(false);
+    expect(isNaN(result.quantity)).toBe(false);
   });
 });
 
