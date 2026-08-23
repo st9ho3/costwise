@@ -10,7 +10,7 @@ import { Logo } from '../ui/logo';
 import GoogleIcon from './authComponents/googleComponent';
 
 const SignInForm = () => {
-  const { register, handleSubmit, onSubmit } = useSignIn({ isSignIn: true });
+  const { register, handleSubmit, onSubmit, authError } = useSignIn({ isSignIn: true });
 
   return (
     <div className="w-full max-w-[420px] p-6 sm:p-8 bg-white rounded-[28px] shadow-[0_4px_8px_rgba(27,26,22,0.05),0_20px_40px_-12px_rgba(27,26,22,0.16)] border border-[#EFE8DA] flex flex-col gap-6">
@@ -56,6 +56,12 @@ const SignInForm = () => {
             Sign in
           </Button>
         </div>
+
+        {authError && (
+          <div className="p-3 rounded-[12px] bg-tomato-50 border border-tomato-200 text-tomato-700 text-[13px] font-medium text-center">
+            {authError}
+          </div>
+        )}
       </form>
 
       {/* Divider */}

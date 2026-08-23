@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { SignInCredentials, signInCredentialsSchema } from "@costwise/shared/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,12 +11,15 @@ export interface AuthProps {
 }
 
 const useSignIn = ({ isSignIn }: AuthProps) => {
+  const [authError, setAuthError] = useState<string | null>(null);
+
   const { register, handleSubmit } = useForm<SignInCredentials>({
     defaultValues: isSignIn ? signInCredentials : signUpCredentials,
     resolver: zodResolver(signInCredentialsSchema),
   });
 
   const onSubmit = async (formData: SignInCredentials) => {
+    setAuthError(null);
     try {
       const { data, success, error } = signInCredentialsSchema.safeParse(formData);
 
@@ -26,16 +30,17 @@ const useSignIn = ({ isSignIn }: AuthProps) => {
           callbackURL: "/",
         });
         if (signInError) {
-          throw new Error(signInError.message || "Failed to sign in");
+          setAuthError(signInError.message || "Invalid email or password");
+          return;
         }
         return;
       }
 
       if (error) {
-        throw new Error(`${error}`);
+        setAuthError(error.errors[0]?.message || "Invalid credentials");
       }
     } catch (err) {
-      throw new Error(`${err}`);
+      setAuthError(err instanceof Error ? err.message : "Failed to sign in. Please try again.");
     }
   };
 
@@ -43,6 +48,7 @@ const useSignIn = ({ isSignIn }: AuthProps) => {
     register,
     handleSubmit,
     onSubmit,
+    authError,
   };
 };
 
