@@ -1,4 +1,4 @@
-import { ingredientsTable, recipesTable, suppliers } from "@/db/schema";
+import { ingredientsTable, recipesTable, suppliers } from "@costwise/db/schema";
 import { Supplier } from "@costwise/shared/recipe";
 
 export type RecipeIngredientFromDB = {

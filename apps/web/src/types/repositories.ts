@@ -1,4 +1,4 @@
-import { Database } from "@/db/schema";
+import { Database } from "@costwise/db/schema";
 import {
   Recipe,
   RecipeIngredients,

@@ -3,7 +3,7 @@ import {
   prepareSupplierForDB,
   transformSupplierFromDB,
 } from "../utils/transformers";
-import { db } from "@/db/db";
+import { db } from "@costwise/db/db";
 import { SupplierRepository } from "../repositories/suppliersRepository";
 import { IngredientCategory, Supplier } from "@costwise/shared/recipe";
 import { SupplierAddressRepository } from "../repositories/addressesRepository";

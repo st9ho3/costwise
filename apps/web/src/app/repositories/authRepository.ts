@@ -11,8 +11,8 @@
  * - Google OAuth user creation and management
  */
 
-import { db } from "@/db/db";
-import { users } from "@/db/schema";
+import { db } from "@costwise/db/db";
+import { users } from "@costwise/db/schema";
 import { User } from "@costwise/shared/auth";
 import { AUTHrepository } from "@/types/auth";
 import { eq } from "drizzle-orm";

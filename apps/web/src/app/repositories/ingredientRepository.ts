@@ -21,8 +21,8 @@ import {
   OperationResult,
   HighImpactIngredient,
 } from "@/types/repositories";
-import { db } from "@/db/db";
-import { categories, Database, ingredientsTable } from "@/db/schema";
+import { db } from "@costwise/db/db";
+import { categories, Database, ingredientsTable } from "@costwise/db/schema";
 import {
   DBIngredientForTable,
   transformIngredientFromDB,

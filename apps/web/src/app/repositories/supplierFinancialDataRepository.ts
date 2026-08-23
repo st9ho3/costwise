@@ -1,4 +1,4 @@
-import { Database, supplierFinancialData } from "@/db/schema";
+import { Database, supplierFinancialData } from "@costwise/db/schema";
 import {
   ISupplierFinancialDataRepository,
   OperationResult,

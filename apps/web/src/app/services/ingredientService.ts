@@ -16,7 +16,7 @@
 import { IIngredientService } from "@/types/services";
 import { IngredientRepository } from "../repositories/ingredientRepository";
 import { Ingredient, IngredientToDisplay } from "@costwise/shared/recipe";
-import { checkIfIngredientExists } from "@/db/helpers";
+import { checkIfIngredientExists } from "@costwise/db/helpers";
 import { zodValidateIngredientBeforeAddItToDatabase } from "./validationService";
 import { RecipeRepository } from "../repositories/recipeRepository";
 import {
@@ -24,8 +24,8 @@ import {
   transformIngredientToDB,
 } from "../utils/transformers";
 import { RecipeService } from "./recipeService";
-import { db } from "@/db/db";
-import { Database } from "@/db/schema";
+import { db } from "@costwise/db/db";
+import { Database } from "@costwise/db/schema";
 import {
   IngredientAnalytics,
   OperationResult,

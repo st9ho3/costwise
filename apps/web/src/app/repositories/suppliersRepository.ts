@@ -1,5 +1,5 @@
-import { db } from "@/db/db";
-import { Database, suppliers } from "@/db/schema";
+import { db } from "@costwise/db/db";
+import { Database, suppliers } from "@costwise/db/schema";
 import { ISupplierRepository } from "@/types/repositories";
 import {
   DestructuredSupplier,

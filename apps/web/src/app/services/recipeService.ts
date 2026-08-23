@@ -28,7 +28,7 @@ import {
   CreateResponse,
   IRecipeService,
 } from "@/types/services";
-import { db } from "@/db/db";
+import { db } from "@costwise/db/db";
 import {
   RecipeIngredientsRepository,
   RecipeRepository,
@@ -42,7 +42,7 @@ import {
   transformRecipeIngredentFromDB,
   transformRecipeToDB,
 } from "../utils/transformers";
-import { Database } from "@/db/schema";
+import { Database } from "@costwise/db/schema";
 import {
   RecipeAnalytics,
   CategoryAnalytics,

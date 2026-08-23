@@ -8,7 +8,7 @@ import {
   Supplier,
 } from "@costwise/shared/recipe";
 import { Metadata, RecipeWithQuery } from "./specialTypes";
-import { Database } from "@/db/schema";
+import { Database } from "@costwise/db/schema";
 import {
   RecipeAnalytics,
   IngredientAnalytics,

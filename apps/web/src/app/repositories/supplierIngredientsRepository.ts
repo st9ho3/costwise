@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Database, supplierIngredients } from "@/db/schema";
+import { Database, supplierIngredients } from "@costwise/db/schema";
 import { ISupplierIngredientRepository } from "@/types/repositories";
 import { SupplierIngredientData } from "../utils/transformers";
 

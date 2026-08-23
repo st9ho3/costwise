@@ -30,15 +30,15 @@ import {
   CategoryAnalytics,
   MarginHighlights,
 } from "@/types/repositories";
-import { db } from "@/db/db";
+import { db } from "@costwise/db/db";
 import { eq, and, avg, countDistinct, asc, desc } from "drizzle-orm";
-import { Database, recipesTable, recipeIngredientsTable } from "@/db/schema";
+import { Database, recipesTable, recipeIngredientsTable } from "@costwise/db/schema";
 import {
   transformRecipeFromDB,
   transformRecipeToDB,
 } from "../utils/transformers";
 import { revalidatePath } from "next/cache";
-import { checkIfIngredientExists } from "@/db/helpers";
+import { checkIfIngredientExists } from "@costwise/db/helpers";
 import { Metadata, RecipeWithQuery, sortColumns } from "@/types/specialTypes";
 import { DatabaseError } from "../utils/errors";
 
