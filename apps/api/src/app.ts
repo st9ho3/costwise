@@ -2,6 +2,7 @@ import { OpenAPIHono } from "@hono/zod-openapi";
 import { Scalar } from "@scalar/hono-api-reference";
 import { errorHandler, defaultHook } from "./middleware/errors";
 import { makeRequireUser } from "./middleware/auth";
+import { authDebug } from "./middleware/authDebug";
 import { recipesRoutes } from "./routes/recipes";
 import { ingredientsRoutes } from "./routes/ingredients";
 import { suppliersRoutes } from "./routes/suppliers";
@@ -116,6 +117,7 @@ export const createApp = (deps: Deps) => {
       credentials: true,
     })
   );
+  app.use("/v1/auth/*", authDebug);
   app.on(["GET", "POST"], "/v1/auth/*", (c) => auth.handler(c.req.raw));
 
   const v1 = new OpenAPIHono<{ Variables: { userId: string } }>({ defaultHook });
