@@ -45,15 +45,22 @@ export const getUsageCategory = (
 export const formatPrice = (
   priceValue: string | number | undefined
 ): string => {
-  if (!priceValue) {
+  if (priceValue === undefined || priceValue === null || priceValue === "") {
     return "Unavailable";
   }
-  const unitPrice = Number(priceValue) || 0;
+  const unitPrice = Number(priceValue);
+  if (isNaN(unitPrice)) {
+    return "Unavailable";
+  }
+
+  if (unitPrice === 0) {
+    return "0.00";
+  }
 
   if (unitPrice < 1) {
     return unitPrice.toFixed(3);
   } else {
-    return unitPrice.toFixed(1);
+    return unitPrice.toFixed(2);
   }
 };
 
@@ -128,16 +135,21 @@ export const calculateRecipeData = (
   const margin =
     data.profitMargin !== undefined &&
     data.profitMargin !== recipe?.profitMargin
-      ? data.profitMargin
+      ? Number(data.profitMargin)
       : recipe?.profitMargin;
 
   const price =
     data.sellingPrice !== undefined &&
     data.sellingPrice !== recipe?.sellingPrice
-      ? data.sellingPrice
+      ? Number(data.sellingPrice)
       : recipe?.sellingPrice;
 
-  const newTax = data.tax !== undefined ? data.tax : recipe?.tax || 0;
+  const newTax =
+    data.tax !== undefined && data.tax !== null
+      ? Number(data.tax)
+      : recipe?.tax !== undefined
+        ? Number(recipe.tax)
+        : 0.13;
 
   const foodCost = price ? (newCost / price) * 100 : 0;
 

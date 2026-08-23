@@ -1,7 +1,9 @@
 import { describe, test, expect } from "vitest";
 import {
   calculateProfitMargin,
+  calculateRecipeData,
   calculateSellingPrice,
+  formatPrice,
   getDisplayUnit,
   getTotalPrice,
   normalizePrice,
@@ -474,3 +476,76 @@ describe("createIngredientPrototype & IngredientSchema", () => {
     expect(parseResult.success).toBe(true);
   });
 });
+
+describe("formatPrice", () => {
+  test("formats 0 as '0.00' instead of 'Unavailable'", () => {
+    expect(formatPrice(0)).toBe("0.00");
+    expect(formatPrice("0")).toBe("0.00");
+    expect(formatPrice(0.0)).toBe("0.00");
+  });
+
+  test("formats prices under 1 with 3 decimals", () => {
+    expect(formatPrice(0.0125)).toBe("0.013");
+    expect(formatPrice(0.0025)).toBe("0.003");
+    expect(formatPrice(0.5)).toBe("0.500");
+  });
+
+  test("formats prices 1 and above with 2 decimals", () => {
+    expect(formatPrice(12.5)).toBe("12.50");
+    expect(formatPrice(1.5)).toBe("1.50");
+    expect(formatPrice(100)).toBe("100.00");
+  });
+
+  test("returns 'Unavailable' for undefined, null, empty string, or NaN", () => {
+    expect(formatPrice(undefined)).toBe("Unavailable");
+    expect(formatPrice(null as any)).toBe("Unavailable");
+    expect(formatPrice("")).toBe("Unavailable");
+    expect(formatPrice("not-a-number")).toBe("Unavailable");
+  });
+});
+
+describe("calculateRecipeData", () => {
+  const sampleIngredients: RecipeIngredients[] = [
+    {
+      recipeId: "r1",
+      ingredientId: "i1",
+      name: "Pecorino",
+      unit: "g",
+      unitPrice: 0.0125,
+      quantity: 100, // 100g * 0.0125 = €1.25
+    },
+    {
+      recipeId: "r1",
+      ingredientId: "i2",
+      name: "Guanciale",
+      unit: "kg",
+      unitPrice: 0.02, // €0.02 per g -> 0.1kg = 100g * 0.02 = €2.00
+      quantity: 0.1,
+    },
+  ];
+
+  test("computes total cost accurately from mixed unit ingredients", () => {
+    const data: any = {
+      tax: 0.13,
+      sellingPrice: 10,
+    };
+    const result = calculateRecipeData(data, undefined, sampleIngredients);
+    expect(result.newCost).toBe(3.25); // 1.25 + 2.00
+    expect(result.newTax).toBe(0.13);
+    expect(result.foodCost).toBeCloseTo(32.5); // (3.25 / 10) * 100
+  });
+
+  test("recalculates selling price and margin based on VAT rates", () => {
+    const dataWithMargin: any = {
+      tax: 0.24,
+      profitMargin: 60,
+    };
+    const result = calculateRecipeData(dataWithMargin, undefined, sampleIngredients);
+    expect(result.newCost).toBe(3.25);
+    expect(result.newTax).toBe(0.24);
+    expect(result.newPrice).toBeDefined();
+    // denominator = 1 - 0.24 - 0.60 = 0.16 => price = 3.25 / 0.16 = 20.3125
+    expect(result.newPrice).toBeCloseTo(20.3125);
+  });
+});
+

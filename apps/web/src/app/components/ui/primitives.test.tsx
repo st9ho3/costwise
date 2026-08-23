@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { Input } from './input'
+import { MoneyInput } from './moneyInput'
 import { Label } from './label'
 import { Badge } from './badge'
 import { Card, CardTitle } from './card'
@@ -17,6 +18,24 @@ describe('primitives', () => {
     const input = container.querySelector('input')!
     expect(input).toBeTruthy()
     expect(input.className).toContain('custom-in')
+  })
+
+  it('Input safely converts NaN defaultValue to empty string to prevent React warning', () => {
+    const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {})
+    const { container } = render(<Input defaultValue={NaN} />)
+    const input = container.querySelector('input')!
+    expect(input.value).toBe('')
+    expect(consoleError).not.toHaveBeenCalled()
+    consoleError.mockRestore()
+  })
+
+  it('MoneyInput safely converts NaN defaultValue to empty string to prevent React warning', () => {
+    const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {})
+    const { container } = render(<MoneyInput defaultValue={NaN} />)
+    const input = container.querySelector('input')!
+    expect(input.value).toBe('')
+    expect(consoleError).not.toHaveBeenCalled()
+    consoleError.mockRestore()
   })
 
   it('Label renders mono uppercase styling', () => {

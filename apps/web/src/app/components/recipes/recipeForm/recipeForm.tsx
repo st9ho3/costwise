@@ -26,7 +26,7 @@ import { EmptyState } from '../../ui/emptyState';
 import { useFileStore } from '@/app/stores/fileStore';
 import { useNotificationStore } from '@/app/stores/notificationStore';
 import { CategoryThumbnail } from '@/app/utils/uiHelpers';
-import { calculateProfitMargin, calculateSellingPrice, getTotalPrice } from '@costwise/shared/pricing';
+import { calculateProfitMargin, calculateSellingPrice, formatPrice, getTotalPrice } from '@costwise/shared/pricing';
 
 export interface RecipeFormProps {
   mode: 'create' | 'edit';
@@ -113,7 +113,7 @@ export default function RecipeForm({
   };
 
   const handleWorkItOut = () => {
-    const taxNum = Number(currentTax || 0);
+    const taxNum = Number(currentTax !== undefined && currentTax !== null ? currentTax : 0.13);
     if (pricingMode === 'price') {
       const priceNum = Number(getValues('sellingPrice') || 0);
       if (priceNum <= 0 || liveCogs <= 0) {
@@ -122,7 +122,7 @@ export default function RecipeForm({
       }
       const margin = calculateProfitMargin(liveCogs, priceNum, taxNum);
       if (margin !== undefined) {
-        setValue('profitMargin', Math.round(margin * 10) / 10);
+        setValue('profitMargin', Math.round(margin * 10) / 10, { shouldValidate: true });
         notify('success', `Worked out — at €${priceNum.toFixed(2)} you keep ${(Math.round(margin * 10) / 10).toFixed(1)}%.`);
       }
     } else {
@@ -137,7 +137,7 @@ export default function RecipeForm({
       }
       const price = calculateSellingPrice(liveCogs, marginNum, taxNum);
       if (price !== undefined) {
-        setValue('sellingPrice', Math.round(price * 100) / 100);
+        setValue('sellingPrice', Math.round(price * 100) / 100, { shouldValidate: true });
         notify('success', `Worked out — at €${(Math.round(price * 100) / 100).toFixed(2)} you keep ${marginNum.toFixed(1)}%.`);
       }
     }
@@ -145,7 +145,7 @@ export default function RecipeForm({
 
   const calculatedMargin =
     currentSellingPrice && liveCogs > 0
-      ? calculateProfitMargin(liveCogs, Number(currentSellingPrice), Number(currentTax || 0))
+      ? calculateProfitMargin(liveCogs, Number(currentSellingPrice), Number(currentTax !== undefined && currentTax !== null ? currentTax : 0.13))
       : currentProfitMargin;
 
   const calculatedFoodCost =
@@ -249,10 +249,13 @@ export default function RecipeForm({
                       setSelectedUnit(found.unit === 'kg' ? 'g' : found.unit === 'L' ? 'ml' : found.unit);
                     }
                   }}
-                  options={ingredients.map((ing) => ({
-                    value: ing.id,
-                    label: `${ing.name} (€${Number(ing.unitPrice || 0).toFixed(2)}/${ing.unit || 'g'})`,
-                  }))}
+                  options={ingredients.map((ing) => {
+                    const pricePerUnit = Number(ing.unitPrice || 0);
+                    return {
+                      value: ing.id,
+                      label: `${ing.name} (€${formatPrice(pricePerUnit)}/${ing.unit || 'g'})`,
+                    };
+                  })}
                 />
 
                 <Select
@@ -270,30 +273,37 @@ export default function RecipeForm({
 
                 <div className="flex flex-col gap-1.5">
                   <label className="font-bold text-[13px] text-ink-900 select-none">
-                    Quantity
+                    How much?
                   </label>
                   <Incremental
                     count={ingredientQuantity}
-                    step={selectedUnit === 'g' || selectedUnit === 'ml' ? 50 : 1}
                     onRecipeIngredientChange={setIngredientQuantity}
+                    step={selectedUnit === 'g' || selectedUnit === 'ml' ? 50 : 1}
                   />
                 </div>
 
                 <Button
                   type="button"
+                  variant="secondary"
+                  iconLeft={<Plus className="size-4" />}
                   onClick={handleAddPlateIngredient}
-                  iconLeft={<Plus className="size-4" strokeWidth={2.5} />}
+                  className="shrink-0"
                 >
-                  Add it
+                  Add to plate
                 </Button>
               </div>
             </div>
 
-            {/* Card 3: What you charge & Pricing Calculation */}
-            <div className="bg-white rounded-[18px] border border-[#EFE8DA] p-5 sm:p-6 shadow-[0_1px_2px_rgba(27,26,22,0.05)] flex flex-col gap-4">
-              <span className="font-bold text-[11px] uppercase tracking-[0.08em] text-stone-500">
-                What you charge
-              </span>
+            {/* Card 3: Pricing & Target Margin */}
+            <div className="bg-white rounded-[18px] border border-[#EFE8DA] p-5 sm:p-6 shadow-[0_1px_2px_rgba(27,26,22,0.05)] flex flex-col gap-5">
+              <div>
+                <span className="font-bold text-[11px] uppercase tracking-[0.08em] text-stone-500">
+                  Setting the price
+                </span>
+                <p className="font-body text-[14px] text-stone-500 mt-1">
+                  Tell me what you want to charge or what you want to keep — I&apos;ll work out the rest.
+                </p>
+              </div>
 
               {/* Radio Option 1: Set Menu Price */}
               <div
@@ -321,7 +331,11 @@ export default function RecipeForm({
                   <MoneyInput
                     placeholder="15.50"
                     disabled={pricingMode !== 'price'}
-                    defaultValue={currentSellingPrice}
+                    defaultValue={
+                      currentSellingPrice !== undefined && !isNaN(Number(currentSellingPrice))
+                        ? Number(currentSellingPrice)
+                        : undefined
+                    }
                     {...register('sellingPrice', { valueAsNumber: true })}
                   />
                 </div>
@@ -354,7 +368,11 @@ export default function RecipeForm({
                     suffix="%"
                     placeholder="68"
                     disabled={pricingMode !== 'margin'}
-                    defaultValue={currentProfitMargin}
+                    defaultValue={
+                      currentProfitMargin !== undefined && !isNaN(Number(currentProfitMargin))
+                        ? Number(currentProfitMargin)
+                        : undefined
+                    }
                     {...register('profitMargin', { valueAsNumber: true })}
                   />
                 </div>
@@ -365,13 +383,16 @@ export default function RecipeForm({
                 <div className="w-full sm:w-[220px]">
                   <Select
                     label="VAT on top"
-                    value={String(currentTax)}
+                    value={String(currentTax !== undefined && currentTax !== null ? currentTax : '0.13')}
                     options={[
                       { value: '0', label: 'No VAT (0%)' },
                       { value: '0.13', label: 'Food service (13%)' },
                       { value: '0.24', label: 'Standard (24%)' },
                     ]}
-                    onValueChange={(val) => setValue('tax', parseFloat(val), { shouldValidate: true })}
+                    onValueChange={(val) => {
+                      const numVal = parseFloat(val);
+                      setValue('tax', isNaN(numVal) ? 0.13 : numVal, { shouldValidate: true });
+                    }}
                   />
                 </div>
 

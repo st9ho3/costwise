@@ -23,6 +23,15 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       lg: 'h-[52px] px-4 text-[17px]',
     }[size]
 
+    const safeDefaultValue =
+      typeof props.defaultValue === 'number' && isNaN(props.defaultValue)
+        ? ''
+        : props.defaultValue
+    const safeValue =
+      typeof props.value === 'number' && isNaN(props.value)
+        ? ''
+        : props.value
+
     return (
       <div className="flex flex-col gap-1.5 w-full">
         {label && (
@@ -51,6 +60,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               className
             )}
             {...props}
+            defaultValue={safeDefaultValue}
+            value={safeValue}
           />
           {suffix && <span className="font-semibold text-[13px] text-stone-500 shrink-0 select-none">{suffix}</span>}
         </div>

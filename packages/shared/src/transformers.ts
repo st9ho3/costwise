@@ -62,7 +62,7 @@ export const transformRecipeFromDB = (recipeFromDb: DBRecipe | any): Recipe => {
   return {
     ...recipeFromDb,
     totalCost: isNaN(totalCost) ? 0 : totalCost,
-    tax: isNaN(tax) ? 0 : tax,
+    tax: isNaN(tax) ? 0.13 : tax,
     sellingPrice:
       sellingPrice !== undefined && !isNaN(sellingPrice)
         ? sellingPrice
