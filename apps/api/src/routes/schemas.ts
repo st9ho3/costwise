@@ -5,12 +5,18 @@ import {
   RecipeIngredientsSchema,
   IngredientSchema,
   IngredientCategoryNameSchema,
+  IngredientCategorySchema,
   type Ingredient,
   type IngredientToDisplay,
+  SupplierSchema,
+  type Supplier,
 } from "@costwise/shared/recipe";
 import type { Metadata, RecipeWithQuery } from "@costwise/domain/types/specialTypes";
 import type { CreateRequest } from "@costwise/domain/types/services";
-import type { RecipeUpdatePayload } from "@costwise/domain/types/context";
+import type {
+  RecipeUpdatePayload,
+  SupplierUpdatePayload,
+} from "@costwise/domain/types/context";
 
 export const ErrorEnvelope = z.object({
   error: z.object({
@@ -114,3 +120,17 @@ export const IngredientListResponse = z
   ingredients: IngredientToDisplay[];
   count: { count: number };
 }>;
+
+export const SupplierPayloadSchema = z.object({
+  supplier: SupplierSchema,
+  addedCategories: z.array(IngredientCategorySchema),
+  removedCategories: z.array(IngredientCategorySchema),
+}) satisfies z.ZodType<SupplierUpdatePayload, z.ZodTypeDef, any>;
+
+export const SupplierListResponse = z
+  .object({ suppliers: z.array(SupplierSchema) })
+  .merge(CountSchema) satisfies z.ZodType<
+  { suppliers: Supplier[]; count: { count: number } },
+  z.ZodTypeDef,
+  any
+>;

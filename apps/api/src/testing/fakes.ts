@@ -3,6 +3,7 @@ import type {
   RecipeIngredients,
   Ingredient,
   IngredientToDisplay,
+  Supplier,
 } from "@costwise/shared/recipe";
 import type {
   RecipeWithQuery,
@@ -12,19 +13,27 @@ import type {
   CreateRequest,
   CreateResponse,
 } from "@costwise/domain/types/services";
+import type { SupplierUpdatePayload } from "@costwise/domain/types/context";
 import { NotFoundError } from "@costwise/domain/utils/errors";
-import type { Deps, RecipeServiceLike, IngredientServiceLike } from "../app";
+import type {
+  Deps,
+  RecipeServiceLike,
+  IngredientServiceLike,
+  SupplierServiceLike,
+} from "../app";
 
 export interface FakeState {
   recipes: Recipe[];
   recipeDetails: Map<string, RecipeWithQuery>;
   ingredients: Ingredient[];
+  suppliers: Supplier[];
 }
 
 export const createFakeState = (): FakeState => ({
   recipes: [],
   recipeDetails: new Map(),
   ingredients: [],
+  suppliers: [],
 });
 
 export const seedRecipe = (
@@ -99,6 +108,43 @@ export const seedIngredient = (
   const state = (deps as any)._state as FakeState;
   state.ingredients.push(ing);
   return ing;
+};
+
+export const seedSupplier = (
+  deps: Deps,
+  userId: string,
+  supplier?: Partial<Supplier>
+) => {
+  const s: Supplier = {
+    id: supplier?.id ?? "66666666-6666-6666-6666-666666666666",
+    userId,
+    name: supplier?.name ?? "Acme Supplier",
+    icon: supplier?.icon ?? null,
+    category: supplier?.category ?? ["5dee106a-5050-443e-8368-03397e02af6d"],
+    contactPerson: supplier?.contactPerson ?? "John Doe",
+    email: supplier?.email ?? "acme@example.com",
+    phone: supplier?.phone ?? "1234567890",
+    website: supplier?.website ?? "https://acme.com",
+    address: supplier?.address ?? {
+      street: "123 Main St",
+      city: "City",
+      state: "State",
+      postalCode: "12345",
+      country: "Country",
+    },
+    financialData: supplier?.financialData ?? {
+      paymentTerms: "Net 30",
+      vatNumber: "VAT123",
+    },
+    notes: supplier?.notes ?? "Test notes",
+    deliveryTime: supplier?.deliveryTime ?? "1-2 Days",
+    isActive: supplier?.isActive ?? true,
+    dateAdded: supplier?.dateAdded ?? new Date(),
+    ...supplier,
+  };
+  const state = (deps as any)._state as FakeState;
+  state.suppliers.push(s);
+  return s;
 };
 
 export const fakeDeps = (): Deps => {
@@ -221,9 +267,45 @@ export const fakeDeps = (): Deps => {
     },
   });
 
+  const makeSupplierService = (userId: string): SupplierServiceLike => ({
+    async findAll(uId: string, metadata: Metadata) {
+      const userSuppliers = state.suppliers.filter((s) => s.userId === uId);
+      return {
+        suppliers: userSuppliers,
+        count: { count: userSuppliers.length },
+      };
+    },
+    async findById(id: string) {
+      const s = state.suppliers.find((s) => s.id === id && s.userId === userId);
+      if (!s) return undefined;
+      return s;
+    },
+    async create(payload: SupplierUpdatePayload) {
+      state.suppliers.push(payload.supplier);
+      return { id: payload.supplier.id };
+    },
+    async update(payload: SupplierUpdatePayload) {
+      const idx = state.suppliers.findIndex(
+        (s) => s.id === payload.supplier.id && s.userId === userId
+      );
+      if (idx === -1) throw new NotFoundError("Supplier", payload.supplier.id);
+      state.suppliers[idx] = payload.supplier;
+      return { id: payload.supplier.id };
+    },
+    async delete(id: string) {
+      const idx = state.suppliers.findIndex(
+        (s) => s.id === id && s.userId === userId
+      );
+      if (idx === -1) throw new NotFoundError("Supplier", id);
+      state.suppliers.splice(idx, 1);
+      return { id };
+    },
+  });
+
   const deps: Deps = {
     makeRecipeService,
     makeIngredientService,
+    makeSupplierService,
   };
   (deps as any)._state = state;
   return deps;

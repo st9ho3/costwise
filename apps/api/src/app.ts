@@ -3,11 +3,13 @@ import { errorHandler } from "./middleware/errors";
 import { requireUser } from "./middleware/auth";
 import { recipesRoutes } from "./routes/recipes";
 import { ingredientsRoutes } from "./routes/ingredients";
+import { suppliersRoutes } from "./routes/suppliers";
 import type {
   Recipe,
   RecipeIngredients,
   Ingredient,
   IngredientToDisplay,
+  Supplier,
 } from "@costwise/shared/recipe";
 import type {
   RecipeWithQuery,
@@ -17,6 +19,7 @@ import type {
   CreateRequest,
   CreateResponse,
 } from "@costwise/domain/types/services";
+import type { SupplierUpdatePayload } from "@costwise/domain/types/context";
 
 export type RecipeServiceLike = {
   findAll(
@@ -47,9 +50,21 @@ export type IngredientServiceLike = {
   delete(id: string): Promise<void>;
 };
 
+export type SupplierServiceLike = {
+  findAll(
+    userId: string,
+    metadata: Metadata
+  ): Promise<{ suppliers: Supplier[]; count: { count: number } } | undefined>;
+  findById(supplierId: string): Promise<Supplier | undefined>;
+  create(supplier: SupplierUpdatePayload): Promise<{ id: string } | undefined>;
+  update(supplier: SupplierUpdatePayload): Promise<{ id: string } | undefined>;
+  delete(supplierId: string): Promise<{ id: string } | undefined>;
+};
+
 export interface Deps {
   makeRecipeService: (userId: string) => RecipeServiceLike;
   makeIngredientService: (userId: string) => IngredientServiceLike;
+  makeSupplierService: (userId: string) => SupplierServiceLike;
 }
 
 export const createApp = (deps: Deps) => {
@@ -62,6 +77,7 @@ export const createApp = (deps: Deps) => {
   v1.use("*", requireUser);
   v1.route("/recipes", recipesRoutes(deps));
   v1.route("/ingredients", ingredientsRoutes(deps));
+  v1.route("/suppliers", suppliersRoutes(deps));
   app.route("/v1", v1);
 
   return app;
