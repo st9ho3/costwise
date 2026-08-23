@@ -1,4 +1,10 @@
-import "dotenv/config";
+import dotenv from "dotenv";
+import path from "path";
+
+dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
+dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
+
 import { Pool } from "pg";
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL! });
@@ -34,8 +40,9 @@ const run = async () => {
       "userId" text NOT NULL REFERENCES "user"(id) ON DELETE CASCADE,
       "accessToken" text, "refreshToken" text, "idToken" text,
       "accessTokenExpiresAt" timestamp, "refreshTokenExpiresAt" timestamp,
-      scope text, password text,
+      scope text, password text, issuer text,
       "createdAt" timestamp NOT NULL DEFAULT now(), "updatedAt" timestamp NOT NULL DEFAULT now())`);
+    await c.query(`ALTER TABLE "account" ADD COLUMN IF NOT EXISTS "issuer" text`);
     await c.query(`CREATE TABLE IF NOT EXISTS "session" (
       id text PRIMARY KEY, token text NOT NULL UNIQUE,
       "userId" text NOT NULL REFERENCES "user"(id) ON DELETE CASCADE,
@@ -48,18 +55,22 @@ const run = async () => {
 
     // 4. data: google links + credential rows
     const gOld = await c.query(`SELECT count(*) FROM "account_old" WHERE provider = 'google'`).catch(() => ({ rows: [{ count: "0" }] }));
-    await c.query(`INSERT INTO "account" (id, "accountId", "providerId", "userId", "accessToken", "refreshToken", "idToken", scope)
-      SELECT gen_random_uuid()::text, "providerAccountId", provider, "userId", access_token, refresh_token, id_token, scope
+    await c.query(`INSERT INTO "account" (id, "accountId", "providerId", "userId", "accessToken", "refreshToken", "idToken", scope, issuer)
+      SELECT gen_random_uuid()::text, "providerAccountId", provider, "userId", access_token, refresh_token, id_token, scope, 'https://accounts.google.com'
       FROM "account_old" WHERE provider = 'google'
       ON CONFLICT DO NOTHING`);
     const gNew = await c.query(`SELECT count(*) FROM "account" WHERE "providerId" = 'google'`);
 
     const pwUsers = await c.query(`SELECT count(*) FROM "user" WHERE password IS NOT NULL`);
-    await c.query(`INSERT INTO "account" (id, "accountId", "providerId", "userId", password)
-      SELECT gen_random_uuid()::text, id, 'credential', id, password FROM "user"
+    await c.query(`INSERT INTO "account" (id, "accountId", "providerId", "userId", password, issuer)
+      SELECT gen_random_uuid()::text, id, 'credential', id, password, 'local:credential' FROM "user"
       WHERE password IS NOT NULL
         AND NOT EXISTS (SELECT 1 FROM "account" a WHERE a."userId" = "user".id AND a."providerId" = 'credential')`);
     const credNew = await c.query(`SELECT count(*) FROM "account" WHERE "providerId" = 'credential'`);
+
+    // Idempotent backfill in case table existed prior to issuer column
+    await c.query(`UPDATE "account" SET issuer = 'local:credential' WHERE "providerId" = 'credential' AND issuer IS NULL`);
+    await c.query(`UPDATE "account" SET issuer = 'https://accounts.google.com' WHERE "providerId" = 'google' AND issuer IS NULL`);
 
     console.log(`google: old=${gOld.rows[0].count} new=${gNew.rows[0].count}`);
     console.log(`credential: users-with-password=${pwUsers.rows[0].count} rows=${credNew.rows[0].count}`);
