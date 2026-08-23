@@ -1,45 +1,49 @@
+'use client';
 
 import React from 'react';
-import { AlertTriangle } from 'lucide-react';
-import Button from './sharedButton';
+import { TriangleAlert } from 'lucide-react';
+import { Button } from '../ui/button';
 
 interface DeleteConfirmationModalProps {
-    onDelete: (id: string | null) => void;
-    onClose: () => void;
-    id: string | null;
+  onDelete: (id: string | null) => void;
+  onClose: () => void;
+  id: string | null;
+  itemType?: 'dish' | 'ingredient' | 'supplier' | 'item';
 }
 
-const DeleteConfirmationModal = ({ onDelete, onClose, id }: DeleteConfirmationModalProps) => {
-
+const DeleteConfirmationModal = ({
+  onDelete,
+  onClose,
+  id,
+  itemType = 'item',
+}: DeleteConfirmationModalProps) => {
   return (
-    // CONTAINER: Standard Dialog width, generous padding, rounded corners (Material Large Shape)
-    <div className="w-full max-w-sm p-6 bg-white rounded-[28px] shadow-xl border border-gray-100">
-      
-      {/* HEADER: Icon + Title */}
-      <div className="flex flex-col items-center text-center gap-4 mb-8">
-        {/* Warning Icon Container */}
-        <div className="flex items-center justify-center w-12 h-12 rounded-full bg-red-50 text-red-600">
-            <AlertTriangle size={24} strokeWidth={2.5} />
-        </div>
-
-        <div className="space-y-2">
-            <h3 className="text-xl font-semibold text-gray-900">
-                Delete this item?
-            </h3>
-            <p className="text-sm text-gray-500 leading-relaxed px-2">
-                This action cannot be undone. This will permanently remove the item from your inventory.
-            </p>
+    <div className="w-full max-w-[440px] flex flex-col gap-4">
+      {/* Header */}
+      <div className="flex items-start gap-3">
+        <span className="size-[40px] rounded-[12px] bg-tomato-100 text-tomato-600 flex items-center justify-center shrink-0 mt-0.5">
+          <TriangleAlert className="size-5" strokeWidth={1.75} />
+        </span>
+        <div className="flex flex-col">
+          <h3 className="font-display font-bold text-[20px] text-ink-900 leading-snug">
+            Delete this {itemType}?
+          </h3>
+          <p className="font-body text-[14px] text-stone-500 mt-1 leading-normal">
+            It&apos;ll go for good — costs and history with it. Nothing else on your list changes.
+          </p>
         </div>
       </div>
 
-      {/* ACTIONS: Flex-row-reverse places the Primary action on the right */}
-      <div className="flex flex-col sm:flex-row-reverse gap-3">
-        
-        {/* PRIMARY ACTION: Red (Destructive) */}
-        <Button text='Yes' action={() => onDelete(id)} />
-        <Button text='No' action={onClose} />
+      {/* Footer Actions */}
+      <div className="flex items-center justify-end gap-2.5 mt-2">
+        <Button variant="secondary" onClick={onClose}>
+          Leave it
+        </Button>
+        <Button variant="danger" onClick={() => onDelete(id)}>
+          Delete it
+        </Button>
       </div>
-    </div> 
+    </div>
   );
 };
 

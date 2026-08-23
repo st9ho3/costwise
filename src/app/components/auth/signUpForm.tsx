@@ -1,126 +1,93 @@
-"use client"
+'use client';
 
-import { Button } from '@/app/constants/components'
-import useSignUp from '@/app/hooks/useSignUp';
+import React from 'react';
 import Link from 'next/link';
-import { Mail, LockKeyhole, ShieldCheck } from 'lucide-react';
+import { signIn } from 'next-auth/react';
+import useSignUp from '@/app/hooks/useSignUp';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
+import { Logo } from '../ui/logo';
+import GoogleIcon from './authComponents/googleComponent';
 
 const SignUpForm = () => {
   const { register, handleSubmit, onSubmit } = useSignUp({ isSignIn: false });
 
   return (
-    // CARD CONTAINER:
-    // Matches the SignInForm: Rounded-2xl (Large shape), High Shadow, Spacious
-    <div className="w-full max-w-md p-8 bg-white rounded-[28px] shadow-xl border border-gray-100">
-      
-      {/* Header */}
-      <div className="flex flex-col text-center mb-8 space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-          Get Started
-        </h1>
-        <p className="text-sm text-gray-500">
-          Create a free account to start tracking your inventory.
-        </p>
+    <div className="w-full max-w-[420px] p-6 sm:p-8 bg-white rounded-[28px] shadow-[0_4px_8px_rgba(27,26,22,0.05),0_20px_40px_-12px_rgba(27,26,22,0.16)] border border-[#EFE8DA] flex flex-col gap-6">
+      {/* Brand & Heading */}
+      <div className="flex flex-col gap-3">
+        <Logo size="md" />
+        <div>
+          <h1 className="font-display font-bold text-[28px] sm:text-[32px] text-ink-900 leading-tight tracking-[-0.02em]">
+            Set me up.
+          </h1>
+          <p className="font-body text-[15px] text-stone-500 mt-1">
+            Start costing what goes on the plate.
+          </p>
+        </div>
       </div>
 
-      {/* Form Content */}
-      <div className="space-y-6">
-        <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
-          
-          {/* EMAIL INPUT */}
-          <div className="space-y-1.5">
-            <label 
-              htmlFor="email" 
-              className="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1"
-            >
-              Email Address
-            </label>
-            <div className={`
-              flex items-center w-full px-4 h-12
-              bg-white border border-gray-200 rounded-xl
-              transition-all duration-200 ease-in-out
-              focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10
-            `}>
-              <Mail className="text-gray-400 mr-3 shrink-0" size={20} strokeWidth={2} />
-              <input 
-                id="email" 
-                type="email" 
-                placeholder="name@example.com"
-                className="w-full h-full bg-transparent border-none outline-none text-sm text-gray-900 placeholder:text-gray-400"
-                {...register('email')}
-              />
-            </div>
-          </div>
+      {/* Form */}
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <Input
+          label="Email address"
+          type="email"
+          placeholder="name@example.com"
+          size="lg"
+          {...register('email')}
+        />
 
-          {/* PASSWORD INPUT */}
-          <div className="space-y-1.5">
-            <label 
-              htmlFor="password" 
-              className="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1"
-            >
-              Password
-            </label>
-            <div className={`
-              flex items-center w-full px-4 h-12
-              bg-white border border-gray-200 rounded-xl
-              transition-all duration-200 ease-in-out
-              focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10
-            `}>
-              <LockKeyhole className="text-gray-400 mr-3 shrink-0" size={20} strokeWidth={2} />
-              <input 
-                id="password" 
-                type="password"
-                placeholder="••••••••"
-                className="w-full h-full bg-transparent border-none outline-none text-sm text-gray-900 placeholder:text-gray-400"
-                {...register('password')}
-              />
-            </div>
-          </div>
+        <Input
+          label="Password"
+          type="password"
+          placeholder="••••••••"
+          size="lg"
+          {...register('password')}
+        />
 
-          {/* CONFIRM PASSWORD INPUT */}
-          <div className="space-y-1.5">
-            <label 
-              htmlFor="passwordConfirmation" 
-              className="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1"
-            >
-              Confirm Password
-            </label>
-            <div className={`
-              flex items-center w-full px-4 h-12
-              bg-white border border-gray-200 rounded-xl
-              transition-all duration-200 ease-in-out
-              focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10
-            `}>
-              {/* Shield Icon to imply security/verification */}
-              <ShieldCheck className="text-gray-400 mr-3 shrink-0" size={20} strokeWidth={2} />
-              <input 
-                id="passwordConfirmation" 
-                type="password"
-                placeholder="••••••••"
-                className="w-full h-full bg-transparent border-none outline-none text-sm text-gray-900 placeholder:text-gray-400"
-                {...register('passwordConfirmation')}
-              />
-            </div>
-          </div>
+        <Input
+          label="Confirm password"
+          type="password"
+          placeholder="••••••••"
+          size="lg"
+          {...register('passwordConfirmation')}
+        />
 
-          {/* Submit Button */}
-          <div className="pt-4">
-            <Button isSignIn={false} mode='credentials' type="submit">
-                Create Account
-            </Button>
-          </div>
-        </form>
+        <div className="pt-2">
+          <Button type="submit" block size="lg">
+            Create account
+          </Button>
+        </div>
+      </form>
+
+      {/* Divider */}
+      <div className="relative flex items-center justify-center">
+        <div className="border-t border-[#EFE8DA] w-full" />
+        <span className="bg-white px-3 font-bold text-[11px] uppercase tracking-[0.08em] text-stone-500 absolute">
+          or
+        </span>
       </div>
+
+      {/* Google Login */}
+      <Button
+        variant="outline"
+        block
+        size="lg"
+        onClick={() => signIn('google', { redirectTo: '/' })}
+        iconLeft={<GoogleIcon />}
+      >
+        Continue with Google
+      </Button>
 
       {/* Footer */}
-      <div className="mt-8 text-center">
-        <p className="text-sm text-gray-600">
+      <div className="text-center pt-1">
+        <p className="font-body text-[14px] text-stone-500">
           Already have an account?{' '}
           <Link
             href="/signin"
-            className="font-semibold text-blue-600 hover:text-blue-700 hover:underline transition-colors"
+            className="font-bold text-green-800 hover:underline transition-colors"
           >
-            Sign In
+            Sign in
           </Link>
         </p>
       </div>

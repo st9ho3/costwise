@@ -1,0 +1,65 @@
+:root{
+/* ---- Base ramps -------------------------------------------------------- */
+/* Green — sampled from the coin-broccoli logo mark (outline #1B4A2C, florets #6FB86E/#9AD183) */
+--green-950:#0B2213;--green-900:#123420;--green-800:#1B4A2C;--green-700:#24603A;
+--green-600:#2F7A45;--green-500:#43955A;--green-400:#6FB86E;--green-300:#9AD183;
+--green-200:#C6E7AF;--green-100:#E4F3D8;--green-50:#F2F9EC;
+/* Gold — the stacked coins */
+--gold-800:#6E4A11;--gold-700:#8A5F16;--gold-600:#B98A2A;--gold-500:#DCB24A;
+--gold-400:#E9C86B;--gold-300:#F3DFA3;--gold-100:#FBF1D4;
+/* Clay — the illustration's orange limbs */
+--clay-700:#9E4220;--clay-600:#C4552C;--clay-500:#EE7B3C;--clay-300:#F7BC91;--clay-100:#FDEBDD;
+/* Tomato / Berry / Blueberry — the produce cast */
+--tomato-700:#9E2A20;--tomato-600:#C0392B;--tomato-500:#DE5145;--tomato-100:#FBE6E3;
+--berry-600:#7A4A8C;--berry-500:#9A63AC;--berry-100:#F1E7F5;
+--blueberry-600:#3A6E9E;--blueberry-500:#4A86C4;--blueberry-100:#E6EFF8;
+/* Warm neutrals — paper, not grey */
+--cream-50:#FDFBF6;--cream-100:#F8F4EA;--cream-200:#F0EADC;
+--sand-300:#E2DACA;--sand-400:#C9BFAA;
+--stone-500:#8C8574;--stone-600:#6B6558;
+--ink-700:#45413A;--ink-800:#2C2A25;--ink-900:#1B1A16;
+--white:#FFFFFF;
+
+/* ---- Semantic surfaces ------------------------------------------------- */
+--surface-page:var(--cream-50);
+--surface-card:var(--white);
+--surface-sunken:var(--cream-100);
+--surface-inset:var(--cream-200);
+--surface-brand:var(--green-800);
+--surface-brand-strong:var(--green-900);
+--surface-brand-soft:var(--green-50);
+--surface-accent-soft:var(--gold-100);
+--surface-warm-soft:var(--clay-100);
+--surface-overlay:rgba(27,26,22,.42);
+--surface-glass:rgba(253,251,246,.78);
+
+/* ---- Semantic text ----------------------------------------------------- */
+--text-strong:var(--ink-900);
+--text-body:var(--ink-700);
+--text-muted:var(--stone-500);
+--text-faint:var(--sand-400);
+--text-brand:var(--green-700);
+--text-on-brand:var(--cream-50);
+--text-on-accent:var(--gold-800);
+--text-link:var(--green-700);
+--text-link-hover:var(--green-900);
+
+/* ---- Borders ----------------------------------------------------------- */
+--border-subtle:#EFE8DA;
+--border-default:var(--sand-300);
+--border-strong:var(--sand-400);
+--border-brand:var(--green-600);
+--border-focus:var(--green-500);
+
+/* ---- Semantic status --------------------------------------------------- */
+--good:var(--green-600);--good-soft:var(--green-100);--good-text:var(--green-800);
+--watch:var(--gold-600);--watch-soft:var(--gold-100);--watch-text:var(--gold-800);
+--over:var(--tomato-600);--over-soft:var(--tomato-100);--over-text:var(--tomato-700);
+--info:var(--blueberry-500);--info-soft:var(--blueberry-100);--info-text:var(--blueberry-600);
+--agent:var(--berry-500);--agent-soft:var(--berry-100);--agent-text:var(--berry-600);
+
+/* ---- Data viz (ordered; food-cast derived) ----------------------------- */
+--viz-1:var(--green-500);--viz-2:var(--gold-500);--viz-3:var(--clay-500);
+--viz-4:var(--berry-500);--viz-5:var(--blueberry-500);--viz-6:var(--green-300);
+--viz-track:var(--cream-200);
+}

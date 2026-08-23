@@ -21,7 +21,7 @@ interface MultipleSelectProps<T> {
  * Reusable component for multi-select fields that open a modal.
  * Displays selected items and opens a modal when clicked.
  */
-const MultipleSelect = <T extends Record<string, any>>({
+const MultipleSelect = <T extends Record<string, unknown>>({
   selectedItems,
   label,
   placeholder,

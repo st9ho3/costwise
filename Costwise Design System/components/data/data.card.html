@@ -1,0 +1,33 @@
+<!-- @dsCard group="Components" viewport="700x380" name="Data — stat tiles, meters, rows" subtitle="How Costwise shows a number" -->
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>html,body{margin:0;background:var(--surface-page)}#root{padding:18px 20px}.cwc-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px}.cwc-col{display:flex;flex-direction:column;gap:12px}.cwc-lbl{font:var(--type-overline);letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--text-muted);margin-bottom:2px}.cwc-grid{display:grid;gap:14px}</style>
+</head><body><div id="root"></div>
+<script type="text/babel" data-presets="react">
+const {Icon}=window.CostwiseDesignSystem_f2dfa3;
+
+const {StatTile,ProgressMeter,DataRow,Badge,Card}=window.CostwiseDesignSystem_f2dfa3;
+const App=()=>(<div className="cwc-col" style={{gap:16}}>
+  <div className="cwc-grid" style={{gridTemplateColumns:'repeat(3,1fr)'}}>
+    <StatTile label="Food cost" value="31.4" unit="%" delta="↓ 2.1 pts" deltaTone="good" caption="vs last week"/>
+    <StatTile label="Waste" value="€184" delta="↑ €22" deltaTone="over" caption="this month"/>
+    <StatTile variant="brand" label="Kept this month" value="€1,840"/>
+  </div>
+  <Card padding="tight" style={{display:'flex',flexDirection:'column',gap:14}}>
+    <ProgressMeter label="Carbonara plate cost" value={3.9} max={6} target={4.2} tone="good" display="€3.90 of €4.20" caption="Target plate cost €4.20"/>
+    <ProgressMeter thick label="Where the money went" segments={[{value:42},{value:26},{value:18},{value:14}]} max={100} caption="Produce · Dairy · Meat · Dry goods"/>
+  </Card>
+  <Card padding="tight">
+    <DataRow thumb={<Icon name="carrot"/>} title="Carrots, loose" subtitle="Local market · 12 Aug" amount="€1.10" amountNote="per kg"/>
+    <DataRow thumb={<Icon name="egg"/>} title="Free-range eggs" subtitle="Metro · price up 14%" amount="€4.20" amountNote="per dozen" end={<Badge tone="over">Up</Badge>}/>
+    <DataRow thumb={<Icon name="milk"/>} title="Cream 35%" subtitle="Bidfood · 8 Aug" amount="€2.65" amountNote="per litre"/>
+  </Card>
+</div>);
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+lucide.createIcons();
+</script></body></html>

@@ -13,6 +13,9 @@ import {
   RecipeAnalytics,
   IngredientAnalytics,
   OperationResult,
+  CategoryAnalytics,
+  MarginHighlights,
+  HighImpactIngredient,
 } from "./repositories";
 import { SupplierUpdatePayload } from "./context";
 
@@ -47,6 +50,8 @@ export interface IRecipeService {
     tx?: Database
   ): Promise<void>;
   getRecipesAnalytics(userId: string): Promise<RecipeAnalytics | undefined>;
+  getCategoryAnalytics(userId: string): Promise<CategoryAnalytics[]>;
+  getMarginHighlights(userId: string): Promise<MarginHighlights>;
 }
 
 export interface IIngredientService {
@@ -64,6 +69,10 @@ export interface IIngredientService {
   getIngredientAnalytics(
     userId: string
   ): Promise<IngredientAnalytics | undefined>;
+  getHighImpactIngredients(
+    userId: string,
+    limit?: number
+  ): Promise<HighImpactIngredient[]>;
 }
 
 export interface ISearchService {
@@ -71,7 +80,7 @@ export interface ISearchService {
   findIngredient(
     searchTerm: string,
     userId: string
-  ): Promise<Ingredient[] | undefined>;
+  ): Promise<IngredientToDisplay[] | undefined>;
 }
 
 export interface ISupplierService {

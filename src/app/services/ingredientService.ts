@@ -26,8 +26,12 @@ import {
 import { RecipeService } from "./recipeService";
 import { db } from "@/db/db";
 import { Database } from "@/db/schema";
-import { IngredientAnalytics, OperationResult } from "@/types/repositories";
-import { ConflictError } from "../utils/errors";
+import {
+  IngredientAnalytics,
+  OperationResult,
+  HighImpactIngredient,
+} from "@/types/repositories";
+import { ConflictError, ForbiddenError } from "../utils/errors";
 import { Metadata } from "@/types/specialTypes";
 import { SupplierIngredientRepository } from "../repositories/supplierIngredientsRepository";
 
@@ -73,21 +77,23 @@ export class IngredientService implements IIngredientService {
       destructureIngredient(validatedIngredient);
 
     if (!ingredientExists && dbIngredient) {
-      const trResult = await db.transaction(async (tx) => {
+      const result = await db.transaction(async (tx) => {
         console.log("initiate transaction");
-        const result = await this.ingredientRepository.create(dbIngredient, tx);
-        console.log("ingredient", result);
+        const res = await this.ingredientRepository.create(dbIngredient, tx);
+        console.log("ingredient", res);
         const resultS = await this.supplierIngredientRepository.create(
           tx,
           supplierIngredients,
         );
         console.log("sIngredient", resultS);
-        return result;
+        return res;
       });
+      return result;
     } else {
       if (ingredientExists) {
         throw new ConflictError("Ingredient", "name");
       }
+      return undefined;
     }
   }
 
@@ -126,9 +132,22 @@ export class IngredientService implements IIngredientService {
   async getIngredientAnalytics(
     userId: string,
   ): Promise<IngredientAnalytics | undefined> {
+    if (userId !== this.currentUserId) {
+      throw new ForbiddenError("Ingredient", "Analytics", this.currentUserId);
+    }
     const ingredientAnalytics =
       await this.ingredientRepository.getIngredientAnalytics(userId);
 
     return ingredientAnalytics;
+  }
+
+  async getHighImpactIngredients(
+    userId: string,
+    limit: number = 5
+  ): Promise<HighImpactIngredient[]> {
+    if (userId !== this.currentUserId) {
+      throw new ForbiddenError("Ingredient", "HighImpact", this.currentUserId);
+    }
+    return this.ingredientRepository.getHighImpactIngredients(userId, limit);
   }
 }

@@ -1,17 +1,12 @@
-/**
- * - Defines a root layout for authentication-related pages (e.g., sign-in, sign-up).
- * - Sets shared metadata including page title and description.
- * - Applies global styles via `../globals.css`.
- * - Wraps child pages in a semantic HTML structure with a main container that prevents vertical overflow.
- */
-import '@fontsource/jetbrains-mono/400.css'
-import '@fontsource/jetbrains-mono/500.css'
 import type { Metadata } from "next";
 import "../globals.css";
 
 export const metadata: Metadata = {
-  title: "Auth Page",
-  description: "Auth page for user authentication",
+  title: "Costwise — Sign In",
+  description: "A companion for small food and beverage businesses",
+  icons: {
+    icon: '/images/logo-mark-transparent.png',
+  },
 };
 
 export default function AuthLayout({
@@ -19,13 +14,16 @@ export default function AuthLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  
   return (
     <html lang="en">
-      <body>
-            <main className="flex-1 overflow-y-hidden">
-              {children}
-            </main>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      </head>
+      <body className="bg-cream-50 text-ink-700 font-body antialiased min-h-screen">
+        <main className="min-h-screen w-full flex">
+          {children}
+        </main>
       </body>
     </html>
   );

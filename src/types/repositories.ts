@@ -25,6 +25,25 @@ export interface RecipeAnalytics {
   totalRecipes: number;
 }
 
+export interface CategoryAnalytics {
+  category: "starter" | "main" | "dessert";
+  count: number;
+  avgFoodCost: string | null;
+}
+
+export interface MarginHighlights {
+  topPerformers: Recipe[];
+  attentionNeeded: Recipe[];
+}
+
+export interface HighImpactIngredient {
+  id: string;
+  name: string;
+  icon: string | null;
+  usage: number;
+  category: string;
+}
+
 export interface IngredientAnalytics {
   totalIngredients: number;
 }
@@ -49,6 +68,8 @@ export interface IRecipeRepository {
   delete(id: string, tx: Database): Promise<OperationResult | undefined>;
 
   getRecipesAnalytics(userId: string): Promise<RecipeAnalytics | undefined>;
+  getCategoryAnalytics(userId: string): Promise<CategoryAnalytics[]>;
+  getMarginHighlights(userId: string): Promise<MarginHighlights>;
   findByName(
     recipesName: string,
     userId: string | undefined,
@@ -94,6 +115,10 @@ export interface IIngredientRepository {
   getIngredientAnalytics(
     userId: string,
   ): Promise<IngredientAnalytics | undefined>;
+  getHighImpactIngredients(
+    userId: string,
+    limit?: number,
+  ): Promise<HighImpactIngredient[]>;
 }
 
 export interface ISupplierRepository {

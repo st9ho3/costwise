@@ -43,7 +43,11 @@ import {
   transformRecipeToDB,
 } from "../utils/transformers";
 import { Database } from "@/db/schema";
-import { RecipeAnalytics } from "@/types/repositories";
+import {
+  RecipeAnalytics,
+  CategoryAnalytics,
+  MarginHighlights,
+} from "@/types/repositories";
 import {
   ConflictError,
   ForbiddenError,
@@ -294,7 +298,24 @@ export class RecipeService implements IRecipeService {
   async getRecipesAnalytics(
     userId: string
   ): Promise<RecipeAnalytics | undefined> {
-    const recipeAnalytics = this.recipeRepository.getRecipesAnalytics(userId);
+    if (userId !== this.currentUserID) {
+      throw new ForbiddenError("Recipe", "Analytics", this.currentUserID);
+    }
+    const recipeAnalytics = await this.recipeRepository.getRecipesAnalytics(userId);
     return recipeAnalytics;
+  }
+
+  async getCategoryAnalytics(userId: string): Promise<CategoryAnalytics[]> {
+    if (userId !== this.currentUserID) {
+      throw new ForbiddenError("Recipe", "CategoryAnalytics", this.currentUserID);
+    }
+    return this.recipeRepository.getCategoryAnalytics(userId);
+  }
+
+  async getMarginHighlights(userId: string): Promise<MarginHighlights> {
+    if (userId !== this.currentUserID) {
+      throw new ForbiddenError("Recipe", "MarginHighlights", this.currentUserID);
+    }
+    return this.recipeRepository.getMarginHighlights(userId);
   }
 }

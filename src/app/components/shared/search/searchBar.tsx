@@ -1,5 +1,3 @@
-// src/components/SearchBar.jsx
-
 import React from 'react';
 import { Search, X } from 'lucide-react';
 
@@ -7,54 +5,31 @@ interface SearchBarProps {
   searchTerm: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onClear: () => void;
+  autoFocus?: boolean;
 }
 
-const SearchBar = ({ searchTerm, onChange, onClear }: SearchBarProps) => {
+const SearchBar = ({ searchTerm, onChange, onClear, autoFocus = false }: SearchBarProps) => {
   return (
-    // CONTAINER:
-    // 1. 'rounded-full' creates Pill shape
-    // 2. 'bg-gray-100' creates the off-white surface (Google's #f1f3f4)
-    // 3. 'focus-within:' classes handle the transition to active state (White bg + Shadow)
-    <div
-      className={`
-        relative flex items-center w-5/6 max-w-md h-12 px-5 mt-2 md: m-0
-        rounded-full bg-white lg:bg-gray-100
-        transition-all duration-300 ease-in-out
-        
-        /* Hover State: Subtle darkening to indicate interactivity */
-        hover:bg-gray-200/70 hover:shadow-sm
-        
-        /* Focus State: The "Pop" effect (Background turns white, adds elevation) */
-        focus-within:bg-white focus-within:shadow-md focus-within:ring-2 focus-within:ring-blue-100
-      `}
-    >
-      {/* ICON:
-          Start with a lighter gray, darken slightly on focus to draw attention 
-      */}
-      <Search 
-        className="w-5 h-5 text-gray-500 transition-colors duration-300 group-focus-within:text-blue-600 mr-3" 
-        strokeWidth={2}
-      />
-
-      {/* INPUT:
-          1. bg-transparent: Lets the container's color show through
-          2. w-full: Fills the pill
-          3. outline-none: We handle focus rings on the parent <div> instead
-      */}
+    <div className="relative flex items-center w-full max-w-[460px] h-[36px] px-3.5 rounded-full bg-cream-100 border border-transparent hover:border-sand-300 focus-within:border-green-500 focus-within:bg-white focus-within:ring-3 focus-within:ring-green-500/20 transition-all duration-140 select-none">
+      <Search className="size-[16px] text-stone-500 mr-2 shrink-0" strokeWidth={1.75} />
       <input
-        className="
-          w-full h-full bg-transparent border-none outline-none
-          text-gray-700 placeholder-gray-500 font-medium tracking-wide
-          text-sm
-        "
+        type="text"
+        autoFocus={autoFocus}
         value={searchTerm}
         onChange={onChange}
-        type="text"
-        placeholder="Search..."
+        placeholder="Search dishes, ingredients, suppliers…"
+        className="w-full bg-transparent border-0 outline-none font-body text-[13px] text-ink-900 placeholder:text-stone-500"
       />
-      <div className='flex justify-center items-center rounded-full bg-gray-700 p-1' onClick={onClear}>
-        <X size={16} color='white'/>
-      </div>
+      {searchTerm && (
+        <button
+          type="button"
+          onClick={onClear}
+          className="size-[20px] rounded-full bg-cream-200 hover:bg-sand-300 text-stone-600 flex items-center justify-center shrink-0 cursor-pointer transition-colors"
+          aria-label="Clear search"
+        >
+          <X className="size-[12px]" strokeWidth={2} />
+        </button>
+      )}
     </div>
   );
 };

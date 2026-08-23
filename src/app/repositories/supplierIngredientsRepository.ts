@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Database, supplierIngredients } from "@/db/schema";
 import { ISupplierIngredientRepository } from "@/types/repositories";
 import { SupplierIngredientData } from "../utils/transformers";
@@ -13,12 +14,12 @@ export class SupplierIngredientRepository implements ISupplierIngredientReposito
       .returning();
     return response;
   }
-  update(
+  async update(
     tx: Database,
     supplierId: string,
     data: SupplierIngredientData[],
   ): Promise<void> {}
-  delete(
+  async delete(
     tx: Database,
     supplierId: string,
     ingreientId: string,

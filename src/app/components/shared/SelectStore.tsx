@@ -1,6 +1,5 @@
 'use client'
 
-import { IngredientCategory } from '@/shemas/recipe';
 import React from 'react'
 
 /**

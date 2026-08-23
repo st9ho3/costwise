@@ -1,18 +1,14 @@
-/**
- * Renders the ingredients page for a logged-in user.
- * This component fetches all ingredients associated with the current user's ID.
- * It first verifies user authentication and redirects to the sign-in page if no session is found.
- * It then uses the `IngredientService` to retrieve the ingredient data and passes it to the `IngredientsTable`
- * and `Pagination` components for display and navigation. The page is set to be dynamically rendered
- * to ensure data is always up-to-date.
- */
 import React from 'react';
+import Link from 'next/link';
+import { Plus } from 'lucide-react';
 import IngredientsTable from '@/app/components/ingredients/ingredientsTable';
 import Pagination from '@/app/components/recipes/pagination';
 import { IngredientService } from '@/app/services/ingredientService';
+import { SupplierService } from '@/app/services/suppliersService';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { Metadata } from '@/types/specialTypes';
+import { Button } from '@/app/components/ui/button';
 
 export const dynamic = 'force-dynamic';
 
@@ -44,23 +40,55 @@ const IngredientsPage = async ({ searchParams }: Props) => {
   };
 
   const service = new IngredientService(session.user.id);
-  const rawIngredients = session.user.id && await service.findAll(session.user.id, metadata);
-  const totalItems = rawIngredients ? rawIngredients.count.count : 1;
+  const supplierService = new SupplierService(session.user.id);
+
+  const [rawIngredients, supplierData] = await Promise.all([
+    service.findAll(session.user.id, metadata),
+    supplierService.findAll(session.user.id, {
+      itemsPerPage: 1,
+      offset: 0,
+      page: 1,
+      order: 'desc',
+      sort: 'dateAdded',
+    }),
+  ]);
+
+  const totalItems = rawIngredients ? rawIngredients.count.count : 0;
+  const supplierCount = supplierData ? supplierData.count.count : 0;
   const pageNumber = Math.ceil(totalItems / itemsPerPage);
-  const ingredients = rawIngredients
-    ? rawIngredients.ingredients.map((ingredient) => {
-        return ingredient;
-      })
-    : [];
+  const ingredients = rawIngredients ? rawIngredients.ingredients : [];
 
   return (
-    <div className="flex flex-col h-full w-full px-2 md:px-5 bg-white">
-      <div className="flex-1 overflow-auto">
+    <div className="flex flex-col gap-6 p-4 sm:p-8 lg:px-10 lg:py-8 max-w-[1160px] mx-auto w-full">
+      {/* Page Header */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <h1 className="font-display font-bold text-[28px] sm:text-[30px] leading-tight text-ink-900 tracking-[-0.02em]">
+            Your ingredients
+          </h1>
+          <p className="font-body text-[15px] text-stone-500 mt-1">
+            {totalItems} {totalItems === 1 ? 'thing' : 'things'} you buy, across {supplierCount} {supplierCount === 1 ? 'supplier' : 'suppliers'}
+          </p>
+        </div>
+
+        <Link href="/ingredients/create">
+          <Button iconLeft={<Plus className="size-4" strokeWidth={2.5} />}>
+            Add an ingredient
+          </Button>
+        </Link>
+      </div>
+
+      {/* Ingredients List / Table */}
+      <div className="w-full">
         <IngredientsTable items={ingredients} />
       </div>
-      <div className="mt-auto">
-        <Pagination pageNumber={pageNumber} currentPage={page} />
-      </div>
+
+      {/* Pagination */}
+      {pageNumber > 1 && (
+        <div className="mt-auto">
+          <Pagination pageNumber={pageNumber} currentPage={page} />
+        </div>
+      )}
     </div>
   );
 };

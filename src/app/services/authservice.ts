@@ -72,4 +72,8 @@ export class AuthService implements AUTHService {
 
     return userId;
   }
+
+  async updateUserImage(userId: string, image: string, name?: string | null): Promise<void> {
+    await this.authRepository.updateUserImage(userId, image, name);
+  }
 }

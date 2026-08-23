@@ -1,13 +1,3 @@
-/**
- * Renders a full-screen overlay for creating a new recipe.
- * This component first checks for an authenticated user session. If no session is found,
- * it redirects the user to the sign-in page. It then fetches all ingredients associated
- * with the authenticated user from the `IngredientService`. These ingredients are
- * formatted and passed to the `RecipeForm` component, which is configured for 'create' mode.
- * An empty array for `recipeIngredients` is also initialized and passed to the form,
- * as a new recipe has no ingredients by default. The component ensures the user is
- * authenticated before rendering the form to prevent unauthorized access.
- */
 import React from 'react';
 import RecipeForm from '@/app/components/recipes/recipeForm/recipeForm';
 import { IngredientService } from '@/app/services/ingredientService';
@@ -17,38 +7,35 @@ import { redirect } from 'next/navigation';
 import { Metadata } from '@/types/specialTypes';
 
 const Page = async () => {
-    const session = await auth();
+  const session = await auth();
 
-    if (!session?.user?.id) {
-        redirect('/signin');
-    }
+  if (!session?.user?.id) {
+    redirect('/signin');
+  }
 
-    const service = new IngredientService(session?.user?.id);
+  const service = new IngredientService(session.user.id);
 
-    // Use a high limit to get all ingredients for dropdown
-    const dropdownMetadata: Metadata = {
-        page: 1,
-        order: 'asc',
-        sort: 'name',
-        itemsPerPage: 1000,
-        offset: 0,
-    };
+  // Use a high limit to get all ingredients for dropdown
+  const dropdownMetadata: Metadata = {
+    page: 1,
+    order: 'asc',
+    sort: 'name',
+    itemsPerPage: 1000,
+    offset: 0,
+  };
 
-    const result = session.user.id && await service.findAll(session.user.id, dropdownMetadata);
+  const result = await service.findAll(session.user.id, dropdownMetadata);
+  const ingredients = result ? result.ingredients : [];
+  const recipeIngredients: RecipeIngredients[] = [];
 
-    const ingredients = result ? result.ingredients.map((ingredient) => {
-        return { ...ingredient, unitPrice: Number(ingredient.unitPrice), quantity: Number(ingredient.quantity) };
-    }) : [];
-    
-    const recipeIngredients: RecipeIngredients[] = [];
-
-    return (
-        <div className="fixed inset-0 z-55 flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity duration-300">
-            <div className={`relative w-full max-w-fit p-9 mx-4 transform transition-all duration-300 bg-white rounded-2xl shadow-xl`}>
-                {session.user.id && <RecipeForm mode="create" recipeIngredients={recipeIngredients} ingredients={ingredients} userId={session.user.id} />}
-            </div>
-        </div>
-    );
+  return (
+    <RecipeForm
+      mode="create"
+      recipeIngredients={recipeIngredients}
+      ingredients={ingredients}
+      userId={session.user.id}
+    />
+  );
 };
 
 export default Page;

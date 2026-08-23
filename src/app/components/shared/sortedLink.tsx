@@ -1,62 +1,58 @@
-"use client"
-import { ArrowDown, ArrowDownUp, ArrowUp } from 'lucide-react'
-import { usePathname, useSearchParams } from 'next/navigation'
-import { useRouter } from 'next/navigation'
-import React from 'react'
+"use client";
+
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
+import React from 'react';
+import { cn } from '@/app/utils/cn';
 
 interface SortedLinkProps {
-    children: React.ReactNode
-    value: string
+  children: React.ReactNode;
+  value: string;
+  className?: string;
 }
 
-const SortedLink = ({children, value}: SortedLinkProps) => {
+const SortedLink = ({ children, value, className }: SortedLinkProps) => {
+  const router = useRouter();
+  const pathName = usePathname();
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
+  const orderValue = params.get('sort');
+  const direction = params.get('order');
+  const isActive = orderValue === value;
 
-  const router = useRouter()
-  const pathName = usePathname()
-  const searchParams = useSearchParams()
-  const params = new URLSearchParams(searchParams)
-  const orderValue = params.get('sort')
-  const direction = params.get('order')
-  const isActive = orderValue === value
+  const setSorting = (val: string) => {
+    params.delete('page');
+    params.set('sort', val);
 
-  const setSorting = (value: string) => {
-    const paramsValue = params.get('sort')
-    params.delete('page')
-    params.set('sort', value)
-    
     if (!direction) {
-      params.set('order', 'desc')
-    }else{
-      if (direction === 'desc' && value === paramsValue) {
-        params.set('order', 'asc')
+      params.set('order', 'desc');
+    } else {
+      if (direction === 'desc' && val === orderValue) {
+        params.set('order', 'asc');
       } else {
-        params.set('order', 'desc')
+        params.set('order', 'desc');
       }
-      
     }
-    router.push(`${pathName}?${params}`)
-  }
-  
-  
-  const showArrowsDirection = () => {
-   
-    if (isActive) {
-      if (direction === 'desc') {
-       return <ArrowDown color='green' size={15} />
-      } else {
-       return <ArrowUp color='green' size={15} /> 
-      }
-    }else {
-      return <ArrowDownUp size={15} />
-    }
-  }
-  const arrow = showArrowsDirection()
-  return (
-    <div className='cursor-pointer text-xs flex items-center gap-2' onClick={() => setSorting(value)}>
-      {children}
-      {arrow}
-    </div>
-  )
-}
+    router.push(`${pathName}?${params}`);
+  };
 
-export default SortedLink
+  return (
+    <button
+      type="button"
+      onClick={() => setSorting(value)}
+      className={cn(
+        "inline-flex items-center gap-1 font-bold text-[11px] uppercase tracking-[0.08em] select-none cursor-pointer transition-colors outline-none",
+        isActive ? "text-green-800" : "text-stone-500 hover:text-ink-900",
+        className
+      )}
+    >
+      <span>{children}</span>
+      {isActive && (
+        <span className="text-green-700 font-bold text-[13px] leading-none">
+          {direction === 'asc' ? '↑' : '↓'}
+        </span>
+      )}
+    </button>
+  );
+};
+
+export default SortedLink;

@@ -1,90 +1,99 @@
-"use client"
-import React from 'react'
-import { Home, ChefHat, Leaf, User, Plus } from 'lucide-react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useUIStore } from '@/app/stores/uiStore'
+"use client";
+
+import React from 'react';
+import { House, Utensils, Carrot, Truck, Plus } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useUIStore } from '@/app/stores/uiStore';
+import { cn } from '@/app/utils/cn';
 
 const TabBar = () => {
-  const pathname = usePathname()
-  const openModal = useUIStore((state) => state.openModal)
-  const openProfile = useUIStore((state) => state.openProfile)
+  const pathname = usePathname();
+  const openModal = useUIStore((state) => state.openModal);
 
-  const isActive = (path: string) => pathname === path
+  const isActive = (path: string) => {
+    if (path === '/') return pathname === '/';
+    return pathname.startsWith(path);
+  };
 
   return (
-    <div className='fixed bottom-0 left-0 right-0 z-50 md:hidden'>
+    <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden select-none">
       {/* Drop Shadow Container */}
-      <div className="relative w-full h-[80px] filter drop-shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
-        
+      <div className="relative w-full h-[82px] filter drop-shadow-[0_-4px_10px_rgba(27,26,22,0.06)]">
         {/* Main Bar with Cutout Mask */}
-        <div 
-          className="absolute inset-0 bg-white flex items-center justify-between px-2 pb-2"
+        <div
+          className="absolute inset-0 bg-white flex items-center justify-between px-2 pb-1"
           style={{
             maskImage: 'radial-gradient(circle at 50% 0px, transparent 35px, black 36px)',
             WebkitMaskImage: 'radial-gradient(circle at 50% 0px, transparent 35px, black 36px)',
           }}
         >
-          {/* Home */}
-          <Link 
-            href="/" 
-            className={`flex-1 flex flex-col items-center justify-center gap-1 h-full pt-3 transition-colors ${
-              isActive('/') ? 'text-blue-600' : 'text-gray-400 hover:text-gray-600'
-            }`}
+          {/* Today */}
+          <Link
+            href="/"
+            className={cn(
+              "flex-1 flex flex-col items-center justify-center gap-1 h-full pt-3 transition-colors",
+              isActive('/') ? "text-green-800" : "text-sand-400 hover:text-ink-700"
+            )}
           >
-            <Home size={24} strokeWidth={isActive('/') ? 2.5 : 2} fill={isActive('/') ? "currentColor" : "none"} />
-            <span className="text-[10px] font-medium">Home</span>
+            <House size={22} strokeWidth={1.75} />
+            <span className="text-[10px] font-bold tracking-tight">Today</span>
           </Link>
 
-          {/* Recipes */}
-          <Link 
-            href="/recipes" 
-            className={`flex-1 flex flex-col items-center justify-center gap-1 h-full pt-3 transition-colors ${
-              isActive('/recipes') ? 'text-blue-600' : 'text-gray-400 hover:text-gray-600'
-            }`}
+          {/* Dishes */}
+          <Link
+            href="/recipes"
+            className={cn(
+              "flex-1 flex flex-col items-center justify-center gap-1 h-full pt-3 transition-colors",
+              isActive('/recipes') ? "text-green-800" : "text-sand-400 hover:text-ink-700"
+            )}
           >
-            <ChefHat size={24} strokeWidth={isActive('/recipes') ? 2.5 : 2} />
-            <span className="text-[10px] font-medium">Recipes</span>
+            <Utensils size={22} strokeWidth={1.75} />
+            <span className="text-[10px] font-bold tracking-tight">Dishes</span>
           </Link>
 
           {/* Spacer for FAB */}
           <div className="w-20 shrink-0" />
 
           {/* Ingredients */}
-          <Link 
-            href="/ingredients" 
-            className={`flex-1 flex flex-col items-center justify-center gap-1 h-full pt-3 transition-colors ${
-              isActive('/ingredients') ? 'text-blue-600' : 'text-gray-400 hover:text-gray-600'
-            }`}
+          <Link
+            href="/ingredients"
+            className={cn(
+              "flex-1 flex flex-col items-center justify-center gap-1 h-full pt-3 transition-colors",
+              isActive('/ingredients') ? "text-green-800" : "text-sand-400 hover:text-ink-700"
+            )}
           >
-            <Leaf size={24} strokeWidth={isActive('/ingredients') ? 2.5 : 2} fill={isActive('/ingredients') ? "currentColor" : "none"} />
-            <span className="text-[10px] font-medium">Ingredients</span>
+            <Carrot size={22} strokeWidth={1.75} />
+            <span className="text-[10px] font-bold tracking-tight">Ingredients</span>
           </Link>
 
-          {/* Profile */}
-          <button 
-            onClick={openProfile}
-            className={`flex-1 flex flex-col items-center justify-center gap-1 h-full pt-3 transition-colors ${
-              pathname === '/profile' ? 'text-blue-600' : 'text-gray-400 hover:text-gray-600'
-            }`}
+          {/* Suppliers */}
+          <Link
+            href="/suppliers"
+            className={cn(
+              "flex-1 flex flex-col items-center justify-center gap-1 h-full pt-3 transition-colors",
+              isActive('/suppliers') ? "text-green-800" : "text-sand-400 hover:text-ink-700"
+            )}
           >
-            <User size={24} strokeWidth={2} fill={pathname === '/profile' ? "currentColor" : "none"} />
-            <span className="text-[10px] font-medium">Profile</span>
-          </button>
+            <Truck size={22} strokeWidth={1.75} />
+            <span className="text-[10px] font-bold tracking-tight">Suppliers</span>
+          </Link>
         </div>
 
-        {/* Floating Action Button */}
+        {/* Floating Action Button (FAB) */}
         <div className="absolute left-1/2 -top-7 -translate-x-1/2">
-            <button 
-                onClick={() => openModal('create')}
-                className="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-blue-600/40 hover:scale-105 active:scale-95 transition-all"
-            >
-                <Plus size={28} strokeWidth={2.5} />
-            </button>
+          <button
+            type="button"
+            onClick={() => openModal('create')}
+            className="size-[56px] rounded-full bg-green-800 text-cream-50 flex items-center justify-center shadow-[0_8px_24px_-10px_rgba(27,74,44,0.5)] hover:bg-green-700 active:scale-95 transition-all cursor-pointer"
+            aria-label="Add something"
+          >
+            <Plus size={26} strokeWidth={2} />
+          </button>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default TabBar
+export default TabBar;

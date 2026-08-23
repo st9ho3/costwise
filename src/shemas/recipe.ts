@@ -55,6 +55,9 @@ export const DeliveryTimeSchema = z
     z.literal("2-3 Days"),
     z.literal("Up to 5 days"),
     z.literal("Weekly"),
+    z.literal("Same day").transform(() => "Same Day" as const),
+    z.literal("1-2 days").transform(() => "1-2 Days" as const),
+    z.literal("2-3 days").transform(() => "2-3 Days" as const),
   ])
   .nullable()
   .optional();

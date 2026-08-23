@@ -1,0 +1,24 @@
+:root{
+--space-0:0;--space-1:2px;--space-2:4px;--space-3:6px;--space-4:8px;--space-5:12px;
+--space-6:16px;--space-7:20px;--space-8:24px;--space-9:32px;--space-10:40px;
+--space-11:48px;--space-12:64px;--space-13:80px;--space-14:96px;
+
+/* Composition */
+--gutter-page:20px;        /* phone side margin */
+--gutter-page-lg:40px;     /* desktop side margin */
+--gap-stack:12px;          /* between rows inside a card */
+--gap-cards:16px;          /* between cards in a feed */
+--gap-section:32px;        /* between feed sections */
+--pad-card:20px;
+--pad-card-tight:14px;
+--pad-control-x:16px;
+--pad-control-y:11px;
+--width-content:1160px;
+--width-prose:64ch;
+--width-app-phone:390px;
+--width-sidebar:248px;
+--width-sidebar-collapsed:64px;
+--height-control:44px;      /* never below 44 — thumb target */
+--height-control-sm:36px;
+--height-topbar:60px;
+}

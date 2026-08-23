@@ -1,41 +1,38 @@
-import { getIconColor } from '@/app/utils/uiHelpers'
-import { IngredientCategory } from '@/shemas/recipe'
-import Image from 'next/image'
-import React from 'react'
+import { CategoryThumbnail } from '@/app/utils/uiHelpers';
+import React from 'react';
 
 interface TableClickableTitleProps {
-    imgPath?: string
-    title: string
-    icon?: string | null
-    category?: IngredientCategory
+  imgPath?: string;
+  title: string;
+  category?: string;
+  subtitle?: string;
 }
 
-const TableClickableTitle = ({imgPath, title, icon, category}: TableClickableTitleProps) => {
-
-  const iconColor = getIconColor(category)
-  
+const TableClickableTitle = ({ imgPath, title, category, subtitle }: TableClickableTitleProps) => {
   return (
-    <div className="flex items-center gap-2 mb-1">
-        {imgPath && 
-        <Image
-          className="w-9 h-9 rounded-full object-cover"
-          src={imgPath || '/images/placeholder-image.png'}
+    <div className="flex items-center gap-3 py-1">
+      {imgPath ? (
+        <img
+          className="size-[36px] rounded-full object-cover shrink-0 border border-[#EFE8DA]"
+          src={imgPath}
           alt={title}
-          width={1200}
-          height={800}
         />
-        }
-        {!imgPath && 
-          <div className={`flex justify-center items-center w-9 h-9 text-xl rounded-full object-cover ${iconColor}`}>
-          {icon}
-          </div>
-        }
-        
-        <p className="text-xs break-words transition-colors duration-300 ease-in-out hover:text-gray-400">
-          {title}
-        </p>
-    </div>
-  )
-}
+      ) : (
+        <CategoryThumbnail category={category} size={36} />
+      )}
 
-export default TableClickableTitle
+      <div className="flex flex-col min-w-0">
+        <span className="font-semibold text-[15px] text-ink-900 leading-snug group-hover:text-green-800 transition-colors truncate">
+          {title}
+        </span>
+        {subtitle && (
+          <span className="text-[12px] text-stone-500 truncate font-body">
+            {subtitle}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default TableClickableTitle;

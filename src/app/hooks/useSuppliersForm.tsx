@@ -12,6 +12,7 @@ import useHelpers from './useHelpers';
 import { useUIStore } from '../stores/uiStore';
 
 export type FormFields = z.infer<typeof SupplierSchema>;
+export type FormInput = z.input<typeof SupplierSchema>;
 
 interface UseSuppliersFormProps {
   userId: string
@@ -21,7 +22,7 @@ interface UseSuppliersFormProps {
 
 const useSuppliersForm = ({userId, mode, supplier}: UseSuppliersFormProps) => {
 
-    const {register, handleSubmit, reset, formState} = useForm<FormFields>({
+    const {register, handleSubmit, reset, formState, setValue, watch} = useForm<FormInput, unknown, FormFields>({
         defaultValues: mode === 'create' ? getDefaultSupplierValues() : supplier,
         resolver: zodResolver(SupplierSchema)
     })
@@ -109,6 +110,8 @@ const useSuppliersForm = ({userId, mode, supplier}: UseSuppliersFormProps) => {
   return {
     register,
     handleSubmit,
+    setValue,
+    watch,
     reset,
     formState,
     onSubmit,

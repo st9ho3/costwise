@@ -1,10 +1,9 @@
 import { MessageType } from "@/shemas/chat";
-import { initialState } from "@/app/context/homeContext/homeReducer";
 import { ReactNode } from "react";
 import { IngredientCategory, Recipe, RecipeIngredients, Supplier } from "@/shemas/recipe";
 
 export interface HomeContextProps {
-    state: typeof initialState,
+    state: HomeState,
     dispatch: React.Dispatch<Action>;
 }
 

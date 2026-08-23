@@ -1,0 +1,36 @@
+<!-- @dsCard group="Components" viewport="700x400" name="Assistant — bubbles, chips, composer" subtitle="The conversational surface" -->
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>html,body{margin:0;background:var(--surface-page)}#root{padding:18px 20px}.cwc-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px}.cwc-col{display:flex;flex-direction:column;gap:12px}.cwc-lbl{font:var(--type-overline);letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--text-muted);margin-bottom:2px}.cwc-grid{display:grid;gap:14px}</style>
+</head><body><div id="root"></div>
+<script type="text/babel" data-presets="react">
+const {Icon}=window.CostwiseDesignSystem_f2dfa3;
+
+const {ChatBubble,SuggestionChip,Composer,Avatar,IconButton,ProgressMeter,Card}=window.CostwiseDesignSystem_f2dfa3;
+const App=()=>(<div className="cwc-col" style={{gap:14}}>
+  <ChatBubble avatar={<Avatar agent src="../../assets/logo-mark-transparent.png"/>} meta="Just now"
+    attachment={<Card padding="tight"><ProgressMeter label="Carbonara" value={3.9} max={6} target={4.2} tone="watch" display="€3.90"/></Card>}>
+    Your <strong>carbonara</strong> costs €3.90 a plate this week — 40c more than last, because eggs went up.
+  </ChatBubble>
+  <ChatBubble from="me">So should I put the price up?</ChatBubble>
+  <ChatBubble tone="note" avatar={<Avatar agent src="../../assets/logo-mark-transparent.png"/>}>
+    €15.50 keeps you at a 68% margin, even if eggs stay high. That's 50c more than now.
+  </ChatBubble>
+  <div className="cwc-row">
+    <SuggestionChip icon={<Icon name="receipt-text" size={15}/>}>Snap a supplier invoice</SuggestionChip>
+    <SuggestionChip variant="accent">Why did my margin drop?</SuggestionChip>
+    <SuggestionChip variant="soft">Cheapest dish to push</SuggestionChip>
+    <SuggestionChip variant="filter" selected>Dishes</SuggestionChip>
+    <SuggestionChip variant="filter">Suppliers</SuggestionChip>
+  </div>
+  <Composer value="" lead={<Icon name="sparkles" size={16}/>} sendIcon={<Icon name="arrow-up" size={18}/>}
+    tools={<><IconButton size="sm" round icon={<Icon name="camera" size={18}/>} label="Snap an invoice"/><IconButton size="sm" round icon={<Icon name="mic" size={18}/>} label="Speak"/></>}/>
+</div>);
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+lucide.createIcons();
+</script></body></html>

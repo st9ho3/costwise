@@ -68,4 +68,17 @@ export class AuthRepository implements AUTHrepository {
       throw new DatabaseError("AuthRepository.createGoogleUser", err);
     }
   }
+
+  async updateUserImage(userId: string, image: string, name?: string | null): Promise<void> {
+    try {
+      const updateData: { image: string; name?: string } = { image };
+      if (name) {
+        updateData.name = name;
+      }
+      await db.update(users).set(updateData).where(eq(users.id, userId));
+    } catch (err) {
+      console.error("Failed to update user image:", err);
+      throw new DatabaseError("AuthRepository.updateUserImage", err);
+    }
+  }
 }
