@@ -23,4 +23,11 @@ describe("app root endpoints", () => {
     const html = await res.text();
     expect(html).toContain("<html");
   });
+
+  it("does not gate /v1/auth/* behind requireUser", async () => {
+    const res = await createApp(fakeDeps()).request("/v1/auth/get-session");
+    const body = await res.json().catch(() => null);
+    // Better Auth answers (null session), not our auth envelope:
+    expect(body?.error?.code).not.toBe("AUTHENTICATION_ERROR");
+  });
 });

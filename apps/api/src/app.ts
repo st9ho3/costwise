@@ -91,6 +91,9 @@ export type PutBlobFn = (
   opts: { access: "public"; addRandomSuffix?: boolean }
 ) => Promise<{ url: string }>;
 
+import { cors } from "hono/cors";
+import { auth } from "./auth";
+
 export interface Deps {
   makeRecipeService: (userId: string) => RecipeServiceLike;
   makeIngredientService: (userId: string) => IngredientServiceLike;
@@ -104,6 +107,15 @@ export const createApp = (deps: Deps) => {
   app.onError(errorHandler);
 
   app.get("/health", (c) => c.json({ status: "ok" }));
+
+  app.use(
+    "/v1/*",
+    cors({
+      origin: process.env.WEB_ORIGIN ?? "http://localhost:3000",
+      credentials: true,
+    })
+  );
+  app.on(["GET", "POST"], "/v1/auth/*", (c) => auth.handler(c.req.raw));
 
   const v1 = new OpenAPIHono<{ Variables: { userId: string } }>();
   v1.use("*", requireUser);

@@ -358,6 +358,8 @@ export const verificationTokens = pgTable(
   ],
 );
 
+export const verifications = verificationTokens;
+
 export const authenticators = pgTable(
   "authenticator",
   {

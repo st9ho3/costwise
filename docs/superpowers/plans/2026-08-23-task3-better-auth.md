@@ -29,8 +29,8 @@
 
 ### Task 1: Preflight
 
-- [ ] `git fetch origin && git merge-base --is-ancestor origin/feature/hono-api origin/main && echo OK` → `OK` (Task 2 merged), else STOP.
-- [ ] Own clone, clean tree, `git checkout main && git pull && git checkout -b feature/better-auth`.
+- [x] `git fetch origin && git merge-base --is-ancestor origin/feature/hono-api origin/main && echo OK` → `OK` (Task 2 merged), else STOP.
+- [x] Own clone, clean tree, `git checkout main && git pull && git checkout -b feature/better-auth`.
 
 ---
 
@@ -40,8 +40,8 @@
 
 **Interfaces produced:** `auth` (Better Auth instance) exported from `apps/api/src/auth.ts`; `/v1/auth/*` handled by Better Auth; CORS on `/v1/*` for `WEB_ORIGIN` with credentials.
 
-- [ ] **Step 1:** `pnpm --filter api add better-auth` (record the resolved version in the commit body).
-- [ ] **Step 2 (RED):** add to `app.test.ts`:
+- [x] **Step 1:** `pnpm --filter api add better-auth` (record the resolved version in the commit body).
+- [x] **Step 2 (RED):** add to `app.test.ts`:
 
 ```ts
 it("does not gate /v1/auth/* behind requireUser", async () => {
@@ -54,7 +54,7 @@ it("does not gate /v1/auth/* behind requireUser", async () => {
 
 Run → FAIL (currently 401 envelope from requireUser).
 
-- [ ] **Step 3:** `apps/api/src/auth.ts`:
+- [x] **Step 3:** `apps/api/src/auth.ts`:
 
 ```ts
 import { betterAuth } from "better-auth";
@@ -88,7 +88,7 @@ export const auth = betterAuth({
 
 (`bcrypt` is already a domain dep; add it to `apps/api` deps too: `pnpm --filter api add bcrypt && pnpm --filter api add -D @types/bcrypt`.)
 
-- [ ] **Step 4 (GREEN):** in `app.ts`, BEFORE `app.route("/v1", v1)`:
+- [x] **Step 4 (GREEN):** in `app.ts`, BEFORE `app.route("/v1", v1)`:
 
 ```ts
 import { cors } from "hono/cors";
@@ -103,7 +103,7 @@ app.on(["GET", "POST"], "/v1/auth/*", (c) => auth.handler(c.req.raw));
 
 Registration ORDER is the point: auth handler before the v1 sub-app. Run the test → PASS. NOTE: importing `./auth` at module load requires env vars to merely exist for tests — if the instance throws in CI (no DB connection is fine, `pg.Pool` is lazy; a missing secret is not), give `auth.ts` safe fallbacks for test env (`process.env.BETTER_AUTH_SECRET ?? "test-secret-32-chars-minimum-xxxx"`) and note it.
 
-- [ ] **Step 5:** Workspace gates green. Commit `feat(api): better-auth instance mounted at /v1/auth`.
+- [x] **Step 5:** Workspace gates green. Commit `feat(api): better-auth instance mounted at /v1/auth`.
 
 ---
 
