@@ -31,6 +31,7 @@
 
 - [ ] `git fetch origin && git merge-base --is-ancestor origin/fix/ingredient-supplier-selection origin/main && echo BUGFIX-MERGED` — informational only; note the result (the deploy ships whatever `main` holds; urgent bug 868kv84c1 should ideally be merged first — STOP and report if it isn't, don't wait silently).
 - [ ] Own clone/worktree, clean tree, branch `feature/deploy-split` off pulled `origin/main`.
+- [ ] Check ClickUp 868kv87ad (Google sign-in error-page flash): if still unclassified at cutover time, flag it at the Task 4 checkpoint — an unclassified auth flash makes a Task 8 Google-login failure ambiguous between the pre-existing bug and the new split-origin config. Panos decides whether to classify it first or proceed.
 
 ---
 
