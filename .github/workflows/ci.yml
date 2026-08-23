@@ -40,3 +40,25 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - run: pnpm exec turbo run build test lint --cache-dir=.turbo
+
+  fallow:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Fallow advisory report (never blocks)
+        run: |
+          echo '## Fallow advisory findings' >> "$GITHUB_STEP_SUMMARY"
+          echo '```'                         >> "$GITHUB_STEP_SUMMARY"
+          pnpm --silent fallow:ci | tee -a "$GITHUB_STEP_SUMMARY" || true
+          echo '```'                         >> "$GITHUB_STEP_SUMMARY"
