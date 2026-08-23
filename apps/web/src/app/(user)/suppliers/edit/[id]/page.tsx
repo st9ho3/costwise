@@ -1,8 +1,9 @@
 import SuppliersForm from '@/app/components/suppliers/suppliersForm';
-import { SupplierService } from '@costwise/domain/services/suppliersService';
 import { getServerSession } from '@/app/lib/serverSession';
 import { redirect, notFound } from 'next/navigation';
 import React from 'react';
+import { apiServer } from '@/app/lib/api';
+import { Supplier } from '@costwise/shared/recipe';
 
 export interface Params {
   params: Promise<{
@@ -16,13 +17,22 @@ const EditPage = async ({ params }: Params) => {
     redirect('/signin');
   }
 
-  const service = new SupplierService(session.user.id);
   const { id } = await params;
-  const supplier = await service.findById(id);
+  const api = await apiServer();
+  const { data: rawSupplier, error } = await api.GET('/v1/suppliers/{id}', {
+    params: { path: { id } },
+  });
 
-  if (!supplier) {
+  if (error || !rawSupplier) {
     notFound();
   }
+
+  const supplier: Supplier = {
+    ...rawSupplier,
+    icon: rawSupplier.icon ?? undefined,
+    dateAdded: rawSupplier.dateAdded ? new Date(rawSupplier.dateAdded) : undefined,
+    deliveryTime: rawSupplier.deliveryTime as Supplier['deliveryTime'],
+  };
 
   return (
     <SuppliersForm

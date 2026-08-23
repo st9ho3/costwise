@@ -3,11 +3,11 @@ import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import SuppliersTable from '@/app/components/suppliers/suppliersTable';
 import Pagination from '@/app/components/recipes/pagination';
-import { SupplierService } from '@costwise/domain/services/suppliersService';
 import { getServerSession } from '@/app/lib/serverSession';
 import { redirect } from 'next/navigation';
-import { Metadata } from '@costwise/shared/specialTypes';
 import { Button } from '@/app/components/ui/button';
+import { apiServer } from '@/app/lib/api';
+import { Supplier } from '@costwise/shared/recipe';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,19 +30,30 @@ const SuppliersPage = async ({ searchParams }: Props) => {
   const numericPage = parseInt(page || '1');
   const itemsPerPage = 9;
   const offset = (numericPage - 1) * itemsPerPage;
-  const metadata: Metadata = {
-    page: numericPage,
-    order,
-    sort,
-    itemsPerPage,
-    offset,
-  };
 
-  const service = new SupplierService(session.user.id);
-  const rawSuppliers = await service.findAll(session.user.id, metadata);
+  const api = await apiServer();
+  const { data: rawSuppliers } = await api.GET('/v1/suppliers', {
+    params: {
+      query: {
+        page: numericPage,
+        order,
+        sort,
+        itemsPerPage,
+        offset,
+      },
+    },
+  });
+
   const totalItems = rawSuppliers ? rawSuppliers.count.count : 0;
   const pageNumber = Math.ceil(totalItems / itemsPerPage);
-  const suppliers = rawSuppliers ? rawSuppliers.suppliers : [];
+  const suppliers: Supplier[] = rawSuppliers
+    ? rawSuppliers.suppliers.map((s) => ({
+        ...s,
+        icon: s.icon ?? undefined,
+        dateAdded: s.dateAdded ? new Date(s.dateAdded) : undefined,
+        deliveryTime: s.deliveryTime as Supplier['deliveryTime'],
+      }))
+    : [];
 
   return (
     <div className="flex flex-col gap-6 p-4 sm:p-8 lg:px-10 lg:py-8 max-w-[1160px] mx-auto w-full">
