@@ -62,6 +62,29 @@ describe("/v1/recipes", () => {
       expect(res.status).toBe(401);
     });
 
+    it("returns standard error envelope on validation failure", async () => {
+      const res = await createApp(fakeDeps()).request("/v1/recipes", {
+        method: "POST",
+        headers: { ...H, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          recipe: validRecipe,
+          addedIngredients: [{ ...validIngredient, recipeId: "not-a-uuid" }],
+          removedIngredients: [],
+        }),
+      });
+      expect(res.status).toBe(400);
+      const body = await res.json();
+      expect(body).toEqual({
+        error: {
+          code: "VALIDATION_ERROR",
+          message: "Validation failed",
+          fieldErrors: expect.objectContaining({
+            "addedIngredients.0.recipeId": expect.any(String),
+          }),
+        },
+      });
+    });
+
     it("creates recipe and returns 201 with message", async () => {
       const deps = fakeDeps();
       const res = await createApp(deps).request("/v1/recipes", {
@@ -76,6 +99,23 @@ describe("/v1/recipes", () => {
       expect(res.status).toBe(201);
       const body = await res.json();
       expect(body.message).toBe("Recipe successfully created!");
+    });
+
+    it("overwrites forged userId and createdBy with session userId", async () => {
+      const deps = fakeDeps();
+      const res = await createApp(deps).request("/v1/recipes", {
+        method: "POST",
+        headers: { ...H, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          recipe: { ...validRecipe, userId: "forged-user", createdBy: "forged-user" },
+          addedIngredients: [validIngredient],
+          removedIngredients: [],
+        }),
+      });
+      expect(res.status).toBe(201);
+      const state = (deps as any)._state;
+      expect(state.recipes[0].userId).toBe("u1");
+      expect(state.recipes[0].createdBy).toBe("u1");
     });
 
     it("400s on invalid body", async () => {

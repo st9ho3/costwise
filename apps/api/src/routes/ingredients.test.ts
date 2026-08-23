@@ -71,6 +71,21 @@ describe("/v1/ingredients", () => {
       expect(body.message).toBe("Ingredient created successfully");
     });
 
+    it("overwrites forged userId with session userId", async () => {
+      const deps = fakeDeps();
+      const res = await createApp(deps).request("/v1/ingredients", {
+        method: "POST",
+        headers: { ...H, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...validIngredient,
+          userId: "forged-user",
+        }),
+      });
+      expect(res.status).toBe(201);
+      const state = (deps as any)._state;
+      expect(state.ingredients[0].userId).toBe("u1");
+    });
+
     it("400s on invalid body", async () => {
       const deps = fakeDeps();
       const res = await createApp(deps).request("/v1/ingredients", {

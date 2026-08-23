@@ -2,7 +2,7 @@
 
 import React, { useMemo } from 'react';
 import { RecipeIngredients } from '@costwise/shared/recipe';
-import { getTotalPrice } from '@costwise/domain/utils/pricing';
+import { getTotalPrice } from '@costwise/shared/pricing';
 import {  ShoppingBasket,TrendingUp, UtensilsCrossed, BadgeCent, Banknote } from 'lucide-react';
 import { UseFormGetValues, UseFormSetValue, UseFormWatch } from 'react-hook-form';
 import { FormFields } from '../../recipeForm';

@@ -5,8 +5,8 @@ import {
   DestructuredSupplier,
   Metadata,
   RawDBSupplier,
-  supplierSortColumns,
-} from "../types/specialTypes";
+} from "@costwise/shared/specialTypes";
+import { supplierSortColumns } from "../types/specialTypes";
 import { and, asc, countDistinct, desc, eq } from "drizzle-orm";
 import { DatabaseError } from "../utils/errors";
 

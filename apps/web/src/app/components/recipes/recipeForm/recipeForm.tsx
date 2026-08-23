@@ -26,7 +26,7 @@ import { EmptyState } from '../../ui/emptyState';
 import { useFileStore } from '@/app/stores/fileStore';
 import { useNotificationStore } from '@/app/stores/notificationStore';
 import { CategoryThumbnail } from '@/app/utils/uiHelpers';
-import { calculateProfitMargin, calculateSellingPrice, getTotalPrice } from '@costwise/domain/utils/pricing';
+import { calculateProfitMargin, calculateSellingPrice, getTotalPrice } from '@costwise/shared/pricing';
 
 export interface RecipeFormProps {
   mode: 'create' | 'edit';
@@ -60,6 +60,7 @@ export default function RecipeForm({
     onSubmit,
     tempIngredients,
     watch,
+    newId,
   } = useRecipeForm({ ingredients, recipe, recipeIngredients, mode, userId });
 
   // State for ingredient draft row
@@ -97,7 +98,7 @@ export default function RecipeForm({
     const unitPrice = Number(matched.unitPrice || 0);
 
     handleAddIngredient({
-      recipeId: recipe?.id || '',
+      recipeId: recipe?.id || newId,
       ingredientId: matched.id,
       name: matched.name,
       quantity: ingredientQuantity,

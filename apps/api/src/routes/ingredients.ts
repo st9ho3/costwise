@@ -12,9 +12,10 @@ import {
 } from "./schemas";
 import { IngredientSchema } from "@costwise/shared/recipe";
 import { NotFoundError } from "@costwise/domain/utils/errors";
+import { defaultHook } from "../middleware/errors";
 
 export const ingredientsRoutes = (deps: Deps) => {
-  const router = new OpenAPIHono<{ Variables: { userId: string } }>();
+  const router = new OpenAPIHono<{ Variables: { userId: string } }>({ defaultHook });
 
   // 1. GET /
   const listIngredients = createRoute({
@@ -59,6 +60,7 @@ export const ingredientsRoutes = (deps: Deps) => {
   router.openapi(createIngredient, async (c) => {
     const svc = deps.makeIngredientService(c.var.userId);
     const body = c.req.valid("json");
+    body.userId = c.var.userId;
     await svc.create(body);
     return c.json({ message: "Ingredient created successfully" }, 201);
   });
@@ -112,6 +114,7 @@ export const ingredientsRoutes = (deps: Deps) => {
   router.openapi(updateIngredient, async (c) => {
     const svc = deps.makeIngredientService(c.var.userId);
     const body = c.req.valid("json");
+    body.userId = c.var.userId;
     await svc.update(body);
     return c.json({ message: "Ingredient updated successfully" }, 200);
   });

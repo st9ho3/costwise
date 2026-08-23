@@ -22,7 +22,7 @@ import { RecipeRepository } from "../repositories/recipeRepository";
 import {
   destructureIngredient,
   transformIngredientToDB,
-} from "../utils/transformers";
+} from "@costwise/shared/transformers";
 import { RecipeService } from "./recipeService";
 import { db } from "@costwise/db/db";
 import { Database } from "@costwise/db/schema";
@@ -32,7 +32,7 @@ import {
   HighImpactIngredient,
 } from "../types/repositories";
 import { ConflictError, ForbiddenError } from "../utils/errors";
-import { Metadata } from "../types/specialTypes";
+import { Metadata } from "@costwise/shared/specialTypes";
 import { SupplierIngredientRepository } from "../repositories/supplierIngredientsRepository";
 
 export class IngredientService implements IIngredientService {

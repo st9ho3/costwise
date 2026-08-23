@@ -1,8 +1,8 @@
 import React from 'react';
 import { getServerSession } from '@/app/lib/serverSession';
 import { redirect, notFound } from 'next/navigation';
-import { IngredientService } from '@costwise/domain/services/ingredientService';
 import IngredientDetailView from '@/app/components/ingredients/ingredientPage/IngredientDetailView';
+import { apiServer } from '@/app/lib/apiServer';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -16,10 +16,12 @@ const IngredientDetailPage = async ({ params }: PageProps) => {
     redirect('/signin');
   }
 
-  const service = new IngredientService(session.user.id);
-  const ingredient = await service.findById(id);
+  const api = await apiServer();
+  const { data: ingredient, error } = await api.GET('/v1/ingredients/{id}', {
+    params: { path: { id } },
+  });
 
-  if (!ingredient) {
+  if (error || !ingredient) {
     notFound();
   }
 

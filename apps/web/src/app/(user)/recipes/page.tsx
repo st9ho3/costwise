@@ -3,11 +3,11 @@ import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import Pagination from '@/app/components/recipes/pagination';
 import RecipesTable from '@/app/components/recipes/recipestable';
-import { RecipeService } from '@costwise/domain/services/recipeService';
 import { getServerSession } from '@/app/lib/serverSession';
 import { redirect } from 'next/navigation';
-import { Metadata } from '@costwise/domain/types/specialTypes';
 import { Button } from '@/app/components/ui/button';
+import { apiServer } from '@/app/lib/apiServer';
+import { Recipe } from '@costwise/shared/recipe';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,19 +30,28 @@ const RecipesPage = async ({ searchParams }: Props) => {
   const numericPage = parseInt(page || '1');
   const itemsPerPage = 9;
   const offset = (numericPage - 1) * itemsPerPage;
-  const metadata: Metadata = {
-    page: numericPage,
-    order,
-    sort,
-    itemsPerPage,
-    offset,
-  };
-  const service = new RecipeService(session.user.id);
 
-  const rawRecipes = await service.findAll(session.user.id, metadata);
+  const api = await apiServer();
+  const { data: rawRecipes } = await api.GET('/v1/recipes', {
+    params: {
+      query: {
+        page: numericPage,
+        order,
+        sort,
+        itemsPerPage,
+        offset,
+      },
+    },
+  });
+
   const totalItems = rawRecipes ? rawRecipes.count.count : 0;
   const pageNumber = Math.ceil(totalItems / itemsPerPage);
-  const recipes = rawRecipes ? rawRecipes.recipes : [];
+  const recipes: Recipe[] = rawRecipes
+    ? rawRecipes.recipes.map((r) => ({
+        ...r,
+        dateCreated: new Date(r.dateCreated || Date.now()),
+      }))
+    : [];
 
   return (
     <div className="flex flex-col gap-6 p-4 sm:p-8 lg:px-10 lg:py-8 max-w-[1160px] mx-auto w-full">

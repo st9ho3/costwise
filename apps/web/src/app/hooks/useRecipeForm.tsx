@@ -18,8 +18,8 @@ import { v4 as uuidv4 } from "uuid";
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { calculateRecipeData, getTotalPrice } from '@costwise/domain/utils/pricing';
-import { getArrayChanges } from '@costwise/domain/utils/transformers';
+import { calculateRecipeData, getTotalPrice } from '@costwise/shared/pricing';
+import { getArrayChanges } from '@costwise/shared/transformers';
 import { sendRecipe, sendRecipeToUpdate } from '@/app/services/services';
 import { useRouter } from 'next/navigation';
 import { useFileUpload } from './useFileUpload';
@@ -76,6 +76,7 @@ const useRecipeForm = ({mode, recipe, recipeIngredients, userId}: RecipeFormProp
       setTempIngredients([]);
     }, 1000);
     router.replace("/recipes");
+    router.refresh();
   },[mode, setValue, reset, router, resetFile]); 
 
   const onSubmit = useCallback( async (data: FormFields) => {

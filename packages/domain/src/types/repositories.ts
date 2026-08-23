@@ -13,44 +13,26 @@ import {
   Metadata,
   RawDBSupplier,
   RecipeWithQuery,
-} from "./specialTypes";
+  RecipeAnalytics,
+  CategoryAnalytics,
+  MarginHighlights,
+  HighImpactIngredient,
+  IngredientAnalytics,
+  OperationResult,
+} from "@costwise/shared/specialTypes";
 import {
   DBIngredientForTable,
   SupplierIngredientData,
-} from "../utils/transformers";
+} from "@costwise/shared/transformers";
 
-export interface RecipeAnalytics {
-  avgProfitMargin: string | null;
-  avgFoodCost: string | null;
-  totalRecipes: number;
-}
-
-export interface CategoryAnalytics {
-  category: "starter" | "main" | "dessert";
-  count: number;
-  avgFoodCost: string | null;
-}
-
-export interface MarginHighlights {
-  topPerformers: Recipe[];
-  attentionNeeded: Recipe[];
-}
-
-export interface HighImpactIngredient {
-  id: string;
-  name: string;
-  icon: string | null;
-  usage: number;
-  category: string;
-}
-
-export interface IngredientAnalytics {
-  totalIngredients: number;
-}
-
-export interface OperationResult {
-  id: string;
-}
+export type {
+  RecipeAnalytics,
+  CategoryAnalytics,
+  MarginHighlights,
+  HighImpactIngredient,
+  IngredientAnalytics,
+  OperationResult,
+};
 
 export interface IRecipeRepository {
   findById(id: string): Promise<RecipeWithQuery | undefined>;

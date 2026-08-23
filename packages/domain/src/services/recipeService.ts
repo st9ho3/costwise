@@ -35,13 +35,13 @@ import {
 } from "../repositories/recipeRepository";
 import { IngredientRepository } from "../repositories/ingredientRepository";
 import { validateComplexEntity } from "./validationService";
-import { Metadata, RecipeWithQuery } from "../types/specialTypes";
-import { calculateProfitMargin, getTotalPrice } from "../utils/pricing";
+import { Metadata, RecipeWithQuery } from "@costwise/shared/specialTypes";
+import { calculateProfitMargin, getTotalPrice } from "@costwise/shared/pricing";
 import {
   transformRecipeFromDB,
   transformRecipeIngredentFromDB,
   transformRecipeToDB,
-} from "../utils/transformers";
+} from "@costwise/shared/transformers";
 import { Database } from "@costwise/db/schema";
 import {
   RecipeAnalytics,

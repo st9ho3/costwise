@@ -13,9 +13,10 @@ import {
   ErrRes,
 } from "./schemas";
 import { NotFoundError } from "@costwise/domain/utils/errors";
+import { defaultHook } from "../middleware/errors";
 
 export const recipesRoutes = (deps: Deps) => {
-  const router = new OpenAPIHono<{ Variables: { userId: string } }>();
+  const router = new OpenAPIHono<{ Variables: { userId: string } }>({ defaultHook });
 
   // 1. GET /
   const listRecipes = createRoute({
@@ -60,6 +61,8 @@ export const recipesRoutes = (deps: Deps) => {
   router.openapi(createRecipe, async (c) => {
     const svc = deps.makeRecipeService(c.var.userId);
     const body = c.req.valid("json");
+    body.recipe.userId = c.var.userId;
+    body.recipe.createdBy = c.var.userId;
     await svc.create(body);
     return c.json({ message: "Recipe successfully created!" }, 201);
   });
@@ -114,6 +117,7 @@ export const recipesRoutes = (deps: Deps) => {
     const svc = deps.makeRecipeService(c.var.userId);
     const { id } = c.req.valid("param");
     const body = c.req.valid("json");
+    body.recipe.userId = c.var.userId;
     await svc.update(
       id,
       body.recipe,

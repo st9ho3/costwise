@@ -1,7 +1,7 @@
 // src/components/shared/sharedButton.tsx
 
 import React from 'react';
-import { ButtonProps } from '@costwise/domain/types/context';
+import { ButtonProps } from '@costwise/shared/uiTypes';
 
 const Button = ({ text, action }: ButtonProps) => {
   return (

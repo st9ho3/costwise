@@ -1,4 +1,4 @@
-import { formatPrice, getDisplayUnit } from '@costwise/domain/utils/pricing';
+import { formatPrice, getDisplayUnit } from '@costwise/shared/pricing';
 import React from 'react';
 
 interface MonetaryCellProps {

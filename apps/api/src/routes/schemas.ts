@@ -11,12 +11,12 @@ import {
   SupplierSchema,
   type Supplier,
 } from "@costwise/shared/recipe";
-import type { Metadata, RecipeWithQuery } from "@costwise/domain/types/specialTypes";
+import type { Metadata, RecipeWithQuery } from "@costwise/shared/specialTypes";
 import type { CreateRequest } from "@costwise/domain/types/services";
 import type {
   RecipeUpdatePayload,
   SupplierUpdatePayload,
-} from "@costwise/domain/types/context";
+} from "@costwise/shared/uiTypes";
 import type {
   RecipeAnalytics,
   CategoryAnalytics,

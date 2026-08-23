@@ -1,6 +1,6 @@
 import React from 'react';
 import { Badge } from '../ui/badge';
-import { LabelType } from '@costwise/domain/types/specialTypes';
+import { LabelType } from '@costwise/shared/specialTypes';
 
 interface LabelProps {
   text: string | undefined | null;

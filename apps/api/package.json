@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "emit-openapi": "tsx scripts/emit-openapi.ts"
   },
   "dependencies": {
     "@costwise/db": "workspace:*",

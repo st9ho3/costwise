@@ -1,9 +1,10 @@
 import { createRoute, OpenAPIHono } from "@hono/zod-openapi";
 import type { Deps } from "../app";
 import { SearchQuery, SearchResponse, ErrRes } from "./schemas";
+import { defaultHook } from "../middleware/errors";
 
 export const searchRoutes = (deps: Deps) => {
-  const router = new OpenAPIHono<{ Variables: { userId: string } }>();
+  const router = new OpenAPIHono<{ Variables: { userId: string } }>({ defaultHook });
 
   const searchRoute = createRoute({
     method: "get",

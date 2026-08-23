@@ -7,7 +7,7 @@ import {
   IngredientToDisplay,
   Supplier,
 } from "@costwise/shared/recipe";
-import { Metadata, RecipeWithQuery } from "./specialTypes";
+import { Metadata, RecipeWithQuery } from "@costwise/shared/specialTypes";
 import { Database } from "@costwise/db/schema";
 import {
   RecipeAnalytics,
@@ -17,7 +17,7 @@ import {
   MarginHighlights,
   HighImpactIngredient,
 } from "./repositories";
-import { SupplierUpdatePayload } from "./context";
+import { SupplierUpdatePayload } from "@costwise/shared/uiTypes";
 
 export interface CreateResponse {
   recipe: string | undefined;

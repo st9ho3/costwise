@@ -9,9 +9,10 @@ import {
   HighImpactQuery,
   ErrRes,
 } from "./schemas";
+import { defaultHook } from "../middleware/errors";
 
 export const analyticsRoutes = (deps: Deps) => {
-  const router = new OpenAPIHono<{ Variables: { userId: string } }>();
+  const router = new OpenAPIHono<{ Variables: { userId: string } }>({ defaultHook });
 
   // 1. GET /recipes
   const recipesAnalytics = createRoute({

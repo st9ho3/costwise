@@ -1,9 +1,9 @@
 import React from 'react';
 import { getServerSession } from '@/app/lib/serverSession';
 import { redirect } from 'next/navigation';
-import { SupplierService } from '@costwise/domain/services/suppliersService';
-import { Metadata } from '@costwise/domain/types/specialTypes';
+import { Metadata } from '@costwise/shared/specialTypes';
 import IngredientForm from '@/app/components/ingredients/ingredientForm';
+import { apiServer } from '@/app/lib/apiServer';
 
 const Page = async () => {
   const session = await getServerSession();
@@ -11,8 +11,6 @@ const Page = async () => {
   if (!session?.user?.id) {
     redirect('/signin');
   }
-
-  const supplierService = new SupplierService(session.user.id);
 
   const dropdownMetadata: Metadata = {
     page: 1,
@@ -22,7 +20,18 @@ const Page = async () => {
     offset: 0,
   };
 
-  const result = await supplierService.findAll(session.user.id, dropdownMetadata);
+  const api = await apiServer();
+  const { data: result } = await api.GET('/v1/suppliers', {
+    params: {
+      query: {
+        page: dropdownMetadata.page,
+        order: dropdownMetadata.order,
+        sort: dropdownMetadata.sort,
+        itemsPerPage: dropdownMetadata.itemsPerPage,
+        offset: dropdownMetadata.offset,
+      },
+    },
+  });
 
   const supplierOptions =
     result?.suppliers?.map((supplier) => ({

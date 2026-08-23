@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { createApp } from "../app";
 import { fakeDeps, seedSupplier } from "../testing/fakes";
 import type { Supplier } from "@costwise/shared/recipe";
-import type { SupplierUpdatePayload } from "@costwise/domain/types/context";
+import type { SupplierUpdatePayload } from "@costwise/shared/uiTypes";
 
 const H = { "x-user-id": "u1" };
 
@@ -82,6 +82,21 @@ describe("/v1/suppliers", () => {
       expect(res.status).toBe(201);
       const body = await res.json();
       expect(body.message).toBe("Supplier successfully created!");
+    });
+
+    it("overwrites forged userId with session userId", async () => {
+      const deps = fakeDeps();
+      const res = await createApp(deps).request("/v1/suppliers", {
+        method: "POST",
+        headers: { ...H, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...validPayload,
+          supplier: { ...validPayload.supplier, userId: "forged-user" },
+        }),
+      });
+      expect(res.status).toBe(201);
+      const state = (deps as any)._state;
+      expect(state.suppliers[0].userId).toBe("u1");
     });
 
     it("400s on invalid body", async () => {

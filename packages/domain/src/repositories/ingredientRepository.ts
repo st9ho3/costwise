@@ -26,7 +26,7 @@ import { categories, Database, ingredientsTable } from "@costwise/db/schema";
 import {
   DBIngredientForTable,
   transformIngredientFromDB,
-} from "../utils/transformers";
+} from "@costwise/shared/transformers";
 import { and, asc, countDistinct, desc, eq, sql } from "drizzle-orm";
 import { DatabaseError } from "../utils/errors";
 import { ingredientSortColumns, Metadata } from "../types/specialTypes";

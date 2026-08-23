@@ -12,9 +12,10 @@ import {
 } from "./schemas";
 import { SupplierSchema } from "@costwise/shared/recipe";
 import { NotFoundError } from "@costwise/domain/utils/errors";
+import { defaultHook } from "../middleware/errors";
 
 export const suppliersRoutes = (deps: Deps) => {
-  const router = new OpenAPIHono<{ Variables: { userId: string } }>();
+  const router = new OpenAPIHono<{ Variables: { userId: string } }>({ defaultHook });
 
   // 1. GET /
   const listSuppliers = createRoute({
@@ -59,6 +60,7 @@ export const suppliersRoutes = (deps: Deps) => {
   router.openapi(createSupplier, async (c) => {
     const svc = deps.makeSupplierService(c.var.userId);
     const body = c.req.valid("json");
+    body.supplier.userId = c.var.userId;
     await svc.create(body);
     return c.json({ message: "Supplier successfully created!" }, 201);
   });
@@ -112,6 +114,7 @@ export const suppliersRoutes = (deps: Deps) => {
   router.openapi(updateSupplier, async (c) => {
     const svc = deps.makeSupplierService(c.var.userId);
     const body = c.req.valid("json");
+    body.supplier.userId = c.var.userId;
     await svc.update(body);
     return c.json({ message: "supplier updated" }, 200);
   });

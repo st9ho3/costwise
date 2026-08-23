@@ -2,16 +2,16 @@ import { ISupplierService } from "../types/services";
 import {
   prepareSupplierForDB,
   transformSupplierFromDB,
-} from "../utils/transformers";
+} from "@costwise/shared/transformers";
 import { db } from "@costwise/db/db";
 import { SupplierRepository } from "../repositories/suppliersRepository";
 import { IngredientCategory, Supplier } from "@costwise/shared/recipe";
 import { SupplierAddressRepository } from "../repositories/addressesRepository";
 import { SupplierFinDataRepository } from "../repositories/supplierFinancialDataRepository";
 import { SuppliersCategoryRepository } from "../repositories/suppliersCategory";
-import { SupplierUpdatePayload } from "../types/context";
+import { SupplierUpdatePayload } from "@costwise/shared/uiTypes";
 import { ConflictError, ForbiddenError, NotFoundError } from "../utils/errors";
-import { Metadata } from "../types/specialTypes";
+import { Metadata } from "@costwise/shared/specialTypes";
 
 export class SupplierService implements ISupplierService {
   private supplierRepository: SupplierRepository;
