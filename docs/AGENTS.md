@@ -12,6 +12,26 @@ Before any change that crosses a layer or touches pricing, recipe
 recalculation, ingredient usage counts, transactions, ownership, or folder
 names, read `docs/decisions.md` first.
 
+## Delivery Process (ClickUp task → spec → plan → execute)
+
+This loop applies to ALL work in this repository, no exceptions:
+
+1. **ClickUp task** — every unit of work starts as a task in the ClickUp
+   `Costwise` folder (Panos Workspace). One task = one spec = one plan =
+   one execute-and-verify cycle.
+2. **Spec** — written to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
+   and approved by Panos before planning.
+3. **Plan** — written to `docs/superpowers/plans/YYYY-MM-DD-<topic>.md`
+   from the approved spec.
+4. **Execute** — implementation follows the plan; the task's acceptance
+   criteria are the verification gate; ClickUp status is updated when done.
+
+**Model authority rule:** specs and plans are authored ONLY by the
+Fable 5 model (`claude-fable-5`). All other models are executors: they
+implement an existing approved plan and MUST NOT create, rewrite, or
+re-scope specs or plans. If an executor finds a plan wrong, blocked, or
+incomplete, it stops and reports back instead of improvising.
+
 Working rules:
 - Prefer the smallest file that owns the change.
 - Keep behavior, architecture, and routing guidance in `docs/` only.
