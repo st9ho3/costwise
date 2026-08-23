@@ -1,6 +1,6 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { Scalar } from "@scalar/hono-api-reference";
-import { errorHandler } from "./middleware/errors";
+import { errorHandler, defaultHook } from "./middleware/errors";
 import { makeRequireUser } from "./middleware/auth";
 import { recipesRoutes } from "./routes/recipes";
 import { ingredientsRoutes } from "./routes/ingredients";
@@ -104,7 +104,7 @@ export interface Deps {
 }
 
 export const createApp = (deps: Deps) => {
-  const app = new OpenAPIHono();
+  const app = new OpenAPIHono({ defaultHook });
   app.onError(errorHandler);
 
   app.get("/health", (c) => c.json({ status: "ok" }));
@@ -118,7 +118,7 @@ export const createApp = (deps: Deps) => {
   );
   app.on(["GET", "POST"], "/v1/auth/*", (c) => auth.handler(c.req.raw));
 
-  const v1 = new OpenAPIHono<{ Variables: { userId: string } }>();
+  const v1 = new OpenAPIHono<{ Variables: { userId: string } }>({ defaultHook });
   v1.use("*", makeRequireUser(deps.getSessionUserId));
   v1.route("/recipes", recipesRoutes(deps));
   v1.route("/ingredients", ingredientsRoutes(deps));

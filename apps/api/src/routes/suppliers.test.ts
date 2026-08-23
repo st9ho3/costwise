@@ -84,6 +84,21 @@ describe("/v1/suppliers", () => {
       expect(body.message).toBe("Supplier successfully created!");
     });
 
+    it("overwrites forged userId with session userId", async () => {
+      const deps = fakeDeps();
+      const res = await createApp(deps).request("/v1/suppliers", {
+        method: "POST",
+        headers: { ...H, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...validPayload,
+          supplier: { ...validPayload.supplier, userId: "forged-user" },
+        }),
+      });
+      expect(res.status).toBe(201);
+      const state = (deps as any)._state;
+      expect(state.suppliers[0].userId).toBe("u1");
+    });
+
     it("400s on invalid body", async () => {
       const deps = fakeDeps();
       const res = await createApp(deps).request("/v1/suppliers", {
