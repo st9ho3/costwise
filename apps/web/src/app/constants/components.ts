@@ -27,7 +27,6 @@ import PricingRadioOption from "../components/recipes/recipeForm/formComponents/
 import CalculateButton from "../components/recipes/recipeForm/formComponents/pricingComponents/calculateButton";
 import OrderTotal from "../components/recipes/recipeForm/formComponents/totalDisplayComponents/total";
 import DisplayedIngredientItem from "../components/recipes/recipeForm/formComponents/totalDisplayComponents/displayedIngredient";
-import Button from "../components/auth/authComponents/authButton";
 import Input from "../components/auth/authComponents/authInput";
 import Label from "../components/auth/authComponents/authLabel";
 import GoogleIcon from "../components/auth/authComponents/googleComponent";
@@ -60,7 +59,6 @@ export {
   CalculateButton,
   OrderTotal,
   DisplayedIngredientItem,
-  Button,
   Input,
   Label,
   GoogleIcon,
