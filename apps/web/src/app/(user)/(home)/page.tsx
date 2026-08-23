@@ -1,10 +1,8 @@
 import { getServerSession } from "@/app/lib/serverSession";
 import { redirect } from "next/navigation";
 import React from "react";
-import { RecipeService } from "@costwise/domain/services/recipeService";
-import { IngredientService } from "@costwise/domain/services/ingredientService";
-import { SupplierService } from "@costwise/domain/services/suppliersService";
 import TodayView from "@/app/components/home/TodayView";
+import { apiServer } from "@/app/lib/api";
 
 const HomePage = async () => {
   const session = await getServerSession();
@@ -13,34 +11,44 @@ const HomePage = async () => {
     redirect("/signin");
   }
 
-  const userId = session.user.id;
-  const recipeService = new RecipeService(userId);
-  const ingredientService = new IngredientService(userId);
-  const supplierService = new SupplierService(userId);
+  const api = await apiServer();
 
   const [
-    recipeAnalytics,
-    ingredientAnalytics,
-    supplierData,
-    recipesData,
+    recipeAnalyticsRes,
+    ingredientAnalyticsRes,
+    supplierDataRes,
+    recipesDataRes,
   ] = await Promise.all([
-    recipeService.getRecipesAnalytics(userId),
-    ingredientService.getIngredientAnalytics(userId),
-    supplierService.findAll(userId, {
-      itemsPerPage: 1,
-      offset: 0,
-      page: 1,
-      order: "desc",
-      sort: "dateAdded",
+    api.GET("/v1/analytics/recipes"),
+    api.GET("/v1/analytics/ingredients"),
+    api.GET("/v1/suppliers", {
+      params: {
+        query: {
+          itemsPerPage: 1,
+          offset: 0,
+          page: 1,
+          order: "desc",
+          sort: "dateAdded",
+        },
+      },
     }),
-    recipeService.findAll(userId, {
-      itemsPerPage: 4,
-      offset: 0,
-      page: 1,
-      order: "desc",
-      sort: "dateCreated",
+    api.GET("/v1/recipes", {
+      params: {
+        query: {
+          itemsPerPage: 4,
+          offset: 0,
+          page: 1,
+          order: "desc",
+          sort: "dateCreated",
+        },
+      },
     }),
   ]);
+
+  const recipeAnalytics = recipeAnalyticsRes.data;
+  const ingredientAnalytics = ingredientAnalyticsRes.data;
+  const supplierData = supplierDataRes.data;
+  const recipesData = recipesDataRes.data;
 
   const totalRecipes = recipeAnalytics ? recipeAnalytics.totalRecipes : 0;
   const avgFoodCost =
