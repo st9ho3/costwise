@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { authClient } from '@/app/lib/authClient';
+import { webUrl } from '@/app/lib/webOrigin';
 import useSignIn from '@/app/hooks/useSignIn';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
@@ -79,7 +80,7 @@ const SignInForm = () => {
         variant="outline"
         block
         size="lg"
-        onClick={() => authClient.signIn.social({ provider: 'google', callbackURL: '/' })}
+        onClick={() => authClient.signIn.social({ provider: 'google', callbackURL: webUrl('/') })}
         iconLeft={<GoogleIcon />}
       >
         Continue with Google
