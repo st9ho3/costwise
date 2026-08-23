@@ -12,7 +12,7 @@
  */
 import { NextRequest } from "next/server";
 import { revalidatePath } from "next/cache";
-import { RecipeUpdatePayload } from "@costwise/domain/types/context";
+import { RecipeUpdatePayload } from "@costwise/shared/uiTypes";
 import { sendSuccess } from "../../utils/responses";
 import { RecipeService } from "@costwise/domain/services/recipeService";
 import { getServerSession } from "@/app/lib/serverSession";

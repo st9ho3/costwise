@@ -5,7 +5,7 @@ import { SearchRepository } from "../repositories/searchRepository";
 import {
   transformIngredientFromDB,
   transformRecipeFromDB,
-} from "../utils/transformers";
+} from "@costwise/shared/transformers";
 
 export class SearchService implements ISearchService {
   private searchTerm: string;

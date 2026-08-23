@@ -36,7 +36,7 @@ import { Database, recipesTable, recipeIngredientsTable } from "@costwise/db/sch
 import {
   transformRecipeFromDB,
   transformRecipeToDB,
-} from "../utils/transformers";
+} from "@costwise/shared/transformers";
 import { checkIfIngredientExists } from "@costwise/db/helpers";
 import { Metadata, RecipeWithQuery, sortColumns } from "../types/specialTypes";
 import { DatabaseError } from "../utils/errors";

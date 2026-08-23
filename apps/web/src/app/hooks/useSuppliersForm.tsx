@@ -7,7 +7,7 @@ import z from 'zod';
 import { useState } from 'react';
 import { createSupplier, updateSupplier } from '../services/services';
 import { useRouter } from 'next/navigation';
-import { getArrayChanges } from '@costwise/domain/utils/transformers';
+import { getArrayChanges } from '@costwise/shared/transformers';
 import useHelpers from './useHelpers';
 import { useUIStore } from '../stores/uiStore';
 

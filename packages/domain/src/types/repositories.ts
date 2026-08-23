@@ -13,11 +13,11 @@ import {
   Metadata,
   RawDBSupplier,
   RecipeWithQuery,
-} from "./specialTypes";
+} from "@costwise/shared/specialTypes";
 import {
   DBIngredientForTable,
   SupplierIngredientData,
-} from "../utils/transformers";
+} from "@costwise/shared/transformers";
 
 export interface RecipeAnalytics {
   avgProfitMargin: string | null;

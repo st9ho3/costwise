@@ -14,7 +14,7 @@ import { Button } from '../ui/button';
 import { IconButton } from '../ui/iconButton';
 import Incremental from '../shared/incremental';
 import { CATEGORIES } from '@/app/utils/uiHelpers';
-import { normalizePrice, formatPrice, getDisplayUnit } from '@costwise/domain/utils/pricing';
+import { normalizePrice, formatPrice, getDisplayUnit } from '@costwise/shared/pricing';
 
 export interface IngredientFormProps {
   ingredient?: Ingredient | IngredientToDisplay;

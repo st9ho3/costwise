@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { createApp } from "../app";
 import { fakeDeps, seedSupplier } from "../testing/fakes";
 import type { Supplier } from "@costwise/shared/recipe";
-import type { SupplierUpdatePayload } from "@costwise/domain/types/context";
+import type { SupplierUpdatePayload } from "@costwise/shared/uiTypes";
 
 const H = { "x-user-id": "u1" };
 

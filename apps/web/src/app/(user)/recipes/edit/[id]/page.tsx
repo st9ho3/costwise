@@ -1,9 +1,9 @@
 import React from 'react';
 import RecipeForm from '@/app/components/recipes/recipeForm/recipeForm';
-import { transformRecipeFromDB, transformRecipeIngredentFromDB } from '@costwise/domain/utils/transformers';
+import { transformRecipeFromDB, transformRecipeIngredentFromDB } from '@costwise/shared/transformers';
 import { IngredientService } from '@costwise/domain/services/ingredientService';
 import { RecipeService } from '@costwise/domain/services/recipeService';
-import { Metadata, RecipeIngredientFromDB } from '@costwise/domain/types/specialTypes';
+import { Metadata, RecipeIngredientFromDB } from '@costwise/shared/specialTypes';
 import { getServerSession } from '@/app/lib/serverSession';
 import { redirect, notFound } from 'next/navigation';
 

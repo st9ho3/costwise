@@ -147,9 +147,9 @@ Verify GREEN (adapt only to `openapi-fetch`'s actual option names for the instal
 
 **Files:** Move `packages/domain/src/utils/pricing.ts` and `utils/transformers.ts` (+ `helpers.test.ts` if it tests them) → `packages/shared/src/`; move `packages/domain/src/types/specialTypes.ts` → `packages/shared/src/`; for `types/context.ts`, move ONLY the web-consumed members (grep the 6 web imports for the symbols they use) into a new `packages/shared/src/uiTypes.ts` — members referencing repositories/db stay in domain.
 
-- [ ] **Step 1:** `git mv` the whole-file moves; split `context.ts` per the grep; update `@costwise/shared` deps if transformers/pricing import anything new (they must NOT import `@costwise/db` — if one does, STOP and report).
-- [ ] **Step 2:** Rewrite imports in BOTH `packages/domain` (services/repositories that used these utils/types — now import from `@costwise/shared/...`) and `apps/web` (all `@costwise/domain/utils/pricing|transformers`, `types/specialTypes`, moved context members → `@costwise/shared/...`).
-- [ ] **Step 3:** Gates + `grep -rn "@costwise/db" packages/shared` empty + `grep -rn "domain/utils/pricing\|domain/utils/transformers\|domain/types/specialTypes" apps packages` empty. Commit `refactor(shared): move pure pricing/transformers/types to shared`. **Restart dev servers** (packages changed).
+- [x] **Step 1:** `git mv` the whole-file moves; split `context.ts` per the grep; update `@costwise/shared` deps if transformers/pricing import anything new (they must NOT import `@costwise/db` — if one does, STOP and report).
+- [x] **Step 2:** Rewrite imports in BOTH `packages/domain` (services/repositories that used these utils/types — now import from `@costwise/shared/...`) and `apps/web` (all `@costwise/domain/utils/pricing|transformers`, `types/specialTypes`, moved context members → `@costwise/shared/...`).
+- [x] **Step 3:** Gates + `grep -rn "@costwise/db" packages/shared` empty + `grep -rn "domain/utils/pricing\|domain/utils/transformers\|domain/types/specialTypes" apps packages` empty. Commit `refactor(shared): move pure pricing/transformers/types to shared`. **Restart dev servers** (packages changed).
 
 ---
 

@@ -18,12 +18,12 @@ import type {
 import type {
   RecipeWithQuery,
   Metadata,
-} from "@costwise/domain/types/specialTypes";
+} from "@costwise/shared/specialTypes";
 import type {
   CreateRequest,
   CreateResponse,
 } from "@costwise/domain/types/services";
-import type { SupplierUpdatePayload } from "@costwise/domain/types/context";
+import type { SupplierUpdatePayload } from "@costwise/shared/uiTypes";
 import type {
   RecipeAnalytics,
   CategoryAnalytics,

@@ -1,4 +1,4 @@
-import { IngredientCategoryType } from '@costwise/domain/types/specialTypes';
+import { IngredientCategoryType } from '@costwise/shared/specialTypes';
 import React from 'react'
 import { Badge } from '@/app/components/ui/badge'
 

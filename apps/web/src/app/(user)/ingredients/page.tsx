@@ -7,7 +7,7 @@ import { IngredientService } from '@costwise/domain/services/ingredientService';
 import { SupplierService } from '@costwise/domain/services/suppliersService';
 import { getServerSession } from '@/app/lib/serverSession';
 import { redirect } from 'next/navigation';
-import { Metadata } from '@costwise/domain/types/specialTypes';
+import { Metadata } from '@costwise/shared/specialTypes';
 import { Button } from '@/app/components/ui/button';
 
 export const dynamic = 'force-dynamic';

@@ -2,7 +2,7 @@ import React from 'react';
 import { getServerSession } from '@/app/lib/serverSession';
 import { redirect } from 'next/navigation';
 import { SupplierService } from '@costwise/domain/services/suppliersService';
-import { Metadata } from '@costwise/domain/types/specialTypes';
+import { Metadata } from '@costwise/shared/specialTypes';
 import IngredientForm from '@/app/components/ingredients/ingredientForm';
 
 const Page = async () => {

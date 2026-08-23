@@ -17,7 +17,7 @@ import {
   Ingredient,
   Recipe,
   RecipeIngredients,
-} from "@costwise/shared/recipe";
+} from "./recipe";
 
 const date = new Date("2025-09-22");
 
@@ -70,6 +70,19 @@ const mockIngredient: Ingredient = {
   usage: "Used in various baked goods like bread and cakes.",
   userId: "user_xyz789",
   category: "ef45178d-e566-4637-b7f9-abcf6d575466",
+  suppliers: [],
+};
+
+const mockIngredientToDisplay = {
+  id: "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+  icon: "https://example.com/icons/flour.png",
+  name: "All-Purpose Flour",
+  unit: "kg",
+  unitPrice: 1.55,
+  quantity: 25,
+  usage: "Used in various baked goods like bread and cakes.",
+  userId: "user_xyz789",
+  category: "ef45178d-e566-4637-b7f9-abcf6d575466",
   categoryName: "Other",
 };
 
@@ -83,7 +96,6 @@ const mockDBIngredient: DBIngredient = {
   usage: "Used in various baked goods like bread and cakes.",
   userId: "user_xyz789",
   category: "ef45178d-e566-4637-b7f9-abcf6d575466",
-  categoryName: "Other",
 };
 
 const mockDbRecipe: DBRecipe = {
@@ -271,11 +283,6 @@ describe("calculateProfitMargin", () => {
   });
 });
 
-//////////
-
-
-/////////
-
 describe("transformRecipeFromDB", () => {
   test("Should return recipe: Recipe with numbered keys", () => {
     const result = transformRecipeFromDB(mockDbRecipe);
@@ -296,7 +303,7 @@ describe("transformIngredientFromDB", () => {
   test("Should return ingredient with numbered Keys", () => {
     const result = transformIngredientFromDB(mockDBIngredient);
 
-    expect(result).toStrictEqual(mockIngredient);
+    expect(result).toStrictEqual(mockIngredientToDisplay);
   });
 });
 

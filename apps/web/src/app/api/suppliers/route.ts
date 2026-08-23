@@ -2,7 +2,7 @@ import { getServerSession } from "@/app/lib/serverSession";
 import { sendSuccess } from "../utils/responses";
 import { NextRequest } from "next/server";
 import { SupplierService } from "@costwise/domain/services/suppliersService";
-import { SupplierUpdatePayload } from "@costwise/domain/types/context";
+import { SupplierUpdatePayload } from "@costwise/shared/uiTypes";
 import { AuthenticationError } from "@costwise/domain/utils/errors";
 import { errorHandler } from "@/app/utils/errorHandler";
 import { revalidatePath } from "next/cache";

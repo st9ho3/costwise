@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
 import { Ingredient, IngredientSchema, IngredientToDisplay } from '@costwise/shared/recipe';
-import { createEditIngredientPrototype, createIngredientPrototype } from '@costwise/domain/utils/transformers';
+import { createEditIngredientPrototype, createIngredientPrototype } from '@costwise/shared/transformers';
 import { sendIngredient, updateIngredient } from '../services/services';
 import useHelpers from './useHelpers';
 import { useForm } from 'react-hook-form';

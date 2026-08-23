@@ -3,7 +3,7 @@ import { IngredientService } from '@costwise/domain/services/ingredientService';
 import { SupplierService } from '@costwise/domain/services/suppliersService';
 import { getServerSession } from '@/app/lib/serverSession';
 import { redirect, notFound } from 'next/navigation';
-import { Metadata } from '@costwise/domain/types/specialTypes';
+import { Metadata } from '@costwise/shared/specialTypes';
 import IngredientForm from '@/app/components/ingredients/ingredientForm';
 
 export interface Params {

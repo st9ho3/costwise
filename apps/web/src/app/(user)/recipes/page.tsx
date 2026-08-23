@@ -6,7 +6,7 @@ import RecipesTable from '@/app/components/recipes/recipestable';
 import { RecipeService } from '@costwise/domain/services/recipeService';
 import { getServerSession } from '@/app/lib/serverSession';
 import { redirect } from 'next/navigation';
-import { Metadata } from '@costwise/domain/types/specialTypes';
+import { Metadata } from '@costwise/shared/specialTypes';
 import { Button } from '@/app/components/ui/button';
 
 export const dynamic = 'force-dynamic';
