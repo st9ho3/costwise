@@ -1,28 +1,41 @@
 import React from 'react';
+import { Skeleton } from '../ui/skeleton';
 
-const TableSkeleton = () => {
+export { Skeleton };
+export { IngredientsTableSkeleton, IngredientsPageSkeleton } from '../ingredients/ingredientsSkeleton';
+export { RecipesTableSkeleton, RecipesPageSkeleton } from '../recipes/recipesSkeleton';
+export { SuppliersTableSkeleton, SuppliersPageSkeleton } from '../suppliers/suppliersSkeleton';
+export { TodayViewSkeleton } from '../home/todaySkeleton';
+export { IngredientDetailSkeleton } from '../ingredients/ingredientPage/ingredientDetailSkeleton';
+export { FormPageSkeleton } from './formSkeleton';
+
+export const TableSkeleton = ({ rowCount = 6 }: { rowCount?: number }) => {
   return (
-    <div className="w-full">
-      <div className="flex items-center justify-between p-4 border-b border-gray-200">
-        <div className="w-1/4 h-4 bg-gray-200 rounded animate-pulse"></div>
-        <div className="w-1/4 h-4 bg-gray-200 rounded animate-pulse"></div>
-        <div className="w-1/4 h-4 bg-gray-200 rounded animate-pulse"></div>
-        <div className="w-1/4 h-4 bg-gray-200 rounded animate-pulse"></div>
+    <div className="w-full bg-white rounded-[18px] border border-[#EFE8DA] shadow-xs overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 bg-cream-100/70 border-b border-[#EFE8DA]">
+        <Skeleton className="w-1/4 h-3.5" />
+        <Skeleton className="w-1/4 h-3.5" />
+        <Skeleton className="w-1/4 h-3.5" />
+        <Skeleton className="w-1/4 h-3.5" />
       </div>
-      {[...Array(3)].map((_, i) => (
-        <div
-          key={i}
-          className="flex items-center justify-between p-4 border-b border-gray-200"
-        >
-          <div className="flex items-center w-1/4 space-x-2">
-            <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
-            <div className="w-3/4 h-4 bg-gray-200 rounded animate-pulse"></div>
+      {/* Rows */}
+      <div className="divide-y divide-[#EFE8DA]">
+        {Array.from({ length: rowCount }).map((_, i) => (
+          <div
+            key={i}
+            className="flex items-center justify-between p-4"
+          >
+            <div className="flex items-center w-1/4 space-x-3">
+              <Skeleton circle className="size-9 shrink-0" />
+              <Skeleton className="w-3/4 h-4" />
+            </div>
+            <Skeleton className="w-1/4 h-4" />
+            <Skeleton className="w-1/4 h-4" />
+            <Skeleton className="w-1/4 h-4" />
           </div>
-          <div className="w-1/4 h-4 bg-gray-200 rounded animate-pulse"></div>
-          <div className="w-1/4 h-4 bg-gray-200 rounded animate-pulse"></div>
-          <div className="w-1/4 h-4 bg-gray-200 rounded animate-pulse"></div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };

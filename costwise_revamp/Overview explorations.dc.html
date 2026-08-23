@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="design_doc_mode" content="canvas">
+  <link rel="stylesheet" href="_ds/costwise-design-system-f2dfa314-0efb-48b2-bc6e-0e05266dc484/tokens/fonts.css">
+  <link rel="stylesheet" href="_ds/costwise-design-system-f2dfa314-0efb-48b2-bc6e-0e05266dc484/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/costwise-design-system-f2dfa314-0efb-48b2-bc6e-0e05266dc484/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/costwise-design-system-f2dfa314-0efb-48b2-bc6e-0e05266dc484/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/costwise-design-system-f2dfa314-0efb-48b2-bc6e-0e05266dc484/tokens/shape.css">
+  <link rel="stylesheet" href="_ds/costwise-design-system-f2dfa314-0efb-48b2-bc6e-0e05266dc484/tokens/motion.css">
+  <link rel="stylesheet" href="_ds/costwise-design-system-f2dfa314-0efb-48b2-bc6e-0e05266dc484/tokens/base.css">
+  <link rel="stylesheet" href="_ds/costwise-design-system-f2dfa314-0efb-48b2-bc6e-0e05266dc484/styles.css">
+  <script src="_ds/costwise-design-system-f2dfa314-0efb-48b2-bc6e-0e05266dc484/_ds_bundle.js"></script>
+  <script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@400;600;700&family=Syne:wght@700;800&family=Fira+Sans:wght@400;500;600;700&family=Alegreya+Sans:wght@400;700;800&family=Fira+Mono:wght@500;700&family=JetBrains+Mono:wght@500;700&family=Commissioner:wght@400;600;700&display=swap">
+  <style>
+    body { margin:0; background:#F0EADC; font-family:'Nunito Sans',sans-serif; color:#1B1A16; }
+    a { color:#24603A; }
+    a:hover { color:#1B4A2C; }
+  </style>
+</helmet>
+
+<section style="display:flex;flex-direction:column;gap:28px;padding:44px 44px 20px">
+  <div style="display:flex;flex-direction:column;gap:6px;max-width:900px">
+    <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Turn 2 · Greek type</span>
+    <h1 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:34px;line-height:1.1;letter-spacing:-.02em;color:#1B1A16">Three Greek-capable type systems</h1>
+    <p style="margin:2px 0 0;font-size:16px;line-height:1.45;color:#6B6558;text-wrap:pretty">I checked the Google Fonts charsets directly rather than trusting my memory: <strong style="font-weight:700">Bricolage Grotesque, Nunito Sans, IBM Plex Mono and Baloo 2 all ship without Greek</strong> — Latin, Latin-ext, Cyrillic and Vietnamese only. So the Greek screen in <a href="#1a">1a</a> has no brand type in it at all. Each option below sets the same headline, sentence and money row in faces that do cover Greek, with the Latin equivalent underneath so you can see what the swap costs on the English side.</p>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:stretch">
+
+    <div id="2a" style="width:486px;background:#FDFBF6;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:24px;display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:24px;padding:0 9px;border-radius:999px;background:#1B4A2C;color:#FDFBF6;font-weight:700;font-size:12px">2a</span>
+        <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:18px;letter-spacing:-.01em;color:#1B1A16">The sharp grotesque</span>
+      </div>
+      <p style="margin:0;font-size:14px;line-height:1.45;color:#6B6558">Geologica for display, Fira Sans for everything spoken, Fira Mono for money. Geologica is the nearest thing to Bricolage's optical sharpness that has Greek; Fira's Greek was drawn properly and covers greek-ext.</p>
+      <div lang="el" style="background:#fff;border:1px solid #EFE8DA;border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px">
+        <div style="font-family:'Geologica',sans-serif;font-weight:700;font-size:27px;line-height:1.16;letter-spacing:-.02em;color:#1B1A16">Ανέβασε την καρμπονάρα στα €15,50</div>
+        <p style="margin:0;font-family:'Fira Sans',sans-serif;font-size:15px;line-height:1.5;color:#2C2A25;text-wrap:pretty">Τα αυγά ανέβηκαν 14% στη Metro, δηλαδή 40 λεπτά το πιάτο. Στα €15,50 κρατάς ξανά 68%.</p>
+        <div style="display:flex;gap:18px;padding-top:2px">
+          <div style="display:flex;flex-direction:column"><span style="font-family:'Fira Sans',sans-serif;font-size:12px;color:#8C8574">Κόστος πιάτου</span><span style="font-family:'Fira Mono',monospace;font-weight:500;font-size:17px;color:#45413A;font-variant-numeric:tabular-nums">€4,30</span></div>
+          <div style="display:flex;flex-direction:column"><span style="font-family:'Fira Sans',sans-serif;font-size:12px;color:#8C8574">Θα κρατάς</span><span style="font-family:'Fira Mono',monospace;font-weight:500;font-size:17px;color:#1B4A2C;font-variant-numeric:tabular-nums">68,0%</span></div>
+        </div>
+      </div>
+      <div style="background:#F8F4EA;border:1px solid #EFE8DA;border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:8px">
+        <div style="font-family:'Geologica',sans-serif;font-weight:700;font-size:27px;line-height:1.16;letter-spacing:-.02em;color:#1B1A16">Move the carbonara to €15.50</div>
+        <p style="margin:0;font-family:'Fira Sans',sans-serif;font-size:15px;line-height:1.5;color:#2C2A25">Eggs are up 14% at Metro — 40c a plate. <span style="font-family:'Fira Mono',monospace;font-weight:500;font-variant-numeric:tabular-nums">€15.50</span> puts you back at 68%.</p>
+      </div>
+    </div>
+
+    <div id="2b" style="width:486px;background:#FDFBF6;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:24px;display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:24px;padding:0 9px;border-radius:999px;background:#1B4A2C;color:#FDFBF6;font-weight:700;font-size:12px">2b</span>
+        <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:18px;letter-spacing:-.01em;color:#1B1A16">The wonky one</span>
+      </div>
+      <p style="margin:0;font-size:14px;line-height:1.45;color:#6B6558">Syne Extrabold for display, Alegreya Sans for the talking, JetBrains Mono for money. Syne is the only genuinely idiosyncratic display face on Google Fonts with Greek — closest to Bricolage's attitude, further from its skeleton.</p>
+      <div lang="el" style="background:#fff;border:1px solid #EFE8DA;border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:26px;line-height:1.18;letter-spacing:-.01em;color:#1B1A16">Ανέβασε την καρμπονάρα στα €15,50</div>
+        <p style="margin:0;font-family:'Alegreya Sans',sans-serif;font-size:16px;line-height:1.5;color:#2C2A25;text-wrap:pretty">Τα αυγά ανέβηκαν 14% στη Metro, δηλαδή 40 λεπτά το πιάτο. Στα €15,50 κρατάς ξανά 68%.</p>
+        <div style="display:flex;gap:18px;padding-top:2px">
+          <div style="display:flex;flex-direction:column"><span style="font-family:'Alegreya Sans',sans-serif;font-size:13px;color:#8C8574">Κόστος πιάτου</span><span style="font-family:'JetBrains Mono',monospace;font-weight:500;font-size:17px;color:#45413A;font-variant-numeric:tabular-nums">€4,30</span></div>
+          <div style="display:flex;flex-direction:column"><span style="font-family:'Alegreya Sans',sans-serif;font-size:13px;color:#8C8574">Θα κρατάς</span><span style="font-family:'JetBrains Mono',monospace;font-weight:500;font-size:17px;color:#1B4A2C;font-variant-numeric:tabular-nums">68,0%</span></div>
+        </div>
+      </div>
+      <div style="background:#F8F4EA;border:1px solid #EFE8DA;border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:8px">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:26px;line-height:1.18;letter-spacing:-.01em;color:#1B1A16">Move the carbonara to €15.50</div>
+        <p style="margin:0;font-family:'Alegreya Sans',sans-serif;font-size:16px;line-height:1.5;color:#2C2A25">Eggs are up 14% at Metro — 40c a plate. <span style="font-family:'JetBrains Mono',monospace;font-weight:500;font-variant-numeric:tabular-nums">€15.50</span> puts you back at 68%.</p>
+      </div>
+    </div>
+
+    <div id="2c" style="width:486px;background:#FDFBF6;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:24px;display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:24px;padding:0 9px;border-radius:999px;background:#1B4A2C;color:#FDFBF6;font-weight:700;font-size:12px">2c</span>
+        <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:18px;letter-spacing:-.01em;color:#1B1A16">Keep Latin, swap per locale</span>
+      </div>
+      <p style="margin:0;font-size:14px;line-height:1.45;color:#6B6558">English keeps Bricolage and Nunito Sans exactly as they are. Greek gets Commissioner and Fira Sans through a <span style="font-family:'Fira Mono',monospace;font-size:13px">:lang(el)</span> rule. Two type systems to maintain, but nothing about the English product changes.</p>
+      <div lang="el" style="background:#fff;border:1px solid #EFE8DA;border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px">
+        <div style="font-family:'Commissioner',sans-serif;font-weight:700;font-size:27px;line-height:1.16;letter-spacing:-.02em;color:#1B1A16">Ανέβασε την καρμπονάρα στα €15,50</div>
+        <p style="margin:0;font-family:'Fira Sans',sans-serif;font-size:15px;line-height:1.5;color:#2C2A25;text-wrap:pretty">Τα αυγά ανέβηκαν 14% στη Metro, δηλαδή 40 λεπτά το πιάτο. Στα €15,50 κρατάς ξανά 68%.</p>
+        <div style="display:flex;gap:18px;padding-top:2px">
+          <div style="display:flex;flex-direction:column"><span style="font-family:'Fira Sans',sans-serif;font-size:12px;color:#8C8574">Κόστος πιάτου</span><span style="font-family:'Fira Mono',monospace;font-weight:500;font-size:17px;color:#45413A;font-variant-numeric:tabular-nums">€4,30</span></div>
+          <div style="display:flex;flex-direction:column"><span style="font-family:'Fira Sans',sans-serif;font-size:12px;color:#8C8574">Θα κρατάς</span><span style="font-family:'Fira Mono',monospace;font-weight:500;font-size:17px;color:#1B4A2C;font-variant-numeric:tabular-nums">68,0%</span></div>
+        </div>
+      </div>
+      <div style="background:#F8F4EA;border:1px solid #EFE8DA;border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:8px">
+        <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:27px;line-height:1.16;letter-spacing:-.02em;color:#1B1A16">Move the carbonara to €15.50</div>
+        <p style="margin:0;font-size:15px;line-height:1.5;color:#2C2A25">Eggs are up 14% at Metro — 40c a plate. <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums">€15.50</span> puts you back at 68%. Unchanged.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="max-width:900px;background:#FBF1D4;border:1px solid #F0E3BE;border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:6px">
+    <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8A5F16">Where I'd land</span>
+    <p style="margin:0;font-size:15px;line-height:1.5;color:#2C2A25;text-wrap:pretty"><a href="#2a">2a</a>. It reads closest to what you have, it's one decision instead of two type systems, and Fira's Greek is the best-drawn of the three. <a href="#2c">2c</a> is the safe answer if English is the primary market and you don't want to re-approve the Latin look. Either way the wordmark is a separate problem — Baloo 2 has no Greek, and "Costwise" stays Latin anyway.</p>
+  </div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:28px;padding:24px 44px 80px">
+  <div style="display:flex;flex-direction:column;gap:6px;max-width:820px">
+    <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Turn 1 · Today screen</span>
+    <h1 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:34px;line-height:1.1;letter-spacing:-.02em;color:#1B1A16">Two ways for Costwise to open the day</h1>
+    <p style="margin:2px 0 0;font-size:16px;line-height:1.45;color:#6B6558;text-wrap:pretty">Both propose and wait for a yes, both lead with one thing to do, both shrink the four numbers to a line. <a href="#1a">1a</a> is something you read; <a href="#1b">1b</a> is something you clear. Each is drawn twice — day one, and a Tuesday three months in.</p>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:44px;align-items:flex-start">
+
+    <div id="1a" style="width:1000px;display:flex;flex-direction:column;gap:20px">
+      <div style="display:flex;align-items:center;gap:12px">
+        <span style="display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:26px;padding:0 10px;border-radius:999px;background:#1B4A2C;color:#FDFBF6;font-weight:700;font-size:13px;letter-spacing:.02em">1a</span>
+        <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:22px;letter-spacing:-.01em;color:#1B1A16">The standing brief</span>
+        <span style="font-size:15px;color:#8C8574">Costwise writes you a note. One decision at the top, the reasoning underneath, actions inline in the prose.</span>
+      </div>
+
+      <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Day one — signed up an hour ago</span>
+      <div style="background:#FDFBF6;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:30px 32px 22px;display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Avatar" agent="{{ yes }}" name="Costwise" src="assets/logo-mark-transparent.png" size="sm" hint-size="32px,32px"></x-import>
+          <span style="font-weight:700;font-size:13px;color:#1B4A2C">Costwise</span>
+          <span style="font-size:12px;color:#8C8574">read your invoice just now</span>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <h2 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:34px;line-height:1.1;letter-spacing:-.02em;color:#1B1A16">I've read your invoice, {{ ownerFirst }}.</h2>
+          <p style="margin:0;max-width:660px;font-size:17px;line-height:1.45;color:#6B6558;text-wrap:pretty">You're a trattoria, you gave me two dishes and one invoice from Metro. That's enough to start — here's where you stand.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:4px;font-size:13px;color:#8C8574">
+            <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">2</span><span>dishes</span>
+            <span style="color:#C9BFAA">·</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">11</span><span>ingredients</span>
+            <span style="color:#C9BFAA">·</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">1</span><span>supplier</span>
+            <span style="color:#C9BFAA">·</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">1</span><span>invoice read</span>
+          </div>
+        </div>
+
+        <div style="background:#FBF1D4;border:1px solid #F0E3BE;border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+            <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8A5F16">One thing to do today</span>
+            <span style="font-size:12px;color:#8A5F16;opacity:.8">About a minute</span>
+          </div>
+          <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:24px;line-height:1.2;letter-spacing:-.01em;color:#1B1A16">Two lines on the Metro invoice I couldn't read</div>
+          <p style="margin:0;max-width:620px;font-size:15px;line-height:1.45;color:#2C2A25;text-wrap:pretty">Eleven of the fourteen matched straight away. These two are handwritten — tell me what they are and your carbonara cost is final rather than nearly right.</p>
+          <div style="display:flex;gap:10px;margin-top:2px">
+            <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" iconLeft="{{ ic.eye }}" hint-size="190px,40px">Look at the two lines</x-import>
+            <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="ghost" hint-size="120px,40px">Later today</x-import>
+          </div>
+        </div>
+
+        <div style="height:1px;background:#EFE8DA"></div>
+
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">While you were signing up</span>
+          <div style="display:flex;flex-direction:column;gap:14px;max-width:700px">
+            <p style="margin:0;font-size:16px;line-height:1.55;color:#2C2A25;text-wrap:pretty">I added <strong style="font-weight:700">11 ingredients</strong> from the invoice and priced them at what you actually paid. Two of them I matched to Athens averages, because the invoice didn't say. <a href="#1a" style="font-weight:600;text-decoration:none;border-bottom:1px solid #A8CDB4">See the eleven</a></p>
+            <p style="margin:0;font-size:16px;line-height:1.55;color:#2C2A25;text-wrap:pretty">Your <strong style="font-weight:700">carbonara</strong> works out at <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums">€3.72</span> a plate. At <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums">€14.20</span> you're keeping 68% — comfortable for a trattoria, and I'd leave it alone this week. <a href="#1a" style="font-weight:600;text-decoration:none;border-bottom:1px solid #A8CDB4">Look at the carbonara</a></p>
+            <p style="margin:0;font-size:16px;line-height:1.55;color:#2C2A25;text-wrap:pretty">The <strong style="font-weight:700">Greek salad</strong> is at <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums">€2.10</span> a plate, keeping 70%. And I saved <strong style="font-weight:700">Metro Cash &amp; Carry</strong> as a supplier — 1-2 days, 30 days to pay, as it says on the invoice.</p>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">What I'd do next</span>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:14px;background:#F8F4EA;border:1px solid #EFE8DA;border-radius:16px;padding:14px 16px">
+              <span style="display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:999px;background:#FDEBDD;color:#9E4220;flex:0 0 auto">{{ ic.camera }}</span>
+              <div style="flex:1;display:flex;flex-direction:column;gap:2px">
+                <span style="font-weight:700;font-size:16px;color:#1B1A16">Add the rest of your menu</span>
+                <span style="font-size:14px;line-height:1.45;color:#6B6558">Send me a photo of it and I'll have every dish costed by tonight.</span>
+              </div>
+              <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="secondary" hint-size="140px,40px">Snap the menu</x-import>
+            </div>
+            <div style="display:flex;align-items:center;gap:14px;background:#F8F4EA;border:1px solid #EFE8DA;border-radius:16px;padding:14px 16px">
+              <span style="display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:999px;background:#FBF1D4;color:#6E4A11;flex:0 0 auto">{{ ic.egg }}</span>
+              <div style="flex:1;display:flex;flex-direction:column;gap:2px">
+                <span style="font-weight:700;font-size:16px;color:#1B1A16">Let me keep an eye on eggs</span>
+                <span style="font-size:14px;line-height:1.45;color:#6B6558">They move more than anything else you buy, and they're in four of your dishes.</span>
+              </div>
+              <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="secondary" hint-size="130px,40px">Set a watch</x-import>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding-top:18px;background:linear-gradient(to top,#FDFBF6 62%,rgba(253,251,246,0))">
+          <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Composer" placeholder="Ask me anything — what a dish costs, what to charge, who's cheapest" lead="{{ ic.sparkLead }}" hint-size="100%,52px"></x-import>
+        </div>
+      </div>
+
+      <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">A Tuesday, three months in</span>
+      <div style="background:#FDFBF6;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:30px 32px 22px;display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Avatar" agent="{{ yes }}" name="Costwise" src="assets/logo-mark-transparent.png" size="sm" hint-size="32px,32px"></x-import>
+          <span style="font-weight:700;font-size:13px;color:#1B4A2C">Costwise</span>
+          <span style="font-size:12px;color:#8C8574">wrote this at 6:40 this morning</span>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <h2 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:34px;line-height:1.1;letter-spacing:-.02em;color:#1B1A16">Morning, {{ ownerFirst }}.</h2>
+          <p style="margin:0;max-width:660px;font-size:17px;line-height:1.45;color:#6B6558;text-wrap:pretty">Nothing's broken. One price worth moving before you print the new menu.</p>
+          <sc-if value="{{ statLine }}" hint-placeholder-val="{{ yes }}">
+            <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:4px;font-size:13px;color:#8C8574">
+              <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">12</span><span>dishes</span>
+              <span style="color:#C9BFAA">·</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">38</span><span>ingredients</span>
+              <span style="color:#C9BFAA">·</span>
+              <span>food cost</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">31.4%</span><span style="color:#2F7A45;font-weight:600">↓ 2.1</span>
+              <span style="color:#C9BFAA">·</span>
+              <span>you keep</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">62.4%</span><span style="color:#2F7A45;font-weight:600">↑ 1.4</span>
+            </div>
+          </sc-if>
+        </div>
+
+        <div style="background:#FBF1D4;border:1px solid #F0E3BE;border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+            <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8A5F16">One thing to do today</span>
+            <span style="font-size:12px;color:#8A5F16;opacity:.8">I'd do this before service</span>
+          </div>
+          <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:24px;line-height:1.2;letter-spacing:-.01em;color:#1B1A16">Move the carbonara to €15.50</div>
+          <p style="margin:0;max-width:620px;font-size:15px;line-height:1.45;color:#2C2A25;text-wrap:pretty">Eggs are up 14% at Metro, which is 40c a plate. At €15.50 you're back to keeping 68%, and you're still under the taverna across the road.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:20px;padding:12px 0 2px">
+            <div style="display:flex;flex-direction:column;gap:1px">
+              <span style="font-size:12px;color:#8A5F16">On the menu now</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:17px;color:#45413A;font-variant-numeric:tabular-nums">€14.20</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:1px">
+              <span style="font-size:12px;color:#8A5F16">Plate cost today</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:17px;color:#45413A;font-variant-numeric:tabular-nums">€4.30</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:1px">
+              <span style="font-size:12px;color:#8A5F16">You'd keep</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:17px;color:#1B4A2C;font-variant-numeric:tabular-nums">68.0%</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px">
+            <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" hint-size="140px,40px">Use €15.50</x-import>
+            <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="secondary" hint-size="170px,40px">Hold for a fortnight</x-import>
+            <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="ghost" hint-size="90px,40px">Not yet</x-import>
+          </div>
+        </div>
+
+        <div style="height:1px;background:#EFE8DA"></div>
+
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Since yesterday</span>
+          <div style="display:flex;flex-direction:column;gap:14px;max-width:700px">
+            <p style="margin:0;font-size:16px;line-height:1.55;color:#2C2A25;text-wrap:pretty">Zeta Dairy's invoice came in overnight — <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums">€188.20</span>, nine lines. I read it and <strong style="font-weight:700">four ingredient costs changed</strong>. Cream is up 6c a litre; the rest held. <a href="#1a" style="font-weight:600;text-decoration:none;border-bottom:1px solid #A8CDB4">See what changed</a></p>
+            <p style="margin:0;font-size:16px;line-height:1.55;color:#2C2A25;text-wrap:pretty">Kritikos is <strong style="font-weight:700">14c cheaper a kilo on tomatoes</strong> this week and delivers same day. Worth a switch on the bruschetta and the salad — about <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums">€0.09</span> a plate. <a href="#1a" style="font-weight:600;text-decoration:none;border-bottom:1px solid #A8CDB4">Switch tomatoes to Kritikos</a></p>
+            <p style="margin:0;font-size:16px;line-height:1.55;color:#2C2A25;text-wrap:pretty">Guanciale has drifted up three weeks running — not enough to reprice the carbonara twice in a month, but I'd rather you knew. <a href="#1a" style="font-weight:600;text-decoration:none;border-bottom:1px solid #A8CDB4">Watch it for me</a></p>
+            <p style="margin:0;font-size:16px;line-height:1.55;color:#2C2A25;text-wrap:pretty">Your Friday order for Kritikos is drafted from last week — 11 lines, <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums">€146.00</span>. It sends itself Thursday at six unless you change it. <a href="#1a" style="font-weight:600;text-decoration:none;border-bottom:1px solid #A8CDB4">Look at the draft</a></p>
+          </div>
+        </div>
+
+        <div style="padding-top:18px;background:linear-gradient(to top,#FDFBF6 62%,rgba(253,251,246,0))">
+          <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Composer" placeholder="Ask me anything — what a dish costs, what to charge, who's cheapest" lead="{{ ic.sparkLead }}" hint-size="100%,52px"></x-import>
+        </div>
+      </div>
+      <div lang="el" style="display:flex;flex-direction:column;gap:3px">
+        <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Η ίδια οθόνη, στα ελληνικά — font check</span>
+        <span style="font-size:13px;line-height:1.45;color:#8C8574;max-width:640px">Every face in this panel is a system fallback — Bricolage Grotesque, Nunito Sans and IBM Plex Mono all ship without Greek, so none of the brand type is actually doing the work here. This is the problem, not the proposal. Turn 2 at the top of the board has three fixes. Decimals use the Greek comma.</span>
+      </div>
+      <div lang="el" style="background:#FDFBF6;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:30px 32px 22px;display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Avatar" agent="{{ yes }}" name="Costwise" src="assets/logo-mark-transparent.png" size="sm" hint-size="32px,32px"></x-import>
+          <span style="font-weight:700;font-size:13px;color:#1B4A2C">Costwise</span>
+          <span style="font-size:12px;color:#8C8574">το έγραψε στις 6:40 σήμερα το πρωί</span>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <h2 style="margin:0;font-family:'Bricolage Grotesque','Nunito Sans',sans-serif;font-weight:800;font-size:34px;line-height:1.12;letter-spacing:-.02em;color:#1B1A16">Καλημέρα, Παναγιώτη.</h2>
+          <p style="margin:0;max-width:660px;font-size:17px;line-height:1.45;color:#6B6558;text-wrap:pretty">Τίποτα δεν χάλασε. Μία τιμή αξίζει να αλλάξει πριν τυπώσεις το νέο μενού.</p>
+          <sc-if value="{{ statLine }}" hint-placeholder-val="{{ yes }}">
+            <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:4px;font-size:13px;color:#8C8574">
+              <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">12</span><span>πιάτα</span>
+              <span style="color:#C9BFAA">·</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">38</span><span>υλικά</span>
+              <span style="color:#C9BFAA">·</span>
+              <span>κόστος τροφίμων</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">31,4%</span><span style="color:#2F7A45;font-weight:600">↓ 2,1</span>
+              <span style="color:#C9BFAA">·</span>
+              <span>κρατάς</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">62,4%</span><span style="color:#2F7A45;font-weight:600">↑ 1,4</span>
+            </div>
+          </sc-if>
+        </div>
+
+        <div style="background:#FBF1D4;border:1px solid #F0E3BE;border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+            <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8A5F16">Ένα πράγμα για σήμερα</span>
+            <span style="font-size:12px;color:#8A5F16;opacity:.8">Θα το έκανα πριν το σέρβις</span>
+          </div>
+          <div style="font-family:'Bricolage Grotesque','Nunito Sans',sans-serif;font-weight:800;font-size:24px;line-height:1.22;letter-spacing:-.01em;color:#1B1A16">Ανέβασε την καρμπονάρα στα €15,50</div>
+          <p style="margin:0;max-width:620px;font-size:15px;line-height:1.45;color:#2C2A25;text-wrap:pretty">Τα αυγά ανέβηκαν 14% στη Metro, δηλαδή 40 λεπτά το πιάτο. Στα €15,50 κρατάς ξανά 68%, και είσαι ακόμα πιο κάτω από την ταβέρνα απέναντι.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:20px;padding:12px 0 2px">
+            <div style="display:flex;flex-direction:column;gap:1px">
+              <span style="font-size:12px;color:#8A5F16">Τώρα στο μενού</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:17px;color:#45413A;font-variant-numeric:tabular-nums">€14,20</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:1px">
+              <span style="font-size:12px;color:#8A5F16">Κόστος πιάτου</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:17px;color:#45413A;font-variant-numeric:tabular-nums">€4,30</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:1px">
+              <span style="font-size:12px;color:#8A5F16">Θα κρατάς</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:17px;color:#1B4A2C;font-variant-numeric:tabular-nums">68,0%</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px">
+            <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" hint-size="140px,40px">Βάλε €15,50</x-import>
+            <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="secondary" hint-size="190px,40px">Κράτα το δύο βδομάδες</x-import>
+            <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="ghost" hint-size="100px,40px">Όχι τώρα</x-import>
+          </div>
+        </div>
+
+        <div style="height:1px;background:#EFE8DA"></div>
+
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Από χθες</span>
+          <div style="display:flex;flex-direction:column;gap:14px;max-width:700px">
+            <p style="margin:0;font-size:16px;line-height:1.55;color:#2C2A25;text-wrap:pretty">Το τιμολόγιο της Zeta Dairy ήρθε μέσα στη νύχτα — <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums">€188,20</span>, εννιά γραμμές. Το διάβασα και <strong style="font-weight:700">άλλαξαν τέσσερα κόστη υλικών</strong>. Η κρέμα πάνω 6 λεπτά το λίτρο, τα άλλα σταθερά. <a href="#1a" style="font-weight:600;text-decoration:none;border-bottom:1px solid #A8CDB4">Δες τι άλλαξε</a></p>
+            <p style="margin:0;font-size:16px;line-height:1.55;color:#2C2A25;text-wrap:pretty">Ο Κρητικός έχει τις ντομάτες <strong style="font-weight:700">14 λεπτά φθηνότερα το κιλό</strong> αυτή τη βδομάδα και φέρνει την ίδια μέρα. Αξίζει αλλαγή στην μπρουσκέτα και τη σαλάτα — περίπου <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums">€0,09</span> το πιάτο. <a href="#1a" style="font-weight:600;text-decoration:none;border-bottom:1px solid #A8CDB4">Άλλαξε τις ντομάτες στον Κρητικό</a></p>
+            <p style="margin:0;font-size:16px;line-height:1.55;color:#2C2A25;text-wrap:pretty">Το γουανσιάλε ανεβαίνει τρεις βδομάδες σερί — δεν φτάνει για δεύτερη αλλαγή τιμής μέσα στον μήνα, αλλά καλύτερα να το ξέρεις. <a href="#1a" style="font-weight:600;text-decoration:none;border-bottom:1px solid #A8CDB4">Πρόσεχέ το για μένα</a></p>
+            <p style="margin:0;font-size:16px;line-height:1.55;color:#2C2A25;text-wrap:pretty">Η παραγγελία της Παρασκευής για τον Κρητικό είναι έτοιμη από την περασμένη βδομάδα — 11 γραμμές, <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums">€146,00</span>. Φεύγει μόνη της την Πέμπτη στις έξι, εκτός αν την αλλάξεις. <a href="#1a" style="font-weight:600;text-decoration:none;border-bottom:1px solid #A8CDB4">Δες την παραγγελία</a></p>
+          </div>
+        </div>
+
+        <div style="padding-top:18px;background:linear-gradient(to top,#FDFBF6 62%,rgba(253,251,246,0))">
+          <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Composer" placeholder="Ρώτα με ό,τι θέλεις — τι κοστίζει ένα πιάτο, τι να χρεώσεις, ποιος έχει φθηνότερα" lead="{{ ic.sparkLead }}" hint-size="100%,52px"></x-import>
+        </div>
+      </div>
+    </div>
+
+    <div id="1b" style="width:1000px;display:flex;flex-direction:column;gap:20px">
+      <div style="display:flex;align-items:center;gap:12px">
+        <span style="display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:26px;padding:0 10px;border-radius:999px;background:#1B4A2C;color:#FDFBF6;font-weight:700;font-size:13px;letter-spacing:.02em">1b</span>
+        <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:22px;letter-spacing:-.01em;color:#1B1A16">The decision queue</span>
+        <span style="font-size:15px;color:#8C8574">Costwise queues proposals and you clear them. Try the buttons — the count moves.</span>
+      </div>
+
+      <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Day one — signed up an hour ago</span>
+      <div style="background:#FDFBF6;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:30px 32px 22px;display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Avatar" agent="{{ yes }}" name="Costwise" src="assets/logo-mark-transparent.png" size="sm" hint-size="32px,32px"></x-import>
+          <span style="font-weight:700;font-size:13px;color:#1B4A2C">Costwise</span>
+          <span style="font-size:12px;color:#8C8574">read your invoice just now</span>
+        </div>
+
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px">
+          <div style="display:flex;flex-direction:column;gap:8px;flex:1">
+            <h2 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:34px;line-height:1.1;letter-spacing:-.02em;color:#1B1A16">Say yes three times and your menu is costed</h2>
+            <p style="margin:0;max-width:600px;font-size:17px;line-height:1.45;color:#6B6558;text-wrap:pretty">I've done the reading, {{ ownerFirst }}. Nothing gets saved until you tell me to.</p>
+          </div>
+          <div style="width:220px;display:flex;flex-direction:column;gap:7px;flex:0 0 auto">
+            <div style="display:flex;align-items:baseline;justify-content:space-between">
+              <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Waiting on you</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;color:#45413A;font-variant-numeric:tabular-nums">{{ dText }}</span>
+            </div>
+            <div style="height:8px;border-radius:999px;background:#F0EADC;overflow:hidden">
+              <div style="{{ dBarStyle }}"></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="background:#fff;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:20px;display:flex;gap:16px">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:999px;background:#E4F3D8;color:#1B4A2C;flex:0 0 auto">{{ ic.receipt }}</span>
+            <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+              <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">From your Metro invoice</span>
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px">
+                <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:21px;line-height:1.2;letter-spacing:-.01em;color:#1B1A16">Add 11 ingredients at what you paid?</span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:16px;color:#45413A;font-variant-numeric:tabular-nums;flex:0 0 auto">€212.40</span>
+              </div>
+              <p style="margin:0;max-width:560px;font-size:15px;line-height:1.45;color:#45413A;text-wrap:pretty">Fourteen lines on the invoice. Eleven are things you'd buy again, so I'd file those with the price you actually paid rather than an average.</p>
+              <sc-if value="{{ d1.open }}" hint-placeholder-val="{{ yes }}">
+                <div style="display:flex;gap:10px;margin-top:2px">
+                  <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" onClick="{{ d1.approve }}" hint-size="130px,40px">Add all 11</x-import>
+                  <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="secondary" onClick="{{ d1.approve }}" hint-size="110px,40px">Look first</x-import>
+                </div>
+              </sc-if>
+              <sc-if value="{{ d1.done }}" hint-placeholder-val="{{ no }}">
+                <div style="display:flex;align-items:center;gap:8px;margin-top:2px;font-size:15px;font-weight:600;color:#2F7A45">{{ ic.check }}<span>Filed — all 11 are on your list.</span><button onClick="{{ d1.undo }}" style="border:0;background:none;padding:0;margin-left:4px;cursor:pointer;font-family:'Nunito Sans',sans-serif;font-weight:600;font-size:14px;color:#8C8574;text-decoration:underline">Undo</button></div>
+              </sc-if>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:20px;display:flex;gap:16px">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:999px;background:#FDEBDD;color:#9E4220;flex:0 0 auto">{{ ic.utensils }}</span>
+            <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+              <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">The two dishes you gave me</span>
+              <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:21px;line-height:1.2;letter-spacing:-.01em;color:#1B1A16">Cost the carbonara and the Greek salad?</span>
+              <p style="margin:0;max-width:560px;font-size:15px;line-height:1.45;color:#45413A;text-wrap:pretty">I'll use your invoice prices where I have them and Athens averages for the rest — guanciale and pecorino, mostly. You can correct any of it after, and I'll relearn.</p>
+              <sc-if value="{{ d2.open }}" hint-placeholder-val="{{ yes }}">
+                <div style="display:flex;gap:10px;margin-top:2px">
+                  <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" onClick="{{ d2.approve }}" hint-size="150px,40px">Cost them both</x-import>
+                  <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="ghost" onClick="{{ d2.approve }}" hint-size="90px,40px">Not yet</x-import>
+                </div>
+              </sc-if>
+              <sc-if value="{{ d2.done }}" hint-placeholder-val="{{ no }}">
+                <div style="display:flex;align-items:center;gap:8px;margin-top:2px;font-size:15px;font-weight:600;color:#2F7A45">{{ ic.check }}<span>Done — carbonara €3.72 a plate, salad €2.10.</span><button onClick="{{ d2.undo }}" style="border:0;background:none;padding:0;margin-left:4px;cursor:pointer;font-family:'Nunito Sans',sans-serif;font-weight:600;font-size:14px;color:#8C8574;text-decoration:underline">Undo</button></div>
+              </sc-if>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:20px;display:flex;gap:16px">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:999px;background:#F1E7F5;color:#7A4A8C;flex:0 0 auto">{{ ic.eyeAgent }}</span>
+            <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+              <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Needs your eyes</span>
+              <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:21px;line-height:1.2;letter-spacing:-.01em;color:#1B1A16">Two handwritten lines I couldn't read</span>
+              <p style="margin:0;max-width:560px;font-size:15px;line-height:1.45;color:#45413A;text-wrap:pretty">Tell me what they are and nothing on this invoice is a guess. Takes about a minute.</p>
+              <sc-if value="{{ d3.open }}" hint-placeholder-val="{{ yes }}">
+                <div style="display:flex;gap:10px;margin-top:2px">
+                  <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" onClick="{{ d3.approve }}" hint-size="170px,40px">Show me the lines</x-import>
+                  <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="ghost" onClick="{{ d3.approve }}" hint-size="120px,40px">Skip for now</x-import>
+                </div>
+              </sc-if>
+              <sc-if value="{{ d3.done }}" hint-placeholder-val="{{ no }}">
+                <div style="display:flex;align-items:center;gap:8px;margin-top:2px;font-size:15px;font-weight:600;color:#2F7A45">{{ ic.check }}<span>Cleared — both lines named.</span><button onClick="{{ d3.undo }}" style="border:0;background:none;padding:0;margin-left:4px;cursor:pointer;font-family:'Nunito Sans',sans-serif;font-weight:600;font-size:14px;color:#8C8574;text-decoration:underline">Undo</button></div>
+              </sc-if>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#F8F4EA;border:1px solid #EFE8DA;border-radius:16px;padding:14px 16px">
+          <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574;margin-right:2px">What I already know</span>
+          <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Badge" tone="neutral" hint-size="auto,26px">Trattoria</x-import>
+          <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Badge" tone="neutral" hint-size="auto,26px">Athens</x-import>
+          <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Badge" tone="neutral" hint-size="auto,26px">2 dishes</x-import>
+          <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Badge" tone="neutral" hint-size="auto,26px">Metro Cash &amp; Carry</x-import>
+          <span style="flex:1"></span>
+          <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="ghost" size="sm" hint-size="130px,36px">Fix any of this</x-import>
+        </div>
+
+        <div style="padding-top:18px;background:linear-gradient(to top,#FDFBF6 62%,rgba(253,251,246,0))">
+          <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Composer" placeholder="Or just tell me what you sell and I'll build the list" lead="{{ ic.sparkLead }}" hint-size="100%,52px"></x-import>
+        </div>
+      </div>
+
+      <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">A Tuesday, three months in</span>
+      <div style="background:#FDFBF6;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:30px 32px 22px;display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Avatar" agent="{{ yes }}" name="Costwise" src="assets/logo-mark-transparent.png" size="sm" hint-size="32px,32px"></x-import>
+          <span style="font-weight:700;font-size:13px;color:#1B4A2C">Costwise</span>
+          <span style="font-size:12px;color:#8C8574">lined these up at 6:40 this morning</span>
+        </div>
+
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px">
+          <div style="display:flex;flex-direction:column;gap:8px;flex:1">
+            <h2 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:34px;line-height:1.1;letter-spacing:-.02em;color:#1B1A16">Three for you before service</h2>
+            <p style="margin:0;max-width:600px;font-size:17px;line-height:1.45;color:#6B6558;text-wrap:pretty">Nothing's broken, {{ ownerFirst }} — one of them is worth money, two are housekeeping.</p>
+            <sc-if value="{{ statLine }}" hint-placeholder-val="{{ yes }}">
+              <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:4px;font-size:13px;color:#8C8574">
+                <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">12</span><span>dishes</span>
+                <span style="color:#C9BFAA">·</span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">38</span><span>ingredients</span>
+                <span style="color:#C9BFAA">·</span>
+                <span>food cost</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">31.4%</span><span style="color:#2F7A45;font-weight:600">↓ 2.1</span>
+                <span style="color:#C9BFAA">·</span>
+                <span>you keep</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">62.4%</span><span style="color:#2F7A45;font-weight:600">↑ 1.4</span>
+              </div>
+            </sc-if>
+          </div>
+          <div style="width:220px;display:flex;flex-direction:column;gap:7px;flex:0 0 auto">
+            <div style="display:flex;align-items:baseline;justify-content:space-between">
+              <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Cleared today</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;color:#45413A;font-variant-numeric:tabular-nums">{{ eText }}</span>
+            </div>
+            <div style="height:8px;border-radius:999px;background:#F0EADC;overflow:hidden">
+              <div style="{{ eBarStyle }}"></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="background:#FBF1D4;border:1px solid #F0E3BE;border-radius:18px;padding:20px;display:flex;gap:16px">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:999px;background:#F5E3B4;color:#6E4A11;flex:0 0 auto">{{ ic.trend }}</span>
+            <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+                <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8A5F16">Worth money · do it first</span>
+                <span style="font-size:12px;color:#8A5F16;opacity:.8">Before you print the menu</span>
+              </div>
+              <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:21px;line-height:1.2;letter-spacing:-.01em;color:#1B1A16">Move the carbonara to €15.50?</span>
+              <p style="margin:0;max-width:560px;font-size:15px;line-height:1.45;color:#2C2A25;text-wrap:pretty">Eggs are up 14% at Metro — 40c a plate. At €15.50 you're back to keeping 68%, still under the taverna across the road.</p>
+              <div style="display:flex;flex-wrap:wrap;gap:20px;padding:8px 0 2px">
+                <div style="display:flex;flex-direction:column;gap:1px">
+                  <span style="font-size:12px;color:#8A5F16">Now</span>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:17px;color:#45413A;font-variant-numeric:tabular-nums">€14.20</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:1px">
+                  <span style="font-size:12px;color:#8A5F16">Plate cost</span>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:17px;color:#45413A;font-variant-numeric:tabular-nums">€4.30</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:1px">
+                  <span style="font-size:12px;color:#8A5F16">You'd keep</span>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:17px;color:#1B4A2C;font-variant-numeric:tabular-nums">68.0%</span>
+                </div>
+              </div>
+              <sc-if value="{{ e1.open }}" hint-placeholder-val="{{ yes }}">
+                <div style="display:flex;flex-wrap:wrap;gap:10px">
+                  <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" onClick="{{ e1.approve }}" hint-size="140px,40px">Use €15.50</x-import>
+                  <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="secondary" onClick="{{ e1.approve }}" hint-size="150px,40px">Hold two weeks</x-import>
+                </div>
+              </sc-if>
+              <sc-if value="{{ e1.done }}" hint-placeholder-val="{{ no }}">
+                <div style="display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:#2F7A45">{{ ic.check }}<span>Done — carbonara is €15.50 on the menu.</span><button onClick="{{ e1.undo }}" style="border:0;background:none;padding:0;margin-left:4px;cursor:pointer;font-family:'Nunito Sans',sans-serif;font-weight:600;font-size:14px;color:#8C8574;text-decoration:underline">Undo</button></div>
+              </sc-if>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:20px;display:flex;gap:16px">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:999px;background:#FBF1D4;color:#6E4A11;flex:0 0 auto">{{ ic.milk }}</span>
+            <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+              <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Zeta Dairy invoice, read at 5:12am</span>
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px">
+                <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:21px;line-height:1.2;letter-spacing:-.01em;color:#1B1A16">Update four ingredient costs?</span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:16px;color:#45413A;font-variant-numeric:tabular-nums;flex:0 0 auto">€188.20</span>
+              </div>
+              <p style="margin:0;max-width:560px;font-size:15px;line-height:1.45;color:#45413A;text-wrap:pretty">Cream is up 6c a litre, pecorino down 2c, the other two held. It moves three dishes by less than a cent a plate, so no repricing needed.</p>
+              <sc-if value="{{ e2.open }}" hint-placeholder-val="{{ yes }}">
+                <div style="display:flex;gap:10px;margin-top:2px">
+                  <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" onClick="{{ e2.approve }}" hint-size="150px,40px">Update them</x-import>
+                  <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="secondary" onClick="{{ e2.approve }}" hint-size="150px,40px">Show the invoice</x-import>
+                </div>
+              </sc-if>
+              <sc-if value="{{ e2.done }}" hint-placeholder-val="{{ no }}">
+                <div style="display:flex;align-items:center;gap:8px;margin-top:2px;font-size:15px;font-weight:600;color:#2F7A45">{{ ic.check }}<span>Updated — four costs, three dishes recosted.</span><button onClick="{{ e2.undo }}" style="border:0;background:none;padding:0;margin-left:4px;cursor:pointer;font-family:'Nunito Sans',sans-serif;font-weight:600;font-size:14px;color:#8C8574;text-decoration:underline">Undo</button></div>
+              </sc-if>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:20px;display:flex;gap:16px">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:999px;background:#E4F3D8;color:#1B4A2C;flex:0 0 auto">{{ ic.truck }}</span>
+            <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+              <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Two suppliers, same tomatoes</span>
+              <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:21px;line-height:1.2;letter-spacing:-.01em;color:#1B1A16">Buy tomatoes from Kritikos instead?</span>
+              <p style="margin:0;max-width:560px;font-size:15px;line-height:1.45;color:#45413A;text-wrap:pretty">14c cheaper a kilo this week and they deliver same day. Saves about €0.09 a plate on the bruschetta and the salad — roughly €18 a month at your covers.</p>
+              <sc-if value="{{ e3.open }}" hint-placeholder-val="{{ yes }}">
+                <div style="display:flex;gap:10px;margin-top:2px">
+                  <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" onClick="{{ e3.approve }}" hint-size="170px,40px">Switch to Kritikos</x-import>
+                  <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="ghost" onClick="{{ e3.approve }}" hint-size="90px,40px">Leave it</x-import>
+                </div>
+              </sc-if>
+              <sc-if value="{{ e3.done }}" hint-placeholder-val="{{ no }}">
+                <div style="display:flex;align-items:center;gap:8px;margin-top:2px;font-size:15px;font-weight:600;color:#2F7A45">{{ ic.check }}<span>Switched — Friday's order goes to Kritikos.</span><button onClick="{{ e3.undo }}" style="border:0;background:none;padding:0;margin-left:4px;cursor:pointer;font-family:'Nunito Sans',sans-serif;font-weight:600;font-size:14px;color:#8C8574;text-decoration:underline">Undo</button></div>
+              </sc-if>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px;background:#F8F4EA;border:1px solid #EFE8DA;border-radius:16px;padding:14px 16px">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:999px;background:#E4F3D8;color:#2F7A45;flex:0 0 auto">{{ ic.checkSm }}</span>
+          <span style="font-size:15px;color:#45413A">Handled before you were up — Friday's Kritikos order drafted, 11 lines, <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums">€146.00</span>.</span>
+          <span style="flex:1"></span>
+          <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="ghost" size="sm" hint-size="140px,36px">Look at the draft</x-import>
+        </div>
+
+        <div style="padding-top:18px;background:linear-gradient(to top,#FDFBF6 62%,rgba(253,251,246,0))">
+          <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Composer" placeholder="Ask me anything — what a dish costs, what to charge, who's cheapest" lead="{{ ic.sparkLead }}" hint-size="100%,52px"></x-import>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;ownerName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Panagiotis&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;showStatLine&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Content&quot;}}">
+class Component extends DCLogic {
+  state = { done: {} };
+
+  DS() { return window.CostwiseDesignSystem_f2dfa3 || {}; }
+  I(name, size, color, sw) {
+    const D = this.DS();
+    if (!D.Icon) return null;
+    return React.createElement(D.Icon, {name: name, size: size || 20, color: color, strokeWidth: sw || 1.75});
+  }
+
+  componentDidMount() {
+    if (window.lucide && this.DS().Icon) return;
+    let tries = 0;
+    this._poll = setInterval(() => {
+      tries++;
+      if (window.lucide && this.DS().Icon) { clearInterval(this._poll); this.forceUpdate(); }
+      else if (tries > 60) clearInterval(this._poll);
+    }, 120);
+  }
+  componentWillUnmount() { clearInterval(this._poll); }
+
+  card(id) {
+    const done = !!this.state.done[id];
+    return {
+      done: done, open: !done,
+      approve: () => this.setState(s => ({done: Object.assign({}, s.done, {[id]: true})})),
+      undo: () => this.setState(s => {
+        const d = Object.assign({}, s.done); delete d[id]; return {done: d};
+      })
+    };
+  }
+
+  bar(n, total) {
+    const pct = Math.round((n / total) * 100);
+    return 'height:100%;width:' + pct + '%;border-radius:999px;background:#43955A;transition:width 200ms cubic-bezier(.2,.8,.25,1)';
+  }
+
+  renderVals() {
+    const d1 = this.card('d1'), d2 = this.card('d2'), d3 = this.card('d3');
+    const e1 = this.card('e1'), e2 = this.card('e2'), e3 = this.card('e3');
+    const dDone = [d1, d2, d3].filter(c => c.done).length;
+    const eDone = [e1, e2, e3].filter(c => c.done).length + 1;
+    const owner = (this.props.ownerName || 'Panagiotis').trim().split(' ')[0];
+
+    return {
+      yes: true, no: false,
+      ownerFirst: owner,
+      statLine: this.props.showStatLine !== false,
+      d1: d1, d2: d2, d3: d3, e1: e1, e2: e2, e3: e3,
+      dText: dDone + ' of 3 done', dBarStyle: this.bar(dDone, 3),
+      eText: eDone + ' of 4 done', eBarStyle: this.bar(eDone, 4),
+      ic: {
+        eye: this.I('eye', 18),
+        camera: this.I('camera', 20),
+        egg: this.I('egg', 20),
+        receipt: this.I('receipt-text', 22),
+        utensils: this.I('utensils', 22),
+        eyeAgent: this.I('scan-eye', 22),
+        milk: this.I('milk', 22),
+        truck: this.I('truck', 22),
+        trend: this.I('trending-up', 22),
+        check: this.I('check', 18, '#2F7A45'),
+        checkSm: this.I('check', 15, '#2F7A45'),
+        sparkLead: this.I('sparkles', 20, '#2F7A45')
+      }
+    };
+  }
+}
+
+</script>
+</body>
+</html>

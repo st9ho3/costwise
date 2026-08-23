@@ -1,0 +1,50 @@
+<!-- @dsCard group="Components" viewport="700x300" name="Core — buttons, badges, avatars" subtitle="Actions, status pills and avatars" -->
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>html,body{margin:0;background:var(--surface-page)}#root{padding:18px 20px}.cwc-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px}.cwc-col{display:flex;flex-direction:column;gap:12px}.cwc-lbl{font:var(--type-overline);letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--text-muted);margin-bottom:2px}.cwc-grid{display:grid;gap:14px}</style>
+</head><body><div id="root"></div>
+<script type="text/babel" data-presets="react">
+const {Icon}=window.CostwiseDesignSystem_f2dfa3;
+
+const {Button,IconButton,Badge,Avatar}=window.CostwiseDesignSystem_f2dfa3;
+const App=()=>(<div className="cwc-col">
+  <div><div className="cwc-lbl">Buttons</div><div className="cwc-row">
+    <Button iconLeft={<Icon name="sparkles" size={18}/>}>Ask Costwise</Button>
+    <Button variant="accent" pill iconRight={<Icon name="arrow-right" size={18}/>}>Price this dish</Button>
+    <Button variant="secondary">Not now</Button>
+    <Button variant="ghost" iconLeft={<Icon name="plus" size={18}/>}>Add ingredient</Button>
+    <Button variant="danger" size="sm">Delete</Button>
+    <Button disabled>Saving…</Button>
+  </div></div>
+  <div><div className="cwc-lbl">Sizes &amp; icon buttons</div><div className="cwc-row">
+    <Button size="sm" variant="secondary">Small 36</Button>
+    <Button variant="secondary">Medium 44</Button>
+    <Button size="lg" variant="secondary">Large 52</Button>
+    <span style={{width:12}}/>
+    <IconButton icon={<Icon name="ellipsis"/>} label="More"/>
+    <IconButton variant="outline" icon={<Icon name="camera"/>} label="Snap invoice"/>
+    <IconButton variant="soft" round icon={<Icon name="mic"/>} label="Talk to Costwise"/>
+    <IconButton variant="solid" round icon={<Icon name="plus"/>} label="Add"/>
+  </div></div>
+  <div><div className="cwc-lbl">Badges &amp; avatars</div><div className="cwc-row">
+    <Badge tone="good" dot>On target</Badge>
+    <Badge tone="watch">Drifting</Badge>
+    <Badge tone="over">18% over</Badge>
+    <Badge tone="agent" icon={<Icon name="sparkles" size={13}/>}>Costwise spotted this</Badge>
+    <Badge tone="info">New price</Badge>
+    <Badge tone="outline">Draft</Badge>
+    <span style={{width:12}}/>
+    <Avatar name="Marta Ruiz" online/>
+    <Avatar name="Tomas Björk" size="sm"/>
+    <Avatar agent src="../../assets/logo-mark-transparent.png"/>
+    <Avatar agent src="../../assets/logo-mark-transparent.png" size="lg"/>
+  </div></div>
+</div>);
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+lucide.createIcons();
+</script></body></html>

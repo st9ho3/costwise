@@ -26,31 +26,35 @@ CostWise is a comprehensive solution for managing recipes and ingredients, with 
 - ✅ **Authentication:** Secure user authentication with credentials and Google OAuth.
 - ✅ **File Uploads:** Upload images for recipes.
 - ✅ **Supplier Management:** Create and manage suppliers with detailed information including contact details, address, and financial data.
+- ✅ **Costwise Design System ("Paper and Produce"):** Tailor-made warm UI design system with 22 custom primitives (`src/app/components/ui/`), warm cream surfaces, broccoli green brand palette, produce accents, and tabular typography.
 
 ---
 
 ## 🛠️ Tech Stack
 
-### Frontend:
+### Frontend & Design:
 
-- **React 19**
-- **Next.js 15**
-- **TypeScript**
-- **Tailwind CSS**
+- **React 19** & **Next.js 15** (App Router)
+- **TypeScript 5**
+- **Tailwind CSS v4** (`@theme` tokens)
+- **Costwise UI Primitives** (`src/app/components/ui/`)
 - **Zustand** (Global State Management)
+- **Lucide React** (Iconography)
 
-### Backend:
+### Backend & Database:
 
 - **Next.js API Routes**
 - **PostgreSQL** (with `drizzle-orm`)
+- **NextAuth.js v5** (OAuth & Credentials)
 
-### Tools & Services:
+### Documentation:
 
-- **Git & GitHub**
-- **Vercel**
-- **Jest**
-- **ESLint**
-- **NextAuth.js**
+Canonical developer documentation is maintained in `docs/`:
+- `docs/AGENTS.md` - Operating rules and navigation
+- `docs/architecture.md` - Codebase architecture and layout
+- `docs/where-to-touch.md` - File routing and edit ownership
+- `docs/decisions.md` - Invariants and business constraints
+- `docs/ui.md` - Design system guide, tokens, and primitives
 
 ---
 

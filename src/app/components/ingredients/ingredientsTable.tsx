@@ -1,22 +1,34 @@
 "use client";
+
+import React, { useEffect } from "react";
 import { ingredientColumns, ingredientSortedLinks } from "@/app/constants/data";
-import { getUsageCategory } from "@/app/utils/pricing";
 import { IngredientToDisplay } from "@/shemas/recipe";
 import Link from "next/link";
-import Label from "../shared/label";
 import useHelpers from "@/app/hooks/useHelpers";
+import { useNotificationStore } from "@/app/stores/notificationStore";
 import TableHead from "../shared/table/tableHead";
 import TableActions from "../shared/table/tableActions";
 import TableClickableTitle from "../shared/table/tableClickableTitle";
-import Notification from "../shared/notification";
 import MonetaryCell from "../shared/table/monetaryCell";
 import Modal from "../shared/modal";
 import DeleteConfirmationModal from "../shared/deleteConfirmationModal";
 import MobileListCard, { MobileCardRow } from "../shared/mobileListCard";
+import { Badge } from "../ui/badge";
+import { CategoryChip, CategoryThumbnail } from "@/app/utils/uiHelpers";
+
+const getUsageBadge = (usageNum: number) => {
+  if (usageNum > 15) {
+    return <Badge tone="good">Most days</Badge>;
+  }
+  if (usageNum > 8) {
+    return <Badge tone="info">Weekly</Badge>;
+  }
+  return <Badge tone="neutral">Now and then</Badge>;
+};
 
 const IngredientsTable = ({ items }: { items: IngredientToDisplay[] }) => {
+  const resetNotification = useNotificationStore((state) => state.reset);
   const {
-    isOpen,
     isModalOpen,
     isDeleteActive,
     closeModal,
@@ -25,33 +37,33 @@ const IngredientsTable = ({ items }: { items: IngredientToDisplay[] }) => {
     askPermision,
   } = useHelpers({ path: "ingredients" });
 
+  useEffect(() => {
+    resetNotification();
+  }, [resetNotification]);
+
   return (
-    <div>
-      <div className="md:hidden">
+    <div className="w-full">
+      {/* Mobile Card Feed */}
+      <div className="md:hidden flex flex-col gap-3">
         {items.map((item) => (
           <MobileListCard
             key={item.id}
+            thumb={<CategoryThumbnail category={item.category} size={36} />}
             title={
-              <Link href={`/ingredients/${item.id}`}>
-                <TableClickableTitle
-                  title={item.name}
-                  icon={item.icon}
-                  category={item.category}
-                />
+              <Link href={`/ingredients/${item.id}`} className="hover:text-green-800 transition-colors">
+                {item.name}
               </Link>
             }
             actions={
-              <div className="flex gap-3">
-                <TableActions
-                  id={item.id}
-                  onDelete={askPermision}
-                  path="ingredients"
-                />
-              </div>
+              <TableActions
+                id={item.id}
+                onDelete={askPermision}
+                path="ingredients"
+              />
             }
           >
             <MobileCardRow
-              label="Price"
+              label="What it costs"
               value={
                 <MonetaryCell
                   price={item.unitPrice}
@@ -61,78 +73,78 @@ const IngredientsTable = ({ items }: { items: IngredientToDisplay[] }) => {
               }
             />
             <MobileCardRow
-              label="Usage"
-              value={
-                <Label
-                  text={getUsageCategory(Number(item.usage))}
-                  type={getUsageCategory(Number(item.usage))}
-                />
-              }
+              label="How often"
+              value={getUsageBadge(Number(item.usage))}
+              isMono={false}
             />
             <MobileCardRow
-              label="Category"
-              value={<Label text={item.categoryName} type={item.categoryName} />}
+              label="Kind"
+              value={<CategoryChip category={item.categoryName || item.category} />}
+              isMono={false}
             />
           </MobileListCard>
         ))}
       </div>
-      <table className="w-full table-fixed mb-2 hidden md:table">
-        <TableHead
-          columns={ingredientColumns}
-          sortedLinks={ingredientSortedLinks}
-        />
-        <tbody className="text-muted-foreground text-sm">
-          {items.map((item) => (
-            <tr
-              key={item.id}
-              className="border-b h-12.5 border-border text-sm"
-            >
-              <td className="pl-4 md:pl-0 pt-2">
-                <Link href={`/ingredients/${item.id}`}>
-                  <TableClickableTitle
-                    title={item.name}
-                    icon={item.icon}
-                    category={item.category}
+
+      {/* Desktop Table */}
+      <div className="hidden md:block w-full bg-white rounded-[18px] border border-[#EFE8DA] shadow-[0_1px_2px_rgba(27,26,22,0.05)] overflow-hidden">
+        <table className="w-full table-fixed border-collapse">
+          <TableHead
+            columns={ingredientColumns}
+            sortedLinks={ingredientSortedLinks}
+          />
+          <tbody className="divide-y divide-[#EFE8DA]">
+            {items.map((item) => (
+              <tr
+                key={item.id}
+                className="h-[56px] hover:bg-cream-100/60 transition-colors duration-140 group"
+              >
+                <td className="pl-5 pr-3 text-left">
+                  <Link href={`/ingredients/${item.id}`} className="block">
+                    <TableClickableTitle
+                      title={item.name}
+                      category={item.category}
+                    />
+                  </Link>
+                </td>
+
+                <td className="px-3.5 text-left">
+                  <MonetaryCell
+                    price={item.unitPrice}
+                    type="per_unit"
+                    unit={item.unit}
                   />
-                </Link>
-              </td>
+                </td>
 
-              <td className="hidden md:table-cell align-middle text-center md:text-start md:pl-4">
-                <MonetaryCell
-                  price={item.unitPrice}
-                  type="per_unit"
-                  unit={item.unit}
-                />
-              </td>
+                <td className="px-3.5 text-left">
+                  {getUsageBadge(Number(item.usage))}
+                </td>
 
-              <td className="hidden md:table-cell pl-4">
-                <Label
-                  text={getUsageCategory(Number(item.usage))}
-                  type={getUsageCategory(Number(item.usage))}
-                />
-              </td>
-              <td className="hidden md:table-cell pl-4">
-                <Label text={item.categoryName} type={item.categoryName} />
-              </td>
+                <td className="px-3.5 text-left">
+                  <CategoryChip category={item.categoryName || item.category} />
+                </td>
 
-              <td className="align-middle text-center gap-5 flex justify-center md:text-start md:justify-start mt-4 md:pl-4">
-                <TableActions
-                  id={item.id}
-                  onDelete={askPermision}
-                  path="ingredients"
-                />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      {isOpen && <Notification />}
+                <td className="pr-5 pl-3 text-right">
+                  <TableActions
+                    id={item.id}
+                    onDelete={askPermision}
+                    path="ingredients"
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Delete Confirmation Modal */}
       {isModalOpen && isDeleteActive && (
         <Modal isOpen={isModalOpen} onClose={closeModal} type="delete">
           <DeleteConfirmationModal
             onDelete={handleDelete}
             onClose={closeModal}
             id={storedItemId}
+            itemType="ingredient"
           />
         </Modal>
       )}

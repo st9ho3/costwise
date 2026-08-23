@@ -18,15 +18,15 @@ export const zodValidateIngredientBeforeAddItToDatabase = (
 };
 
 export const validateComplexEntity = <T extends object, TArrayItem>(
-  entity: T,
-  entitySchema: z.ZodSchema<T>,
-  arraysSchema: z.ZodSchema<TArrayItem>,
-  fieldName: keyof T,
+  entity: Record<string, unknown>,
+  entitySchema: z.ZodType<T, z.ZodTypeDef, unknown>,
+  arraysSchema: z.ZodType<TArrayItem, z.ZodTypeDef, unknown>,
+  fieldName: string,
   addedItems: TArrayItem[],
   removedItems: TArrayItem[]
 ) => {
   if (fieldName in entity && typeof entity[fieldName] === "string") {
-    entity[fieldName] = new Date(entity[fieldName] as string) as T[keyof T];
+    entity[fieldName] = new Date(entity[fieldName] as string);
   }
   const entityResult = entitySchema.safeParse(entity);
 

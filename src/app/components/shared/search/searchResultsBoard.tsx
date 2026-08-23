@@ -1,83 +1,70 @@
-// src/components/SearchResultsBoard.tsx
-
-import React from 'react'
-import { Results } from '@/app/hooks/useSearch'
-import RecipeSearchResult from './recipeSearchResult'
-import IngredientSearchResult from './ingredientSearchresult'
-import SearchResultsDisplay from './searchResultsDisplay'
-import { SearchX, Loader2 } from 'lucide-react'
+import React from 'react';
+import { Results } from '@/app/hooks/useSearch';
+import RecipeSearchResult from './recipeSearchResult';
+import IngredientSearchResult from './ingredientSearchresult';
+import SearchResultsDisplay from './searchResultsDisplay';
+import { Loader2 } from 'lucide-react';
 
 interface SearchResultsBoardProps {
-  results: Results | undefined
-  loading: boolean
-  onClose: () => void
+  results: Results | undefined;
+  loading: boolean;
+  onClose: () => void;
+  isMobile?: boolean;
 }
 
-const SearchResultsBoard = ({ results, loading, onClose, isMobile = false }: SearchResultsBoardProps & { isMobile?: boolean }) => {
-  const { recipes, ingredients } = results || {}
-  const hasRecipes = recipes && recipes.length > 0
-  const hasIngredients = ingredients && ingredients.length > 0
-  const isEmpty = !loading && !hasRecipes && !hasIngredients
+const SearchResultsBoard = ({ results, loading, onClose, isMobile = false }: SearchResultsBoardProps) => {
+  const { recipes, ingredients } = results || {};
+  const hasRecipes = recipes && recipes.length > 0;
+  const hasIngredients = ingredients && ingredients.length > 0;
+  const isEmpty = !loading && !hasRecipes && !hasIngredients;
 
-  // Desktop: Dropdown/Modal styles
-  const desktopClasses = `
-    hidden md:flex
-    absolute z-20 top-full left-0 right-0 mt-2
-    w-full bg-white
-    rounded-[28px] border border-gray-100
-    shadow-xl shadow-gray-200/50
-    overflow-hidden flex flex-col
-  `
-
-  // Mobile: Full width/height styles
-  const mobileClasses = `
-    flex flex-col w-full bg-white h-140
-    overflow-y-auto
-  `
-
-  const containerClasses = isMobile ? mobileClasses : desktopClasses
+  const containerClasses = isMobile
+    ? "flex flex-col w-full bg-white max-h-[80vh] overflow-y-auto"
+    : "absolute z-40 top-[44px] left-0 w-full max-w-[460px] bg-white rounded-[26px] border border-[#EFE8DA] shadow-[0_4px_8px_rgba(27,26,22,0.05),0_20px_40px_-12px_rgba(27,26,22,0.16)] overflow-hidden flex flex-col max-h-[380px] overflow-y-auto animate-in fade-in-0 duration-140";
 
   if (loading) {
     return (
-      <div className={`${containerClasses} ${!isMobile ? 'h-30 md:h-40' : 'h-full'} justify-center items-center gap-3 text-gray-400`}>
-        <Loader2 className='animate-spin text-blue-500' size={24} />
-        <span className="text-sm font-medium">Finding delicious things...</span>
+      <div className={`${containerClasses} h-36 justify-center items-center gap-2 text-stone-500`}>
+        <Loader2 className="animate-spin text-green-700 size-5" />
+        <span className="text-[14px] font-medium font-body">Finding delicious things…</span>
       </div>
-    )
+    );
   }
 
   if (isEmpty) {
     return (
-      <div className={`${containerClasses} ${!isMobile ? 'h-full md:h-40' : 'h-full'} justify-center items-center gap-2 text-gray-400`}>
-        <div className="p-3 bg-gray-50 rounded-full mb-1">
-            <SearchX size={24} className="text-gray-400" />
+      <div className={`${containerClasses} p-6 justify-center items-center text-center gap-1.5`}>
+        <div className="font-display font-bold text-[17px] text-ink-900">
+          Nothing matched that
         </div>
-        <span className="text-sm font-medium">No results found</span>
+        <p className="text-[13px] text-stone-500 font-body">
+          Try a shorter word — &ldquo;carb&rdquo;, &ldquo;egg&rdquo;, &ldquo;oil&rdquo;.
+        </p>
       </div>
-    )
+    );
   }
 
   return (
-    <div className={`${containerClasses} ${!isMobile ? 'max-h-[60vh]' : ''} overflow-y-auto py-4`}>
+    <div className={containerClasses}>
       {hasRecipes && (
-        <SearchResultsDisplay title='Recipes' total={recipes.length}>
-          {recipes.map((recipe) => (
+        <SearchResultsDisplay title="Dishes" total={recipes.length}>
+          {recipes.slice(0, 4).map((recipe) => (
             <RecipeSearchResult onClose={onClose} key={recipe.id} item={recipe} />
           ))}
         </SearchResultsDisplay>
       )}
 
-      {hasRecipes && hasIngredients && <div className="h-px bg-gray-100 mx-8 my-2" />}
+      {hasRecipes && hasIngredients && <div className="h-px bg-[#EFE8DA] mx-4" />}
 
       {hasIngredients && (
-        <SearchResultsDisplay title='Ingredients' total={ingredients.length}>
-          {ingredients.map((ingredient) => (
+        <SearchResultsDisplay title="Ingredients" total={ingredients.length}>
+          {ingredients.slice(0, 4).map((ingredient) => (
             <IngredientSearchResult onClose={onClose} key={ingredient.id} item={ingredient} />
           ))}
         </SearchResultsDisplay>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default SearchResultsBoard
+export default SearchResultsBoard;

@@ -1,108 +1,92 @@
-// src/components/Header.tsx
-"use client"
-import React from 'react'
-import { Bell, Menu, Search } from 'lucide-react'
-import { Session } from 'next-auth'
-import NotificationsNumber from '../shared/notificationsNumber'
-import SearchBoard from '../shared/search/searchBoard'
-import Profile from '../shared/userProfile'
-import { useUIStore } from '@/app/stores/uiStore'
+'use client';
 
-import UserProfile from '../shared/profileModal'
-import Modal from '../shared/modal'
-import { useFileStore } from '@/app/stores/fileStore'
+import React from 'react';
+import { Bell, Menu } from 'lucide-react';
+import { Session } from 'next-auth';
+import SearchBoard from '../shared/search/searchBoard';
+import { useUIStore } from '@/app/stores/uiStore';
+import UserProfile from '../shared/profileModal';
+import Modal from '../shared/modal';
+import { Avatar } from '../ui/avatar';
 
-const Header = ({ session }: { session: Session }) => {
-  const toggleMobileMenu = useUIStore((state) => state.toggleMobileMenu)
-  const openMobileSearch = useUIStore((state) => state.openMobileSearch)
-  
-  const isModalOpen = useUIStore((state) => state.isModalOpen)
-  const isProfileOpen = useUIStore((state) => state.isProfileOpen)
-  const reset = useUIStore((state) => state.reset)
-  
+interface HeaderProps {
+  session: Session;
+}
+
+export default function Header({ session }: HeaderProps) {
+  const toggleMobileMenu = useUIStore((state) => state.toggleMobileMenu);
+  const isModalOpen = useUIStore((state) => state.isModalOpen);
+  const isProfileOpen = useUIStore((state) => state.isProfileOpen);
+  const openProfile = useUIStore((state) => state.openProfile);
+  const reset = useUIStore((state) => state.reset);
+
+  const userName = session?.user?.name || 'Account';
+  const userEmail = session?.user?.email || '';
+
   return (
     <>
-      <header 
-        className="
-          sticky top-0 z-1 w-full
-          flex items-center justify-between 
-          px-6 py-3 h-20
-          bg-white/95 backdrop-blur-sm
-          border-b border-gray-100
-        "
-      >
-        {/* LEFT: Logo or Menu Trigger (Placeholder) */}
-        <div className="flex items-center gap-4 w-60">
-          <button 
-            onClick={() => toggleMobileMenu()}
-            className="p-2 -ml-2 rounded-full hover:bg-gray-100 text-gray-600 lg:hidden"
+      <header className="sticky top-0 z-30 w-full h-[60px] px-4 sm:px-6 flex items-center justify-between bg-cream-50/80 backdrop-blur-[8px] border-b border-[#EFE8DA] transition-all select-none">
+        {/* LEFT: Mobile Menu Button & Search Trigger */}
+        <div className="flex items-center gap-3 flex-1 max-w-[480px]">
+          <button
+            type="button"
+            onClick={toggleMobileMenu}
+            className="p-1.5 rounded-lg text-ink-700 hover:bg-cream-100 hover:text-ink-900 lg:hidden cursor-pointer"
+            aria-label="Open navigation menu"
           >
-            <Menu size={24} />
-          </button>
-          {/* You can replace this text with your Logo Image */}
-          <span className="text-xl font-semibold text-gray-700 tracking-tight hidden sm:block">
-            
-          </span>
-        </div>
-
-        {/* CENTER: Search Bar (Takes prominent space) */}
-        <div className="hidden md:flex-1 md:flex md:justify-center md:px-4">
-          <SearchBoard />
-        </div>
-
-       <div className='flex md:hidden' onClick={openMobileSearch}>
-        <Search />
-       </div>
-
-        {/* RIGHT: Actions & Profile */}
-        <div className="flex items-center justify-end gap-3 w-60">
-          
-          {/* Notifications Icon Button */}
-          <button className="relative group p-2.5 rounded-full hover:bg-gray-100 transition-colors">
-            <Bell className="text-gray-500 group-hover:text-gray-700" size={22} strokeWidth={2} />
-            {/* Positioning the badge absolutely within the button */}
-            <div className="absolute top-7 right-6">
-              <NotificationsNumber />
-            </div>
+            <Menu className="size-5" />
           </button>
 
-          {/* Separator */}
-          <div className="h-8 w-px bg-gray-200 mx-1 hidden sm:block"></div>
-
-          {/* User Profile Chip */}
-          <div className="flex items-center gap-3 pl-1 cursor-pointer group">
-            
-            {/* User Info (Hidden on mobile for cleanliness) */}
-            <div className="hidden md:flex flex-col items-end">
-              <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
-                Account
-              </span>
-              <span className="text-xs text-gray-400 max-w-[120px] truncate">
-                {session?.user?.email}
-              </span>
-            </div>
-
-            {/* Avatar / Circle */}
-            <Profile session={session} />
+          {/* Desktop & Mobile Search Dropdown Container */}
+          <div className="flex-1 w-full">
+            <SearchBoard />
           </div>
+        </div>
+
+        {/* RIGHT: Notifications & User Profile */}
+        <div className="flex items-center gap-3 shrink-0">
+          {/* Notification Bell */}
+          <button
+            type="button"
+            className="relative size-[36px] rounded-full flex items-center justify-center text-ink-700 hover:bg-cream-100 transition-colors cursor-pointer"
+            aria-label="Notifications"
+          >
+            <Bell className="size-[18px]" strokeWidth={1.75} />
+            <span className="absolute top-1.5 right-1.5 min-w-[8px] h-[8px] rounded-full bg-tomato-600 ring-2 ring-cream-50" />
+          </button>
+
+          {/* Divider */}
+          <div className="h-[24px] w-px bg-[#EFE8DA] hidden sm:block" />
+
+          {/* Account Chip */}
+          <button
+            type="button"
+            onClick={openProfile}
+            className="flex items-center gap-2.5 p-1 rounded-full hover:bg-cream-100 transition-colors cursor-pointer text-left group"
+          >
+            <div className="hidden sm:flex flex-col items-end leading-tight">
+              <span className="font-semibold text-[13px] text-ink-900 group-hover:text-green-800 transition-colors truncate max-w-[130px]">
+                {userName}
+              </span>
+              <span className="text-[11px] text-stone-500 truncate max-w-[130px]">
+                {userEmail}
+              </span>
+            </div>
+            <Avatar name={userName} src={session?.user?.image} size="sm" />
+          </button>
         </div>
       </header>
 
       {/* User Profile Modal */}
       {isProfileOpen && (
-        <Modal
-          isOpen={isModalOpen}
-          onClose={reset}
-        >
-          <UserProfile 
-            name={session?.user?.name || "Unknown name"} 
-            email={session?.user?.email || "Unknown email"} 
-            avatar={session?.user?.image} 
+        <Modal isOpen={isModalOpen} onClose={reset}>
+          <UserProfile
+            name={userName}
+            email={userEmail}
+            avatar={session?.user?.image}
           />
         </Modal>
       )}
     </>
-  )
+  );
 }
-
-export default Header

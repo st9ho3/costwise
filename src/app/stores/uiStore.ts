@@ -11,6 +11,7 @@ interface State {
   isDeleteActive: boolean;
   isMobileMenuOpen: boolean;
   isMobileSearchOpen: boolean;
+  sidebarCollapsed: boolean;
 
   openModal: (type: string) => void;
   closeModal: () => void;
@@ -21,18 +22,22 @@ interface State {
   closeMobileMenu: () => void;
   openMobileSearch: () => void;
   closeMobileSearch: () => void;
+  toggleSidebar: () => void;
+  setSidebarCollapsed: (collapsed: boolean) => void;
   reset: () => void;
 }
 
 export const useUIStore = create<State>((set) => ({
-  //State
+  // State
   isModalOpen: false,
   isProfileOpen: false,
   modalType: { type: "" },
   isDeleteActive: false,
   isMobileMenuOpen: false,
   isMobileSearchOpen: false,
-  //Actions
+  sidebarCollapsed: false,
+
+  // Actions
   openModal: (type) =>
     set({
       isModalOpen: true,
@@ -48,6 +53,10 @@ export const useUIStore = create<State>((set) => ({
   closeMobileMenu: () => set({ isMobileMenuOpen: false }),
   openMobileSearch: () => set({ isMobileSearchOpen: true }),
   closeMobileSearch: () => set({ isMobileSearchOpen: false }),
+
+  toggleSidebar: () =>
+    set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed })),
+  setSidebarCollapsed: (collapsed) => set({ sidebarCollapsed: collapsed }),
 
   reset: () =>
     set({

@@ -1,12 +1,10 @@
-"use client"
+"use client";
+
+import React, { useEffect } from "react";
 import { recipesColumns, recipeSortedLinks } from "@/app/constants/data";
-import { getProfitMarginType } from "@/app/utils/pricing";
 import { Recipe } from "@/shemas/recipe";
-import Notification from '@/app/components/shared/notification'
 import Link from "next/link";
-import Label from "../shared/label";
 import useHelpers from "@/app/hooks/useHelpers";
-import { useEffect } from "react";
 import { useNotificationStore } from "@/app/stores/notificationStore";
 import TableHead from "../shared/table/tableHead";
 import TableActions from "../shared/table/tableActions";
@@ -16,124 +14,144 @@ import PercentilleCell from "../shared/table/percentilleCell";
 import Modal from "../shared/modal";
 import DeleteConfirmationModal from "../shared/deleteConfirmationModal";
 import MobileListCard, { MobileCardRow } from "../shared/mobileListCard";
+import { Badge } from "../ui/badge";
+import { CategoryThumbnail } from "@/app/utils/uiHelpers";
 
+const getMarginTone = (margin: number | undefined): "good" | "info" | "watch" | "over" => {
+  if (margin === undefined || margin <= 40) return "over";
+  if (margin > 60) return "good";
+  if (margin > 50) return "info";
+  return "watch";
+};
 
+const RecipesTable = ({ items }: { items: Recipe[] }) => {
+  const resetNotification = useNotificationStore((state) => state.reset);
+  const { isModalOpen, isDeleteActive, closeModal, storedItemId, handleDelete, askPermision } = useHelpers({ path: 'recipes' });
 
-const RecipesTable = ({items}: {items: Recipe[]}) => {
-  
-  const resetNotification = useNotificationStore((state) => state.reset)
-  const { isOpen, isModalOpen, isDeleteActive, closeModal, storedItemId, handleDelete, askPermision } = useHelpers({path: 'recipes'})
-
-  useEffect(()=> {
-    const reset = () => {
-      resetNotification()
-    }
-    reset()
-
-  }, [resetNotification])
+  useEffect(() => {
+    resetNotification();
+  }, [resetNotification]);
 
   return (
-    <div>
-      <div className="md:hidden">
+    <div className="w-full">
+      {/* Mobile Card Feed */}
+      <div className="md:hidden flex flex-col gap-3">
         {items.map((item) => (
           <MobileListCard
             key={item.id}
+            thumb={
+              item.imgPath ? (
+                <img
+                  src={item.imgPath}
+                  alt={item.title}
+                  className="size-[36px] rounded-full object-cover shrink-0 border border-[#EFE8DA]"
+                />
+              ) : (
+                <CategoryThumbnail category={item.category} size={36} />
+              )
+            }
             title={
-              <Link href={`/recipes/${item.id}`}>
-                <TableClickableTitle imgPath={item.imgPath} title={item.title} />
+              <Link href={`/recipes/edit/${item.id}`} className="hover:text-green-800 transition-colors">
+                {item.title}
               </Link>
             }
             actions={
-              <div className="flex gap-3">
-                <TableActions
-                  id={item.id}
-                  onDelete={askPermision}
-                  path="recipes"
-                />
-              </div>
+              <TableActions
+                id={item.id}
+                onDelete={askPermision}
+                path="recipes"
+              />
             }
           >
             <MobileCardRow
-              label="Tax"
+              label="VAT"
               value={<PercentilleCell percentage={item.tax} />}
             />
             <MobileCardRow
-              label="Selling Price"
+              label="Menu price"
               value={<MonetaryCell type="absolute" price={item.sellingPrice} />}
             />
             <MobileCardRow
-              label="Profit Margin"
+              label="What you keep"
               value={
-                <Label
-                  text={`${String(item.profitMargin)}%`}
-                  type={getProfitMarginType(item.profitMargin)}
-                />
+                <Badge tone={getMarginTone(Number(item.profitMargin))}>
+                  {Number(item.profitMargin || 0).toFixed(1)}%
+                </Badge>
               }
+              isMono={false}
             />
             <MobileCardRow
-              label="Total Cost"
+              label="Plate cost"
               value={<MonetaryCell type="absolute" price={item.totalCost} />}
             />
           </MobileListCard>
         ))}
       </div>
-      <table className="w-full table-fixed mb-2 hidden md:table">
-        <TableHead columns={recipesColumns} sortedLinks={recipeSortedLinks} />
-        <tbody className="text-gray-500 text-md">
-          {items.map((item) => (
-            <tr
-              key={item.id}
-              className="border-b h-12.5 border-gray-200 text-sm"
-            >
-              <td className="pl-4 md:pl-0 pt-2">
-                <Link href={`/recipes/${item.id}`}>
-                  <TableClickableTitle
-                    imgPath={item.imgPath}
-                    title={item.title}
+
+      {/* Desktop Table */}
+      <div className="hidden md:block w-full bg-white rounded-[18px] border border-[#EFE8DA] shadow-[0_1px_2px_rgba(27,26,22,0.05)] overflow-hidden">
+        <table className="w-full table-fixed border-collapse">
+          <TableHead columns={recipesColumns} sortedLinks={recipeSortedLinks} />
+          <tbody className="divide-y divide-[#EFE8DA]">
+            {items.map((item) => (
+              <tr
+                key={item.id}
+                className="h-[56px] hover:bg-cream-100/60 transition-colors duration-140 group"
+              >
+                <td className="pl-5 pr-3 text-left">
+                  <Link href={`/recipes/edit/${item.id}`} className="block">
+                    <TableClickableTitle
+                      imgPath={item.imgPath}
+                      title={item.title}
+                      category={item.category}
+                    />
+                  </Link>
+                </td>
+
+                <td className="px-3.5 text-left">
+                  <PercentilleCell percentage={item.tax} />
+                </td>
+
+                <td className="px-3.5 text-left">
+                  <MonetaryCell type="absolute" price={item.sellingPrice} />
+                </td>
+
+                <td className="px-3.5 text-left">
+                  <Badge tone={getMarginTone(Number(item.profitMargin))}>
+                    {Number(item.profitMargin || 0).toFixed(1)}%
+                  </Badge>
+                </td>
+
+                <td className="px-3.5 text-left">
+                  <MonetaryCell type="absolute" price={item.totalCost} />
+                </td>
+
+                <td className="pr-5 pl-3 text-right">
+                  <TableActions
+                    id={item.id}
+                    onDelete={askPermision}
+                    path="recipes"
                   />
-                </Link>
-              </td>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-              <td className="hidden md:table-cell pl-4">
-                <PercentilleCell percentage={item.tax} />
-              </td>
-
-              <td className="hidden md:table-cell pl-4">
-                <MonetaryCell type="absolute" price={item.sellingPrice} />
-              </td>
-
-              <td className="hidden md:table-cell pl-4">
-                <Label
-                  text={`${String(item.profitMargin)}%`}
-                  type={getProfitMarginType(item.profitMargin)}
-                />
-              </td>
-
-              <td className="hidden md:table-cell pl-4">
-                <MonetaryCell type="absolute" price={item.totalCost} />
-              </td>
-              <td className="align-middle text-center gap-5 flex justify-center md:text-start md:justify-start mt-4 md:pl-4">
-                <TableActions
-                  id={item.id}
-                  onDelete={askPermision}
-                  path="recipes"
-                />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      {isOpen && <Notification />}
-      {isModalOpen && isDeleteActive && 
-      <Modal isOpen={isModalOpen} onClose={closeModal} type="delete">
-        <DeleteConfirmationModal
-          onDelete={handleDelete}
-          onClose={closeModal}
-          id={storedItemId}
-         />
-      </Modal>}
+      {/* Delete Confirmation Modal */}
+      {isModalOpen && isDeleteActive && (
+        <Modal isOpen={isModalOpen} onClose={closeModal} type="delete">
+          <DeleteConfirmationModal
+            onDelete={handleDelete}
+            onClose={closeModal}
+            id={storedItemId}
+            itemType="dish"
+          />
+        </Modal>
+      )}
     </div>
   );
 };
 
-export default RecipesTable
+export default RecipesTable;

@@ -1,18 +1,13 @@
-/**
- * Renders the suppliers page for a logged-in user.
- * This component fetches all suppliers associated with the current user's ID.
- * It first verifies user authentication and redirects to the sign-in page if no session is found.
- * It then uses the `SupplierService` to retrieve the supplier data and passes it to the `SuppliersTable`
- * and `Pagination` components for display and navigation. The page is set to be dynamically rendered
- * to ensure data is always up-to-date.
- */
-import Pagination from '@/app/components/recipes/pagination';
+import React from 'react';
+import Link from 'next/link';
+import { Plus } from 'lucide-react';
 import SuppliersTable from '@/app/components/suppliers/suppliersTable';
+import Pagination from '@/app/components/recipes/pagination';
 import { SupplierService } from '@/app/services/suppliersService';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
-import React from 'react';
 import { Metadata } from '@/types/specialTypes';
+import { Button } from '@/app/components/ui/button';
 
 export const dynamic = 'force-dynamic';
 
@@ -44,24 +39,43 @@ const SuppliersPage = async ({ searchParams }: Props) => {
   };
 
   const service = new SupplierService(session.user.id);
-  const rawSuppliers = session.user.id && await service.findAll(session.user.id, metadata);
-  const totalItems = rawSuppliers ? rawSuppliers.count.count : 1;
+  const rawSuppliers = await service.findAll(session.user.id, metadata);
+  const totalItems = rawSuppliers ? rawSuppliers.count.count : 0;
   const pageNumber = Math.ceil(totalItems / itemsPerPage);
-  const suppliers = rawSuppliers
-    ? rawSuppliers.suppliers.map((supplier) => {
-        return supplier;
-      })
-    : [];
+  const suppliers = rawSuppliers ? rawSuppliers.suppliers : [];
 
   return (
-     <div className="flex flex-col h-full w-full px-2 md:px-5 bg-white">
-            <div className="flex-1 overflow-auto">
-                <SuppliersTable items={suppliers} />
-            </div>
-            <div className="mt-auto">
-                <Pagination pageNumber={pageNumber} currentPage={page} />
-            </div>
+    <div className="flex flex-col gap-6 p-4 sm:p-8 lg:px-10 lg:py-8 max-w-[1160px] mx-auto w-full">
+      {/* Page Header */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <h1 className="font-display font-bold text-[28px] sm:text-[30px] leading-tight text-ink-900 tracking-[-0.02em]">
+            Your suppliers
+          </h1>
+          <p className="font-body text-[15px] text-stone-500 mt-1">
+            {totalItems} {totalItems === 1 ? 'supplier' : 'suppliers'} you order from
+          </p>
         </div>
+
+        <Link href="/suppliers/create">
+          <Button iconLeft={<Plus className="size-4" strokeWidth={2.5} />}>
+            Add a supplier
+          </Button>
+        </Link>
+      </div>
+
+      {/* Suppliers Table */}
+      <div className="w-full">
+        <SuppliersTable items={suppliers} />
+      </div>
+
+      {/* Pagination */}
+      {pageNumber > 1 && (
+        <div className="mt-auto">
+          <Pagination pageNumber={pageNumber} currentPage={page} />
+        </div>
+      )}
+    </div>
   );
 };
 

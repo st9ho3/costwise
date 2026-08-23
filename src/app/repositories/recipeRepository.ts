@@ -27,6 +27,8 @@ import {
   IRecipeRepository,
   OperationResult,
   RecipeAnalytics,
+  CategoryAnalytics,
+  MarginHighlights,
 } from "@/types/repositories";
 import { db } from "@/db/db";
 import { eq, and, avg, countDistinct, asc, desc } from "drizzle-orm";
@@ -54,7 +56,7 @@ export class RecipeRepository implements IRecipeRepository {
         },
       });
 
-      return recipe;
+      return recipe as unknown as RecipeWithQuery | undefined;
     } catch (err) {
       console.error("Failed to fetch recipe by ID:", err);
       throw new DatabaseError("RecipeRepository.findById", err);
@@ -189,6 +191,56 @@ export class RecipeRepository implements IRecipeRepository {
     } catch (err) {
       console.error("Failed to get recipe analytics:", err);
       throw new DatabaseError("RecipeRepository.getRecipesAnalytics", err);
+    }
+  }
+
+  async getCategoryAnalytics(userId: string): Promise<CategoryAnalytics[]> {
+    try {
+      const rawCategories = await db
+        .select({
+          category: recipesTable.category,
+          count: countDistinct(recipesTable.id),
+          avgFoodCost: avg(recipesTable.foodCost),
+        })
+        .from(recipesTable)
+        .where(eq(recipesTable.userId, userId))
+        .groupBy(recipesTable.category);
+
+      return rawCategories.map((c) => ({
+        category: c.category as "starter" | "main" | "dessert",
+        count: Number(c.count),
+        avgFoodCost: c.avgFoodCost,
+      }));
+    } catch (err) {
+      console.error("Failed to get category analytics:", err);
+      throw new DatabaseError("RecipeRepository.getCategoryAnalytics", err);
+    }
+  }
+
+  async getMarginHighlights(userId: string): Promise<MarginHighlights> {
+    try {
+      const [topPerformersDB, attentionNeededDB] = await Promise.all([
+        db
+          .select()
+          .from(recipesTable)
+          .where(eq(recipesTable.userId, userId))
+          .orderBy(desc(recipesTable.profitMargin))
+          .limit(4),
+        db
+          .select()
+          .from(recipesTable)
+          .where(eq(recipesTable.userId, userId))
+          .orderBy(desc(recipesTable.foodCost))
+          .limit(4),
+      ]);
+
+      return {
+        topPerformers: topPerformersDB.map((r) => transformRecipeFromDB(r)),
+        attentionNeeded: attentionNeededDB.map((r) => transformRecipeFromDB(r)),
+      };
+    } catch (err) {
+      console.error("Failed to get margin highlights:", err);
+      throw new DatabaseError("RecipeRepository.getMarginHighlights", err);
     }
   }
 

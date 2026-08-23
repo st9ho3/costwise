@@ -1,218 +1,191 @@
-// src/components/ingredients/IngredientForm.tsx
+'use client';
 
-"use client"
 import React from 'react';
-import { 
-  IngredientNameInput, 
-  IngredientPriceInput, 
-  IngredientSummary, 
-  AddIngredientButton, 
-  FormErrors 
-} from '../../constants/components';
-import Incremental from '../shared/incremental';
-import { Ingredient } from '@/shemas/recipe';
-import { useIngredientForm } from '../../hooks/useIngredientsForm';
-import FormSelect from './ingredientsFormComponents/FormSelect';
-import { categoryOptions, unitOptions } from './ingredientsFormComponents/selectOptions';
-import { Tag, Scale, Trash2 } from 'lucide-react';
-import { Card } from '../ui/card';
-import { Label } from '../ui/label';
-import { Button } from '../ui/button';
-import Modal from '../shared/modal';
-import ItemsStore from '../shared/itemsStore';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { ArrowLeft, Sparkles } from 'lucide-react';
+import { Ingredient, IngredientCategory, IngredientToDisplay, Unit } from '@/shemas/recipe';
+import { useIngredientForm } from '@/app/hooks/useIngredientsForm';
 import { SelectableItem } from '../shared/SelectStore';
+import { Input } from '../ui/input';
+import { MoneyInput } from '../ui/moneyInput';
+import { Select } from '../ui/select';
+import { Button } from '../ui/button';
+import { IconButton } from '../ui/iconButton';
+import Incremental from '../shared/incremental';
+import { CATEGORIES } from '@/app/utils/uiHelpers';
+import { normalizePrice, formatPrice, getDisplayUnit } from '@/app/utils/pricing';
 
-type AddIngredientProps = {
-  ingredient: Ingredient | undefined
-  mode: 'create' | 'edit'
-  userId: string
-  supplierOptions: SelectableItem[]
-};
+export interface IngredientFormProps {
+  ingredient?: Ingredient | IngredientToDisplay;
+  mode: 'create' | 'edit';
+  userId: string;
+  supplierOptions: SelectableItem[];
+}
 
-const IngredientForm = ({ ingredient, mode, userId, supplierOptions}: AddIngredientProps) => {
-  // All supplier selection and modal logic now managed by the hook
+export default function IngredientForm({
+  ingredient,
+  mode,
+  userId,
+  supplierOptions,
+}: IngredientFormProps) {
+  const router = useRouter();
+
   const {
-     price, error, register, quantity, unit, name,
-     setErrors, handleKeyDown, handleSubmit, onSubmit, setValue, isSubmitting,
-     tempSuppliers,
-     selectSupplier,
-     confirmSuppliers,
-     handleCloseModal,
-     isModalOpen,
-     modalType,
-     fields,
-     append,
-     remove
+    price,
+    quantity,
+    unit,
+    name,
+    error,
+    register,
+    handleSubmit,
+    setValue,
+    isSubmitting,
+    setErrors,
+    onSubmit,
   } = useIngredientForm({ ingredient, mode, userId, supplierOptions });
-  
+
+  const numPrice = Number(price || 0);
+  const numQty = Number(quantity || 1);
+  const normalized = normalizePrice(numPrice, (unit as Unit) || 'g', numQty);
+  const displayUnit = getDisplayUnit(unit);
+
+  const categoryList = Object.values(CATEGORIES).map((cat) => ({
+    value: cat.id,
+    label: cat.name,
+  }));
+
+  const ingredientWithSuppliers = ingredient as (Ingredient & { suppliers?: { suppliersId?: string }[] }) | undefined;
+  const initialSupplierId =
+    mode === 'edit' && ingredientWithSuppliers && Array.isArray(ingredientWithSuppliers.suppliers) && ingredientWithSuppliers.suppliers[0]?.suppliersId
+      ? ingredientWithSuppliers.suppliers[0].suppliersId
+      : undefined;
+
   return (
-    <form 
-      className="w-full max-w-3xl mx-auto p-2 md:mt-2" 
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      {/* SINGLE CARD CONTAINER: Fits content efficiently */}
-      <Card className="p-6">
-        
-        {/* Title Header */}
-        <div className="mb-6 border-b-2 border-primary pb-4">
-          <h2 className="font-sora font-extrabold text-2xl uppercase tracking-tight text-foreground">
-            {mode === 'edit' ? 'Edit Ingredient' : 'Create Ingredient'}
-            <span className="text-focus-accent">.</span>
-          </h2>
-          <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground mt-1">
-            Ingredient profile & supplier pricing
+    <div className="flex flex-col gap-6 p-4 sm:p-8 lg:px-10 lg:py-8 max-w-[760px] mx-auto w-full">
+      {/* Header */}
+      <div className="flex items-center gap-3">
+        <IconButton
+          icon={<ArrowLeft className="size-5" strokeWidth={1.75} />}
+          variant="outline"
+          label="Back to ingredients"
+          onClick={() => router.push('/ingredients')}
+        />
+        <div>
+          <h1 className="font-display font-bold text-[28px] sm:text-[30px] text-ink-900 leading-snug">
+            {mode === 'edit' ? 'Change this ingredient' : 'A new ingredient'}
+          </h1>
+          <p className="font-body text-[15px] text-stone-500">
+            Tell me what you paid and how much you got — I&apos;ll work out the rest.
           </p>
         </div>
+      </div>
 
-        {/* GRID LAYOUT: 12-column grid for precise sizing */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-end">
-          
-          {/* --- ROW 1: Name & Category --- */}
-          
-          {/* Name: Takes up ~60% of width */}
-          <div className="md:col-span-7">
-            <Label className="mb-1.5 ml-1 block">Ingredient Name</Label>
-            <IngredientNameInput register={register} onKeyDown={handleKeyDown} />
+      {/* Form Card */}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="bg-white rounded-[18px] border border-[#EFE8DA] p-6 sm:p-8 shadow-[0_1px_2px_rgba(27,26,22,0.05)] flex flex-col gap-6">
+          {/* Row 1: Name & Category */}
+          <div className="grid grid-cols-1 sm:grid-cols-[1.4fr_1fr] gap-4">
+            <Input
+              label="What is it?"
+              placeholder="Pecorino romano"
+              size="lg"
+              defaultValue={name}
+              {...register('name')}
+            />
+
+            <Select
+              label="What kind?"
+              defaultValue={ingredient?.category || categoryList[0]?.value}
+              options={categoryList}
+              onValueChange={(val) => setValue('category', val as IngredientCategory, { shouldValidate: true })}
+            />
           </div>
 
-          {/* Category: Takes up ~40% of width */}
-          <div className="md:col-span-5"> 
-             <Label className="mb-1.5 ml-1 block">Category</Label>
-             <FormSelect 
-               fieldName="category"
-               options={categoryOptions}
-               placeholder="Select a Category"
-               icon={Tag}
-               register={register}
-               onKeyDown={handleKeyDown}
-               getValue={(opt) => opt.value}
-               getLabel={(opt) => opt.name}
-             />
-          </div>
+          <div className="h-px bg-[#EFE8DA]" />
 
+          {/* Row 2: Supplier, Quantity, Unit, Price */}
+          <div className="grid grid-cols-1 sm:grid-cols-[1.2fr_auto_0.8fr_1fr] gap-4 items-end">
+            <Select
+              label="Who from?"
+              placeholder="Pick a supplier"
+              defaultValue={initialSupplierId}
+              options={supplierOptions.map((s) => ({ value: s.id, label: s.name }))}
+              onValueChange={(val) => setValue('suppliers.0.suppliersId', val, { shouldValidate: true })}
+            />
 
-          {/* --- ROW 2: Supplier, Quantity, Unit, Price --- */}
-          <div className='w-full md:col-span-12 flex flex-col'>
-            {fields.map((field, index) => (
-              <div key={field.id} className='w-full grid grid-cols-1 md:grid-cols-12 gap-4 p-4 border border-primary rounded-md bg-accent/20 mb-4 items-end'>
-                
-                {/* Supplier Selection */}
-                <div className='col-span-1 md:col-span-3'>
-                  <Label className="mb-1.5 ml-1 block">Supplier</Label>
-                  <FormSelect 
-                     fieldName={`suppliers.${index}.suppliersId`}
-                     options={supplierOptions}
-                     placeholder="Select Supplier"
-                     icon={Scale}
-                     register={register}
-                     onKeyDown={handleKeyDown}
-                     getValue={(opt) => opt.id}
-                     getLabel={(opt) => opt.name}
-                   />
-                </div>
-              
-                {/* Quantity */}
-                 <div className="col-span-1 md:col-span-2">
-                  <Label className="mb-1.5 ml-1 block">Quantity</Label>
-                  <div className="w-full flex justify-center">
-                    <Incremental 
-                      onIngredientChange={setValue} 
-                      count={quantity} 
-                      onKeyDown={handleKeyDown} 
-                      setErrors={setErrors} 
-                    />
-                  </div>
-                </div>
-
-                {/* Unit */}
-                <div className="col-span-1 md:col-span-2">
-                  <Label className="mb-1.5 ml-1 block">Unit</Label>
-                  <FormSelect 
-                     fieldName="unit"
-                     options={unitOptions}
-                     placeholder="Unit"
-                     icon={Scale}
-                     register={register}
-                     onKeyDown={handleKeyDown}
-                     getValue={(opt) => opt.value}
-                     getLabel={(opt) => opt.name}
-                   />
-                </div>
-
-                {/* Price: Price / Unit */}
-                <div className="col-span-1 md:col-span-2">
-                  <Label className="mb-1.5 ml-1 block">Price / Unit</Label>
-                  <IngredientPriceInput
-                    onChange={setValue}
-                    price={price}
-                  />
-                </div>
-
-                {/* Action button to add supplier row */}
-                <div className="col-span-1 md:col-span-2 flex items-end">
-                  <Button 
-                    type="button"
-                    variant="outline"
-                    size="default"
-                    onClick={() => append({ suppliersId: "", unit: "", quantity: 1, price: 0, isActive: false })}
-                    className="w-full"
-                  >
-                    Add
-                  </Button>
-                </div>
-
-                {/* Action button to delete supplier row */}
-                <div className="col-span-1 md:col-span-1 flex items-end">
-                  <Button 
-                    type="button"
-                    variant="destructive"
-                    size="icon"
-                    onClick={() => remove(index)}
-                    className="w-full h-10 rounded-full"
-                    aria-label="Delete supplier"
-                  >
-                    <Trash2 className="size-4" />
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        
-        </div> 
-          
-
-        {/* --- FOOTER SECTION: Summary & Actions --- */}
-        <div className="mt-6 space-y-4">
-            {/* Dynamic Summary */}
-            <div className="min-h-[80px]"> {/* Min-height prevents layout jump */}
-                <IngredientSummary quantity={quantity} unit={unit} name={name} price={price} />
+            <div className="flex flex-col gap-1.5">
+              <label className="font-bold text-[13px] text-ink-900 select-none">
+                How much you got
+              </label>
+              <Incremental
+                count={numQty}
+                step={unit === 'g' || unit === 'ml' ? 50 : 1}
+                onIngredientChange={setValue}
+                setErrors={setErrors}
+              />
             </div>
 
-            {/* Error Feedback */}
-            <FormErrors errors={error} />
+            <Select
+              label="In what"
+              value={unit || 'kg'}
+              options={[
+                { value: 'kg', label: 'Kilos (kg)' },
+                { value: 'g', label: 'Grams (g)' },
+                { value: 'L', label: 'Litres (L)' },
+                { value: 'ml', label: 'Millilitres (ml)' },
+                { value: 'piece', label: 'Pieces' },
+              ]}
+              onValueChange={(val) => setValue('unit', val as Unit, { shouldValidate: true })}
+            />
 
-            {/* Action Button: Right aligned */}
-            <div className="flex justify-end pt-2">
-                <div className="w-full md:w-auto min-w-[160px]">
-                    <AddIngredientButton mode={mode} isSubmitting={isSubmitting} />
-                </div>
+            <MoneyInput
+              label="What you paid"
+              placeholder="12.40"
+              defaultValue={numPrice > 0 ? numPrice : undefined}
+              {...register('unitPrice', { valueAsNumber: true })}
+            />
+          </div>
+
+          {/* Live Summary Card */}
+          {name && numPrice > 0 && (
+            <div className="rounded-[16px] bg-green-50 border border-green-200/60 p-4 flex items-center gap-3 text-green-900 animate-in fade-in-0 duration-140">
+              <span className="size-8 rounded-full bg-green-100 text-green-700 flex items-center justify-center shrink-0">
+                <Sparkles className="size-4" strokeWidth={2} />
+              </span>
+              <p className="font-body text-[15px] font-medium leading-snug">
+                €{numPrice.toFixed(2)} for {numQty} {unit || 'kg'} works out at{' '}
+                <strong className="font-mono font-bold tabular-nums">
+                  €{formatPrice(normalized)}
+                </strong>{' '}
+                a {displayUnit}.
+              </p>
             </div>
+          )}
+
+          {/* Validation Errors */}
+          {error && error.length > 0 && (
+            <div className="p-3.5 rounded-[12px] bg-tomato-50 border border-tomato-200 text-tomato-700 text-[13px] font-medium flex flex-col gap-1">
+              {error.map((err, idx) => (
+                <span key={idx}>• {err}</span>
+              ))}
+            </div>
+          )}
+
+          {/* Footer Actions */}
+          <div className="flex items-center justify-end gap-3 pt-2">
+            <Link href="/ingredients">
+              <Button variant="secondary" type="button">
+                Not yet
+              </Button>
+            </Link>
+
+            <Button type="submit" size="lg" disabled={isSubmitting}>
+              {mode === 'edit' ? 'Save the changes' : 'Add the ingredient'}
+            </Button>
+          </div>
         </div>
-      </Card>
-
-      {/* Suppliers Selection Modal */}
-      <Modal isOpen={isModalOpen && modalType.type === 'suppliers'} onClose={handleCloseModal} type="create">
-        <ItemsStore
-          items={supplierOptions}
-          selected={tempSuppliers}
-          onSelect={selectSupplier}
-          title="Select Suppliers"
-          description="Choose suppliers for this ingredient"
-          onClose={confirmSuppliers}
-        />
-      </Modal>
-    </form>
+      </form>
+    </div>
   );
-};
-
-export default IngredientForm;
+}

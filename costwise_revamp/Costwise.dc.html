@@ -1,0 +1,1642 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/costwise-design-system-f2dfa314-0efb-48b2-bc6e-0e05266dc484/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/costwise-design-system-f2dfa314-0efb-48b2-bc6e-0e05266dc484/tokens/colors.css">
+<link rel="stylesheet" href="_ds/costwise-design-system-f2dfa314-0efb-48b2-bc6e-0e05266dc484/tokens/typography.css">
+<link rel="stylesheet" href="_ds/costwise-design-system-f2dfa314-0efb-48b2-bc6e-0e05266dc484/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/costwise-design-system-f2dfa314-0efb-48b2-bc6e-0e05266dc484/tokens/shape.css">
+<link rel="stylesheet" href="_ds/costwise-design-system-f2dfa314-0efb-48b2-bc6e-0e05266dc484/tokens/motion.css">
+<link rel="stylesheet" href="_ds/costwise-design-system-f2dfa314-0efb-48b2-bc6e-0e05266dc484/tokens/base.css">
+<link rel="stylesheet" href="_ds/costwise-design-system-f2dfa314-0efb-48b2-bc6e-0e05266dc484/styles.css">
+<script src="_ds/costwise-design-system-f2dfa314-0efb-48b2-bc6e-0e05266dc484/_ds_bundle.js"></script>
+<script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@400;600;700&family=Fira+Sans:wght@400;500;600;700&family=Fira+Mono:wght@500;600&display=swap">
+<style>
+*{box-sizing:border-box}
+/* English is unchanged. Greek has no glyphs in Bricolage / Nunito Sans / IBM Plex Mono,
+   so each stack falls through per-character to its Greek-capable counterpart (option 2a). */
+:root{
+--font-display:"Bricolage Grotesque","Geologica","Bricolage Grotesque Fallback",Trebuchet MS,sans-serif;
+--font-body:"Nunito Sans","Fira Sans","Nunito Sans Fallback",Avenir Next,Segoe UI,sans-serif;
+--font-mono:"IBM Plex Mono","Fira Mono",ui-monospace,SFMono-Regular,monospace;
+}
+body{margin:0;background:#FDFBF6;font-family:"Nunito Sans","Fira Sans",Avenir Next,sans-serif;color:#45413A;-webkit-font-smoothing:antialiased}
+a{color:#24603A;text-decoration:none}
+a:hover{color:#123420}
+button{font:inherit}
+input,select{font:inherit}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:#E2DACA;border-radius:999px;border:3px solid transparent;background-clip:content-box}
+</style>
+</helmet>
+
+<sc-if value="{{ isAuth }}" hint-placeholder-val="{{ true }}">
+<div style="min-height:100vh;display:flex;background:#FDFBF6">
+  <div style="flex:1;min-width:0;display:flex;align-items:center;justify-content:center;padding:40px 24px">
+    <div style="width:100%;max-width:404px">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:28px">
+        <img src="assets/logo-mark-transparent.png" width="30" height="30" alt="">
+        <span style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:24px;line-height:1;color:#1B4A2C;letter-spacing:-.015em">Costwise</span>
+      </div>
+      <h1 style="margin:0;font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:30px;line-height:1.22;letter-spacing:-.02em;color:#1B1A16">{{ authTitle }}</h1>
+      <p style="margin:8px 0 26px;font-size:15px;line-height:1.45;color:#8C8574">{{ authBlurb }}</p>
+      <div style="background:#fff;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:20px;display:flex;flex-direction:column;gap:14px">
+        <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Input" label="Email" type="email" placeholder="you@yourplace.gr" hint-size="100%,68px"></x-import>
+        <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Input" label="Password" type="password" placeholder="••••••••" hint-size="100%,68px"></x-import>
+        <sc-if value="{{ isSignup }}" hint-placeholder-val="{{ false }}">
+          <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Input" label="Password again" type="password" placeholder="••••••••" hint="Just so a typo doesn't lock you out" hint-size="100%,86px"></x-import>
+        </sc-if>
+        <sc-if value="{{ isSignin }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;justify-content:flex-end;margin-top:-6px">
+            <a href="#" style="font-size:13px;font-weight:600">Forgotten it?</a>
+          </div>
+        </sc-if>
+        <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" block="{{ true }}" onClick="{{ signIn }}" hint-size="100%,44px">{{ authCta }}</x-import>
+        <div style="display:flex;align-items:center;gap:12px;margin:2px 0">
+          <span style="flex:1;height:1px;background:#EFE8DA"></span>
+          <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">or</span>
+          <span style="flex:1;height:1px;background:#EFE8DA"></span>
+        </div>
+        <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="secondary" block="{{ true }}" iconLeft="{{ ic.google }}" onClick="{{ signIn }}" hint-size="100%,44px">Continue with Google</x-import>
+      </div>
+      <p style="margin:20px 0 0;font-size:15px;line-height:1.45;color:#8C8574">{{ authSwitchText }} <a href="#" onClick="{{ toggleAuth }}" style="font-weight:700">{{ authSwitchLink }}</a></p>
+    </div>
+  </div>
+  <div style="flex:0 0 46%;min-width:0;background:#F2F9EC;border-left:1px solid #EFE8DA;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;padding:48px">
+    <img src="assets/brand-illustration-cast-transparent.png" alt="" style="width:100%;max-width:420px;height:auto">
+    <div style="max-width:380px;text-align:center">
+      <div style="font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:24px;line-height:1.22;letter-spacing:-.02em;color:#1B4A2C">I keep an eye on what your food costs</div>
+      <p style="margin:8px 0 0;font-size:15px;line-height:1.45;color:#24603A">Add what goes on the plate and I'll work out what it costs you — and what you keep.</p>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isDesktopApp }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;height:100vh;overflow:hidden;background:#FDFBF6">
+
+  <sc-if value="{{ expanded }}" hint-placeholder-val="{{ true }}">
+  <aside style="width:248px;flex:0 0 auto;display:flex;flex-direction:column;padding:18px 12px;border-right:1px solid #EFE8DA;background:#FDFBF6">
+    <div style="display:flex;align-items:center;gap:9px;padding:0 6px 18px">
+      <img src="assets/logo-mark-transparent.png" width="26" height="26" alt="">
+      <span style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:22px;line-height:1;color:#1B4A2C;letter-spacing:-.015em">Costwise</span>
+    </div>
+    <nav style="display:flex;flex-direction:column;gap:4px">
+      <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="5">
+        <button onClick="{{ n.go }}" style="{{ n.style }}">{{ n.icon }}<span style="flex:1;text-align:left">{{ n.label }}</span></button>
+      </sc-for>
+    </nav>
+    <div style="flex:1"></div>
+    <div style="background:#FBF1D4;border-radius:18px;padding:14px;margin-bottom:10px">
+      <div style="font-weight:700;font-size:13px;line-height:1.3;color:#6E4A11">{{ sidebarNoteTitle }}</div>
+      <div style="font-size:12px;line-height:1.45;color:#6E4A11;opacity:.8;margin-top:4px">Mostly by fixing three dish prices.</div>
+    </div>
+    <button onClick="{{ toggleCollapse }}" style="display:flex;align-items:center;gap:11px;min-height:42px;padding:0 12px;border:0;border-radius:12px;background:none;color:#8C8574;font-weight:600;font-size:14px;cursor:pointer">{{ ic.panelClose }}<span>Tuck it away</span></button>
+  </aside>
+  </sc-if>
+
+  <sc-if value="{{ collapsed }}" hint-placeholder-val="{{ false }}">
+  <aside style="width:64px;flex:0 0 auto;display:flex;flex-direction:column;align-items:center;padding:18px 8px;border-right:1px solid #EFE8DA;background:#FDFBF6">
+    <img src="assets/logo-mark-transparent.png" width="26" height="26" alt="" style="margin-bottom:18px">
+    <nav style="display:flex;flex-direction:column;gap:4px;width:100%;align-items:center">
+      <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="5">
+        <button onClick="{{ n.go }}" title="{{ n.label }}" style="{{ n.railStyle }}">{{ n.icon }}</button>
+      </sc-for>
+    </nav>
+    <div style="flex:1"></div>
+    <button onClick="{{ toggleCollapse }}" title="Show labels" style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;border:0;border-radius:12px;background:none;color:#8C8574;cursor:pointer">{{ ic.panelOpen }}</button>
+  </aside>
+  </sc-if>
+
+  <main style="flex:1;min-width:0;display:flex;flex-direction:column;position:relative">
+    <header style="height:60px;flex:0 0 auto;display:flex;align-items:center;gap:14px;padding:0 26px;border-bottom:1px solid #EFE8DA;background:rgba(253,251,246,.78);backdrop-filter:blur(8px);position:relative;z-index:30">
+      <div style="flex:1;max-width:460px;position:relative">
+        <button onClick="{{ openSearch }}" style="display:flex;align-items:center;gap:9px;width:100%;height:36px;padding:0 14px;border:0;border-radius:999px;background:#F8F4EA;color:#8C8574;font-size:13px;cursor:pointer;text-align:left">{{ ic.search }}<span>Search dishes, ingredients, suppliers…</span></button>
+        <sc-if value="{{ searchOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;top:44px;left:0;right:0;background:#fff;border:1px solid #EFE8DA;border-radius:26px;box-shadow:0 4px 8px rgba(27,26,22,.05),0 20px 40px -12px rgba(27,26,22,.16);overflow:hidden;z-index:40">
+            <div style="display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid #EFE8DA">
+              {{ ic.search }}
+              <input value="{{ searchTerm }}" onChange="{{ onSearch }}" autofocus="{{ true }}" placeholder="Type a dish or an ingredient" style="flex:1;border:0;outline:none;background:none;font-size:15px;color:#1B1A16">
+              <button onClick="{{ closeAll }}" style="display:flex;align-items:center;justify-content:center;width:26px;height:26px;border:0;border-radius:999px;background:#F0EADC;color:#6B6558;cursor:pointer">{{ ic.x }}</button>
+            </div>
+            <div style="max-height:380px;overflow:auto;padding:8px 0">
+              <sc-if value="{{ hasSearchHits }}" hint-placeholder-val="{{ true }}">
+                <sc-if value="{{ hasRecipeHits }}" hint-placeholder-val="{{ true }}">
+                  <div style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574;padding:10px 18px 6px">Dishes · {{ recipeHitCount }}</div>
+                  <sc-for list="{{ recipeHits }}" as="h" hint-placeholder-count="2">
+                    <button onClick="{{ h.open }}" style="display:flex;align-items:center;gap:12px;width:100%;padding:9px 18px;border:0;background:none;cursor:pointer;text-align:left">
+                      <span style="{{ h.thumbStyle }}">{{ h.glyph }}</span>
+                      <span style="flex:1;font-weight:600;font-size:15px;color:#1B1A16">{{ h.title }}</span>
+                      <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:14px;color:#45413A">{{ h.price }}</span>
+                    </button>
+                  </sc-for>
+                </sc-if>
+                <sc-if value="{{ hasIngredientHits }}" hint-placeholder-val="{{ true }}">
+                  <div style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574;padding:10px 18px 6px">Ingredients · {{ ingredientHitCount }}</div>
+                  <sc-for list="{{ ingredientHits }}" as="h" hint-placeholder-count="2">
+                    <button onClick="{{ h.open }}" style="display:flex;align-items:center;gap:12px;width:100%;padding:9px 18px;border:0;background:none;cursor:pointer;text-align:left">
+                      <span style="{{ h.thumbStyle }}">{{ h.glyph }}</span>
+                      <span style="flex:1;font-weight:600;font-size:15px;color:#1B1A16">{{ h.title }}</span>
+                      <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:14px;color:#45413A">{{ h.price }}</span>
+                    </button>
+                  </sc-for>
+                </sc-if>
+              </sc-if>
+              <sc-if value="{{ noSearchHits }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:34px 18px;text-align:center">
+                  <div style="font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:17px;color:#1B1A16">Nothing matched that</div>
+                  <div style="font-size:13px;color:#8C8574;margin-top:4px">Try a shorter word — "carb", "egg", "oil".</div>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+      <div style="flex:1"></div>
+      <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.IconButton" icon="{{ ic.phone }}" label="See it on a phone" onClick="{{ toPhone }}" hint-size="36px,36px"></x-import>
+      <div style="position:relative">
+        <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.IconButton" icon="{{ ic.bell }}" label="What's new" onClick="{{ showToast }}" hint-size="36px,36px"></x-import>
+        <span style="position:absolute;top:-1px;right:-1px;min-width:17px;height:17px;padding:0 4px;border-radius:999px;background:#C0392B;color:#fff;font-weight:700;font-size:10px;line-height:17px;text-align:center;pointer-events:none">2</span>
+      </div>
+      <span style="width:1px;height:26px;background:#EFE8DA;margin:0 2px"></span>
+      <button onClick="{{ openProfile }}" style="display:flex;align-items:center;gap:10px;border:0;background:none;padding:2px;border-radius:999px;cursor:pointer">
+        <span style="display:flex;flex-direction:column;align-items:flex-end;line-height:1.2">
+          <span style="font-weight:600;font-size:13px;color:#2C2A25">{{ ownerFirst }}</span>
+          <span style="font-size:11px;color:#8C8574">{{ ownerEmail }}</span>
+        </span>
+        <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Avatar" name="{{ ownerName }}" size="sm" hint-size="32px,32px"></x-import>
+      </button>
+    </header>
+
+    <div style="flex:1;min-height:0;overflow:auto">
+      <div style="max-width:1160px;margin:0 auto;padding:26px 40px 60px">
+
+        <sc-if value="{{ atHome }}" hint-placeholder-val="{{ true }}">
+
+        <sc-if value="{{ everyday }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:26px">
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:32px">
+            <div style="flex:1;display:flex;flex-direction:column;gap:10px">
+              <h1 style="margin:0;font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:38px;line-height:1.08;letter-spacing:-.02em;color:#1B1A16">Three for you before service</h1>
+              <p style="margin:0;max-width:620px;font-size:17px;line-height:1.45;color:#8C8574;text-wrap:pretty">{{ everydayLead }}</p>
+          <sc-if value="{{ statLine }}" hint-placeholder-val="{{ yes }}">
+            <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13px;color:#8C8574">
+              <span style="white-space:nowrap"><span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">{{ statDishes }}</span> dishes</span>
+              <span style="color:#C9BFAA">·</span>
+              <span style="white-space:nowrap"><span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">{{ statIngredients }}</span> ingredients</span>
+              <span style="color:#C9BFAA">·</span>
+              <span style="white-space:nowrap">food cost <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">{{ statFoodCost }}%</span> <span style="color:#2F7A45;font-weight:600">↓ 2.1</span></span>
+              <span style="color:#C9BFAA">·</span>
+              <span style="white-space:nowrap">you keep <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">{{ statMargin }}%</span> <span style="color:#2F7A45;font-weight:600">↑ 1.4</span></span>
+            </div>
+          </sc-if>
+            </div>
+            <div style="width:220px;display:flex;flex-direction:column;gap:7px;flex:0 0 auto">
+              <div style="display:flex;align-items:baseline;justify-content:space-between">
+                <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Cleared today</span>
+                <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:13px;color:#45413A;font-variant-numeric:tabular-nums">{{ qText }}</span>
+              </div>
+              <div style="height:8px;border-radius:999px;background:#F0EADC;overflow:hidden">
+                <div style="{{ qBarStyle }}"></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="background:#FBF1D4;border:1px solid #F0E3BE;border-radius:18px;padding:20px;display:flex;gap:16px">
+              <span style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:999px;background:#F5E3B4;color:#6E4A11;flex:0 0 auto">{{ ic.trend }}</span>
+              <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+                  <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8A5F16">Worth money · do it first</span>
+                  <span style="font-size:12px;color:#8A5F16;opacity:.8">Before you print the menu</span>
+                </div>
+                <span style="font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:21px;line-height:1.2;letter-spacing:-.01em;color:#1B1A16">Move the carbonara to €15.50?</span>
+                <p style="margin:0;max-width:620px;font-size:15px;line-height:1.45;color:#2C2A25;text-wrap:pretty">Eggs are up 14% at Metro — 40c a plate. At €15.50 you're back to keeping 68%, and you're still under the taverna across the road.</p>
+                <div style="display:flex;flex-wrap:wrap;gap:22px;padding:8px 0 2px">
+                  <div style="display:flex;flex-direction:column;gap:1px">
+                    <span style="font-size:12px;color:#8A5F16">On the menu now</span>
+                    <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:17px;color:#45413A;font-variant-numeric:tabular-nums">€14.20</span>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:1px">
+                    <span style="font-size:12px;color:#8A5F16">Plate cost today</span>
+                    <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:17px;color:#45413A;font-variant-numeric:tabular-nums">€4.30</span>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:1px">
+                    <span style="font-size:12px;color:#8A5F16">You'd keep</span>
+                    <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:17px;color:#1B4A2C;font-variant-numeric:tabular-nums">68.0%</span>
+                  </div>
+                </div>
+                <sc-if value="{{ q1.open }}" hint-placeholder-val="{{ yes }}">
+                  <div style="display:flex;flex-wrap:wrap;gap:10px">
+                    <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" onClick="{{ q1.approve }}" hint-size="140px,40px">Use €15.50</x-import>
+                    <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="secondary" onClick="{{ q1.dismiss }}" hint-size="150px,40px">Hold two weeks</x-import>
+                    <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="ghost" onClick="{{ goRecipes }}" hint-size="180px,40px">Look at the carbonara</x-import>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ q1.done }}" hint-placeholder-val="{{ no }}">
+                  <div style="display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:#2F7A45">{{ ic.check }}<span>Done — carbonara is €15.50 on the menu.</span><button onClick="{{ q1.undo }}" style="border:0;background:none;padding:0;margin-left:4px;cursor:pointer;font-weight:600;font-size:14px;color:#8C8574;text-decoration:underline">Undo</button></div>
+                </sc-if>
+              </div>
+            </div>
+
+            <div style="background:#fff;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:20px;display:flex;gap:16px">
+              <span style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:999px;background:#FBF1D4;color:#6E4A11;flex:0 0 auto">{{ ic.milk }}</span>
+              <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+                <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Zeta Dairy invoice, read at 5:12am</span>
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px">
+                  <span style="font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:21px;line-height:1.2;letter-spacing:-.01em;color:#1B1A16">Update four ingredient costs?</span>
+                  <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:16px;color:#45413A;font-variant-numeric:tabular-nums;flex:0 0 auto">€188.20</span>
+                </div>
+                <p style="margin:0;max-width:620px;font-size:15px;line-height:1.45;color:#45413A;text-wrap:pretty">Cream is up 6c a litre, pecorino down 2c, the other two held. It moves three dishes by less than a cent a plate, so nothing needs repricing.</p>
+                <sc-if value="{{ q2.open }}" hint-placeholder-val="{{ yes }}">
+                  <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:2px">
+                    <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" onClick="{{ q2.approve }}" hint-size="150px,40px">Update them</x-import>
+                    <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="secondary" onClick="{{ q2.dismiss }}" hint-size="140px,40px">Show the invoice</x-import>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ q2.done }}" hint-placeholder-val="{{ no }}">
+                  <div style="display:flex;align-items:center;gap:8px;margin-top:2px;font-size:15px;font-weight:600;color:#2F7A45">{{ ic.check }}<span>Updated — four costs, three dishes recosted.</span><button onClick="{{ q2.undo }}" style="border:0;background:none;padding:0;margin-left:4px;cursor:pointer;font-weight:600;font-size:14px;color:#8C8574;text-decoration:underline">Undo</button></div>
+                </sc-if>
+              </div>
+            </div>
+
+            <div style="background:#fff;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:20px;display:flex;gap:16px">
+              <span style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:999px;background:#E4F3D8;color:#1B4A2C;flex:0 0 auto">{{ ic.truck }}</span>
+              <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+                <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Two suppliers, same tomatoes</span>
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px">
+                  <span style="font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:21px;line-height:1.2;letter-spacing:-.01em;color:#1B1A16">Buy tomatoes from Kritikos instead?</span>
+                  <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:16px;color:#45413A;font-variant-numeric:tabular-nums;flex:0 0 auto">−€0.09</span>
+                </div>
+                <p style="margin:0;max-width:620px;font-size:15px;line-height:1.45;color:#45413A;text-wrap:pretty">14c cheaper a kilo this week and they deliver same day. Saves about 9c a plate on the bruschetta and the salad — roughly €18 a month at your covers.</p>
+                <sc-if value="{{ q3.open }}" hint-placeholder-val="{{ yes }}">
+                  <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:2px">
+                    <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" onClick="{{ q3.approve }}" hint-size="150px,40px">Switch to Kritikos</x-import>
+                    <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="ghost" onClick="{{ q3.dismiss }}" hint-size="140px,40px">Leave it</x-import>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ q3.done }}" hint-placeholder-val="{{ no }}">
+                  <div style="display:flex;align-items:center;gap:8px;margin-top:2px;font-size:15px;font-weight:600;color:#2F7A45">{{ ic.check }}<span>Switched — Friday's order goes to Kritikos.</span><button onClick="{{ q3.undo }}" style="border:0;background:none;padding:0;margin-left:4px;cursor:pointer;font-weight:600;font-size:14px;color:#8C8574;text-decoration:underline">Undo</button></div>
+                </sc-if>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px;background:#F8F4EA;border:1px solid #EFE8DA;border-radius:16px;padding:14px 16px">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:999px;background:#E4F3D8;color:#2F7A45;flex:0 0 auto">{{ ic.checkSm }}</span>
+            <span style="font-size:15px;color:#45413A">Handled before you were up — Friday's Kritikos order drafted, 11 lines, <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums">€146.00</span>.</span>
+            <span style="flex:1"></span>
+            <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="ghost" size="sm" onClick="{{ showToast }}" hint-size="150px,36px">Look at the draft</x-import>
+          </div>
+
+          <div>
+            <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px">
+              <h2 style="margin:0;font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:20px;line-height:1.22;color:#1B1A16">Last touched</h2>
+              <a href="#" onClick="{{ goRecipes }}" style="font-size:13px;font-weight:600">All dishes</a>
+            </div>
+            <div style="background:#fff;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:6px 20px">
+              <sc-for list="{{ recentRows }}" as="r" hint-placeholder-count="4">
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.DataRow" thumb="{{ r.thumb }}" title="{{ r.title }}" subtitle="{{ r.subtitle }}" amount="{{ r.amount }}" amountNote="{{ r.note }}" end="{{ r.badge }}" onClick="{{ r.open }}" hint-size="100%,62px"></x-import>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ firstDay }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:860px;display:flex;flex-direction:column;gap:22px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Avatar" agent="{{ yes }}" name="Costwise" src="assets/logo-mark-transparent.png" size="sm" hint-size="32px,32px"></x-import>
+            <span style="font-weight:700;font-size:13px;color:#1B4A2C">Costwise</span>
+            <span style="font-size:12px;color:#8C8574">read your invoice just now</span>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <h1 style="margin:0;font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:38px;line-height:1.08;letter-spacing:-.02em;color:#1B1A16">I've read your invoice, {{ ownerFirst }}.</h1>
+            <p style="margin:0;max-width:640px;font-size:17px;line-height:1.45;color:#8C8574;text-wrap:pretty">You're a trattoria, you gave me two dishes and one invoice from Metro. That's enough to start — here's where you stand.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:2px;font-size:13px;color:#8C8574">
+              <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">2</span><span>dishes</span>
+              <span style="color:#C9BFAA">·</span>
+              <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">11</span><span>ingredients</span>
+              <span style="color:#C9BFAA">·</span>
+              <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">1</span><span>supplier</span>
+              <span style="color:#C9BFAA">·</span>
+              <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">1</span><span>invoice read</span>
+            </div>
+          </div>
+
+          <div style="background:#FBF1D4;border:1px solid #F0E3BE;border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+              <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8A5F16">One thing to do today</span>
+              <span style="font-size:12px;color:#8A5F16;opacity:.8">About a minute</span>
+            </div>
+            <div style="font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:24px;line-height:1.2;letter-spacing:-.01em;color:#1B1A16">Two lines on the Metro invoice I couldn't read</div>
+            <p style="margin:0;max-width:620px;font-size:15px;line-height:1.45;color:#2C2A25;text-wrap:pretty">Eleven of the fourteen matched straight away. These two are handwritten — tell me what they are and your carbonara cost is final rather than nearly right.</p>
+            <div style="display:flex;gap:10px;margin-top:2px">
+              <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" iconLeft="{{ ic.eye }}" onClick="{{ goIngredients }}" hint-size="200px,40px">Look at the two lines</x-import>
+              <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="ghost" onClick="{{ showToast }}" hint-size="130px,40px">Later today</x-import>
+            </div>
+          </div>
+
+          <div style="height:1px;background:#EFE8DA"></div>
+
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">While you were signing up</span>
+            <div style="display:flex;flex-direction:column;gap:14px;max-width:700px">
+              <p style="margin:0;font-size:16px;line-height:1.55;color:#2C2A25;text-wrap:pretty">I added <strong style="font-weight:700">11 ingredients</strong> from the invoice and priced them at what you actually paid. Two I matched to Athens averages, because the invoice didn't say. <a href="#" onClick="{{ goIngredients }}" style="font-weight:600;border-bottom:1px solid #A8CDB4">See the eleven</a></p>
+              <p style="margin:0;font-size:16px;line-height:1.55;color:#2C2A25;text-wrap:pretty">Your <strong style="font-weight:700">carbonara</strong> works out at <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums">€3.72</span> a plate. At <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums">€14.20</span> you're keeping 68% — comfortable for a trattoria, and I'd leave it alone this week. <a href="#" onClick="{{ goRecipes }}" style="font-weight:600;border-bottom:1px solid #A8CDB4">Look at the carbonara</a></p>
+              <p style="margin:0;font-size:16px;line-height:1.55;color:#2C2A25;text-wrap:pretty">The <strong style="font-weight:700">Greek salad</strong> is at <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums">€2.10</span> a plate, keeping 70%. And I saved <strong style="font-weight:700">Metro Cash &amp; Carry</strong> as a supplier — 1-2 days, 30 days to pay, as it says on the invoice.</p>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">What I'd do next</span>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;align-items:center;gap:14px;background:#F8F4EA;border:1px solid #EFE8DA;border-radius:16px;padding:14px 16px">
+                <span style="display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:999px;background:#FDEBDD;color:#9E4220;flex:0 0 auto">{{ ic.camera }}</span>
+                <div style="flex:1;display:flex;flex-direction:column;gap:2px">
+                  <span style="font-weight:700;font-size:16px;color:#1B1A16">Add the rest of your menu</span>
+                  <span style="font-size:14px;line-height:1.45;color:#6B6558">Send me a photo of it and I'll have every dish costed by tonight.</span>
+                </div>
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="secondary" onClick="{{ newRecipe }}" hint-size="150px,40px">Snap the menu</x-import>
+              </div>
+              <div style="display:flex;align-items:center;gap:14px;background:#F8F4EA;border:1px solid #EFE8DA;border-radius:16px;padding:14px 16px">
+                <span style="display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:999px;background:#FBF1D4;color:#6E4A11;flex:0 0 auto">{{ ic.egg }}</span>
+                <div style="flex:1;display:flex;flex-direction:column;gap:2px">
+                  <span style="font-weight:700;font-size:16px;color:#1B1A16">Let me keep an eye on eggs</span>
+                  <span style="font-size:14px;line-height:1.45;color:#6B6558">They move more than anything else you buy, and they're in four of your dishes.</span>
+                </div>
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="secondary" onClick="{{ showToast }}" hint-size="140px,40px">Set a watch</x-import>
+              </div>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        </sc-if>
+
+        <sc-if value="{{ atRecipes }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px">
+            <div>
+              <h1 style="margin:0;font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:30px;line-height:1.22;letter-spacing:-.02em;color:#1B1A16">Your dishes</h1>
+              <p style="margin:6px 0 0;font-size:15px;line-height:1.45;color:#8C8574">{{ recipeCountLine }}</p>
+            </div>
+            <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" iconLeft="{{ ic.plus }}" onClick="{{ newRecipe }}" hint-size="140px,40px">Add a dish</x-import>
+          </div>
+          <div style="background:#fff;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);overflow:hidden">
+            <table style="width:100%;border-collapse:collapse;table-layout:fixed">
+              <thead>
+                <tr style="background:#FDFBF6">
+                  <th style="width:32%;text-align:left;padding:12px 18px"><button onClick="{{ sortTitle }}" style="display:inline-flex;align-items:center;gap:5px;border:0;background:none;padding:0;cursor:pointer;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Dish<span style="color:#24603A">{{ arrowTitle }}</span></button></th>
+                  <th style="width:11%;text-align:left;padding:12px 14px"><button onClick="{{ sortTax }}" style="display:inline-flex;align-items:center;gap:5px;border:0;background:none;padding:0;cursor:pointer;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">VAT<span style="color:#24603A">{{ arrowTax }}</span></button></th>
+                  <th style="width:15%;text-align:left;padding:12px 14px"><button onClick="{{ sortPrice }}" style="display:inline-flex;align-items:center;gap:5px;border:0;background:none;padding:0;cursor:pointer;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Menu price<span style="color:#24603A">{{ arrowPrice }}</span></button></th>
+                  <th style="width:16%;text-align:left;padding:12px 14px"><button onClick="{{ sortMargin }}" style="display:inline-flex;align-items:center;gap:5px;border:0;background:none;padding:0;cursor:pointer;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">What you keep<span style="color:#24603A">{{ arrowMargin }}</span></button></th>
+                  <th style="width:15%;text-align:left;padding:12px 14px"><button onClick="{{ sortCost }}" style="display:inline-flex;align-items:center;gap:5px;border:0;background:none;padding:0;cursor:pointer;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Plate cost<span style="color:#24603A">{{ arrowCost }}</span></button></th>
+                  <th style="width:11%;text-align:right;padding:12px 18px;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Edit</th>
+                </tr>
+              </thead>
+              <tbody>
+                <sc-for list="{{ recipeRows }}" as="r" hint-placeholder-count="9">
+                  <tr style="border-top:1px solid #EFE8DA">
+                    <td style="padding:10px 18px">
+                      <button onClick="{{ r.open }}" style="display:flex;align-items:center;gap:12px;border:0;background:none;padding:0;cursor:pointer;text-align:left;width:100%">
+                        <span style="{{ r.thumbStyle }}">{{ r.glyph }}</span>
+                        <span style="font-weight:600;font-size:15px;color:#1B1A16">{{ r.title }}</span>
+                      </button>
+                    </td>
+                    <td style="padding:10px 14px;font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:14px;font-variant-numeric:tabular-nums;color:#45413A">{{ r.vat }}</td>
+                    <td style="padding:10px 14px;font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:14px;font-variant-numeric:tabular-nums;color:#1B1A16">{{ r.price }}</td>
+                    <td style="padding:10px 14px"><x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Badge" tone="{{ r.marginTone }}" hint-size="62px,24px">{{ r.marginText }}</x-import></td>
+                    <td style="padding:10px 14px;font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:14px;font-variant-numeric:tabular-nums;color:#45413A">{{ r.cost }}</td>
+                    <td style="padding:10px 18px">
+                      <div style="display:flex;gap:4px;justify-content:flex-end">
+                        <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.IconButton" icon="{{ ic.pencil }}" label="Edit" size="sm" onClick="{{ r.edit }}" hint-size="32px,32px"></x-import>
+                        <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.IconButton" icon="{{ ic.trash }}" label="Delete" size="sm" onClick="{{ r.remove }}" hint-size="32px,32px"></x-import>
+                      </div>
+                    </td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+          <sc-if value="{{ showRecipePager }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;align-items:center;justify-content:center;gap:18px;padding-top:4px">
+              <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="secondary" size="sm" onClick="{{ prevPage }}" hint-size="86px,36px">Back</x-import>
+              <div style="display:flex;gap:6px">
+                <sc-for list="{{ recipePages }}" as="p" hint-placeholder-count="2">
+                  <button onClick="{{ p.go }}" style="{{ p.style }}">{{ p.n }}</button>
+                </sc-for>
+              </div>
+              <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="secondary" size="sm" onClick="{{ nextPage }}" hint-size="86px,36px">More</x-import>
+            </div>
+          </sc-if>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ atIngredients }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px">
+            <div>
+              <h1 style="margin:0;font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:30px;line-height:1.22;letter-spacing:-.02em;color:#1B1A16">Your ingredients</h1>
+              <p style="margin:6px 0 0;font-size:15px;line-height:1.45;color:#8C8574">{{ ingredientCountLine }}</p>
+            </div>
+            <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" iconLeft="{{ ic.plus }}" onClick="{{ newIngredient }}" hint-size="170px,40px">Add an ingredient</x-import>
+          </div>
+          <div style="background:#fff;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);overflow:hidden">
+            <table style="width:100%;border-collapse:collapse;table-layout:fixed">
+              <thead>
+                <tr style="background:#FDFBF6">
+                  <th style="width:34%;text-align:left;padding:12px 18px"><button onClick="{{ sortName }}" style="display:inline-flex;align-items:center;gap:5px;border:0;background:none;padding:0;cursor:pointer;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Ingredient<span style="color:#24603A">{{ arrowName }}</span></button></th>
+                  <th style="width:20%;text-align:left;padding:12px 14px"><button onClick="{{ sortUnitPrice }}" style="display:inline-flex;align-items:center;gap:5px;border:0;background:none;padding:0;cursor:pointer;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">What it costs<span style="color:#24603A">{{ arrowUnitPrice }}</span></button></th>
+                  <th style="width:16%;text-align:left;padding:12px 14px"><button onClick="{{ sortUsage }}" style="display:inline-flex;align-items:center;gap:5px;border:0;background:none;padding:0;cursor:pointer;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">How often<span style="color:#24603A">{{ arrowUsage }}</span></button></th>
+                  <th style="width:19%;text-align:left;padding:12px 14px"><button onClick="{{ sortCategory }}" style="display:inline-flex;align-items:center;gap:5px;border:0;background:none;padding:0;cursor:pointer;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Kind<span style="color:#24603A">{{ arrowCategory }}</span></button></th>
+                  <th style="width:11%;text-align:right;padding:12px 18px;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Edit</th>
+                </tr>
+              </thead>
+              <tbody>
+                <sc-for list="{{ ingredientRows }}" as="r" hint-placeholder-count="9">
+                  <tr style="border-top:1px solid #EFE8DA">
+                    <td style="padding:10px 18px">
+                      <button onClick="{{ r.open }}" style="display:flex;align-items:center;gap:12px;border:0;background:none;padding:0;cursor:pointer;text-align:left;width:100%">
+                        <span style="{{ r.thumbStyle }}">{{ r.glyph }}</span>
+                        <span style="font-weight:600;font-size:15px;color:#1B1A16">{{ r.name }}</span>
+                      </button>
+                    </td>
+                    <td style="padding:10px 14px;font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:14px;font-variant-numeric:tabular-nums;color:#1B1A16">{{ r.unitPrice }}<span style="color:#8C8574;font-weight:500"> / {{ r.displayUnit }}</span></td>
+                    <td style="padding:10px 14px"><x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Badge" tone="{{ r.usageTone }}" hint-size="70px,24px">{{ r.usageText }}</x-import></td>
+                    <td style="padding:10px 14px"><span style="{{ r.catStyle }}">{{ r.catName }}</span></td>
+                    <td style="padding:10px 18px">
+                      <div style="display:flex;gap:4px;justify-content:flex-end">
+                        <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.IconButton" icon="{{ ic.pencil }}" label="Edit" size="sm" onClick="{{ r.edit }}" hint-size="32px,32px"></x-import>
+                        <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.IconButton" icon="{{ ic.trash }}" label="Delete" size="sm" onClick="{{ r.remove }}" hint-size="32px,32px"></x-import>
+                      </div>
+                    </td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+          <sc-if value="{{ showIngredientPager }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;align-items:center;justify-content:center;gap:18px;padding-top:4px">
+              <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="secondary" size="sm" onClick="{{ prevPage }}" hint-size="86px,36px">Back</x-import>
+              <div style="display:flex;gap:6px">
+                <sc-for list="{{ ingredientPages }}" as="p" hint-placeholder-count="2">
+                  <button onClick="{{ p.go }}" style="{{ p.style }}">{{ p.n }}</button>
+                </sc-for>
+              </div>
+              <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="secondary" size="sm" onClick="{{ nextPage }}" hint-size="86px,36px">More</x-import>
+            </div>
+          </sc-if>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ atSuppliers }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px">
+            <div>
+              <h1 style="margin:0;font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:30px;line-height:1.22;letter-spacing:-.02em;color:#1B1A16">Who you buy from</h1>
+              <p style="margin:6px 0 0;font-size:15px;line-height:1.45;color:#8C8574">{{ supplierCountLine }}</p>
+            </div>
+            <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" iconLeft="{{ ic.plus }}" onClick="{{ newSupplier }}" hint-size="160px,40px">Add a supplier</x-import>
+          </div>
+          <div style="background:#fff;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);overflow:hidden">
+            <table style="width:100%;border-collapse:collapse;table-layout:fixed">
+              <thead>
+                <tr style="background:#FDFBF6">
+                  <th style="width:28%;text-align:left;padding:12px 18px"><button onClick="{{ sortName }}" style="display:inline-flex;align-items:center;gap:5px;border:0;background:none;padding:0;cursor:pointer;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Supplier<span style="color:#24603A">{{ arrowName }}</span></button></th>
+                  <th style="width:22%;text-align:left;padding:12px 14px;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Who you talk to</th>
+                  <th style="width:24%;text-align:left;padding:12px 14px;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Email</th>
+                  <th style="width:15%;text-align:left;padding:12px 14px;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Delivery</th>
+                  <th style="width:11%;text-align:right;padding:12px 18px;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Edit</th>
+                </tr>
+              </thead>
+              <tbody>
+                <sc-for list="{{ supplierRows }}" as="r" hint-placeholder-count="6">
+                  <tr style="border-top:1px solid #EFE8DA">
+                    <td style="padding:10px 18px">
+                      <button onClick="{{ r.edit }}" style="display:flex;align-items:center;gap:12px;border:0;background:none;padding:0;cursor:pointer;text-align:left;width:100%">
+                        <span style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:999px;background:#E4F3D8;color:#1B4A2C;flex:0 0 auto">{{ r.glyph }}</span>
+                        <span style="font-weight:600;font-size:15px;color:#1B1A16">{{ r.name }}</span>
+                      </button>
+                    </td>
+                    <td style="padding:10px 14px;font-size:14px;color:#45413A">{{ r.contact }}</td>
+                    <td style="padding:10px 14px;font-size:14px;color:#8C8574;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.email }}</td>
+                    <td style="padding:10px 14px"><x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Badge" tone="{{ r.deliveryTone }}" hint-size="80px,24px">{{ r.delivery }}</x-import></td>
+                    <td style="padding:10px 18px">
+                      <div style="display:flex;gap:4px;justify-content:flex-end">
+                        <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.IconButton" icon="{{ ic.pencil }}" label="Edit" size="sm" onClick="{{ r.edit }}" hint-size="32px,32px"></x-import>
+                        <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.IconButton" icon="{{ ic.trash }}" label="Delete" size="sm" onClick="{{ r.remove }}" hint-size="32px,32px"></x-import>
+                      </div>
+                    </td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ atRecipeForm }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;align-items:center;gap:14px">
+            <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.IconButton" icon="{{ ic.back }}" label="Back to dishes" variant="outline" onClick="{{ goRecipes }}" hint-size="36px,36px"></x-import>
+            <div>
+              <h1 style="margin:0;font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:30px;line-height:1.22;letter-spacing:-.02em;color:#1B1A16">{{ rfHeading }}</h1>
+              <p style="margin:4px 0 0;font-size:15px;line-height:1.45;color:#8C8574">Add what goes on the plate and I'll work out what it costs you.</p>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:16px;align-items:start">
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <div style="background:#fff;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:20px;display:flex;flex-direction:column;gap:16px">
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Input" label="What's the dish called?" size="lg" placeholder="Spaghetti carbonara" value="{{ rfTitle }}" onChange="{{ rfOnTitle }}" hint-size="100%,74px"></x-import>
+                <label style="display:flex;align-items:center;gap:14px;padding:16px;border:1px dashed #C9BFAA;border-radius:16px;background:#FDFBF6;cursor:pointer">
+                  {{ ic.camera }}
+                  <span style="display:flex;flex-direction:column;gap:2px">
+                    <span style="font-weight:600;font-size:15px;color:#1B1A16">Add a photo of the plate</span>
+                    <span style="font-size:13px;color:#8C8574">Handy on the menu later — skip it if you're in a rush</span>
+                  </span>
+                </label>
+              </div>
+
+              <div style="background:#fff;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:20px">
+                <span style="display:block;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574;margin-bottom:12px">What goes on the plate</span>
+                <div style="display:grid;grid-template-columns:1.6fr .9fr auto auto;gap:10px;align-items:flex-end">
+                  <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Select" label="Ingredient" options="{{ rfIngredientOptions }}" value="{{ rfSel }}" onChange="{{ rfOnSel }}" hint-size="100%,68px"></x-import>
+                  <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Select" label="Measured in" options="{{ rfUnitOptions }}" value="{{ rfUnit }}" onChange="{{ rfOnUnit }}" hint-size="100%,68px"></x-import>
+                  <div>
+                    <div style="font-weight:600;font-size:13px;color:#45413A;margin-bottom:6px">How much</div>
+                    <div style="display:flex;align-items:center;gap:4px;height:44px;padding:0 6px;border:1px solid #E2DACA;border-radius:12px;background:#fff">
+                      <button onClick="{{ rfDec }}" style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:0;border-radius:999px;background:#F0EADC;color:#6B6558;cursor:pointer">{{ ic.minus }}</button>
+                      <input value="{{ rfQty }}" onChange="{{ rfOnQty }}" style="width:56px;border:0;outline:none;background:none;text-align:center;font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:16px;font-variant-numeric:tabular-nums;color:#1B1A16">
+                      <button onClick="{{ rfInc }}" style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:0;border-radius:999px;background:#F0EADC;color:#6B6558;cursor:pointer">{{ ic.plus }}</button>
+                    </div>
+                  </div>
+                  <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" onClick="{{ rfAdd }}" hint-size="86px,44px">Add it</x-import>
+                </div>
+              </div>
+
+              <div style="background:#fff;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:20px">
+                <span style="display:block;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574;margin-bottom:12px">What you charge</span>
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <button onClick="{{ rfPickPrice }}" style="{{ rfPriceRowStyle }}">
+                    <span style="{{ rfPriceDotStyle }}"></span>
+                    <span style="flex:1;text-align:left;font-weight:600;font-size:15px;color:#1B1A16">I set the menu price</span>
+                    <span style="width:150px">
+                      <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.MoneyInput" value="{{ rfPriceVal }}" onChange="{{ rfOnPrice }}" placeholder="15.50" disabled="{{ rfPriceDisabled }}" hint-size="150px,44px"></x-import>
+                    </span>
+                  </button>
+                  <button onClick="{{ rfPickProfit }}" style="{{ rfProfitRowStyle }}">
+                    <span style="{{ rfProfitDotStyle }}"></span>
+                    <span style="flex:1;text-align:left;font-weight:600;font-size:15px;color:#1B1A16">I set what I keep</span>
+                    <span style="width:150px">
+                      <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Input" value="{{ rfProfitVal }}" onChange="{{ rfOnProfit }}" placeholder="68" suffix="%" disabled="{{ rfProfitDisabled }}" hint-size="150px,44px"></x-import>
+                    </span>
+                  </button>
+                  <div style="display:flex;align-items:flex-end;gap:12px;padding:14px;border:1px solid #EFE8DA;border-radius:16px;background:#FDFBF6">
+                    <span style="flex:1">
+                      <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Select" label="VAT on top" options="{{ rfTaxOptions }}" value="{{ rfTax }}" onChange="{{ rfOnTax }}" hint-size="100%,68px"></x-import>
+                    </span>
+                    <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="accent" onClick="{{ rfCalc }}" hint-size="130px,44px">Work it out</x-import>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display:flex;justify-content:flex-end">
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" size="lg" onClick="{{ rfSubmit }}" hint-size="180px,48px">{{ rfSubmitLabel }}</x-import>
+              </div>
+            </div>
+
+            <div style="background:#fff;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:20px;position:sticky;top:0">
+              <span style="display:block;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574;margin-bottom:12px">On the plate</span>
+              <sc-if value="{{ rfHasItems }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;flex-direction:column">
+                  <sc-for list="{{ rfItems }}" as="it" hint-placeholder-count="3">
+                    <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #EFE8DA">
+                      <span style="{{ it.thumbStyle }}">{{ it.glyph }}</span>
+                      <span style="flex:1;min-width:0">
+                        <span style="display:block;font-weight:600;font-size:14px;color:#1B1A16">{{ it.name }}</span>
+                        <span style="display:block;font-size:12px;color:#8C8574">{{ it.qtyText }}</span>
+                      </span>
+                      <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:14px;font-variant-numeric:tabular-nums;color:#1B1A16">{{ it.total }}</span>
+                      <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.IconButton" icon="{{ ic.trash }}" label="Take it off" size="sm" onClick="{{ it.remove }}" hint-size="30px,30px"></x-import>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ rfNoItems }}" hint-placeholder-val="{{ false }}">
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.EmptyState" compact="{{ true }}" icon="{{ ic.saladLg }}" title="Nothing on the plate yet" message="Pick an ingredient on the left and I'll start adding it up." hint-size="100%,180px"></x-import>
+              </sc-if>
+              <div style="margin-top:16px;padding-top:14px;border-top:1px solid #EFE8DA;display:flex;flex-direction:column;gap:10px">
+                <sc-for list="{{ rfTotals }}" as="t" hint-placeholder-count="5">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+                    <span style="font-size:14px;color:#45413A">{{ t.label }}</span>
+                    <span style="{{ t.style }}">{{ t.value }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ atIngredientForm }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:760px;display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;align-items:center;gap:14px">
+            <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.IconButton" icon="{{ ic.back }}" label="Back to ingredients" variant="outline" onClick="{{ goIngredients }}" hint-size="36px,36px"></x-import>
+            <div>
+              <h1 style="margin:0;font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:30px;line-height:1.22;letter-spacing:-.02em;color:#1B1A16">{{ infHeading }}</h1>
+              <p style="margin:4px 0 0;font-size:15px;line-height:1.45;color:#8C8574">Tell me what you paid and how much you got — I'll work out the rest.</p>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:20px;display:flex;flex-direction:column;gap:16px">
+            <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:14px">
+              <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Input" label="What is it?" placeholder="Pecorino romano" value="{{ infName }}" onChange="{{ infOnName }}" hint-size="100%,68px"></x-import>
+              <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Select" label="What kind?" options="{{ infCatOptions }}" value="{{ infCat }}" onChange="{{ infOnCat }}" hint-size="100%,68px"></x-import>
+            </div>
+            <div style="height:1px;background:#EFE8DA"></div>
+            <div style="display:grid;grid-template-columns:1.2fr auto .8fr 1fr;gap:14px;align-items:flex-end">
+              <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Select" label="Who from?" options="{{ infSupplierOptions }}" value="{{ infSupplier }}" onChange="{{ infOnSupplier }}" hint-size="100%,68px"></x-import>
+              <div>
+                <div style="font-weight:600;font-size:13px;color:#45413A;margin-bottom:6px">How much you got</div>
+                <div style="display:flex;align-items:center;gap:4px;height:44px;padding:0 6px;border:1px solid #E2DACA;border-radius:12px;background:#fff">
+                  <button onClick="{{ infDec }}" style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:0;border-radius:999px;background:#F0EADC;color:#6B6558;cursor:pointer">{{ ic.minus }}</button>
+                  <input value="{{ infQty }}" onChange="{{ infOnQty }}" style="width:52px;border:0;outline:none;background:none;text-align:center;font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:16px;font-variant-numeric:tabular-nums;color:#1B1A16">
+                  <button onClick="{{ infInc }}" style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:0;border-radius:999px;background:#F0EADC;color:#6B6558;cursor:pointer">{{ ic.plus }}</button>
+                </div>
+              </div>
+              <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Select" label="In what" options="{{ infUnitOptions }}" value="{{ infUnit }}" onChange="{{ infOnUnit }}" hint-size="100%,68px"></x-import>
+              <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.MoneyInput" label="What you paid" placeholder="12.40" value="{{ infPrice }}" onChange="{{ infOnPrice }}" hint-size="100%,68px"></x-import>
+            </div>
+            <div style="background:#F2F9EC;border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px">
+              {{ ic.sparkles }}
+              <p style="margin:0;font-size:15px;line-height:1.45;color:#1B4A2C">{{ infSummary }}</p>
+            </div>
+            <div style="display:flex;justify-content:flex-end;gap:10px">
+              <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="secondary" onClick="{{ goIngredients }}" hint-size="100px,44px">Not yet</x-import>
+              <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" onClick="{{ infSubmit }}" hint-size="170px,44px">{{ infSubmitLabel }}</x-import>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ atSupplierForm }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:900px;display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;align-items:center;gap:14px">
+            <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.IconButton" icon="{{ ic.back }}" label="Back to suppliers" variant="outline" onClick="{{ goSuppliers }}" hint-size="36px,36px"></x-import>
+            <div>
+              <h1 style="margin:0;font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:30px;line-height:1.22;letter-spacing:-.02em;color:#1B1A16">{{ sfHeading }}</h1>
+              <p style="margin:4px 0 0;font-size:15px;line-height:1.45;color:#8C8574">Just the bits you'd need to place an order.</p>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:20px;display:flex;flex-direction:column;gap:18px">
+            <div>
+              <span style="display:block;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574;margin-bottom:12px">Who they are</span>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Input" label="Business name" placeholder="Kritikos Produce" value="{{ sfName }}" onChange="{{ sfOnName }}" error="{{ sfNameError }}" hint-size="100%,68px"></x-import>
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Input" label="Who you talk to" placeholder="Nikos Vlachos" value="{{ sfContact }}" onChange="{{ sfOnContact }}" hint-size="100%,68px"></x-import>
+              </div>
+            </div>
+            <div style="height:1px;background:#EFE8DA"></div>
+            <div>
+              <span style="display:block;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574;margin-bottom:12px">How to reach them</span>
+              <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:14px">
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Input" label="Email" type="email" placeholder="orders@kritikos.gr" value="{{ sfEmail }}" onChange="{{ sfOnEmail }}" error="{{ sfEmailError }}" hint="Where you send orders" hint-size="100%,68px"></x-import>
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Input" label="Phone" placeholder="695 533 1016" value="{{ sfPhone }}" onChange="{{ sfOnPhone }}" hint-size="100%,68px"></x-import>
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Input" label="Website" placeholder="kritikos.gr" value="{{ sfWebsite }}" onChange="{{ sfOnWebsite }}" hint-size="100%,68px"></x-import>
+              </div>
+            </div>
+            <div style="height:1px;background:#EFE8DA"></div>
+            <div>
+              <span style="display:block;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574;margin-bottom:12px">Delivery and money</span>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Select" label="How fast they deliver" options="{{ sfDeliveryOptions }}" value="{{ sfDelivery }}" onChange="{{ sfOnDelivery }}" hint-size="100%,68px"></x-import>
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Select" label="When you pay" options="{{ sfPaymentOptions }}" value="{{ sfPayment }}" onChange="{{ sfOnPayment }}" hint-size="100%,68px"></x-import>
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Input" label="VAT number" placeholder="EL123456789" value="{{ sfVat }}" onChange="{{ sfOnVat }}" hint-size="100%,68px"></x-import>
+              </div>
+            </div>
+            <div style="height:1px;background:#EFE8DA"></div>
+            <div>
+              <span style="display:block;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574;margin-bottom:12px">Where they are</span>
+              <div style="display:grid;grid-template-columns:1.6fr 1fr .7fr;gap:14px">
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Input" label="Street" placeholder="Solomou 49" value="{{ sfStreet }}" onChange="{{ sfOnStreet }}" hint-size="100%,68px"></x-import>
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Input" label="Town" placeholder="Athens" value="{{ sfCity }}" onChange="{{ sfOnCity }}" hint-size="100%,68px"></x-import>
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Input" label="Postcode" placeholder="11851" value="{{ sfPostal }}" onChange="{{ sfOnPostal }}" hint-size="100%,68px"></x-import>
+              </div>
+            </div>
+            <div style="height:1px;background:#EFE8DA"></div>
+            <div>
+              <span style="display:block;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574;margin-bottom:10px">What they bring you</span>
+              <div style="display:flex;flex-wrap:wrap;gap:8px">
+                <sc-for list="{{ sfCategoryChips }}" as="c" hint-placeholder-count="12">
+                  <button onClick="{{ c.toggle }}" style="{{ c.style }}">{{ c.label }}</button>
+                </sc-for>
+              </div>
+              <p style="margin:10px 0 0;font-size:13px;line-height:1.45;color:#8C8574">{{ sfCatsHint }}</p>
+            </div>
+            <div style="display:flex;justify-content:flex-end;gap:10px">
+              <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="secondary" onClick="{{ goSuppliers }}" hint-size="100px,44px">Not yet</x-import>
+              <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" onClick="{{ sfSubmit }}" hint-size="160px,44px">{{ sfSubmitLabel }}</x-import>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ atIngredientDetail }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:900px;display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;align-items:center;gap:14px">
+            <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.IconButton" icon="{{ ic.back }}" label="Back to ingredients" variant="outline" onClick="{{ goIngredients }}" hint-size="36px,36px"></x-import>
+            <div style="flex:1">
+              <h1 style="margin:0;font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:30px;line-height:1.22;letter-spacing:-.02em;color:#1B1A16">{{ detName }}</h1>
+              <p style="margin:4px 0 0;font-size:15px;line-height:1.45;color:#8C8574">{{ detBlurb }}</p>
+            </div>
+            <div style="display:flex;gap:8px">
+              <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="secondary" size="sm" onClick="{{ detEdit }}" hint-size="90px,36px">Change it</x-import>
+              <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="danger" size="sm" onClick="{{ detRemove }}" hint-size="80px,36px">Delete</x-import>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:start">
+            <div style="background:#fff;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:24px;display:flex;flex-direction:column;align-items:center;gap:14px">
+              <span style="{{ detThumbStyle }}">{{ detGlyph }}</span>
+              <div style="text-align:center">
+                <div style="font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:20px;line-height:1.22;color:#1B1A16">{{ detName }}</div>
+                <div style="margin-top:8px"><span style="{{ detCatStyle }}">{{ detCat }}</span></div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.StatTile" label="What it costs you" value="{{ detUnitPrice }}" unit="{{ detPerUnit }}" hint-size="100%,104px"></x-import>
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.StatTile" label="You buy it in" value="{{ detUnit }}" hint-size="100%,104px"></x-import>
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.StatTile" label="How often you use it" value="{{ detUsageText }}" hint-size="100%,104px"></x-import>
+              </div>
+              <div style="background:#fff;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:6px 20px">
+                <sc-for list="{{ detRows }}" as="d" hint-placeholder-count="4">
+                  <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.DataRow" title="{{ d.label }}" amount="{{ d.value }}" end="{{ d.end }}" hint-size="100%,56px"></x-import>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+      </div>
+    </div>
+  </main>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPhoneApp }}" hint-placeholder-val="{{ false }}">
+<div style="min-height:100vh;background:#F0EADC;display:flex;align-items:flex-start;justify-content:center;gap:26px;padding:36px 24px">
+  <div style="width:390px;flex:0 0 auto;height:812px;background:#FDFBF6;border-radius:38px;border:1px solid #E2DACA;box-shadow:0 4px 8px rgba(27,26,22,.05),0 20px 40px -12px rgba(27,26,22,.16);overflow:hidden;position:relative;display:flex;flex-direction:column">
+    <div style="height:52px;flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:rgba(253,251,246,.78);backdrop-filter:blur(8px);border-bottom:1px solid #EFE8DA">
+      <div style="display:flex;align-items:center;gap:7px">
+        <img src="assets/logo-mark-transparent.png" width="22" height="22" alt="">
+        <span style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:18px;line-height:1;color:#1B4A2C">Costwise</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.IconButton" icon="{{ ic.search }}" label="Search" size="sm" onClick="{{ openSearch }}" hint-size="32px,32px"></x-import>
+        <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Avatar" name="{{ ownerName }}" size="sm" hint-size="30px,30px"></x-import>
+      </div>
+    </div>
+    <div style="flex:1;min-height:0;overflow:auto;padding:20px 20px 108px">
+      <sc-if value="{{ atHome }}" hint-placeholder-val="{{ true }}">
+
+        <sc-if value="{{ everyday }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <h1 style="margin:0;font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:26px;line-height:1.15;letter-spacing:-.02em;color:#1B1A16">Three for you before service</h1>
+            <p style="margin:0;font-size:15px;line-height:1.45;color:#8C8574;text-wrap:pretty">{{ everydayLead }}</p>
+          </div>
+          <sc-if value="{{ statLine }}" hint-placeholder-val="{{ yes }}">
+            <div style="display:flex;flex-wrap:wrap;gap:7px;align-items:center;font-size:12px;color:#8C8574">
+              <span style="white-space:nowrap"><span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">{{ statDishes }}</span> dishes</span>
+              <span style="color:#C9BFAA">·</span>
+              <span style="white-space:nowrap"><span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">{{ statIngredients }}</span> ingredients</span>
+              <span style="color:#C9BFAA">·</span>
+              <span style="white-space:nowrap">food cost <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">{{ statFoodCost }}%</span></span>
+              <span style="color:#C9BFAA">·</span>
+              <span style="white-space:nowrap">you keep <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">{{ statMargin }}%</span></span>
+            </div>
+          </sc-if>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;align-items:baseline;justify-content:space-between">
+              <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Cleared today</span>
+              <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:12px;color:#45413A;font-variant-numeric:tabular-nums">{{ qText }}</span>
+            </div>
+            <div style="height:8px;border-radius:999px;background:#F0EADC;overflow:hidden">
+              <div style="{{ qBarStyle }}"></div>
+            </div>
+          </div>
+
+          <div style="background:#FBF1D4;border:1px solid #F0E3BE;border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:999px;background:#F5E3B4;color:#6E4A11;flex:0 0 auto">{{ ic.trend }}</span>
+              <span style="flex:1;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8A5F16">Worth money</span>
+              <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:14px;color:#45413A;font-variant-numeric:tabular-nums">+€1.30</span>
+            </div>
+            <span style="font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:18px;line-height:1.22;letter-spacing:-.01em;color:#1B1A16">Move the carbonara to €15.50?</span>
+            <p style="margin:0;font-size:14px;line-height:1.45;color:#2C2A25;text-wrap:pretty">Eggs are up 14% at Metro — 40c a plate. At €15.50 you keep 68% again.</p>
+            <div style="display:flex;gap:16px;padding:4px 0 2px">
+              <div style="display:flex;flex-direction:column"><span style="font-size:11px;color:#8A5F16">Now</span><span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:15px;color:#45413A;font-variant-numeric:tabular-nums">€14.20</span></div>
+              <div style="display:flex;flex-direction:column"><span style="font-size:11px;color:#8A5F16">Plate cost</span><span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:15px;color:#45413A;font-variant-numeric:tabular-nums">€4.30</span></div>
+              <div style="display:flex;flex-direction:column"><span style="font-size:11px;color:#8A5F16">You'd keep</span><span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:15px;color:#1B4A2C;font-variant-numeric:tabular-nums">68.0%</span></div>
+            </div>
+            <sc-if value="{{ q1.open }}" hint-placeholder-val="{{ yes }}">
+              <div style="display:flex;flex-direction:column;gap:8px;margin-top:2px">
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" block="{{ yes }}" onClick="{{ q1.approve }}" hint-size="100%,44px">Use €15.50</x-import>
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="secondary" block="{{ yes }}" onClick="{{ q1.dismiss }}" hint-size="100%,44px">Hold two weeks</x-import>
+              </div>
+            </sc-if>
+            <sc-if value="{{ q1.done }}" hint-placeholder-val="{{ no }}">
+              <div style="display:flex;align-items:center;gap:8px;margin-top:2px;font-size:14px;font-weight:600;color:#2F7A45">{{ ic.check }}<span style="flex:1">Done — it's €15.50 now.</span><button onClick="{{ q1.undo }}" style="border:0;background:none;padding:0;cursor:pointer;font-weight:600;font-size:13px;color:#8C8574;text-decoration:underline">Undo</button></div>
+            </sc-if>
+          </div>
+
+          <div style="background:#fff;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:16px;display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:999px;background:#FBF1D4;color:#6E4A11;flex:0 0 auto">{{ ic.milk }}</span>
+              <span style="flex:1;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Zeta Dairy, 5:12am</span>
+              <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:14px;color:#45413A;font-variant-numeric:tabular-nums">€188.20</span>
+            </div>
+            <span style="font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:18px;line-height:1.22;letter-spacing:-.01em;color:#1B1A16">Update four ingredient costs?</span>
+            <p style="margin:0;font-size:14px;line-height:1.45;color:#45413A;text-wrap:pretty">Cream up 6c a litre, pecorino down 2c. Moves three dishes by under a cent a plate.</p>
+            <sc-if value="{{ q2.open }}" hint-placeholder-val="{{ yes }}">
+              <div style="display:flex;flex-direction:column;gap:8px;margin-top:2px">
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" block="{{ yes }}" onClick="{{ q2.approve }}" hint-size="100%,44px">Update them</x-import>
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="secondary" block="{{ yes }}" onClick="{{ q2.dismiss }}" hint-size="100%,44px">Show the invoice</x-import>
+              </div>
+            </sc-if>
+            <sc-if value="{{ q2.done }}" hint-placeholder-val="{{ no }}">
+              <div style="display:flex;align-items:center;gap:8px;margin-top:2px;font-size:14px;font-weight:600;color:#2F7A45">{{ ic.check }}<span style="flex:1">Updated — three dishes recosted.</span><button onClick="{{ q2.undo }}" style="border:0;background:none;padding:0;cursor:pointer;font-weight:600;font-size:13px;color:#8C8574;text-decoration:underline">Undo</button></div>
+            </sc-if>
+          </div>
+
+          <div style="background:#fff;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:16px;display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:999px;background:#E4F3D8;color:#1B4A2C;flex:0 0 auto">{{ ic.truck }}</span>
+              <span style="flex:1;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">Same tomatoes, cheaper</span>
+              <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:14px;color:#45413A;font-variant-numeric:tabular-nums">−€0.09</span>
+            </div>
+            <span style="font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:18px;line-height:1.22;letter-spacing:-.01em;color:#1B1A16">Buy tomatoes from Kritikos?</span>
+            <p style="margin:0;font-size:14px;line-height:1.45;color:#45413A;text-wrap:pretty">14c cheaper a kilo, same-day delivery. About €18 a month at your covers.</p>
+            <sc-if value="{{ q3.open }}" hint-placeholder-val="{{ yes }}">
+              <div style="display:flex;flex-direction:column;gap:8px;margin-top:2px">
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" block="{{ yes }}" onClick="{{ q3.approve }}" hint-size="100%,44px">Switch to Kritikos</x-import>
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="ghost" block="{{ yes }}" onClick="{{ q3.dismiss }}" hint-size="100%,44px">Leave it</x-import>
+              </div>
+            </sc-if>
+            <sc-if value="{{ q3.done }}" hint-placeholder-val="{{ no }}">
+              <div style="display:flex;align-items:center;gap:8px;margin-top:2px;font-size:14px;font-weight:600;color:#2F7A45">{{ ic.check }}<span style="flex:1">Switched for Friday.</span><button onClick="{{ q3.undo }}" style="border:0;background:none;padding:0;cursor:pointer;font-weight:600;font-size:13px;color:#8C8574;text-decoration:underline">Undo</button></div>
+            </sc-if>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;background:#F8F4EA;border:1px solid #EFE8DA;border-radius:16px;padding:13px 14px">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:999px;background:#E4F3D8;color:#2F7A45;flex:0 0 auto">{{ ic.checkSm }}</span>
+            <span style="font-size:14px;line-height:1.4;color:#45413A">Friday's Kritikos order drafted while you slept — <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums">€146.00</span>.</span>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ firstDay }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;align-items:center;gap:9px">
+            <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Avatar" agent="{{ yes }}" name="Costwise" src="assets/logo-mark-transparent.png" size="sm" hint-size="30px,30px"></x-import>
+            <span style="font-weight:700;font-size:12px;color:#1B4A2C">Costwise</span>
+            <span style="font-size:11px;color:#8C8574">read your invoice just now</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <h1 style="margin:0;font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:26px;line-height:1.15;letter-spacing:-.02em;color:#1B1A16">I've read your invoice, {{ ownerFirst }}.</h1>
+            <p style="margin:0;font-size:15px;line-height:1.45;color:#8C8574;text-wrap:pretty">A trattoria, two dishes and one Metro invoice. Enough to start.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:7px;align-items:center;font-size:12px;color:#8C8574">
+              <span style="white-space:nowrap"><span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">2</span> dishes</span>
+              <span style="color:#C9BFAA">·</span>
+              <span style="white-space:nowrap"><span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">11</span> ingredients</span>
+              <span style="color:#C9BFAA">·</span>
+              <span style="white-space:nowrap"><span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;color:#45413A;font-variant-numeric:tabular-nums">1</span> supplier</span>
+            </div>
+          </div>
+          <div style="background:#FBF1D4;border:1px solid #F0E3BE;border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:10px">
+            <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8A5F16">One thing to do today</span>
+            <span style="font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:19px;line-height:1.22;letter-spacing:-.01em;color:#1B1A16">Two lines I couldn't read</span>
+            <p style="margin:0;font-size:14px;line-height:1.45;color:#2C2A25;text-wrap:pretty">Eleven of fourteen matched. These two are handwritten — name them and your carbonara cost is final. About a minute.</p>
+            <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" block="{{ yes }}" iconLeft="{{ ic.eye }}" onClick="{{ goIngredients }}" hint-size="100%,44px">Look at the two lines</x-import>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">While you were signing up</span>
+            <p style="margin:0;font-size:15px;line-height:1.5;color:#2C2A25;text-wrap:pretty">I added <strong style="font-weight:700">11 ingredients</strong> at what you actually paid, and your <strong style="font-weight:700">carbonara</strong> works out at <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums">€3.72</span> a plate — at <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums">€14.20</span> you're keeping 68%. The Greek salad is at <span style="font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums">€2.10</span>, keeping 70%.</p>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <span style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574">What I'd do next</span>
+            <div style="display:flex;align-items:center;gap:12px;background:#F8F4EA;border:1px solid #EFE8DA;border-radius:16px;padding:13px 14px">
+              <span style="display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:999px;background:#FDEBDD;color:#9E4220;flex:0 0 auto">{{ ic.camera }}</span>
+              <div style="flex:1;display:flex;flex-direction:column;gap:2px">
+                <span style="font-weight:700;font-size:15px;color:#1B1A16">Snap your menu</span>
+                <span style="font-size:13px;line-height:1.4;color:#6B6558">I'll cost every dish by tonight.</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;background:#F8F4EA;border:1px solid #EFE8DA;border-radius:16px;padding:13px 14px">
+              <span style="display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:999px;background:#FBF1D4;color:#6E4A11;flex:0 0 auto">{{ ic.egg }}</span>
+              <div style="flex:1;display:flex;flex-direction:column;gap:2px">
+                <span style="font-weight:700;font-size:15px;color:#1B1A16">Watch the eggs for you</span>
+                <span style="font-size:13px;line-height:1.4;color:#6B6558">They move most, and they're in four dishes.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+      </sc-if>
+      <sc-if value="{{ phoneList }}" hint-placeholder-val="{{ false }}">
+        <h1 style="margin:0 0 16px;font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:24px;line-height:1.22;letter-spacing:-.02em;color:#1B1A16">{{ phoneListTitle }}</h1>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ phoneCards }}" as="c" hint-placeholder-count="4">
+            <div style="background:#fff;border:1px solid #EFE8DA;border-radius:18px;box-shadow:0 1px 2px rgba(27,26,22,.05),0 2px 6px rgba(27,26,22,.04);padding:16px">
+              <div style="display:flex;align-items:center;gap:11px;padding-bottom:12px;border-bottom:1px solid #EFE8DA">
+                <span style="{{ c.thumbStyle }}">{{ c.glyph }}</span>
+                <span style="flex:1;font-weight:700;font-size:16px;color:#1B1A16">{{ c.title }}</span>
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.IconButton" icon="{{ ic.pencil }}" label="Edit" size="sm" onClick="{{ c.edit }}" hint-size="32px,32px"></x-import>
+                <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.IconButton" icon="{{ ic.trash }}" label="Delete" size="sm" onClick="{{ c.remove }}" hint-size="32px,32px"></x-import>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px;padding-top:12px">
+                <sc-for list="{{ c.rows }}" as="row" hint-placeholder-count="3">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+                    <span style="font-size:13px;font-weight:600;color:#8C8574">{{ row.label }}</span>
+                    <span style="{{ row.valueStyle }}">{{ row.value }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+    <div style="position:absolute;left:0;right:0;bottom:0;height:82px;filter:drop-shadow(0 -4px 10px rgba(27,26,22,.06))">
+      <div style="position:absolute;inset:0;background:#fff;display:flex;align-items:flex-start;justify-content:space-between;padding:10px 6px 0;-webkit-mask-image:radial-gradient(circle at 50% 0px, transparent 35px, black 36px);mask-image:radial-gradient(circle at 50% 0px, transparent 35px, black 36px)">
+        <sc-for list="{{ tabItems }}" as="t" hint-placeholder-count="4">
+          <button onClick="{{ t.go }}" style="{{ t.style }}">{{ t.icon }}<span style="font-size:10px;font-weight:700;letter-spacing:.01em">{{ t.label }}</span></button>
+        </sc-for>
+      </div>
+      <div style="position:absolute;left:50%;top:-28px;transform:translateX(-50%)">
+        <button onClick="{{ openCreate }}" style="display:flex;align-items:center;justify-content:center;width:56px;height:56px;border:0;border-radius:999px;background:#1B4A2C;color:#FDFBF6;box-shadow:0 8px 24px -10px rgba(27,74,44,.5);cursor:pointer">{{ ic.plusLg }}</button>
+      </div>
+    </div>
+  </div>
+  <div style="width:250px;flex:0 0 auto;padding-top:8px">
+    <div style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8C8574;margin-bottom:8px">Phone view</div>
+    <p style="margin:0 0 14px;font-size:14px;line-height:1.45;color:#6B6558">Lists become a card feed, the sidebar becomes a tab bar, and the plus sits in the cutout.</p>
+    <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Button" variant="secondary" size="sm" onClick="{{ toDesktop }}" hint-size="150px,36px">Back to desktop</x-import>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ createOpen }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Dialog" open="{{ true }}" title="What are we adding?" onClose="{{ closeAll }}" hint-size="440px,380px">
+  <p style="margin:-4px 0 16px;font-size:15px;line-height:1.45;color:#8C8574">Pick one and I'll open a blank form.</p>
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <button onClick="{{ newRecipe }}" style="display:flex;align-items:center;gap:14px;padding:14px;border:1px solid #EFE8DA;border-radius:16px;background:#fff;cursor:pointer;text-align:left">
+      <span style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:999px;background:#FDEBDD;color:#9E4220;flex:0 0 auto">{{ ic.utensils }}</span>
+      <span style="display:flex;flex-direction:column;gap:2px">
+        <span style="font-weight:700;font-size:16px;color:#1B1A16">A dish</span>
+        <span style="font-size:13px;color:#8C8574">What goes on the plate, and what you charge</span>
+      </span>
+    </button>
+    <button onClick="{{ newIngredient }}" style="display:flex;align-items:center;gap:14px;padding:14px;border:1px solid #EFE8DA;border-radius:16px;background:#fff;cursor:pointer;text-align:left">
+      <span style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:999px;background:#E4F3D8;color:#1B4A2C;flex:0 0 auto">{{ ic.carrot }}</span>
+      <span style="display:flex;flex-direction:column;gap:2px">
+        <span style="font-weight:700;font-size:16px;color:#1B1A16">An ingredient</span>
+        <span style="font-size:13px;color:#8C8574">Something you buy, and what it costs</span>
+      </span>
+    </button>
+    <button onClick="{{ newSupplier }}" style="display:flex;align-items:center;gap:14px;padding:14px;border:1px solid #EFE8DA;border-radius:16px;background:#fff;cursor:pointer;text-align:left">
+      <span style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:999px;background:#E6EFF8;color:#3A6E9E;flex:0 0 auto">{{ ic.truck }}</span>
+      <span style="display:flex;flex-direction:column;gap:2px">
+        <span style="font-weight:700;font-size:16px;color:#1B1A16">A supplier</span>
+        <span style="font-size:13px;color:#8C8574">Who you order from and when they deliver</span>
+      </span>
+    </button>
+  </div>
+</x-import>
+</sc-if>
+
+<sc-if value="{{ deleteOpen }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Dialog" open="{{ true }}" title="{{ deleteTitle }}" icon="{{ ic.alert }}" onClose="{{ closeAll }}" footer="{{ deleteFooter }}" hint-size="440px,260px">
+  <p style="margin:0;font-size:15px;line-height:1.45;color:#45413A">{{ deleteBody }}</p>
+</x-import>
+</sc-if>
+
+<sc-if value="{{ profileOpen }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Dialog" open="{{ true }}" onClose="{{ closeAll }}" hint-size="380px,380px">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:6px 0 18px">
+    <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Avatar" name="{{ ownerName }}" size="xl" hint-size="72px,72px"></x-import>
+    <div style="text-align:center">
+      <div style="font-family:'Bricolage Grotesque','Geologica',sans-serif;font-weight:700;font-size:20px;line-height:1.22;color:#1B1A16">{{ ownerName }}</div>
+      <div style="display:inline-block;margin-top:6px;padding:3px 10px;border-radius:999px;background:#F8F4EA;font-size:12px;color:#6B6558">{{ ownerEmail }}</div>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:4px;border-top:1px solid #EFE8DA;padding-top:12px">
+    <button onClick="{{ closeAll }}" style="display:flex;align-items:center;gap:12px;padding:11px 12px;border:0;border-radius:999px;background:none;cursor:pointer;font-weight:600;font-size:15px;color:#45413A;text-align:left">{{ ic.user }}<span>Your details</span></button>
+    <button onClick="{{ signOut }}" style="display:flex;align-items:center;gap:12px;padding:11px 12px;border:0;border-radius:999px;background:none;cursor:pointer;font-weight:600;font-size:15px;color:#9E2A20;text-align:left">{{ ic.logout }}<span>Sign out</span></button>
+  </div>
+</x-import>
+</sc-if>
+
+<sc-if value="{{ toastOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;left:0;right:0;bottom:26px;display:flex;justify-content:center;z-index:120;pointer-events:none">
+  <div style="pointer-events:auto">
+    <x-import component-from-global-scope="CostwiseDesignSystem_f2dfa3.Toast" title="{{ toastTitle }}" message="{{ toastMessage }}" tone="{{ toastTone }}" hint-size="360px,64px"></x-import>
+  </div>
+</div>
+</sc-if>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;ownerName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Panagiotis Stachoulis&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;firstDay&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Today screen&quot;},&quot;showStatLine&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Today screen&quot;},&quot;itemsPerPage&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:9,&quot;min&quot;:4,&quot;max&quot;:14,&quot;tsType&quot;:&quot;number&quot;}}">
+const CATS = {
+  'Produce':                      {bg:'#E4F3D8', fg:'#1B4A2C'},
+  'Meat & Poultry':               {bg:'#FBE6E3', fg:'#9E2A20'},
+  'Fish & Seafood':               {bg:'#E6EFF8', fg:'#3A6E9E'},
+  'Dairy & Alternatives':         {bg:'#FBF1D4', fg:'#6E4A11'},
+  'Dry Goods':                    {bg:'#FDEBDD', fg:'#9E4220'},
+  'Spices & Seasonings':          {bg:'#FBF1D4', fg:'#8A5F16'},
+  'Oils, Vinegars, & Condiments': {bg:'#F1E7F5', fg:'#7A4A8C'},
+  'Frozen':                       {bg:'#E6EFF8', fg:'#4A86C4'},
+  'Coffee & Tea':                 {bg:'#FDEBDD', fg:'#9E4220'},
+  'Beverages (Other)':            {bg:'#E6EFF8', fg:'#3A6E9E'},
+  'Bakery':                       {bg:'#FDEBDD', fg:'#C4552C'},
+  'Other':                        {bg:'#F0EADC', fg:'#6B6558'}
+};
+const DELIVERY_TONE = {'Same day':'good','1-2 days':'good','2-3 days':'info','Up to 5 days':'watch','Weekly':'over'};
+
+class Component extends DCLogic {
+  state = {
+    route: 'home', viewport: 'desktop', collapsed: false,
+    sortKey: '', sortOrder: 'asc', page: 1,
+    searchOpen: false, searchTerm: '', createOpen: false, profileOpen: false,
+    deleteKind: '', deleteId: '', toast: null,
+    detailId: 'i1', formMode: 'create', formId: '',
+    rf: {title:'', items:[{id:'i1',unit:'piece',qty:2},{id:'i2',unit:'g',qty:50},{id:'i4',unit:'g',qty:120}], method:'price', sellingPrice:'15.50', profitMargin:'', tax:'0.13', sel:'i1', unit:'g', qty:120},
+    inf: {name:'', cat:'Produce', unit:'kg', qty:1, price:'', supplier:'Kritikos Produce'},
+    sf: {contact:'', name:'', email:'', phone:'', website:'', delivery:'', payment:'', vat:'', street:'', city:'', postal:'', cats:['Produce']},
+    sfErr: {},
+    qDone: {}
+  };
+
+  BLANK_SUPPLIER = {contact:'', name:'', email:'', phone:'', website:'', delivery:'', payment:'', vat:'', street:'', city:'', postal:'', cats:[]};
+  DELIVERY_OPTIONS = ['Same day', '1-2 days', '2-3 days', 'Up to 5 days', 'Weekly'];
+  PAYMENT_OPTIONS = ['On delivery', '15 days', '30 days', '60 days', 'Paid up front'];
+
+  RECIPES = [
+    {id:'r1',  title:'Spaghetti carbonara',  glyph:'wheat',  cat:'Dry Goods',            tax:0.13, price:15.5, margin:68, cost:3.90},
+    {id:'r2',  title:'Lentil soup',          glyph:'salad',  cat:'Produce',              tax:0.13, price:8.5,  margin:72, cost:1.85},
+    {id:'r3',  title:'Chicken stir-fry',     glyph:'beef',   cat:'Meat & Poultry',       tax:0.13, price:13.0, margin:61, cost:4.20},
+    {id:'r4',  title:'Caprese skewers',      glyph:'salad',  cat:'Produce',              tax:0.13, price:9.5,  margin:66, cost:2.40},
+    {id:'r5',  title:'New York cheesecake',  glyph:'milk',   cat:'Dairy & Alternatives', tax:0.13, price:7.5,  margin:58, cost:2.60},
+    {id:'r6',  title:'Chocolate lava cakes', glyph:'cookie', cat:'Bakery',               tax:0.13, price:8.0,  margin:54, cost:3.10},
+    {id:'r7',  title:'Rosemary focaccia',    glyph:'wheat',  cat:'Bakery',               tax:0.13, price:4.5,  margin:74, cost:0.95},
+    {id:'r8',  title:'Beef ragù',            glyph:'beef',   cat:'Meat & Poultry',       tax:0.24, price:17.0, margin:49, cost:6.40},
+    {id:'r9',  title:'Grilled sea bass',     glyph:'fish',   cat:'Fish & Seafood',       tax:0.24, price:22.0, margin:44, cost:9.60},
+    {id:'r10', title:'Greek salad',          glyph:'salad',  cat:'Produce',              tax:0.13, price:9.0,  margin:70, cost:2.10},
+    {id:'r11', title:'Moussaka',             glyph:'utensils', cat:'Produce',            tax:0.13, price:14.5, margin:57, cost:5.20},
+    {id:'r12', title:'Espresso affogato',    glyph:'coffee', cat:'Coffee & Tea',         tax:0.24, price:6.0,  margin:76, cost:0.85},
+    {id:'r13', title:'Octopus, grilled',     glyph:'fish',   cat:'Fish & Seafood',       tax:0.24, price:19.5, margin:38, cost:10.40},
+    {id:'r14', title:'Tomato bruschetta',    glyph:'salad',  cat:'Produce',              tax:0.13, price:6.5,  margin:73, cost:1.40}
+  ];
+
+  INGREDIENTS = [
+    {id:'i1',  name:'Eggs, free range',       glyph:'egg',      cat:'Dairy & Alternatives',         unitPrice:0.42,  unit:'piece', usage:18, supplier:'Zeta Dairy'},
+    {id:'i2',  name:'Pecorino romano',        glyph:'milk',     cat:'Dairy & Alternatives',         unitPrice:0.019, unit:'kg',    usage:12, supplier:'Zeta Dairy'},
+    {id:'i3',  name:'Guanciale',              glyph:'beef',     cat:'Meat & Poultry',               unitPrice:0.028, unit:'kg',    usage:9,  supplier:'Metro Cash & Carry'},
+    {id:'i4',  name:'Spaghetti no.5',         glyph:'wheat',    cat:'Dry Goods',                    unitPrice:0.002, unit:'kg',    usage:21, supplier:'Mylos Flour'},
+    {id:'i5',  name:'Carrots',                glyph:'carrot',   cat:'Produce',                      unitPrice:0.001, unit:'kg',    usage:14, supplier:'Kritikos Produce'},
+    {id:'i6',  name:'Sea bass, whole',        glyph:'fish',     cat:'Fish & Seafood',               unitPrice:0.024, unit:'kg',    usage:6,  supplier:'Aegean Fish Co.'},
+    {id:'i7',  name:'Olive oil, extra virgin',glyph:'droplets', cat:'Oils, Vinegars, & Condiments', unitPrice:0.008, unit:'L',     usage:17, supplier:'Kritikos Produce'},
+    {id:'i8',  name:'Espresso beans',         glyph:'coffee',   cat:'Coffee & Tea',                 unitPrice:0.021, unit:'kg',    usage:7,  supplier:'Bean & Barrel'},
+    {id:'i9',  name:'Sourdough loaf',         glyph:'croissant',cat:'Bakery',                       unitPrice:2.4,   unit:'piece', usage:5,  supplier:'Mylos Flour'},
+    {id:'i10', name:'Tomatoes, vine',         glyph:'salad',    cat:'Produce',                      unitPrice:0.002, unit:'kg',    usage:19, supplier:'Kritikos Produce'},
+    {id:'i11', name:'Sea salt, flaked',       glyph:'utensils', cat:'Spices & Seasonings',          unitPrice:0.004, unit:'kg',    usage:11, supplier:'Metro Cash & Carry'},
+    {id:'i12', name:'Double cream',           glyph:'milk',     cat:'Dairy & Alternatives',         unitPrice:0.005, unit:'L',     usage:13, supplier:'Zeta Dairy'}
+  ];
+
+  SUPPLIERS = [
+    {id:'s1', name:'Metro Cash & Carry', contact:'Elena Papadaki', email:'elena@metro.gr',        delivery:'1-2 days',     payment:'30 days',        cats:['Dry Goods','Spices & Seasonings']},
+    {id:'s2', name:'Kritikos Produce',   contact:'Nikos Vlachos',  email:'nikos@kritikos.gr',     delivery:'Same day',     payment:'On delivery',    cats:['Produce','Oils, Vinegars, & Condiments']},
+    {id:'s3', name:'Aegean Fish Co.',    contact:'Dimitra Sakka',  email:'orders@aegeanfish.gr',  delivery:'Same day',     payment:'On delivery',    cats:['Fish & Seafood']},
+    {id:'s4', name:'Zeta Dairy',         contact:'Yiannis Rallis', email:'y.rallis@zetadairy.gr', delivery:'2-3 days',     payment:'30 days',        cats:['Dairy & Alternatives']},
+    {id:'s5', name:'Mylos Flour',        contact:'Sofia Tsanaka',  email:'sofia@mylos.gr',        delivery:'Weekly',       payment:'60 days',        cats:['Bakery','Dry Goods']},
+    {id:'s6', name:'Bean & Barrel',      contact:'Alex Roussos',   email:'alex@beanbarrel.gr',    delivery:'Up to 5 days', payment:'Paid up front',  cats:['Coffee & Tea']}
+  ];
+
+  DS() { return window.CostwiseDesignSystem_f2dfa3 || {}; }
+  I(name, size, color, sw) {
+    const D = this.DS();
+    if (!D.Icon) return null;
+    return React.createElement(D.Icon, {name: name, size: size || 20, color: color, strokeWidth: sw || 1.75});
+  }
+
+  go(route) { this.setState({route: route, page: 1, sortKey: '', searchOpen: false, createOpen: false, profileOpen: false}); }
+  toast(title, message, tone) {
+    this.setState({toast: {title: title, message: message, tone: tone || 'good'}});
+    clearTimeout(this._t);
+    this._t = setTimeout(() => this.setState({toast: null}), 3600);
+  }
+  closeAll = () => this.setState({searchOpen:false, createOpen:false, profileOpen:false, deleteKind:'', deleteId:''});
+
+  money(v) { return '€' + Number(v).toFixed(2); }
+  unitPriceText(v) { return '€' + (Number(v) < 1 ? Number(v).toFixed(3) : Number(v).toFixed(2)); }
+  displayUnit(u) { if (u === 'kg' || u === 'g') return 'g'; if (u === 'L' || u === 'ml') return 'ml'; return 'piece'; }
+  marginTone(m) { if (m > 60) return 'good'; if (m > 50) return 'info'; if (m > 40) return 'watch'; return 'over'; }
+  usageBand(u) { if (u > 15) return {text:'Most days', tone:'good'}; if (u > 8) return {text:'Weekly', tone:'info'}; return {text:'Now and then', tone:'neutral'}; }
+  thumb(cat) {
+    const c = CATS[cat] || CATS['Other'];
+    return 'display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:999px;flex:0 0 auto;background:' + c.bg + ';color:' + c.fg;
+  }
+  chip(cat) {
+    const c = CATS[cat] || CATS['Other'];
+    return 'display:inline-block;padding:4px 10px;border-radius:999px;font-weight:600;font-size:12px;background:' + c.bg + ';color:' + c.fg;
+  }
+
+  sortList(list, keyMap) {
+    const k = this.state.sortKey;
+    if (!k || !keyMap[k]) return list;
+    const dir = this.state.sortOrder === 'asc' ? 1 : -1;
+    return list.slice().sort((a, b) => {
+      const av = keyMap[k](a), bv = keyMap[k](b);
+      if (typeof av === 'string') return av.localeCompare(bv) * dir;
+      return (av - bv) * dir;
+    });
+  }
+  sorter(key) { return () => this.setState(s => ({sortKey: key, sortOrder: s.sortKey === key && s.sortOrder === 'asc' ? 'desc' : 'asc', page: 1})); }
+  arrow(key) { return this.state.sortKey === key ? (this.state.sortOrder === 'asc' ? '↑' : '↓') : ''; }
+
+  pager(total, perPage) {
+    const count = Math.ceil(total / perPage);
+    const cur = Math.min(this.state.page, Math.max(count, 1));
+    const pages = [];
+    for (let i = 1; i <= count; i++) {
+      pages.push({
+        n: i, go: () => this.setState({page: i}),
+        style: 'width:30px;height:30px;border-radius:10px;cursor:pointer;font-weight:600;font-size:13px;font-variant-numeric:tabular-nums;' +
+          (i === cur ? 'border:1px solid #C9BFAA;background:#F8F4EA;color:#1B1A16' : 'border:1px solid transparent;background:none;color:#8C8574')
+      });
+    }
+    return {count: count, cur: cur, pages: pages, show: count > 1};
+  }
+
+  askDelete(kind, id) { return () => this.setState({deleteKind: kind, deleteId: id}); }
+
+  queueCard(id, toast) {
+    const done = !!this.state.qDone[id];
+    const set = (v) => this.setState(s => {
+      const q = Object.assign({}, s.qDone);
+      if (v) q[id] = true; else delete q[id];
+      return {qDone: q};
+    });
+    return {
+      done: done, open: !done,
+      approve: () => { set(true); if (toast) this.toast(toast[0], toast[1], 'good'); },
+      dismiss: () => this.toast('Left alone', "I'll bring it up again Monday.", 'watch'),
+      undo: () => set(false)
+    };
+  }
+  confirmDelete = () => {
+    const k = this.state.deleteKind;
+    const noun = k === 'recipes' ? 'dish' : k === 'ingredients' ? 'ingredient' : 'supplier';
+    this.setState({deleteKind: '', deleteId: ''});
+    this.toast('Gone', 'That ' + noun + ' is off your list.', 'good');
+  };
+
+  componentDidMount() {
+    if (window.lucide) return;
+    let tries = 0;
+    this._poll = setInterval(() => {
+      tries++;
+      if (window.lucide) { clearInterval(this._poll); this.forceUpdate(); }
+      else if (tries > 60) clearInterval(this._poll);
+    }, 120);
+  }
+
+  componentWillUnmount() { clearTimeout(this._t); clearInterval(this._poll); }
+
+  renderVals() {
+    const D = this.DS();
+    const s = this.state;
+    const ownerName = this.props.ownerName || 'Panagiotis Stachoulis';
+    const perPage = Number(this.props.itemsPerPage || 9);
+    const ic = {
+      house: this.I('house'), plus: this.I('plus', 18), plusLg: this.I('plus', 26, undefined, 2.2),
+      utensils: this.I('utensils'), carrot: this.I('carrot'), truck: this.I('truck'),
+      search: this.I('search', 18), bell: this.I('bell'), x: this.I('x', 15),
+      pencil: this.I('pencil', 17), trash: this.I('trash-2', 17, '#C0392B'),
+      panelClose: this.I('panel-left-close'), panelOpen: this.I('panel-left-open'),
+      phone: this.I('smartphone'), user: this.I('circle-user-round'), logout: this.I('log-out'),
+      alert: this.I('triangle-alert', 22, '#C0392B'), google: this.I('chrome', 18),
+      chevron: this.I('chevron-right', 18, '#C9BFAA'),
+      back: this.I('arrow-left', 18), camera: this.I('camera', 22, '#8C8574'),
+      minus: this.I('minus', 16), sparkles: this.I('sparkles', 20, '#2F7A45'),
+      saladLg: this.I('salad', 30, '#C9BFAA'),
+      eye: this.I('eye', 18), egg: this.I('egg', 20), milk: this.I('milk', 22),
+      trend: this.I('trending-up', 22), receipt: this.I('receipt-text', 22),
+      check: this.I('check', 18, '#2F7A45'), checkSm: this.I('check', 15, '#2F7A45')
+    };
+
+    const q1 = this.queueCard('q1', ['Repriced', 'Carbonara is €15.50 on the menu now.']);
+    const q2 = this.queueCard('q2', ['Updated', 'Four ingredient costs, three dishes recosted.']);
+    const q3 = this.queueCard('q3', ['Switched', "Friday's tomatoes come from Kritikos."]);
+    const qDone = [q1, q2, q3].filter(c => c.done).length + 1;
+    const qBar = 'height:100%;width:' + Math.round((qDone / 4) * 100) + '%;border-radius:999px;background:#43955A;transition:width 200ms cubic-bezier(.2,.8,.25,1)';
+
+    const nav = [
+      {key: 'home',        label: 'Today',         icon: ic.house},
+      {key: '_create',     label: 'Add something', icon: this.I('plus')},
+      {key: 'recipes',     label: 'Dishes',        icon: ic.utensils},
+      {key: 'ingredients', label: 'Ingredients',   icon: ic.carrot},
+      {key: 'suppliers',   label: 'Suppliers',     icon: ic.truck}
+    ];
+    const navItems = nav.map(n => {
+      const active = s.route === n.key || (n.key === 'recipes' && s.route === 'recipeForm') ||
+        (n.key === 'ingredients' && (s.route === 'ingredientForm' || s.route === 'ingredient')) ||
+        (n.key === 'suppliers' && s.route === 'supplierForm');
+      const base = 'display:flex;align-items:center;gap:11px;min-height:42px;padding:0 12px;border:0;border-radius:12px;cursor:pointer;font-weight:600;font-size:15px;';
+      return {
+        label: n.label, icon: n.icon,
+        go: n.key === '_create' ? (() => this.setState({createOpen: true})) : (() => this.go(n.key)),
+        style: base + (active ? 'background:#F2F9EC;color:#1B4A2C' : 'background:none;color:#45413A'),
+        railStyle: 'display:flex;align-items:center;justify-content:center;width:44px;height:44px;border:0;border-radius:12px;cursor:pointer;' +
+          (active ? 'background:#F2F9EC;color:#1B4A2C' : 'background:none;color:#45413A')
+      };
+    });
+
+    const rSorted = this.sortList(this.RECIPES, {
+      title: r => r.title, tax: r => r.tax, price: r => r.price, margin: r => r.margin, cost: r => r.cost
+    });
+    const rPager = this.pager(rSorted.length, perPage);
+    const recipeRows = rSorted.slice((rPager.cur - 1) * perPage, rPager.cur * perPage).map(r => ({
+      title: r.title, glyph: this.I(r.glyph, 18), thumbStyle: this.thumb(r.cat),
+      vat: Math.round(r.tax * 100) + '%', price: this.money(r.price), cost: this.money(r.cost),
+      marginText: r.margin + '%', marginTone: this.marginTone(r.margin),
+      open: () => this.setState({route: 'recipeForm', formMode: 'edit', formId: r.id, rf: Object.assign({}, s.rf, {title: r.title, sellingPrice: r.price.toFixed(2), tax: String(r.tax)})}),
+      edit: () => this.setState({route: 'recipeForm', formMode: 'edit', formId: r.id, rf: Object.assign({}, s.rf, {title: r.title, sellingPrice: r.price.toFixed(2), tax: String(r.tax)})}),
+      remove: this.askDelete('recipes', r.id)
+    }));
+
+    const iSorted = this.sortList(this.INGREDIENTS, {
+      name: i => i.name, unitPrice: i => i.unitPrice, usage: i => i.usage, category: i => i.cat
+    });
+    const iPager = this.pager(iSorted.length, perPage);
+    const ingredientRows = iSorted.slice((iPager.cur - 1) * perPage, iPager.cur * perPage).map(i => {
+      const b = this.usageBand(i.usage);
+      return {
+        name: i.name, glyph: this.I(i.glyph, 18), thumbStyle: this.thumb(i.cat),
+        unitPrice: this.unitPriceText(i.unitPrice), displayUnit: this.displayUnit(i.unit),
+        usageText: b.text, usageTone: b.tone, catName: i.cat, catStyle: this.chip(i.cat),
+        open: () => this.setState({route: 'ingredient', detailId: i.id}),
+        edit: () => this.setState({route: 'ingredientForm', formMode: 'edit', formId: i.id, inf: {name: i.name, cat: i.cat, unit: i.unit, qty: 1, price: String(i.unitPrice), supplier: i.supplier}}),
+        remove: this.askDelete('ingredients', i.id)
+      };
+    });
+
+    const sSorted = this.sortList(this.SUPPLIERS, {name: x => x.name});
+    const supplierRows = sSorted.map(x => ({
+      name: x.name, contact: x.contact, email: x.email, delivery: x.delivery,
+      deliveryTone: DELIVERY_TONE[x.delivery] || 'neutral', glyph: this.I('store', 18),
+      edit: () => this.setState({route: 'supplierForm', formMode: 'edit', formId: x.id, sfErr: {},
+        sf: Object.assign({}, this.BLANK_SUPPLIER, {name: x.name, contact: x.contact, email: x.email, delivery: x.delivery, payment: x.payment, cats: (x.cats || []).slice()})}),
+      remove: this.askDelete('suppliers', x.id)
+    }));
+
+    const recentRows = this.RECIPES.slice(0, 4).map(r => ({
+      thumb: this.I(r.glyph, 18), title: r.title, subtitle: r.cat + ' · edited this week',
+      amount: this.money(r.price), note: this.money(r.cost) + ' a plate',
+      badge: D.Badge ? React.createElement(D.Badge, {tone: this.marginTone(r.margin)}, r.margin + '%') : null,
+      open: () => this.setState({route: 'recipeForm', formMode: 'edit', formId: r.id, rf: Object.assign({}, s.rf, {title: r.title, sellingPrice: r.price.toFixed(2), tax: String(r.tax)})})
+    }));
+
+    const term = s.searchTerm.trim().toLowerCase();
+    const rHits = term ? this.RECIPES.filter(r => r.title.toLowerCase().indexOf(term) >= 0).slice(0, 4) : [];
+    const iHits = term ? this.INGREDIENTS.filter(i => i.name.toLowerCase().indexOf(term) >= 0).slice(0, 4) : [];
+    const recipeHits = rHits.map(r => ({title: r.title, glyph: this.I(r.glyph, 18), thumbStyle: this.thumb(r.cat), price: this.money(r.price), open: () => this.go('recipes')}));
+    const ingredientHits = iHits.map(i => ({title: i.name, glyph: this.I(i.glyph, 18), thumbStyle: this.thumb(i.cat), price: this.unitPriceText(i.unitPrice), open: () => this.setState({route: 'ingredient', detailId: i.id, searchOpen: false})}));
+
+    const phoneTabs = [
+      {key: 'home', label: 'Today', icon: 'house'},
+      {key: 'recipes', label: 'Dishes', icon: 'utensils'},
+      {key: '_gap', label: '', icon: ''},
+      {key: 'ingredients', label: 'Ingredients', icon: 'carrot'},
+      {key: 'suppliers', label: 'Suppliers', icon: 'truck'}
+    ];
+    const tabItems = phoneTabs.map(t => {
+      if (t.key === '_gap') return {label: '', icon: null, go: () => {}, style: 'width:76px;flex:0 0 auto;border:0;background:none'};
+      const active = s.route === t.key;
+      return {
+        label: t.label, icon: this.I(t.icon, 22),
+        go: () => this.setState({route: t.key, page: 1}),
+        style: 'flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 0;border:0;background:none;cursor:pointer;color:' + (active ? '#1B4A2C' : '#C9BFAA')
+      };
+    });
+
+    let phoneCards = [], phoneListTitle = '';
+    if (s.route === 'recipes') {
+      phoneListTitle = 'Your dishes';
+      phoneCards = rSorted.slice(0, 6).map(r => ({
+        title: r.title, glyph: this.I(r.glyph, 18), thumbStyle: this.thumb(r.cat),
+        edit: () => {}, remove: this.askDelete('recipes', r.id),
+        rows: [
+          {label: 'VAT', value: Math.round(r.tax * 100) + '%', valueStyle: "font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:14px;color:#1B1A16"},
+          {label: 'Menu price', value: this.money(r.price), valueStyle: "font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:14px;color:#1B1A16"},
+          {label: 'You keep', value: r.margin + '%', valueStyle: "font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:14px;color:#24603A"},
+          {label: 'Plate cost', value: this.money(r.cost), valueStyle: "font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:14px;color:#45413A"}
+        ]
+      }));
+    } else if (s.route === 'ingredients') {
+      phoneListTitle = 'Your ingredients';
+      phoneCards = iSorted.slice(0, 6).map(i => ({
+        title: i.name, glyph: this.I(i.glyph, 18), thumbStyle: this.thumb(i.cat),
+        edit: () => {}, remove: this.askDelete('ingredients', i.id),
+        rows: [
+          {label: 'What it costs', value: this.unitPriceText(i.unitPrice) + ' / ' + this.displayUnit(i.unit), valueStyle: "font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:14px;color:#1B1A16"},
+          {label: 'How often', value: this.usageBand(i.usage).text, valueStyle: 'font-weight:600;font-size:14px;color:#45413A'},
+          {label: 'Kind', value: i.cat, valueStyle: this.chip(i.cat)}
+        ]
+      }));
+    } else if (s.route === 'suppliers') {
+      phoneListTitle = 'Who you buy from';
+      phoneCards = sSorted.map(x => ({
+        title: x.name, glyph: this.I('store', 18), thumbStyle: 'display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:999px;flex:0 0 auto;background:#E4F3D8;color:#1B4A2C',
+        edit: () => {}, remove: this.askDelete('suppliers', x.id),
+        rows: [
+          {label: 'Who you talk to', value: x.contact, valueStyle: 'font-weight:600;font-size:14px;color:#1B1A16'},
+          {label: 'Email', value: x.email, valueStyle: 'font-size:13px;color:#8C8574'},
+          {label: 'Delivery', value: x.delivery, valueStyle: 'font-weight:600;font-size:14px;color:#45413A'}
+        ]
+      }));
+    }
+
+    const delNames = {recipes: 'dish', ingredients: 'ingredient', suppliers: 'supplier'};
+    const delNoun = delNames[s.deleteKind] || 'item';
+    const deleteFooter = D.Button ? React.createElement('div', {style: {display: 'flex', gap: 10, justifyContent: 'flex-end'}},
+      React.createElement(D.Button, {key: 'no', variant: 'secondary', onClick: this.closeAll}, 'Leave it'),
+      React.createElement(D.Button, {key: 'yes', variant: 'danger', onClick: this.confirmDelete}, 'Delete it')
+    ) : null;
+
+    const isAuth = s.route === 'signin' || s.route === 'signup';
+    const isPhone = s.viewport === 'phone';
+
+    // ---- Recipe form -----------------------------------------------------
+    const byId = {};
+    this.INGREDIENTS.forEach(i => { byId[i.id] = i; });
+    const lineTotal = (it) => {
+      const ing = byId[it.id]; if (!ing) return 0;
+      const mult = (it.unit === 'kg' || it.unit === 'L') ? 1000 : 1;
+      return ing.unitPrice * Number(it.qty || 0) * mult;
+    };
+    const rf = s.rf;
+    const setRf = (patch) => this.setState(p => ({rf: Object.assign({}, p.rf, patch)}));
+    const cogs = rf.items.reduce((sum, it) => sum + lineTotal(it), 0);
+    const rfPriceNum = Number(rf.sellingPrice) || 0;
+    const rfTaxNum = Number(rf.tax) || 0;
+    const rfMarginNum = Number(rf.profitMargin) || 0;
+    const foodCost = rfPriceNum ? (cogs / rfPriceNum) * 100 : 0;
+    const monoStyle = "font-family:'IBM Plex Mono','Fira Mono',monospace;font-weight:600;font-size:15px;font-variant-numeric:tabular-nums;color:#1B1A16";
+    const rfItems = rf.items.map((it, idx) => {
+      const ing = byId[it.id] || {name: '—', glyph: 'utensils', cat: 'Other'};
+      return {
+        name: ing.name, glyph: this.I(ing.glyph, 17), thumbStyle: 'display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:999px;flex:0 0 auto;background:' + (CATS[ing.cat] || CATS.Other).bg + ';color:' + (CATS[ing.cat] || CATS.Other).fg,
+        qtyText: it.qty + ' ' + it.unit, total: this.money(lineTotal(it)),
+        remove: () => setRf({items: rf.items.filter((_, j) => j !== idx)})
+      };
+    });
+    const rowBase = 'display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border-radius:16px;cursor:pointer;';
+    const dotBase = 'display:inline-block;width:18px;height:18px;border-radius:999px;flex:0 0 auto;';
+
+    // ---- Ingredient form -------------------------------------------------
+    const inf = s.inf;
+    const setInf = (patch) => this.setState(p => ({inf: Object.assign({}, p.inf, patch)}));
+    const infQtyNum = Number(inf.qty) || 0;
+    const infPriceNum = Number(inf.price) || 0;
+    const infPer = this.displayUnit(inf.unit);
+    const infDiv = (inf.unit === 'kg' || inf.unit === 'L') ? infQtyNum * 1000 : infQtyNum;
+    const infUnitCost = infDiv > 0 ? infPriceNum / infDiv : 0;
+    const infSummary = (infPriceNum > 0 && infQtyNum > 0)
+      ? '€' + infPriceNum.toFixed(2) + ' for ' + inf.qty + ' ' + inf.unit + ' works out at ' + this.unitPriceText(infUnitCost) + ' a ' + infPer + '.'
+      : "Fill in what you paid and how much you got — I'll tell you the price per " + infPer + '.';
+
+    // ---- Supplier form ---------------------------------------------------
+    const sf = s.sf;
+    const setSf = (patch) => this.setState(p => {
+      const err = Object.assign({}, p.sfErr);
+      Object.keys(patch).forEach(k => delete err[k]);
+      return {sf: Object.assign({}, p.sf, patch), sfErr: err};
+    });
+    const sfCategoryChips = Object.keys(CATS).map(c => {
+      const cats = sf.cats || [];
+      const on = cats.indexOf(c) >= 0;
+      const tint = CATS[c];
+      return {
+        label: c, style: 'padding:7px 14px;border-radius:999px;cursor:pointer;font-weight:600;font-size:13px;' +
+          (on ? 'border:1px solid ' + tint.fg + ';background:' + tint.bg + ';color:' + tint.fg
+              : 'border:1px solid #E2DACA;background:#fff;color:#8C8574'),
+        toggle: () => setSf({cats: on ? cats.filter(x => x !== c) : cats.concat([c])})
+      };
+    });
+
+    // ---- Ingredient detail -----------------------------------------------
+    const det = byId[s.detailId] || this.INGREDIENTS[0];
+    const detBand = this.usageBand(det.usage);
+    const detTint = CATS[det.cat] || CATS.Other;
+
+    return {
+      atRecipeForm: s.route === 'recipeForm', atIngredientForm: s.route === 'ingredientForm',
+      atSupplierForm: s.route === 'supplierForm', atIngredientDetail: s.route === 'ingredient',
+      goIngredients: () => this.go('ingredients'), goSuppliers: () => this.go('suppliers'),
+
+      rfHeading: s.formMode === 'edit' ? 'Change this dish' : 'A new dish',
+      rfTitle: rf.title, rfOnTitle: (e) => setRf({title: e.target.value}),
+      rfIngredientOptions: this.INGREDIENTS.map(i => ({value: i.id, label: i.name})),
+      rfSel: rf.sel, rfOnSel: (e) => setRf({sel: e.target.value}),
+      rfUnitOptions: [{value: 'g', label: 'grams'}, {value: 'kg', label: 'kilos'}, {value: 'ml', label: 'millilitres'}, {value: 'L', label: 'litres'}, {value: 'piece', label: 'pieces'}],
+      rfUnit: rf.unit, rfOnUnit: (e) => setRf({unit: e.target.value}),
+      rfQty: rf.qty, rfOnQty: (e) => setRf({qty: e.target.value}),
+      rfInc: () => setRf({qty: Number(rf.qty || 0) + 1}),
+      rfDec: () => setRf({qty: Math.max(0, Number(rf.qty || 0) - 1)}),
+      rfAdd: () => { setRf({items: rf.items.concat([{id: rf.sel, unit: rf.unit, qty: Number(rf.qty) || 1}])}); this.toast('On the plate', (byId[rf.sel] || {}).name + ' added.', 'good'); },
+      rfItems: rfItems, rfHasItems: rf.items.length > 0, rfNoItems: rf.items.length === 0,
+      rfTotals: [
+        {label: 'What it costs you', value: this.money(cogs), style: monoStyle},
+        {label: 'Menu price', value: rfPriceNum ? this.money(rfPriceNum) : '—', style: monoStyle},
+        {label: 'What you keep', value: rfMarginNum ? rfMarginNum.toFixed(1) + '%' : '—', style: monoStyle.replace('#1B1A16', '#24603A')},
+        {label: 'Food cost', value: foodCost ? foodCost.toFixed(1) + '%' : '—', style: monoStyle},
+        {label: 'Things on it', value: String(rf.items.length), style: monoStyle}
+      ],
+      rfPickPrice: () => setRf({method: 'price', profitMargin: ''}),
+      rfPickProfit: () => setRf({method: 'profit', sellingPrice: ''}),
+      rfPriceRowStyle: rowBase + (rf.method === 'price' ? 'border:1px solid #43955A;background:#F2F9EC' : 'border:1px solid #EFE8DA;background:#fff'),
+      rfProfitRowStyle: rowBase + (rf.method === 'profit' ? 'border:1px solid #43955A;background:#F2F9EC' : 'border:1px solid #EFE8DA;background:#fff'),
+      rfPriceDotStyle: dotBase + (rf.method === 'price' ? 'border:5px solid #2F7A45;background:#fff' : 'border:1.5px solid #C9BFAA;background:#fff'),
+      rfProfitDotStyle: dotBase + (rf.method === 'profit' ? 'border:5px solid #2F7A45;background:#fff' : 'border:1.5px solid #C9BFAA;background:#fff'),
+      rfPriceVal: rf.sellingPrice, rfOnPrice: (e) => setRf({sellingPrice: e.target.value}),
+      rfProfitVal: rf.profitMargin, rfOnProfit: (e) => setRf({profitMargin: e.target.value}),
+      rfPriceDisabled: rf.method !== 'price', rfProfitDisabled: rf.method !== 'profit',
+      rfTaxOptions: [{value: '0', label: 'No VAT'}, {value: '0.13', label: '13%'}, {value: '0.24', label: '24%'}],
+      rfTax: rf.tax, rfOnTax: (e) => setRf({tax: e.target.value}),
+      rfCalc: () => {
+        if (rf.method === 'profit' && rfMarginNum > 0) {
+          const den = 1 - rfTaxNum - rfMarginNum / 100;
+          if (den > 0) { setRf({sellingPrice: (cogs / den).toFixed(2)}); this.toast('Worked out', 'To keep ' + rfMarginNum + '%, charge €' + (cogs / den).toFixed(2) + '.', 'good'); }
+          else { this.toast('That one is tight', "VAT and margin add up past 100% — try a smaller margin.", 'watch'); }
+        } else if (rfPriceNum > 0) {
+          const m = ((rfPriceNum - rfPriceNum * rfTaxNum - cogs) / rfPriceNum) * 100;
+          setRf({profitMargin: m.toFixed(1)});
+          this.toast('Worked out', 'At €' + rfPriceNum.toFixed(2) + " you keep " + m.toFixed(1) + '%.', m > 50 ? 'good' : 'watch');
+        } else { this.toast('One number short', 'Give me a price or a margin first.', 'watch'); }
+      },
+      rfSubmitLabel: s.formMode === 'edit' ? 'Save the changes' : 'Save the dish',
+      rfSubmit: () => { this.go('recipes'); this.toast('Filed', (rf.title || 'The dish') + ' is on your list.', 'good'); },
+
+      infHeading: s.formMode === 'edit' ? 'Change this ingredient' : 'A new ingredient',
+      infName: inf.name, infOnName: (e) => setInf({name: e.target.value}),
+      infCatOptions: Object.keys(CATS), infCat: inf.cat, infOnCat: (e) => setInf({cat: e.target.value}),
+      infSupplierOptions: this.SUPPLIERS.map(x => x.name),
+      infSupplier: inf.supplier, infOnSupplier: (e) => setInf({supplier: e.target.value}),
+      infUnitOptions: [{value: 'kg', label: 'kilos'}, {value: 'g', label: 'grams'}, {value: 'L', label: 'litres'}, {value: 'ml', label: 'millilitres'}, {value: 'piece', label: 'pieces'}],
+      infUnit: inf.unit, infOnUnit: (e) => setInf({unit: e.target.value}),
+      infQty: inf.qty, infOnQty: (e) => setInf({qty: e.target.value}),
+      infInc: () => setInf({qty: Number(inf.qty || 0) + 1}),
+      infDec: () => setInf({qty: Math.max(0, Number(inf.qty || 0) - 1)}),
+      infPrice: inf.price, infOnPrice: (e) => setInf({price: e.target.value}),
+      infSummary: infSummary,
+      infSubmitLabel: s.formMode === 'edit' ? 'Save the changes' : 'Add the ingredient',
+      infSubmit: () => { this.go('ingredients'); this.toast('Filed', (inf.name || 'The ingredient') + ' is on your list.', 'good'); },
+
+      sfHeading: s.formMode === 'edit' ? 'Change this supplier' : 'A new supplier',
+      sfName: sf.name, sfOnName: (e) => setSf({name: e.target.value}),
+      sfContact: sf.contact, sfOnContact: (e) => setSf({contact: e.target.value}),
+      sfEmail: sf.email, sfOnEmail: (e) => setSf({email: e.target.value}),
+      sfPhone: sf.phone, sfOnPhone: (e) => setSf({phone: e.target.value}),
+      sfWebsite: sf.website, sfOnWebsite: (e) => setSf({website: e.target.value}),
+      sfDeliveryOptions: [{value: '', label: 'Pick one'}].concat(this.DELIVERY_OPTIONS),
+      sfDelivery: sf.delivery, sfOnDelivery: (e) => setSf({delivery: e.target.value}),
+      sfPaymentOptions: [{value: '', label: 'Pick one'}].concat(this.PAYMENT_OPTIONS),
+      sfPayment: sf.payment, sfOnPayment: (e) => setSf({payment: e.target.value}),
+      sfVat: sf.vat, sfOnVat: (e) => setSf({vat: e.target.value}),
+      sfStreet: sf.street, sfOnStreet: (e) => setSf({street: e.target.value}),
+      sfCity: sf.city, sfOnCity: (e) => setSf({city: e.target.value}),
+      sfPostal: sf.postal, sfOnPostal: (e) => setSf({postal: e.target.value}),
+      sfCategoryChips: sfCategoryChips,
+      sfSubmitLabel: s.formMode === 'edit' ? 'Save the changes' : 'Add the supplier',
+      sfNameError: s.sfErr.name, sfEmailError: s.sfErr.email,
+      sfCatsHint: (sf.cats || []).length ? '' : 'Pick what they bring you — it helps me match their invoices.',
+      sfSubmit: () => {
+        const err = {};
+        if (!sf.name.trim()) err.name = 'I need a name to file their invoices under.';
+        if (!sf.email.trim()) err.email = 'Add an email so you can order straight from here.';
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(sf.email.trim())) err.email = 'That address looks off — check the @ and what follows it.';
+        if (Object.keys(err).length) { this.setState({sfErr: err}); return; }
+        this.setState({sfErr: {}});
+        this.go('suppliers');
+        this.toast('Filed', sf.name.trim() + ' is on your list.', 'good');
+      },
+
+      detName: det.name, detGlyph: this.I(det.glyph, 44, detTint.fg),
+      detThumbStyle: 'display:inline-flex;align-items:center;justify-content:center;width:96px;height:96px;border-radius:999px;background:' + detTint.bg,
+      detCat: det.cat, detCatStyle: this.chip(det.cat),
+      detBlurb: 'You buy it from ' + det.supplier + '.',
+      detUnitPrice: this.unitPriceText(det.unitPrice), detPerUnit: '/ ' + this.displayUnit(det.unit),
+      detUnit: det.unit, detUsageText: detBand.text,
+      detRows: [
+        {label: 'Who you buy it from', value: det.supplier, end: null},
+        {label: 'Measured in', value: det.unit, end: null},
+        {label: 'How often you use it', value: '', end: D.Badge ? React.createElement(D.Badge, {tone: detBand.tone}, detBand.text) : null},
+        {label: 'Price last changed', value: '3 days ago', end: null}
+      ],
+      detEdit: () => this.setState({route: 'ingredientForm', formMode: 'edit', formId: det.id, inf: {name: det.name, cat: det.cat, unit: det.unit, qty: 1, price: String(det.unitPrice), supplier: det.supplier}}),
+      detRemove: this.askDelete('ingredients', det.id),
+
+      ic: ic, navItems: navItems, ownerName: ownerName, ownerFirst: ownerName.split(' ')[0],
+      ownerEmail: this.props.ownerEmail || 'stahos@windowslive.com',
+      sidebarNoteTitle: "You've kept €1,840 this month",
+
+      isAuth: isAuth, isSignin: s.route === 'signin', isSignup: s.route === 'signup',
+      isDesktopApp: !isAuth && !isPhone, isPhoneApp: !isAuth && isPhone,
+      authTitle: s.route === 'signup' ? "Let's get you set up" : 'Good to see you',
+      authBlurb: s.route === 'signup' ? "One account, and I'll start keeping track of what your food costs." : 'Sign in and I\'ll pick up where we left off.',
+      authCta: s.route === 'signup' ? 'Set me up' : 'Come on in',
+      authSwitchText: s.route === 'signup' ? 'Already with us?' : 'New here?',
+      authSwitchLink: s.route === 'signup' ? 'Sign in' : 'Make an account',
+      toggleAuth: () => this.setState({route: s.route === 'signup' ? 'signin' : 'signup'}),
+      signIn: () => this.go('home'),
+      signOut: () => this.setState({route: 'signin', profileOpen: false}),
+
+      expanded: !s.collapsed, collapsed: s.collapsed,
+      toggleCollapse: () => this.setState(p => ({collapsed: !p.collapsed})),
+      toPhone: () => this.setState({viewport: 'phone', route: s.route === 'home' ? 'home' : s.route}),
+      toDesktop: () => this.setState({viewport: 'desktop'}),
+
+      atHome: s.route === 'home', atRecipes: s.route === 'recipes',
+      atIngredients: s.route === 'ingredients', atSuppliers: s.route === 'suppliers',
+      goRecipes: () => this.go('recipes'),
+      newRecipe: () => this.setState({route: 'recipeForm', formMode: 'create', formId: '', createOpen: false, rf: {title: '', items: [], method: 'price', sellingPrice: '', profitMargin: '', tax: '0.13', sel: 'i1', unit: 'g', qty: 100}}),
+      newIngredient: () => this.setState({route: 'ingredientForm', formMode: 'create', formId: '', createOpen: false, inf: {name: '', cat: 'Produce', unit: 'kg', qty: 1, price: '', supplier: 'Kritikos Produce'}}),
+      newSupplier: () => this.setState({route: 'supplierForm', formMode: 'create', formId: '', createOpen: false, sfErr: {}, sf: Object.assign({}, this.BLANK_SUPPLIER)}),
+
+      yes: true, no: false,
+      ownerFirst: ownerName.trim().split(' ')[0],
+      everydayLead: "Nothing's broken, " + ownerName.trim().split(' ')[0] + " — one of them is worth money, two are housekeeping.",
+      firstDay: this.props.firstDay === true,
+      everyday: this.props.firstDay !== true,
+      statLine: this.props.showStatLine !== false,
+      q1: q1, q2: q2, q3: q3, qText: qDone + ' of 4 done', qBarStyle: qBar,
+
+      statDishes: this.RECIPES.length, statIngredients: this.INGREDIENTS.length,
+      statFoodCost: '31.4', statMargin: '62.4',
+      recipeCountLine: this.RECIPES.length + ' dishes, priced and costed',
+      ingredientCountLine: this.INGREDIENTS.length + ' things you buy, across 6 suppliers',
+      supplierCountLine: this.SUPPLIERS.length + ' suppliers on your list',
+      recentRows: recentRows,
+
+      recipeRows: recipeRows, ingredientRows: ingredientRows, supplierRows: supplierRows,
+      recipePages: rPager.pages, showRecipePager: rPager.show,
+      ingredientPages: iPager.pages, showIngredientPager: iPager.show,
+      prevPage: () => this.setState(p => ({page: Math.max(1, p.page - 1)})),
+      nextPage: () => this.setState(p => ({page: p.page + 1})),
+
+      sortTitle: this.sorter('title'), sortTax: this.sorter('tax'), sortPrice: this.sorter('price'),
+      sortMargin: this.sorter('margin'), sortCost: this.sorter('cost'), sortName: this.sorter('name'),
+      sortUnitPrice: this.sorter('unitPrice'), sortUsage: this.sorter('usage'), sortCategory: this.sorter('category'),
+      arrowTitle: this.arrow('title'), arrowTax: this.arrow('tax'), arrowPrice: this.arrow('price'),
+      arrowMargin: this.arrow('margin'), arrowCost: this.arrow('cost'), arrowName: this.arrow('name'),
+      arrowUnitPrice: this.arrow('unitPrice'), arrowUsage: this.arrow('usage'), arrowCategory: this.arrow('category'),
+
+      searchOpen: s.searchOpen, searchTerm: s.searchTerm,
+      openSearch: () => this.setState({searchOpen: true}),
+      onSearch: (e) => this.setState({searchTerm: e.target.value}),
+      hasSearchHits: rHits.length + iHits.length > 0, noSearchHits: term.length > 0 && rHits.length + iHits.length === 0,
+      hasRecipeHits: rHits.length > 0, hasIngredientHits: iHits.length > 0,
+      recipeHits: recipeHits, ingredientHits: ingredientHits,
+      recipeHitCount: rHits.length, ingredientHitCount: iHits.length,
+
+      createOpen: s.createOpen, openCreate: () => this.setState({createOpen: true}),
+      profileOpen: s.profileOpen, openProfile: () => this.setState({profileOpen: true}),
+      closeAll: this.closeAll,
+      deleteOpen: !!s.deleteKind,
+      deleteTitle: 'Delete this ' + delNoun + '?',
+      deleteBody: "It'll go for good — costs and history with it. Nothing else on your list changes.",
+      deleteFooter: deleteFooter,
+
+      toastOpen: !!s.toast, toastTitle: s.toast ? s.toast.title : '',
+      toastMessage: s.toast ? s.toast.message : '', toastTone: s.toast ? s.toast.tone : 'good',
+      showToast: () => this.toast('Noted', "I'll bring the eggs up again on Monday.", 'good'),
+
+      phoneList: ['recipes', 'ingredients', 'suppliers'].indexOf(s.route) >= 0,
+      phoneListTitle: phoneListTitle, phoneCards: phoneCards, tabItems: tabItems
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,33 +1,36 @@
-import SuppliersForm from '@/app/components/suppliers/suppliersForm'
-import { SupplierService } from '@/app/services/suppliersService'
-import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
-import React from 'react'
+import SuppliersForm from '@/app/components/suppliers/suppliersForm';
+import { SupplierService } from '@/app/services/suppliersService';
+import { auth } from '@/auth';
+import { redirect, notFound } from 'next/navigation';
+import React from 'react';
 
 export interface Params {
-    params: Promise<{
-        id: string
-    }>
+  params: Promise<{
+    id: string;
+  }>;
 }
 
-const EditPage = async({params}: Params) => {
-
-  const session = await auth()
+const EditPage = async ({ params }: Params) => {
+  const session = await auth();
   if (!session?.user?.id) {
-  redirect("/signin")
+    redirect('/signin');
   }
 
-  const service = new SupplierService(session?.user?.id)
-  const {id} = await params
-  const supplier = await service.findById(id)
-    
-  return (
-    <div className="fixed inset-0 z-55 flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity duration-300">
-            <div className={`relative w-full max-w-fit p-9 mx-4 transform transition-all duration-300 bg-white rounded-2xl shadow-xl`}>
-                {session.user.id && <SuppliersForm userId={session.user.id} mode='edit' supplier={supplier}  />}
-            </div>
-        </div>
-  )
-}
+  const service = new SupplierService(session.user.id);
+  const { id } = await params;
+  const supplier = await service.findById(id);
 
-export default EditPage
+  if (!supplier) {
+    notFound();
+  }
+
+  return (
+    <SuppliersForm
+      userId={session.user.id}
+      mode="edit"
+      supplier={supplier}
+    />
+  );
+};
+
+export default EditPage;

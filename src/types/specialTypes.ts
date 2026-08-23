@@ -190,7 +190,6 @@ export const supplierSortColumns: Record<string, any> = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const ingredientSortColumns: Record<string, any> = {
   name: ingredientsTable.name,
-  unitPrice: ingredientsTable.unitPrice,
   usage: ingredientsTable.usage,
   category: ingredientsTable.category,
 };

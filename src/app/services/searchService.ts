@@ -1,4 +1,4 @@
-import { Ingredient, Recipe } from "@/shemas/recipe";
+import { IngredientToDisplay, Recipe } from "@/shemas/recipe";
 import { ISearchRepository } from "@/types/repositories";
 import { ISearchService } from "@/types/services";
 import { SearchRepository } from "../repositories/searchRepository";
@@ -27,7 +27,7 @@ export class SearchService implements ISearchService {
     return recipes;
   }
 
-  async findIngredient(): Promise<Ingredient[] | undefined> {
+  async findIngredient(): Promise<IngredientToDisplay[] | undefined> {
     const dbIngredients = await this.repository.findIngredient();
     const ingredients = dbIngredients?.map((dbIngredient) =>
       transformIngredientFromDB(dbIngredient)

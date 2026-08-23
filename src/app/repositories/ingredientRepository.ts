@@ -19,6 +19,7 @@ import {
   IIngredientRepository,
   IngredientAnalytics,
   OperationResult,
+  HighImpactIngredient,
 } from "@/types/repositories";
 import { db } from "@/db/db";
 import { categories, Database, ingredientsTable } from "@/db/schema";
@@ -191,6 +192,41 @@ export class IngredientRepository implements IIngredientRepository {
       console.error("Failed to get ingredient analytics:", err);
       throw new DatabaseError(
         "IngredientRepository.getIngredientAnalytics",
+        err,
+      );
+    }
+  }
+
+  async getHighImpactIngredients(
+    userId: string,
+    limit: number = 5
+  ): Promise<HighImpactIngredient[]> {
+    try {
+      const results = await db
+        .select({
+          id: ingredientsTable.id,
+          name: ingredientsTable.name,
+          icon: ingredientsTable.icon,
+          usage: ingredientsTable.usage,
+          category: categories.category,
+        })
+        .from(ingredientsTable)
+        .innerJoin(categories, eq(ingredientsTable.category, categories.id))
+        .where(eq(ingredientsTable.userId, userId))
+        .orderBy(desc(ingredientsTable.usage))
+        .limit(limit);
+
+      return results.map((item) => ({
+        id: item.id,
+        name: item.name,
+        icon: item.icon,
+        usage: Number(item.usage),
+        category: item.category,
+      }));
+    } catch (err) {
+      console.error("Failed to get high impact ingredients:", err);
+      throw new DatabaseError(
+        "IngredientRepository.getHighImpactIngredients",
         err,
       );
     }

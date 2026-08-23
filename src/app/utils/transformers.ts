@@ -126,6 +126,14 @@ export const createIngredientPrototype = (
       data.quantity,
     );
 
+    const supplierItems = confirmedSuppliers.map((supId) => ({
+      suppliersId: supId,
+      unit: (data.unit as Unit) || "g",
+      quantity: Number(data.quantity) || 1,
+      price: Number(data.unitPrice) || 0,
+      isActive: true,
+    }));
+
     const ingredientPrototype: Ingredient = {
       id: data.id,
       icon: createIngredientIcon(data.category),
@@ -141,7 +149,7 @@ export const createIngredientPrototype = (
       usage: "0",
       userId: userId,
       category: data.category,
-      suppliers: confirmedSuppliers,
+      suppliers: supplierItems,
     };
     return ingredientPrototype;
   }
@@ -149,7 +157,7 @@ export const createIngredientPrototype = (
 
 export const createEditIngredientPrototype = (
   data: IngredientFormFields,
-  ingredient: Ingredient,
+  ingredient: Ingredient | IngredientToDisplay,
   confirmedSuppliers: string[],
   userId: string,
 ) => {
@@ -158,6 +166,15 @@ export const createEditIngredientPrototype = (
     data.unit as Unit,
     data.quantity,
   );
+
+  const supplierItems = confirmedSuppliers.map((supId) => ({
+    suppliersId: supId,
+    unit: (data.unit as Unit) || "g",
+    quantity: Number(data.quantity) || 1,
+    price: Number(data.unitPrice) || 0,
+    isActive: true,
+  }));
+
   // Edit mode logic
   const updatedIngredient: Ingredient = {
     id: ingredient.id,
@@ -174,7 +191,7 @@ export const createEditIngredientPrototype = (
     usage: ingredient.usage || "0",
     userId: userId,
     category: data.category,
-    suppliers: confirmedSuppliers,
+    suppliers: supplierItems,
   };
 
   return updatedIngredient;
@@ -300,8 +317,8 @@ export const destructureIngredient = (
   };
 
   const supplierIngredients: SupplierIngredientData[] = suppliers.map(
-    (supplierId) => ({
-      suplierId: supplierId,
+    (sup) => ({
+      suplierId: typeof sup === 'string' ? sup : (sup as { suppliersId: string }).suppliersId,
       ingredientId: ingredient.id,
       unit: unit,
       unitPrice: unitPrice.toString(),

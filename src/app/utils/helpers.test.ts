@@ -71,6 +71,7 @@ const mockIngredient: Ingredient = {
   usage: "Used in various baked goods like bread and cakes.",
   userId: "user_xyz789",
   category: "ef45178d-e566-4637-b7f9-abcf6d575466",
+  categoryName: "Other",
 };
 
 const mockDBIngredient: DBIngredient = {
@@ -83,6 +84,7 @@ const mockDBIngredient: DBIngredient = {
   usage: "Used in various baked goods like bread and cakes.",
   userId: "user_xyz789",
   category: "ef45178d-e566-4637-b7f9-abcf6d575466",
+  categoryName: "Other",
 };
 
 const mockDbRecipe: DBRecipe = {
@@ -274,9 +276,9 @@ describe("calculateProfitMargin", () => {
 
 describe("paginationPages", () => {
   test("Should return an array with the pages", () => {
-    const itemsPerPage = 10;
+    const totalPages = 1;
 
-    const result = paginationPages(itemsPerPage);
+    const result = paginationPages(totalPages);
 
     expect(result).toStrictEqual([1]);
   });

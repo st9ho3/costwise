@@ -85,8 +85,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
           const userId = await service.createGoogleUser(googleUser)
           user.id = userId
-        } else {
+        } else if (existingUser?.id) {
           user.id = existingUser.id
+          if (user.image && (!existingUser.image || existingUser.image !== user.image || (!existingUser.name && user.name))) {
+            await service.updateUserImage(existingUser.id, user.image, user.name || existingUser.name)
+          }
         }
       } catch (err) {
         console.error(err)
@@ -98,16 +101,36 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   async jwt({token, user}) {
    
     if (user) {
-      
       token.lastAccessed = Date.now()
+      if (user.id) {
+        token.id = user.id
+      }
+      if (user.image) {
+        token.picture = user.image
+      }
+      if (user.name) {
+        token.name = user.name
+      }
+      if (user.email) {
+        token.email = user.email
+      }
     }
     
     return token
   },
   async session({session, token}) {
 
-    if (token.sub) {
-      session.user.id = token.sub
+    if (token.sub || token.id) {
+      session.user.id = (token.id || token.sub) as string
+    }
+    if (token.picture) {
+      session.user.image = token.picture as string
+    }
+    if (token.name) {
+      session.user.name = token.name as string
+    }
+    if (token.email) {
+      session.user.email = token.email as string
     }
     
     return session

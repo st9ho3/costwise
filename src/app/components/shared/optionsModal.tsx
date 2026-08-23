@@ -1,108 +1,105 @@
-// src/components/shared/optionsModal.tsx
+'use client';
 
-"use client"
-import React from 'react'
-import { UtensilsCrossed, Carrot, Users } from 'lucide-react';
+import React from 'react';
+import { Utensils, Carrot, Truck } from 'lucide-react';
 import Link from 'next/link';
 import { useUIStore } from '@/app/stores/uiStore';
-import type { LucideIcon } from 'lucide-react';
 
-// --- Internal Sub-Component ---
 interface OptionItemProps {
-    href: string;
-    icon: LucideIcon;
-    label: string;
-    description: string; // Added description for better UX
-    closeModal: () => void;
-    colorClass: string; // To give each item a subtle brand color
+  href: string;
+  icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
+  label: string;
+  description: string;
+  bg: string;
+  color: string;
+  closeModal: () => void;
 }
 
-const OptionItem = ({ href, icon: Icon, label, description, closeModal, colorClass }: OptionItemProps) => {
-    return (
-        <Link 
-            href={href} 
-            onClick={() => {
-                setTimeout(() => {
-                    closeModal()
-                }, 200)
-            }}
-            className="block w-full"
-        >
-            <div className={`
-                group flex items-center gap-4 p-4 rounded-xl
-                transition-all duration-200 ease-in-out
-                hover:bg-gray-50 cursor-pointer border border-transparent hover:border-gray-100
-            `}>
-                {/* Icon Container: Subtle circle that pops with color on hover */}
-                <div className={`
-                    flex items-center justify-center w-12 h-12 rounded-full 
-                    bg-gray-50 text-gray-500 transition-colors duration-200
-                    ${colorClass} group-hover:text-white
-                `}>
-                    <Icon size={22} strokeWidth={2} />
-                </div>
+const OptionItem = ({
+  href,
+  icon: Icon,
+  label,
+  description,
+  bg,
+  color,
+  closeModal,
+}: OptionItemProps) => {
+  return (
+    <Link
+      href={href}
+      onClick={() => {
+        setTimeout(() => closeModal(), 150);
+      }}
+      className="flex items-center gap-3.5 p-3.5 rounded-[16px] border border-[#EFE8DA] bg-white hover:bg-cream-100 hover:border-sand-400 hover:-translate-y-[1px] transition-all duration-140 group"
+    >
+      <div
+        className="size-[44px] rounded-[12px] flex items-center justify-center shrink-0"
+        style={{ backgroundColor: bg, color: color }}
+      >
+        <Icon className="size-[22px]" strokeWidth={1.75} />
+      </div>
 
-                {/* Text Content */}
-                <div className="flex flex-col">
-                    <span className="text-base font-semibold text-gray-900 group-hover:text-gray-900">
-                        {label}
-                    </span>
-                    <span className="text-xs text-gray-500 font-medium tracking-wide">
-                        {description}
-                    </span>
-                </div>
-            </div>
-        </Link>
-    )
-}
+      <div className="flex flex-col text-left">
+        <span className="font-display font-bold text-[16px] text-ink-900 leading-snug group-hover:text-green-800 transition-colors">
+          {label}
+        </span>
+        <span className="font-body text-[13px] text-stone-500 leading-normal">
+          {description}
+        </span>
+      </div>
+    </Link>
+  );
+};
 
-// --- Main Component ---
 const OptionsModal = () => {
-    const closeModal = useUIStore((state) => state.closeModal)
+  const closeModal = useUIStore((state) => state.closeModal);
 
-    return (
-        <div className="w-full max-w-sm">
-            {/* Header */}
-            <div className="px-2 mb-4">
-                <h3 className="text-xl font-bold text-gray-800 tracking-tight">
-                    Create New
-                </h3>
-                <p className="text-sm text-gray-400 mt-1">
-                    What would you like to add today?
-                </p>
-            </div>
+  return (
+    <div className="w-full max-w-[440px] flex flex-col gap-4">
+      {/* Header */}
+      <div>
+        <h3 className="font-display font-bold text-[22px] text-ink-900 tracking-tight">
+          What are we adding?
+        </h3>
+        <p className="font-body text-[14px] text-stone-500 mt-0.5">
+          Pick one and I&apos;ll open a blank form.
+        </p>
+      </div>
 
-            {/* Options List */}
-            <div className="flex flex-col gap-2">
-                <OptionItem 
-                    href="/recipes/create"
-                    icon={UtensilsCrossed}
-                    label="Recipe"
-                    description="Create a new dish or menu item"
-                    closeModal={closeModal}
-                    colorClass="group-hover:bg-orange-500" // Orange hover for Recipes
-                />
+      {/* Options List */}
+      <div className="flex flex-col gap-2.5">
+        <OptionItem
+          href="/recipes/create"
+          icon={Utensils}
+          label="A dish"
+          description="What goes on the plate, and what you charge"
+          bg="#FDEBDD"
+          color="#9E4220"
+          closeModal={closeModal}
+        />
 
-                <OptionItem 
-                    href="/ingredients/create"
-                    icon={Carrot}
-                    label="Ingredient"
-                    description="Add raw materials to inventory"
-                    closeModal={closeModal}
-                    colorClass="group-hover:bg-green-500" // Green hover for Ingredients
-                />
+        <OptionItem
+          href="/ingredients/create"
+          icon={Carrot}
+          label="An ingredient"
+          description="Something you buy, and what it costs"
+          bg="#E4F3D8"
+          color="#1B4A2C"
+          closeModal={closeModal}
+        />
 
-                <OptionItem 
-                    href="/suppliers/create"
-                    icon={Users}
-                    label="Supplier"
-                    description="Manage vendor details"
-                    closeModal={closeModal}
-                    colorClass="group-hover:bg-blue-500" // Blue hover for Suppliers
-                />
-            </div>
-        </div>
-    )
-}
+        <OptionItem
+          href="/suppliers/create"
+          icon={Truck}
+          label="A supplier"
+          description="Who you order from and when they deliver"
+          bg="#E6EFF8"
+          color="#3A6E9E"
+          closeModal={closeModal}
+        />
+      </div>
+    </div>
+  );
+};
 
 export default OptionsModal;

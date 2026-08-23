@@ -1,14 +1,18 @@
-"use client"
+"use client";
+
 import React, { useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
-import { ModalProps } from '../../../types/context';
-import { AlertCircleIcon } from "lucide-react";
+import { cn } from '@/app/utils/cn';
 
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+  type?: string;
+}
 
-const Modal= ({ isOpen, onClose, children, type }: ModalProps) => {
-
+const Modal = ({ isOpen, onClose, children }: ModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
- 
 
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -19,10 +23,12 @@ const Modal= ({ isOpen, onClose, children, type }: ModalProps) => {
 
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
     }
 
     return () => {
       document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = '';
     };
   }, [isOpen, onClose]);
 
@@ -31,24 +37,29 @@ const Modal= ({ isOpen, onClose, children, type }: ModalProps) => {
   }
 
   const handleClose = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    onClose()
-  }
+    e.stopPropagation();
+    onClose();
+  };
 
   return (
     <div
       onClick={handleClose}
-      className={`fixed inset-0 z-55 flex items-center justify-center ${type === 'delete' ? 'bg-white/30' : 'bg-gray-600/30' }  backdrop-blur-sm transition-opacity duration-300`}>
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-ink-900/40 backdrop-blur-[3px] animate-in fade-in-0 duration-140"
+    >
       <div
         onClick={(e) => e.stopPropagation()}
         ref={modalRef}
-        className={`relative w-full max-w-fit ${type === 'create' ? 'p-9' : 'pt-9'} mx-4 transform transition-all duration-300 bg-white rounded-2xl shadow-xl`} >
-        {type === 'delete' && <AlertCircleIcon className="absolute top-3 left-3" color="red" size={28} /> }
+        className={cn(
+          "relative w-full max-w-fit p-6 sm:p-8 bg-white rounded-[28px] shadow-[0_8px_16px_rgba(27,26,22,0.06),0_32px_64px_-20px_rgba(18,52,32,0.24)] border border-[#EFE8DA] animate-in zoom-in-95 duration-140"
+        )}
+      >
         <button
+          type="button"
           onClick={handleClose}
-          className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-offset-2 transition-colors"
-          aria-label="Close modal" >
-            <X />
+          className="absolute top-4 right-4 size-8 rounded-full flex items-center justify-center text-stone-500 hover:text-ink-900 hover:bg-cream-100 transition-colors cursor-pointer"
+          aria-label="Close dialog"
+        >
+          <X className="size-4" />
         </button>
         {children}
       </div>
@@ -56,5 +67,4 @@ const Modal= ({ isOpen, onClose, children, type }: ModalProps) => {
   );
 };
 
-
-export default Modal
+export default Modal;

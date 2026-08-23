@@ -20,7 +20,6 @@ import {
 } from "drizzle-orm/node-postgres";
 import type { AdapterAccountType } from "@auth/core/adapters";
 import * as schema from "./schema";
-import IngredientsTable from "@/app/components/ingredients/ingredientsTable";
 
 export type Database = NodePgDatabase<typeof schema>;
 export type Transaction = PgTransaction<NodePgQueryResultHKT, typeof schema>;

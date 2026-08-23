@@ -9,7 +9,7 @@ describe('Button', () => {
 
   it('applies the destructive variant classes', () => {
     const { getByRole } = render(<Button variant="destructive">Delete</Button>)
-    expect(getByRole('button').className).toContain('bg-destructive')
+    expect(getByRole('button').className).toContain('bg-tomato-600')
   })
 
   it('merges a custom className', () => {

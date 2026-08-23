@@ -1,127 +1,368 @@
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Fira+Mono:wght@500;600&family=Fira+Sans:wght@400;500;600;700&family=Geologica:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Nunito+Sans:ital,opsz,wght@0,6..12,400;0,6..12,500;0,6..12,600;0,6..12,700;0,6..12,800;1,6..12,400&display=swap");
 @import "tailwindcss";
 
 :root {
-  /* surfaces */
-  --background: 210 20% 98%;
-  --foreground: 222 47% 11%;
-  --card: 0 0% 100%;
-  --card-foreground: 222 47% 11%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 222 47% 11%;
+  /* ---- Base ramps -------------------------------------------------------- */
+  /* Green — primary brand (sampled from broccoli-coin mark) */
+  --green-950: #0B2213;
+  --green-900: #123420;
+  --green-800: #1B4A2C;
+  --green-700: #24603A;
+  --green-600: #2F7A45;
+  --green-500: #43955A;
+  --green-400: #6FB86E;
+  --green-300: #9AD183;
+  --green-200: #C6E7AF;
+  --green-100: #E4F3D8;
+  --green-50:  #F2F9EC;
 
-  /* brand / intent (Neo-Brutalist pure black primary) */
-  --primary: 0 0% 0%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 210 20% 94%;
-  --secondary-foreground: 222 47% 18%;
-  --muted: 210 20% 96%;
-  --muted-foreground: 215 16% 47%;
-  --accent: 210 20% 94%;
-  --accent-foreground: 222 47% 18%;
-  --destructive: 0 72% 51%;
-  --destructive-foreground: 210 20% 98%;
-  --success: 160 84% 30%;
-  --success-foreground: 210 20% 98%;
+  /* Gold — stacked coins accent */
+  --gold-800: #6E4A11;
+  --gold-700: #8A5F16;
+  --gold-600: #B98A2A;
+  --gold-500: #DCB24A;
+  --gold-400: #E9C86B;
+  --gold-300: #F3DFA3;
+  --gold-100: #FBF1D4;
 
-  /* lines & focus (Neo-Brutalist pure black borders) */
-  --border: 0 0% 0%;
-  --input: 0 0% 0%;
-  --ring: 222 47% 31%;
+  /* Clay — produce character orange */
+  --clay-700: #9E4220;
+  --clay-600: #C4552C;
+  --clay-500: #EE7B3C;
+  --clay-300: #F7BC91;
+  --clay-100: #FDEBDD;
 
-  --radius: 6px;
+  /* Tomato / Berry / Blueberry — produce cast */
+  --tomato-700: #9E2A20;
+  --tomato-600: #C0392B;
+  --tomato-500: #DE5145;
+  --tomato-100: #FBE6E3;
 
-  /* custom variables */
-  --focus-accent: #4F46E5;
-  --grid-line: #EBEBEB;
+  --berry-600: #7A4A8C;
+  --berry-500: #9A63AC;
+  --berry-100: #F1E7F5;
+
+  --blueberry-600: #3A6E9E;
+  --blueberry-500: #4A86C4;
+  --blueberry-100: #E6EFF8;
+
+  /* Warm neutrals — warm paper, never cold grey */
+  --cream-50:  #FDFBF6;
+  --cream-100: #F8F4EA;
+  --cream-200: #F0EADC;
+  --sand-300:  #E2DACA;
+  --sand-400:  #C9BFAA;
+  --stone-500: #8C8574;
+  --stone-600: #6B6558;
+  --ink-700:   #45413A;
+  --ink-800:   #2C2A25;
+  --ink-900:   #1B1A16;
+  --white:     #FFFFFF;
+
+  /* ---- Semantic surfaces ------------------------------------------------- */
+  --surface-page: var(--cream-50);
+  --surface-card: var(--white);
+  --surface-sunken: var(--cream-100);
+  --surface-inset: var(--cream-200);
+  --surface-brand: var(--green-800);
+  --surface-brand-strong: var(--green-900);
+  --surface-brand-soft: var(--green-50);
+  --surface-accent-soft: var(--gold-100);
+  --surface-warm-soft: var(--clay-100);
+  --surface-overlay: rgba(27, 26, 22, 0.42);
+  --surface-glass: rgba(253, 251, 246, 0.78);
+
+  /* ---- Semantic text ----------------------------------------------------- */
+  --text-strong: var(--ink-900);
+  --text-body: var(--ink-700);
+  --text-muted: var(--stone-500);
+  --text-faint: var(--sand-400);
+  --text-brand: var(--green-700);
+  --text-on-brand: var(--cream-50);
+  --text-on-accent: var(--gold-800);
+  --text-link: var(--green-700);
+  --text-link-hover: var(--green-900);
+
+  /* ---- Borders ----------------------------------------------------------- */
+  --border-subtle: #EFE8DA;
+  --border-default: var(--sand-300);
+  --border-strong: var(--sand-400);
+  --border-brand: var(--green-600);
+  --border-focus: var(--green-500);
+
+  /* ---- Semantic status --------------------------------------------------- */
+  --good: var(--green-600);
+  --good-soft: var(--green-100);
+  --good-text: var(--green-800);
+  --watch: var(--gold-600);
+  --watch-soft: var(--gold-100);
+  --watch-text: var(--gold-800);
+  --over: var(--tomato-600);
+  --over-soft: var(--tomato-100);
+  --over-text: var(--tomato-700);
+  --info: var(--blueberry-500);
+  --info-soft: var(--blueberry-100);
+  --info-text: var(--blueberry-600);
+  --agent: var(--berry-500);
+  --agent-soft: var(--berry-100);
+  --agent-text: var(--berry-600);
+
+  /* ---- Radii ------------------------------------------------------------- */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 26px;
+  --radius-3xl: 32px;
+  --radius-pill: 999px;
+  --radius-control: 12px;
+  --radius-card: 18px;
+  --radius-tile: 20px;
+  --radius-sheet: 28px;
+  --radius-bubble: 20px;
+
+  /* ---- Shadows (warm green-black, never blue-black) ----------------------- */
+  --shadow-xs: 0 1px 2px rgba(27, 26, 22, 0.05);
+  --shadow-sm: 0 1px 2px rgba(27, 26, 22, 0.05), 0 2px 6px rgba(27, 26, 22, 0.04);
+  --shadow-md: 0 2px 4px rgba(27, 26, 22, 0.04), 0 8px 20px -6px rgba(27, 26, 22, 0.10);
+  --shadow-lg: 0 4px 8px rgba(27, 26, 22, 0.05), 0 20px 40px -12px rgba(27, 26, 22, 0.16);
+  --shadow-pop: 0 8px 16px rgba(27, 26, 22, 0.06), 0 32px 64px -20px rgba(18, 52, 32, 0.24);
+  --shadow-inset: inset 0 1px 2px rgba(27, 26, 22, 0.06);
+  --shadow-brand: 0 8px 24px -10px rgba(27, 74, 44, 0.5);
+  --ring-focus: 0 0 0 3px rgba(67, 149, 90, 0.32);
+  --ring-danger: 0 0 0 3px rgba(222, 81, 69, 0.28);
+
+  /* ---- Motion ------------------------------------------------------------ */
+  --dur-instant: 90ms;
+  --dur-fast: 140ms;
+  --dur-base: 200ms;
+  --dur-slow: 320ms;
+  --dur-slower: 480ms;
+  --ease-out-soft: cubic-bezier(.2, .8, .25, 1);
+  --ease-in-out-soft: cubic-bezier(.5, 0, .3, 1);
+  --ease-nudge: cubic-bezier(.34, 1.4, .64, 1);
+  --press-scale: 0.975;
+  --lift-hover: -1px;
+
+  /* ---- Fonts ------------------------------------------------------------- */
+  --font-display: "Bricolage Grotesque", "Geologica", "Bricolage Grotesque Fallback", Trebuchet MS, sans-serif;
+  --font-body: "Nunito Sans", "Fira Sans", "Nunito Sans Fallback", Avenir Next, Segoe UI, sans-serif;
+  --font-logotype: "Baloo 2", "Bricolage Grotesque", sans-serif;
+  --font-mono: "IBM Plex Mono", "Fira Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-instant: 0ms;
+    --dur-fast: 0ms;
+    --dur-base: 0ms;
+    --dur-slow: 0ms;
+    --dur-slower: 0ms;
+    --press-scale: 1;
+    --lift-hover: 0;
+  }
 }
 
 @theme inline {
-  --color-background: hsl(var(--background));
-  --color-foreground: hsl(var(--foreground));
-  --color-card: hsl(var(--card));
-  --color-card-foreground: hsl(var(--card-foreground));
-  --color-popover: hsl(var(--popover));
-  --color-popover-foreground: hsl(var(--popover-foreground));
-  --color-primary: hsl(var(--primary));
-  --color-primary-foreground: hsl(var(--primary-foreground));
-  --color-secondary: hsl(var(--secondary));
-  --color-secondary-foreground: hsl(var(--secondary-foreground));
-  --color-muted: hsl(var(--muted));
-  --color-muted-foreground: hsl(var(--muted-foreground));
-  --color-accent: hsl(var(--accent));
-  --color-accent-foreground: hsl(var(--accent-foreground));
-  --color-destructive: hsl(var(--destructive));
-  --color-destructive-foreground: hsl(var(--destructive-foreground));
-  --color-success: hsl(var(--success));
-  --color-success-foreground: hsl(var(--success-foreground));
-  --color-border: hsl(var(--border));
-  --color-input: hsl(var(--input));
-  --color-ring: hsl(var(--ring));
+  --color-green-950: var(--green-950);
+  --color-green-900: var(--green-900);
+  --color-green-800: var(--green-800);
+  --color-green-700: var(--green-700);
+  --color-green-600: var(--green-600);
+  --color-green-500: var(--green-500);
+  --color-green-400: var(--green-400);
+  --color-green-300: var(--green-300);
+  --color-green-200: var(--green-200);
+  --color-green-100: var(--green-100);
+  --color-green-50:  var(--green-50);
 
-  --color-focus-accent: var(--focus-accent);
-  --color-grid-line: var(--grid-line);
+  --color-gold-800: var(--gold-800);
+  --color-gold-700: var(--gold-700);
+  --color-gold-600: var(--gold-600);
+  --color-gold-500: var(--gold-500);
+  --color-gold-400: var(--gold-400);
+  --color-gold-300: var(--gold-300);
+  --color-gold-100: var(--gold-100);
 
-  --radius-sm: calc(var(--radius) - 2px);
-  --radius-md: var(--radius);
-  --radius-lg: calc(var(--radius) + 4px);
+  --color-clay-700: var(--clay-700);
+  --color-clay-600: var(--clay-600);
+  --color-clay-500: var(--clay-500);
+  --color-clay-300: var(--clay-300);
+  --color-clay-100: var(--clay-100);
 
-  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
-  --font-sora: var(--font-sora), sans-serif;
+  --color-tomato-700: var(--tomato-700);
+  --color-tomato-600: var(--tomato-600);
+  --color-tomato-500: var(--tomato-500);
+  --color-tomato-100: var(--tomato-100);
 
-  --shadow-soft-sm: 0 1px 2px 0 rgb(15 23 42 / 0.06);
-  --shadow-soft-md: 0 2px 8px -2px rgb(15 23 42 / 0.10);
+  --color-berry-600: var(--berry-600);
+  --color-berry-500: var(--berry-500);
+  --color-berry-100: var(--berry-100);
+
+  --color-blueberry-600: var(--blueberry-600);
+  --color-blueberry-500: var(--blueberry-500);
+  --color-blueberry-100: var(--blueberry-100);
+
+  --color-cream-50:  var(--cream-50);
+  --color-cream-100: var(--cream-100);
+  --color-cream-200: var(--cream-200);
+  --color-sand-300:  var(--sand-300);
+  --color-sand-400:  var(--sand-400);
+  --color-stone-500: var(--stone-500);
+  --color-stone-600: var(--stone-600);
+  --color-ink-700:   var(--ink-700);
+  --color-ink-800:   var(--ink-800);
+  --color-ink-900:   var(--ink-900);
+  --color-white:     var(--white);
+
+  --color-surface-page: var(--surface-page);
+  --color-surface-card: var(--surface-card);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-surface-inset: var(--surface-inset);
+  --color-surface-brand: var(--surface-brand);
+  --color-surface-brand-strong: var(--surface-brand-strong);
+  --color-surface-brand-soft: var(--surface-brand-soft);
+  --color-surface-accent-soft: var(--surface-accent-soft);
+  --color-surface-warm-soft: var(--surface-warm-soft);
+  --color-surface-glass: var(--surface-glass);
+
+  --color-text-strong: var(--text-strong);
+  --color-text-body: var(--text-body);
+  --color-text-muted: var(--text-muted);
+  --color-text-faint: var(--text-faint);
+  --color-text-brand: var(--text-brand);
+  --color-text-on-brand: var(--text-on-brand);
+  --color-text-on-accent: var(--text-on-accent);
+
+  --color-border-subtle: var(--border-subtle);
+  --color-border-default: var(--border-default);
+  --color-border-strong: var(--border-strong);
+  --color-border-brand: var(--border-brand);
+  --color-border-focus: var(--border-focus);
+
+  --color-good: var(--good);
+  --color-good-soft: var(--good-soft);
+  --color-good-text: var(--good-text);
+  --color-watch: var(--watch);
+  --color-watch-soft: var(--watch-soft);
+  --color-watch-text: var(--watch-text);
+  --color-over: var(--over);
+  --color-over-soft: var(--over-soft);
+  --color-over-text: var(--over-text);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-info-text: var(--info-text);
+  --color-agent: var(--agent);
+  --color-agent-soft: var(--agent-soft);
+  --color-agent-text: var(--agent-text);
+
+  --radius-xs: var(--radius-xs);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-2xl: var(--radius-2xl);
+  --radius-3xl: var(--radius-3xl);
+  --radius-pill: var(--radius-pill);
+  --radius-control: var(--radius-control);
+  --radius-card: var(--radius-card);
+  --radius-tile: var(--radius-tile);
+  --radius-sheet: var(--radius-sheet);
+  --radius-bubble: var(--radius-bubble);
+
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-logotype: var(--font-logotype);
+  --font-mono: var(--font-mono);
+
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-pop: var(--shadow-pop);
+  --shadow-brand: var(--shadow-brand);
 }
 
 @layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
   body {
-    background: hsl(var(--background));
-    color: hsl(var(--foreground));
-    font-size: small;
+    margin: 0;
+    background: var(--surface-page);
+    color: var(--text-body);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    margin: 0;
+    color: var(--text-strong);
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  p {
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  a {
+    color: var(--text-link);
+    text-decoration: none;
+    transition: color var(--dur-fast) var(--ease-out-soft);
+  }
+
+  a:hover {
+    color: var(--text-link-hover);
+  }
+
+  button, input, select, textarea {
+    font: inherit;
+    color: inherit;
+  }
+
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--ring-focus);
   }
 }
 
 @layer utilities {
-  .shadow-soft-sm { box-shadow: var(--shadow-soft-sm); }
-  .shadow-soft-md { box-shadow: var(--shadow-soft-md); }
-
-  .bg-grid {
-    background-image: linear-gradient(var(--grid-line) 1px, transparent 1px),
-                      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-    background-size: 24px 24px;
-    background-color: #f9f9f9;
+  .cw-money {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
   }
 
-  .brutalist-focus {
-    transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
-  }
-  .brutalist-focus:focus,
-  .brutalist-focus:focus-visible {
-    outline: none !important;
-    border-color: var(--focus-accent) !important;
-    box-shadow: 2px 2px 0px 0px var(--focus-accent) !important;
+  .cw-overline {
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
   }
 
-  .brutalist-focus-within {
-    transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
-  }
-  .brutalist-focus-within:focus-within {
-    outline: none !important;
-    border-color: var(--focus-accent) !important;
-    box-shadow: 2px 2px 0px 0px var(--focus-accent) !important;
+  .cw-glass {
+    background: var(--surface-glass);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 }
 
-/* Chrome, Safari, Edge, Opera: hide number input spinners */
+/* Hide number spinners */
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
-@media (min-width: 768px) and (max-width: 1023px) {
-  .chat-ipad { left: 0px !important; width: 100% !important; }
-}
-
-@media (min-width: 1024px) and (max-width: 1370px) {
-  .chat-laptop { left: calc(100% - 400px) !important; width: calc(100% - 64px) !important; }
+input[type="number"] {
+  -moz-appearance: textfield;
 }

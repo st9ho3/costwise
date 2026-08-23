@@ -1,228 +1,257 @@
 'use client';
 
-import { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import type { LucideIcon } from 'lucide-react';
-import OptionsModal from '../shared/optionsModal';
+import { usePathname } from 'next/navigation';
 import {
-  Home,
-  BookMarked,
-  PlusSquare,
+  House,
+  Plus,
+  Utensils,
+  Carrot,
+  Truck,
   PanelLeftClose,
   PanelLeftOpen,
-  Carrot,
-  Users
 } from 'lucide-react';
+import OptionsModal from '../shared/optionsModal';
 import Modal from '../shared/modal';
-import { useSession } from 'next-auth/react';
 import { useUIStore } from '@/app/stores/uiStore';
 import { useFileStore } from '@/app/stores/fileStore';
+import { cn } from '@/app/utils/cn';
 
-
-
-export function SidebarLink({
-  icon: Icon,
-  text,
-  isCollapsed,
-  href,
-  onClick,
-}: {
-  icon: LucideIcon;
-  text: string;
-  isCollapsed: boolean;
+interface NavItem {
+  name: string;
   href: string;
-  onClick?: () => void;
-}) {
-  const openModal = useUIStore((state) => state.openModal)
-
-
-  // Use a conditional to render either a Link or a div that opens a modal
-  if (href !== 'create' && href !== 'profile') {
-    return (
-        <Link
-        href={href}
-        onClick={onClick}
-      className="flex relative group items-center p-2 text-gray-700 rounded-full hover:bg-gray-100"
-      >
-        <Icon className="w-5 h-5 stroke-1 shrink-0" />
-
-     <span
-          className={`ml-3 whitespace-nowrap text-sm transition-all duration-200 overflow-hidden ${
-            isCollapsed ? 'opacity-0 w-0 ml-0' : 'opacity-100 w-3xl'
-          }`}
-        >
-          {text}
-        </span>
-        
-      <span className={`absolute z-100 top-5 left-20  -translate-x-1/2 mb-2 w-max
-               scale-0 rounded-md bg-gray-800 px-3 py-1.5 text-sm text-white
-               transition-all duration-200  ${isCollapsed ? "group-hover:scale-100" : "group-hover:scale-0" }`}>{text}</span>
-      </Link>
-      
-      
-      
-    );
-  }
-
-  return (
-    <div
-      onClick={() => {
-        openModal('create')
-        onClick?.()
-      }}
-      className="flex relative group items-center p-2 text-gray-700 rounded-lg hover:bg-gray-100 group cursor-pointer"
-    >
-      <Icon className="w-5 h-5 stroke-1 shrink-0" />
-      <span
-        className={`ml-3 whitespace-nowrap text-sm transition-opacity duration-200 ${
-          isCollapsed ? 'opacity-0' : 'opacity-100'
-        }`}
-      >
-        {text}
-      </span>
-      <span className={`absolute z-100 top-5 left-20  -translate-x-1/2 mb-2 w-max
-               scale-0 rounded-md bg-gray-800 px-3 py-1.5 text-sm text-white
-               transition-all duration-200  ${isCollapsed ? "group-hover:scale-100" : "group-hover:scale-0" }`}>{text}</span>
-    </div>
-  );
+  icon: React.ComponentType<{ className?: string }>;
+  isCreate?: boolean;
 }
 
-/**
- * Renders a collapsible navigation sidebar.
- */
+const NAV_ITEMS: NavItem[] = [
+  { name: 'Today', href: '/', icon: House },
+  { name: 'Add something', href: '#create', icon: Plus, isCreate: true },
+  { name: 'Dishes', href: '/recipes', icon: Utensils },
+  { name: 'Ingredients', href: '/ingredients', icon: Carrot },
+  { name: 'Suppliers', href: '/suppliers', icon: Truck },
+];
+
 export default function Sidebar() {
-  const [isCollapsed, setIsCollapsed] = useState(true);
-  const isModalOpen = useUIStore((state) => state.isModalOpen)
-  const modalType = useUIStore((state) => state.modalType)
-  const isProfileOpen = useUIStore((state) => state.isProfileOpen)
-  const isMobileMenuOpen = useUIStore((state) => state.isMobileMenuOpen)
-  const closeMobileMenu = useUIStore((state) => state.closeMobileMenu)
-  const reset = useUIStore((state) => state.reset)
-  const resetFile = useFileStore((state) => state.reset)
-  const {data} = useSession()
-  
+  const pathname = usePathname();
+  const sidebarCollapsed = useUIStore((state) => state.sidebarCollapsed);
+  const toggleSidebar = useUIStore((state) => state.toggleSidebar);
+  const isModalOpen = useUIStore((state) => state.isModalOpen);
+  const modalType = useUIStore((state) => state.modalType);
+  const openModal = useUIStore((state) => state.openModal);
+  const isMobileMenuOpen = useUIStore((state) => state.isMobileMenuOpen);
+  const closeMobileMenu = useUIStore((state) => state.closeMobileMenu);
+  const reset = useUIStore((state) => state.reset);
+  const resetFile = useFileStore((state) => state.reset);
+
+  const isActive = (item: NavItem) => {
+    if (item.isCreate) return false;
+    if (item.href === '/') return pathname === '/';
+    return pathname.startsWith(item.href);
+  };
 
   return (
     <>
       {/* Mobile Sidebar Overlay */}
       {isMobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+        <div
+          className="fixed inset-0 bg-ink-900/40 backdrop-blur-[3px] z-40 lg:hidden animate-in fade-in-0 duration-200"
           onClick={closeMobileMenu}
         />
       )}
 
-      {/* Mobile Sidebar Panel */}
-      <div className={`
-        fixed top-0 left-0 bottom-0 w-64 bg-white z-50 p-4 shadow-xl transition-transform duration-300 ease-in-out lg:hidden
-        ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
-      `}>
-        <div className="flex justify-between items-center mb-8">
-           <span className="text-xl font-semibold text-gray-800">Menu</span>
-           <button onClick={closeMobileMenu} className="p-1 hover:bg-gray-100 rounded-full">
-             <PanelLeftClose className="w-6 h-6" />
-           </button>
+      {/* Mobile Drawer */}
+      <div
+        className={cn(
+          "fixed top-0 left-0 bottom-0 w-[260px] bg-cream-50 z-50 p-4 border-r border-[#EFE8DA] shadow-xl transition-transform duration-300 ease-out lg:hidden flex flex-col justify-between",
+          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
+        <div className="flex flex-col gap-6">
+          <div className="flex items-center justify-between px-2 pt-2">
+            <div className="flex items-center gap-2.5">
+              <img
+                src="/images/logo-mark-transparent.png"
+                alt="Costwise"
+                width={26}
+                height={26}
+                className="shrink-0"
+              />
+              <span className="font-logotype font-extrabold text-[22px] text-green-800 tracking-[-0.015em]">
+                Costwise
+              </span>
+            </div>
+            <button
+              onClick={closeMobileMenu}
+              className="p-1 text-stone-500 hover:text-ink-900 rounded-lg hover:bg-cream-100 transition-colors"
+            >
+              <PanelLeftClose className="size-5" />
+            </button>
+          </div>
+
+          <nav className="flex flex-col gap-1.5">
+            {NAV_ITEMS.map((item) => {
+              const active = isActive(item);
+              const Icon = item.icon;
+
+              if (item.isCreate) {
+                return (
+                  <button
+                    key={item.name}
+                    type="button"
+                    onClick={() => {
+                      openModal('create');
+                      closeMobileMenu();
+                    }}
+                    className="flex items-center gap-3 min-h-[42px] px-3 rounded-[12px] text-[15px] font-semibold text-ink-700 hover:bg-cream-100 hover:text-ink-900 transition-all duration-140 cursor-pointer text-left"
+                  >
+                    <Icon className="size-5 shrink-0 text-ink-700" />
+                    <span>{item.name}</span>
+                  </button>
+                );
+              }
+
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={closeMobileMenu}
+                  className={cn(
+                    "flex items-center gap-3 min-h-[42px] px-3 rounded-[12px] text-[15px] font-semibold transition-all duration-140",
+                    active
+                      ? "bg-green-50 text-green-800 font-bold"
+                      : "text-ink-700 hover:bg-cream-100 hover:text-ink-900"
+                  )}
+                >
+                  <Icon className={cn("size-5 shrink-0", active ? "text-green-800" : "text-ink-700")} />
+                  <span>{item.name}</span>
+                </Link>
+              );
+            })}
+          </nav>
         </div>
-        
-        <nav className="flex flex-col gap-2">
-          <SidebarLink
-            icon={Home}
-            text="Home"
-            isCollapsed={false}
-            href="/"
-            onClick={closeMobileMenu}
-          />
-          <SidebarLink
-            icon={PlusSquare}
-            text="Create"
-            isCollapsed={false}
-            href="create"
-            onClick={closeMobileMenu}
-          />
-          <SidebarLink
-            icon={BookMarked}
-            text="Recipes"
-            isCollapsed={false}
-            href="/recipes"
-            onClick={closeMobileMenu}
-          />
-          <SidebarLink
-            icon={Carrot}
-            text="Ingredients"
-            isCollapsed={false}
-            href="/ingredients"
-            onClick={closeMobileMenu}
-          />
-          <SidebarLink
-            icon={Users}
-            text="Suppliers"
-            isCollapsed={false}
-            href="/suppliers"
-            onClick={closeMobileMenu}
-          />
-        </nav>
       </div>
 
-      {/* Desktop Sidebar */}
+      {/* Desktop Collapsible Sidebar */}
       <aside
-        className={`bg-white border-r border-gray-200 justify-between hidden lg:flex flex-col gap-8 p-2 transition-all duration-300 ease-in-out ${
-          isCollapsed ? 'w-15' : 'w-40' // Adjusted width for better spacing
-        }`}
+        className={cn(
+          "hidden lg:flex flex-col justify-between bg-cream-50 border-r border-[#EFE8DA] p-3 transition-all duration-200 ease-out shrink-0 select-none z-20",
+          sidebarCollapsed ? "w-[64px]" : "w-[248px]"
+        )}
       >
-        {/* Top navigation links */}
-        <nav className="flex flex-col">
-          <SidebarLink
-            icon={Home}
-            text="Home"
-            isCollapsed={isCollapsed}
-            href="/"
-          />
-          <SidebarLink
-            icon={PlusSquare}
-            text="Create"
-            isCollapsed={isCollapsed}
-            href="create"
-          />
-          <SidebarLink
-            icon={BookMarked}
-            text="Recipes"
-            isCollapsed={isCollapsed}
-            href="/recipes"
-          />
-          <SidebarLink
-            icon={Carrot}
-            text="Ingredients"
-            isCollapsed={isCollapsed}
-            href="/ingredients"
-          />
-          <SidebarLink
-            icon={Users}
-            text="Suppliers"
-            isCollapsed={isCollapsed}
-            href="/suppliers"
-          />
-        </nav>
+        <div className="flex flex-col gap-5">
+          {/* Top Logo Lockup */}
+          <div
+            className={cn(
+              "flex items-center gap-2.5 transition-all overflow-hidden",
+              sidebarCollapsed ? "justify-center py-2" : "px-2 pt-2 pb-1"
+            )}
+          >
+            <img
+              src="/images/logo-mark-transparent.png"
+              alt="Costwise"
+              width={26}
+              height={26}
+              className="shrink-0"
+            />
+            {!sidebarCollapsed && (
+              <span className="font-logotype font-extrabold text-[22px] text-green-800 tracking-[-0.015em] whitespace-nowrap">
+                Costwise
+              </span>
+            )}
+          </div>
 
-        {/* Bottom collapse button */}
-        <button
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className="flex items-center justify-end p-2 text-gray-700 rounded-lg hover:bg-gray-100"
-        >
-          {isCollapsed ? (
-            <PanelLeftOpen className="w-6 h-6 stroke-1" />
-          ) : (
-            <PanelLeftClose className="w-6 h-6 stroke-1" />
+          {/* Navigation Links */}
+          <nav className="flex flex-col gap-1.5">
+            {NAV_ITEMS.map((item) => {
+              const active = isActive(item);
+              const Icon = item.icon;
+
+              if (item.isCreate) {
+                return (
+                  <button
+                    key={item.name}
+                    type="button"
+                    title={sidebarCollapsed ? item.name : undefined}
+                    onClick={() => openModal('create')}
+                    className={cn(
+                      "flex items-center rounded-[12px] text-[15px] font-semibold text-ink-700 hover:bg-cream-100 hover:text-ink-900 transition-all duration-140 cursor-pointer",
+                      sidebarCollapsed
+                        ? "size-[44px] justify-center mx-auto"
+                        : "gap-3 min-h-[42px] px-3 w-full text-left"
+                    )}
+                  >
+                    <Icon className="size-5 shrink-0 text-ink-700" />
+                    {!sidebarCollapsed && <span className="whitespace-nowrap">{item.name}</span>}
+                  </button>
+                );
+              }
+
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  title={sidebarCollapsed ? item.name : undefined}
+                  className={cn(
+                    "flex items-center rounded-[12px] text-[15px] font-semibold transition-all duration-140",
+                    sidebarCollapsed
+                      ? "size-[44px] justify-center mx-auto"
+                      : "gap-3 min-h-[42px] px-3 w-full",
+                    active
+                      ? "bg-green-50 text-green-800 font-bold"
+                      : "text-ink-700 hover:bg-cream-100 hover:text-ink-900"
+                  )}
+                >
+                  <Icon className={cn("size-5 shrink-0", active ? "text-green-800" : "text-ink-700")} />
+                  {!sidebarCollapsed && <span className="whitespace-nowrap">{item.name}</span>}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+
+        {/* Bottom Area: Gold Note Card + Collapse Button */}
+        <div className="flex flex-col gap-3">
+          {!sidebarCollapsed && (
+            <div className="rounded-[18px] bg-gold-100 border border-[#F0E3BE] p-3.5 flex flex-col gap-1 text-gold-800">
+              <span className="font-bold text-[13px] leading-snug">
+                You&apos;ve kept €1,840 this month
+              </span>
+              <span className="text-[12px] opacity-80 leading-normal">
+                Mostly by fixing three dish prices.
+              </span>
+            </div>
           )}
-        </button>
+
+          <button
+            type="button"
+            onClick={toggleSidebar}
+            title={sidebarCollapsed ? "Expand sidebar" : "Tuck it away"}
+            className={cn(
+              "flex items-center rounded-[12px] text-[14px] font-semibold text-stone-500 hover:text-ink-900 hover:bg-cream-100 transition-colors p-2 cursor-pointer",
+              sidebarCollapsed ? "justify-center" : "gap-2.5 px-3"
+            )}
+          >
+            {sidebarCollapsed ? (
+              <PanelLeftOpen className="size-5 shrink-0" />
+            ) : (
+              <>
+                <PanelLeftClose className="size-5 shrink-0" />
+                <span className="whitespace-nowrap">Tuck it away</span>
+              </>
+            )}
+          </button>
+        </div>
       </aside>
 
       {/* Modal for 'create' action */}
       <Modal
-        type='create'
-        isOpen={isModalOpen && modalType.type === 'create'} // Added specific check
+        type="create"
+        isOpen={isModalOpen && modalType.type === 'create'}
         onClose={() => {
-          reset()
-          resetFile()
+          reset();
+          resetFile();
         }}
       >
         <OptionsModal />

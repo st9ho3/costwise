@@ -1,0 +1,10 @@
+/* Costwise webfonts.
+   SUBSTITUTION NOTE: no font binaries were supplied with the brand assets.
+   The logotype in assets/logo-mark.png / brand-illustration-cast.png is a rounded
+   bubble display face; the nearest freely-licensed matches are used here.
+   Swap these for the real licensed files when available. */
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Nunito+Sans:ital,opsz,wght@0,6..12,400;0,6..12,500;0,6..12,600;0,6..12,700;0,6..12,800;1,6..12,400&family=Baloo+2:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+
+/* Explicit face declarations so the closure records the shipped families. */
+@font-face{font-family:"Bricolage Grotesque Fallback";src:local("Bricolage Grotesque"),local("Trebuchet MS");font-weight:400 800;font-display:swap}
+@font-face{font-family:"Nunito Sans Fallback";src:local("Nunito Sans"),local("Avenir Next"),local("Segoe UI");font-weight:400 800;font-display:swap}
