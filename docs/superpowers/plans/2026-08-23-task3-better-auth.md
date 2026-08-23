@@ -111,7 +111,7 @@ Registration ORDER is the point: auth handler before the v1 sub-app. Run the tes
 
 **Files:** Modify `packages/db/src/schema.ts`; create `packages/db/scripts/migrate-auth.ts`; modify `packages/db/package.json` (script + `tsx` devDep).
 
-- [ ] **Step 1:** In `schema.ts`, REPLACE the five NextAuth table definitions (`users`, `accounts`, `sessions`, `verificationTokens`, `authenticators`) with the Better Auth shape — table names stay singular; `users` keeps its columns' identity (same table, altered):
+- [x] **Step 1:** In `schema.ts`, REPLACE the five NextAuth table definitions (`users`, `accounts`, `sessions`, `verificationTokens`, `authenticators`) with the Better Auth shape — table names stay singular; `users` keeps its columns' identity (same table, altered):
 
 ```ts
 export const users = pgTable("user", {
@@ -163,7 +163,7 @@ export const verifications = pgTable("verification", {
 
 Delete `verificationTokens`/`authenticators` exports; fix any imports of them (`grep -rn "verificationTokens\|authenticators" apps packages` — expect only schema.ts; STOP if the old NextAuth `AdapterAccountType` import becomes unused and remove it). `udersRelations` (sic) stays.
 
-- [ ] **Step 2:** `packages/db/scripts/migrate-auth.ts` — one transaction, idempotent, chatty:
+- [x] **Step 2:** `packages/db/scripts/migrate-auth.ts` — one transaction, idempotent, chatty:
 
 ```ts
 import "dotenv/config";
@@ -254,7 +254,7 @@ run();
 
 Add to `packages/db/package.json` scripts: `"migrate-auth": "tsx scripts/migrate-auth.ts"`; `pnpm --filter @costwise/db add -D tsx`.
 
-- [ ] **Step 3:** Build gates: `pnpm build` green (schema type changes will surface every consumer of the old auth types — fix ONLY compile errors that follow mechanically, e.g. removed exports; STOP on anything judgment-shaped). NOTE: web still compiles against NextAuth code until Task 5 rips it out — if `apps/web` build breaks on the schema change (e.g. Drizzle adapter types in `src/auth.ts`), it is acceptable to reorder: complete Task 5's deletions first, then re-run this gate. Say so in the commit body.
+- [x] **Step 3:** Build gates: `pnpm build` green (schema type changes will surface every consumer of the old auth types — fix ONLY compile errors that follow mechanically, e.g. removed exports; STOP on anything judgment-shaped). NOTE: web still compiles against NextAuth code until Task 5 rips it out — if `apps/web` build breaks on the schema change (e.g. Drizzle adapter types in `src/auth.ts`), it is acceptable to reorder: complete Task 5's deletions first, then re-run this gate. Say so in the commit body.
 - [ ] **Step 4: ⛔ CHECKPOINT — do NOT run the script yet.** Push everything, report, and wait: Panos confirms which `DATABASE_URL` this runs against and gives the explicit go. (App has no production users, but the database is the one thing with no undo.) After the go: run `dotenv -c -- pnpm --filter @costwise/db run migrate-auth` from the repo root, paste the printed counts into the commit/report.
 
 ---

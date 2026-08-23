@@ -30,7 +30,7 @@ export class AuthRepository implements AUTHrepository {
         return undefined;
       }
 
-      return user as User;
+      return user as unknown as User;
     } catch (err) {
       console.error("Failed to find user by email:", err);
       throw new DatabaseError("AuthRepository.findUserByEmail", err);
@@ -42,9 +42,9 @@ export class AuthRepository implements AUTHrepository {
       const [userId] = await db
         .insert(users)
         .values({
+          name: email.split("@")[0],
           email: email,
-          password: password,
-        })
+        } as any)
         .returning({
           user: users.id,
         });
@@ -58,7 +58,7 @@ export class AuthRepository implements AUTHrepository {
 
   async createGoogleUser(user: User): Promise<string | undefined> {
     try {
-      const [userId] = await db.insert(users).values(user).returning({
+      const [userId] = await db.insert(users).values(user as any).returning({
         id: users.id,
       });
 
