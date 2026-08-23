@@ -35,6 +35,11 @@ Fable 5 model (`claude-fable-5`). All other models are executors: they
 implement an existing approved plan and MUST NOT create, rewrite, or
 re-scope specs or plans. If an executor finds a plan wrong, blocked, or
 incomplete, it stops and reports back instead of improvising.
+Fable 5 itself does NOT execute plans. The single exception: a task
+Fable 5 explicitly declares **super-complex** in the spec and plan
+header, with its reasoning stated — the bar is high (novel architecture
+or judgment-dense work a plan cannot make executor-safe), and Fable 5
+states the call outright either way.
 
 **TDD rule:** the canonical definition is the
 `superpowers:test-driven-development` skill — its Iron Law applies: no
