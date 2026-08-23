@@ -2,10 +2,13 @@ import { describe, test, expect } from "vitest";
 import {
   calculateProfitMargin,
   calculateSellingPrice,
+  getDisplayUnit,
   getTotalPrice,
   normalizePrice,
 } from "./pricing";
 import {
+  createEditIngredientPrototype,
+  createIngredientPrototype,
   transformIngredientFromDB,
   transformIngredientToDB,
   transformRecipeFromDB,
@@ -16,6 +19,7 @@ import {
   DBIngredient,
   DBRecipe,
   Ingredient,
+  IngredientSchema,
   Recipe,
   RecipeIngredients,
 } from "./recipe";
@@ -376,5 +380,97 @@ describe("transformIngredientToDB", () => {
     const result = transformIngredientToDB(mockIngredient);
 
     expect(result).toStrictEqual(mockDBIngredient);
+  });
+});
+
+describe("getDisplayUnit", () => {
+  test("returns correct display unit for metric weight and volume", () => {
+    expect(getDisplayUnit("kg")).toBe("g");
+    expect(getDisplayUnit("g")).toBe("g");
+    expect(getDisplayUnit("L")).toBe("ml");
+    expect(getDisplayUnit("ml")).toBe("ml");
+    expect(getDisplayUnit("piece")).toBe("piece");
+  });
+
+  test("falls back to 'g' when unit is undefined or empty string instead of returning 'undefined'", () => {
+    expect(getDisplayUnit(undefined)).toBe("g");
+    expect(getDisplayUnit("")).toBe("g");
+  });
+});
+
+describe("createIngredientPrototype & IngredientSchema", () => {
+  const sampleFormData: any = {
+    id: "123e4567-e89b-12d3-a456-426614174000",
+    name: "Pecorino Romano",
+    unit: "kg",
+    unitPrice: 12.4,
+    quantity: 1,
+    usage: "0",
+    category: "80662af1-1943-4168-8549-ef721b0e9f54",
+  };
+  const supplierId = "55555555-5555-5555-5555-555555555555";
+  const userId = "u1";
+
+  test("populates suppliers array with proper shape in create prototype", () => {
+    const prototype = createIngredientPrototype(sampleFormData, [supplierId], userId);
+    expect(prototype).toBeDefined();
+    expect(prototype?.suppliers).toHaveLength(1);
+    expect(prototype?.suppliers[0]).toEqual({
+      suppliersId: supplierId,
+      unit: "kg",
+      quantity: 1,
+      price: 12.4,
+      isActive: true,
+    });
+    expect(prototype?.unit).toBe("g");
+    expect(prototype?.unitPrice).toBe(0.0124);
+
+    const parseResult = IngredientSchema.safeParse(prototype);
+    expect(parseResult.success).toBe(true);
+  });
+
+  test("IngredientSchema produces human-readable error 'Add at least one supplier' when suppliers is empty", () => {
+    const prototype = createIngredientPrototype(sampleFormData, [], userId);
+    const parseResult = IngredientSchema.safeParse(prototype);
+    expect(parseResult.success).toBe(false);
+    if (!parseResult.success) {
+      const supplierError = parseResult.error.errors.find((e) =>
+        e.path.includes("suppliers"),
+      );
+      expect(supplierError?.message).toBe("Add at least one supplier");
+    }
+  });
+
+  test("populates suppliers array with proper shape in edit prototype", () => {
+    const existingIngredient: Ingredient = {
+      id: sampleFormData.id,
+      name: "Old Name",
+      unit: "g",
+      unitPrice: 0.01,
+      quantity: 1,
+      usage: "2",
+      userId,
+      category: sampleFormData.category,
+      suppliers: [],
+    };
+
+    const prototype = createEditIngredientPrototype(
+      sampleFormData,
+      existingIngredient,
+      [supplierId],
+      userId,
+    );
+    expect(prototype.suppliers).toHaveLength(1);
+    expect(prototype.suppliers[0]).toEqual({
+      suppliersId: supplierId,
+      unit: "kg",
+      quantity: 1,
+      price: 12.4,
+      isActive: true,
+    });
+    expect(prototype.usage).toBe("2");
+
+    const parseResult = IngredientSchema.safeParse(prototype);
+    expect(parseResult.success).toBe(true);
   });
 });

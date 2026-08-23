@@ -59,7 +59,7 @@ export const formatPrice = (
 
 export const getDisplayUnit = (unit: string | undefined): string => {
   if (!unit) {
-    return "undefined";
+    return "g";
   }
   if (unit === "kg" || unit === "g") return "g";
   if (unit === "ml" || unit === "L") return "ml";
