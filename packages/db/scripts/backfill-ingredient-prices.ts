@@ -1,4 +1,4 @@
-import "dotenv/config";
+import "./loadEnv";
 import { eq } from "drizzle-orm";
 import { db } from "../src/db";
 import { ingredientsTable, supplierIngredients } from "../src/schema";
