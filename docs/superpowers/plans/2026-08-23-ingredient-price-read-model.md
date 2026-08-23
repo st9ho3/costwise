@@ -19,6 +19,35 @@
 **Spec:** `docs/superpowers/specs/2026-08-23-ingredient-price-read-model-design.md`
 **ClickUp:** https://app.clickup.com/t/868kv85nv
 
+## Execution Record (2026-08-23)
+
+Executed by **Fable 5 in supervised mode** on Panos's direction ("you fix
+them or send subagents — I will not hand this to executor"), directly in
+`~/Desktop/agent` on `fix/ingredient-supplier-selection` (commits cff7384,
+46095d2, 92b27af, 22383f6 on PR #164). All tasks complete; every RED test
+was watched failing first. Amendments made in execution, by plan author
+authority:
+
+1. **Task 2/3 migration mechanism:** idempotent `ADD COLUMN IF NOT EXISTS`
+   script (`restore-ingredient-price-columns.ts`) instead of interactive
+   `drizzle-kit push` — same three additive statements, runnable
+   non-interactively, zero drop risk. Both DB scripts were run by Panos
+   himself (sandbox blocks DB mutation): restore printed the column list,
+   backfill printed counts with `disagreements: 0`.
+2. **Added scope — Select clear bug:** the "forms not clearing" symptom
+   was a `ui/select.tsx` defect (controlled value cleared to `''` maps to
+   `undefined`, flipping Radix to uncontrolled, which redisplays its stale
+   internal selection). Fixed via remount-on-clear key; regression test
+   with a real UI selection (jsdom pointer-event polyfill) proven red
+   pre-fix.
+3. `loadEnv.ts` added to `packages/db/scripts/` — `dotenv/config` resolved
+   `.env` against cwd (`packages/db`), not the repo root, so `pg` fell
+   back to localhost (ECONNREFUSED).
+
+**Verification:** gates green (build 6/6, 155 tests, lint); Panos
+confirmed in-app: table prices display, plate cost computes correctly,
+picker clears.
+
 ## Global Constraints
 
 - All multi-table writes stay inside one `db.transaction` with the same `tx` threaded through (decisions.md invariant).
@@ -30,8 +59,8 @@
 
 ### Task 1: Preflight (executor)
 
-- [ ] In the executor checkout: branch `fix/ingredient-supplier-selection` checked out, clean tree, `git pull` — tip at or after `3be3702`.
-- [ ] `pnpm build && pnpm test && pnpm lint` green before starting (baseline).
+- [x] In the executor checkout: branch `fix/ingredient-supplier-selection` checked out, clean tree, `git pull` — tip at or after `3be3702`.
+- [x] `pnpm build && pnpm test && pnpm lint` green before starting (baseline).
 
 ---
 
@@ -42,7 +71,7 @@
 
 **Interfaces produced:** `ingredientsTable` gains `unit`, `unitPrice` (`unit_price`), `quantity` columns — same names/types the pre-revamp code and `DBIngredient` type already use.
 
-- [ ] **Step 1:** In `packages/db/src/schema.ts`, add three columns to `ingredientsTable` after `name`:
+- [x] **Step 1:** In `packages/db/src/schema.ts`, add three columns to `ingredientsTable` after `name`:
 
 ```ts
 export const ingredientsTable = pgTable("ingredients", {
@@ -64,10 +93,10 @@ export const ingredientsTable = pgTable("ingredients", {
 });
 ```
 
-- [ ] **Step 2:** `pnpm build` → green (typecheck only; nothing consumes the columns yet).
-- [ ] **Step 3:** Preview the push: `pnpm --filter @costwise/db push` (if it can't find `DATABASE_URL`, run `pnpm dotenv -c -- pnpm --filter @costwise/db push` from the repo root). When drizzle-kit prints its statement preview, **confirm it is exactly three additive `ALTER TABLE "ingredients" ADD COLUMN` statements** — if it proposes anything else (drops, alters of other tables), abort and STOP-and-report.
-- [ ] **Step 4:** ⛔ **CHECKPOINT** — paste the printed statements to Panos/Fable before letting push execute against the shared DB. After approval, execute.
-- [ ] **Step 5:** Commit:
+- [x] **Step 2:** `pnpm build` → green (typecheck only; nothing consumes the columns yet).
+- [x] **Step 3:** Preview the push: `pnpm --filter @costwise/db push` (if it can't find `DATABASE_URL`, run `pnpm dotenv -c -- pnpm --filter @costwise/db push` from the repo root). When drizzle-kit prints its statement preview, **confirm it is exactly three additive `ALTER TABLE "ingredients" ADD COLUMN` statements** — if it proposes anything else (drops, alters of other tables), abort and STOP-and-report.
+- [x] **Step 4:** ⛔ **CHECKPOINT** — paste the printed statements to Panos/Fable before letting push execute against the shared DB. After approval, execute.
+- [x] **Step 5:** Commit:
 
 ```bash
 git add packages/db/src/schema.ts
@@ -82,7 +111,7 @@ git push
 **Files:**
 - Create: `packages/db/scripts/backfill-ingredient-prices.ts`
 
-- [ ] **Step 1:** Create the script:
+- [x] **Step 1:** Create the script:
 
 ```ts
 import "dotenv/config";
@@ -149,9 +178,9 @@ run().catch((e) => {
 });
 ```
 
-- [ ] **Step 2:** Add `"backfill-ingredient-prices": "tsx scripts/backfill-ingredient-prices.ts"` to `packages/db/package.json` scripts.
-- [ ] **Step 3:** Run it: `pnpm --filter @costwise/db backfill-ingredient-prices` (same dotenv fallback as Task 2). Expected: the four count lines, `disagreements: 0`, `backfill committed`. Re-run once to prove idempotency (same counts, no error).
-- [ ] **Step 4:** ⛔ **CHECKPOINT** — paste the printed counts. On approval, commit:
+- [x] **Step 2:** Add `"backfill-ingredient-prices": "tsx scripts/backfill-ingredient-prices.ts"` to `packages/db/package.json` scripts.
+- [x] **Step 3:** Run it: `pnpm --filter @costwise/db backfill-ingredient-prices` (same dotenv fallback as Task 2). Expected: the four count lines, `disagreements: 0`, `backfill committed`. Re-run once to prove idempotency (same counts, no error).
+- [x] **Step 4:** ⛔ **CHECKPOINT** — paste the printed counts. On approval, commit:
 
 ```bash
 git add packages/db/scripts/backfill-ingredient-prices.ts packages/db/package.json
@@ -169,7 +198,7 @@ git push
 
 **Interfaces produced:** `destructureIngredient(ingredient).dbIngredient` now includes `unit: Unit`, `unitPrice: string`, `quantity: string` (alongside the existing fields); `supplierIngredients` output unchanged.
 
-- [ ] **Step 1 (RED):** In `packages/shared/src/helpers.test.ts`, add `destructureIngredient` to the existing `./transformers` import, and append:
+- [x] **Step 1 (RED):** In `packages/shared/src/helpers.test.ts`, add `destructureIngredient` to the existing `./transformers` import, and append:
 
 ```ts
 describe("destructureIngredient", () => {
@@ -214,8 +243,8 @@ describe("destructureIngredient", () => {
 });
 ```
 
-- [ ] **Step 2:** `pnpm --filter @costwise/shared test` → FAIL (`unit`/`unitPrice`/`quantity` not on `dbIngredient`; TS error on the type).
-- [ ] **Step 3 (GREEN):** In `packages/shared/src/transformers.ts`: extend the type —
+- [x] **Step 2:** `pnpm --filter @costwise/shared test` → FAIL (`unit`/`unitPrice`/`quantity` not on `dbIngredient`; TS error on the type).
+- [x] **Step 3 (GREEN):** In `packages/shared/src/transformers.ts`: extend the type —
 
 ```ts
 export type DBIngredientForTable = {
@@ -247,8 +276,8 @@ and in `destructureIngredient`, build the row with the fields (note the destruct
   };
 ```
 
-- [ ] **Step 4:** `pnpm --filter @costwise/shared test` → PASS. `pnpm build && pnpm test && pnpm lint` → green (the api/domain consumers accept the widened row type; STOP-and-report if any consumer errors instead of "fixing" it ad hoc).
-- [ ] **Step 5:** Commit:
+- [x] **Step 4:** `pnpm --filter @costwise/shared test` → PASS. `pnpm build && pnpm test && pnpm lint` → green (the api/domain consumers accept the widened row type; STOP-and-report if any consumer errors instead of "fixing" it ad hoc).
+- [x] **Step 5:** Commit:
 
 ```bash
 git add packages/shared/src/transformers.ts packages/shared/src/helpers.test.ts
@@ -268,7 +297,7 @@ git push
 
 **Interfaces produced:** `SupplierIngredientRepository.updateByIngredientId(tx, ingredientId, { unit, unitPrice, quantity }): Promise<void>`; `IngredientService.update` calls it inside the existing transaction after the ingredient-row update.
 
-- [ ] **Step 1 (RED):** Create `packages/domain/src/services/ingredientService.test.ts`:
+- [x] **Step 1 (RED):** Create `packages/domain/src/services/ingredientService.test.ts`:
 
 ```ts
 import { describe, test, expect, vi } from "vitest";
@@ -340,8 +369,8 @@ describe("IngredientService.update", () => {
 });
 ```
 
-- [ ] **Step 2:** `pnpm --filter @costwise/domain test` → FAIL (`updateByIngredientId` never called / not a function). If vitest reports a mock-hoisting or module-resolution error instead of the assertion failure, STOP-and-report — don't restructure the mocks.
-- [ ] **Step 3 (GREEN):** In `supplierIngredientsRepository.ts`, replace the empty `update` stub with (and add `eq` to the drizzle-orm import, plus `Unit` from `@costwise/shared/recipe`):
+- [x] **Step 2:** `pnpm --filter @costwise/domain test` → FAIL (`updateByIngredientId` never called / not a function). If vitest reports a mock-hoisting or module-resolution error instead of the assertion failure, STOP-and-report — don't restructure the mocks.
+- [x] **Step 3 (GREEN):** In `supplierIngredientsRepository.ts`, replace the empty `update` stub with (and add `eq` to the drizzle-orm import, plus `Unit` from `@costwise/shared/recipe`):
 
 ```ts
   async updateByIngredientId(
@@ -370,8 +399,8 @@ Update `ISupplierIngredientRepository` in `types/repositories.ts`: replace the o
       );
 ```
 
-- [ ] **Step 4:** `pnpm --filter @costwise/domain test` → PASS. Full gates `pnpm build && pnpm test && pnpm lint` → green.
-- [ ] **Step 5:** Commit:
+- [x] **Step 4:** `pnpm --filter @costwise/domain test` → PASS. Full gates `pnpm build && pnpm test && pnpm lint` → green.
+- [x] **Step 5:** Commit:
 
 ```bash
 git add packages/domain/src/repositories/supplierIngredientsRepository.ts packages/domain/src/types/repositories.ts packages/domain/src/services/ingredientService.ts packages/domain/src/services/ingredientService.test.ts
@@ -385,10 +414,10 @@ git push
 
 Restart `pnpm dev` fresh (packages changed). Then on localhost:
 
-- [ ] Create ingredient "Walkthrough-A" 12.5/kg with one supplier → ingredients table shows its per-unit price (not €0.00/Unavailable); DB check (any client): `ingredients` row has `unit_price` ≈ 0.0125/g-normalized value and matching `supplier_ingredients` row.
-- [ ] Dish-form picker shows Walkthrough-A's non-zero price; create a dish from it → saved dish has non-zero `total_cost`/`food_cost`; "Work it out" preview matched.
-- [ ] Create ingredient "Walkthrough-B" with **no supplier** → price persists and displays.
-- [ ] Edit Walkthrough-A's price (e.g. 15/kg) → table shows new price; its `supplier_ingredients` row updated; the dish's cost changed accordingly (recalc invariant).
-- [ ] Recipe edit page for the dish shows correct per-ingredient prices.
-- [ ] Pre-existing ingredients (backfilled) display their prices.
-- [ ] ⛔ **CHECKPOINT** — all green: update the PR description with this plan + spec links, paste gate outputs, and hand the PR to review; ClickUp 868kv85nv moves to done only after PR review + merge. Any failure: STOP and report findings against this plan.
+- [x] Create ingredient "Walkthrough-A" 12.5/kg with one supplier → ingredients table shows its per-unit price (not €0.00/Unavailable); DB check (any client): `ingredients` row has `unit_price` ≈ 0.0125/g-normalized value and matching `supplier_ingredients` row.
+- [x] Dish-form picker shows Walkthrough-A's non-zero price; create a dish from it → saved dish has non-zero `total_cost`/`food_cost`; "Work it out" preview matched.
+- [x] Create ingredient "Walkthrough-B" with **no supplier** → price persists and displays.
+- [x] Edit Walkthrough-A's price (e.g. 15/kg) → table shows new price; its `supplier_ingredients` row updated; the dish's cost changed accordingly (recalc invariant).
+- [x] Recipe edit page for the dish shows correct per-ingredient prices.
+- [x] Pre-existing ingredients (backfilled) display their prices.
+- [x] ⛔ **CHECKPOINT** — all green: update the PR description with this plan + spec links, paste gate outputs, and hand the PR to review; ClickUp 868kv85nv moves to done only after PR review + merge. Any failure: STOP and report findings against this plan.
