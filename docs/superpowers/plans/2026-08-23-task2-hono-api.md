@@ -57,7 +57,7 @@
   "version": "0.0.0",
   "private": true,
   "exports": { "./*": "./src/*.ts" },
-  "scripts": { "build": "tsc --noEmit" },
+  "scripts": { "build": "tsc --noEmit", "test": "vitest run" },
   "dependencies": {
     "@costwise/db": "workspace:*",
     "@costwise/shared": "workspace:*",
@@ -79,6 +79,7 @@ and `packages/domain/tsconfig.json` — copy `packages/db/tsconfig.json` exactly
 - [x] **Step 6:** Gates: `pnpm install && pnpm build && pnpm test && pnpm lint` all green; `grep -rn "next/" packages/` empty; web dev smoke: recipes/ingredients/suppliers/dashboard pages render, create+delete a recipe works and the list refreshes (revalidatePath relocation proof). Anything failing that Steps 1–5 don't explain: STOP and report.
 - [x] **Step 7:** Commit: `git add -A && git commit -m "refactor: extract domain layer into @costwise/domain"`.
 - [x] **Step 8: ⛔ CHECKPOINT — push `feature/hono-api` and stop.** This task rewired the entire web app's imports; it gets reviewed before anything is built on top. Report the gate outputs and wait for Panos/Fable 5 sign-off (external mode) or Fable 5's between-task review (supervised).
+- [ ] **Step 9 (added at checkpoint-1 review, Fable 5):** the original Step 1 package.json gave `@costwise/domain` no test runner, orphaning the 19 tests in `src/utils/helpers.test.ts` (workspace total fell 47→28). Remediation: add `"test": "vitest run"` to `packages/domain/package.json` scripts, add devDependency `"vitest": "^3.1.0"`, create `packages/domain/vitest.config.ts` with `import { defineConfig } from "vitest/config"; export default defineConfig({ test: { environment: "node" } });`, run `pnpm install`, then verify `pnpm test` reports **47 total tests across web+domain**, all green. Commit `fix(domain): run the moved transformer tests under vitest` with the test-count evidence in the body, push, and proceed to Task 3.
 
 ---
 
