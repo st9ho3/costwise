@@ -175,7 +175,7 @@ serve({ fetch: createApp({}).fetch, port: 3001 }, (i) =>
 
 **Interfaces produced:** `errorHandler` (registered via `app.onError`); `requireUser` middleware setting `c.var.userId: string`; envelope type `{error:{code:string,message:string,fieldErrors?:Record<string,string>}}`. Error-code mapping: class name → SCREAMING_SNAKE (`ValidationError`→`VALIDATION_ERROR`, unknown→`INTERNAL`).
 
-- [ ] **Step 1 (RED):** `apps/api/src/middleware/errors.test.ts`:
+- [x] **Step 1 (RED):** `apps/api/src/middleware/errors.test.ts`:
 
 ```ts
 import { describe, it, expect } from "vitest";
@@ -215,7 +215,7 @@ describe("errorHandler", () => {
 
 Run → FAIL (`./errors` unresolved). NOTE: open `@costwise/domain/utils/errors.ts` first and mirror the REAL constructor signatures in these tests (e.g. `ValidationError` takes the field array, `NotFoundError(resource, id)`); if they differ from shown, adjust the test calls — the assertions stay.
 
-- [ ] **Step 2 (GREEN):** `apps/api/src/middleware/errors.ts`:
+- [x] **Step 2 (GREEN):** `apps/api/src/middleware/errors.ts`:
 
 ```ts
 import type { Context } from "hono";
@@ -242,7 +242,7 @@ export const errorHandler = (err: Error, c: Context) => {
 
 (Adjust the `ValidationError` field-list property name to the real one after reading the class.) Verify GREEN.
 
-- [ ] **Step 3 (RED):** `apps/api/src/middleware/auth.test.ts`:
+- [x] **Step 3 (RED):** `apps/api/src/middleware/auth.test.ts`:
 
 ```ts
 import { describe, it, expect, afterEach } from "vitest";
@@ -273,7 +273,7 @@ describe("requireUser (interim, pre-Better-Auth)", () => {
 
 Run → FAIL.
 
-- [ ] **Step 4 (GREEN):** `apps/api/src/middleware/auth.ts`:
+- [x] **Step 4 (GREEN):** `apps/api/src/middleware/auth.ts`:
 
 ```ts
 import { createMiddleware } from "hono/factory";
