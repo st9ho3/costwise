@@ -395,4 +395,4 @@ Precondition: env vars set (Global Constraints), migration script has run (Task 
 
 ### Task 7: Report
 
-- [ ] Final report: per-criterion evidence, migration counts, resolved better-auth version, any STOP items and how they resolved, PR URL. ClickUp 868kv7tab moves through Panos/Fable 5.
+- [x] Final report: per-criterion evidence, migration counts, resolved better-auth version, any STOP items and how they resolved, PR URL. ClickUp 868kv7tab moves through Panos/Fable 5.
