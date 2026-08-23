@@ -265,7 +265,7 @@ Add to `packages/db/package.json` scripts: `"migrate-auth": "tsx scripts/migrate
 
 **Interfaces:** `Deps` gains REQUIRED `getSessionUserId: (headers: Headers) => Promise<string | null>`; `requireUser` becomes a factory `makeRequireUser(getSessionUserId)`; route files unchanged except `app.ts` wiring `v1.use("*", makeRequireUser(deps.getSessionUserId))`.
 
-- [ ] **Step 1 (RED):** rewrite `auth.test.ts`:
+- [x] **Step 1 (RED):** rewrite `auth.test.ts`:
 
 ```ts
 import { describe, it, expect } from "vitest";
@@ -299,7 +299,7 @@ describe("requireUser (session-backed)", () => {
 
 Run → FAIL (`makeRequireUser` doesn't exist).
 
-- [ ] **Step 2 (GREEN):** `auth.ts` middleware becomes:
+- [x] **Step 2 (GREEN):** `auth.ts` middleware becomes:
 
 ```ts
 import { createMiddleware } from "hono/factory";
@@ -325,7 +325,7 @@ getSessionUserId: async (headers) =>
   (await auth.api.getSession({ headers }))?.user.id ?? null,
 ```
 
-- [ ] **Step 3:** Full api suite green (route tests prove the fake path; middleware tests prove the contract). Workspace gates green. Commit `feat(api): session-backed requireUser via Better Auth`.
+- [x] **Step 3:** Full api suite green (route tests prove the fake path; middleware tests prove the contract). Workspace gates green. Commit `feat(api): session-backed requireUser via Better Auth`.
 
 ---
 

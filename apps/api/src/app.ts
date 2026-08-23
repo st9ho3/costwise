@@ -1,7 +1,7 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { Scalar } from "@scalar/hono-api-reference";
 import { errorHandler } from "./middleware/errors";
-import { requireUser } from "./middleware/auth";
+import { makeRequireUser } from "./middleware/auth";
 import { recipesRoutes } from "./routes/recipes";
 import { ingredientsRoutes } from "./routes/ingredients";
 import { suppliersRoutes } from "./routes/suppliers";
@@ -100,6 +100,7 @@ export interface Deps {
   makeSupplierService: (userId: string) => SupplierServiceLike;
   makeSearchService: (term: string, userId: string) => SearchServiceLike;
   putBlob: PutBlobFn;
+  getSessionUserId: (headers: Headers) => Promise<string | null>;
 }
 
 export const createApp = (deps: Deps) => {
@@ -118,7 +119,7 @@ export const createApp = (deps: Deps) => {
   app.on(["GET", "POST"], "/v1/auth/*", (c) => auth.handler(c.req.raw));
 
   const v1 = new OpenAPIHono<{ Variables: { userId: string } }>();
-  v1.use("*", requireUser);
+  v1.use("*", makeRequireUser(deps.getSessionUserId));
   v1.route("/recipes", recipesRoutes(deps));
   v1.route("/ingredients", ingredientsRoutes(deps));
   v1.route("/suppliers", suppliersRoutes(deps));
