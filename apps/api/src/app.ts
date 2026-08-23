@@ -1,4 +1,5 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
+import { Scalar } from "@scalar/hono-api-reference";
 import { errorHandler } from "./middleware/errors";
 import { requireUser } from "./middleware/auth";
 import { recipesRoutes } from "./routes/recipes";
@@ -113,6 +114,12 @@ export const createApp = (deps: Deps) => {
   v1.route("/analytics", analyticsRoutes(deps));
   v1.route("/uploads", uploadsRoutes(deps));
   app.route("/v1", v1);
+
+  app.doc("/openapi.json", {
+    openapi: "3.0.0",
+    info: { title: "CostWise API", version: "1" },
+  });
+  app.get("/docs", Scalar({ url: "/openapi.json" }));
 
   return app;
 };

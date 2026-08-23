@@ -448,16 +448,16 @@ RED first for every endpoint (401 + success shape + 400 for search), watch fail 
 
 **Files:** `routes/uploads.ts(+test)`; `Deps` gains `putBlob: (name: string, body: Blob | ArrayBuffer, opts: { access: "public" }) => Promise<{ url: string }>`.
 
-- [ ] **Step 1:** Read `apps/web/src/app/api/upload/route.ts` and mirror its contract exactly (field name of the multipart file, response payload, validation such as file presence/size). 
-- [ ] **Step 2 (RED):** tests: 401 no auth; 400 no file; 201/200 (mirror current status) happy path returns the blob URL — `putBlob` fake returns `{url: "https://blob.test/x"}` and the test asserts it was called with the uploaded filename. Watch FAIL.
-- [ ] **Step 3 (GREEN):** `POST /v1/uploads` (multipart via `c.req.parseBody()`), wired in `index.ts` to `@vercel/blob`'s `put`. Gates. Commit `feat(api): /v1/uploads endpoint`.
+- [x] **Step 1:** Read `apps/web/src/app/api/upload/route.ts` and mirror its contract exactly (field name of the multipart file, response payload, validation such as file presence/size). 
+- [x] **Step 2 (RED):** tests: 401 no auth; 400 no file; 201/200 (mirror current status) happy path returns the blob URL — `putBlob` fake returns `{url: "https://blob.test/x"}` and the test asserts it was called with the uploaded filename. Watch FAIL.
+- [x] **Step 3 (GREEN):** `POST /v1/uploads` (multipart via `c.req.parseBody()`), wired in `index.ts` to `@vercel/blob`'s `put`. Gates. Commit `feat(api): /v1/uploads endpoint`.
 
 ---
 
 ### Task 10: OpenAPI docs at `/docs`
 
-- [ ] **Step 1 (RED):** test in `app.test.ts`: `GET /openapi.json` → 200, body has `openapi` field and `paths["/v1/recipes"]`; `GET /docs` → 200 html. Watch FAIL.
-- [ ] **Step 2 (GREEN):** in `app.ts`:
+- [x] **Step 1 (RED):** test in `app.test.ts`: `GET /openapi.json` → 200, body has `openapi` field and `paths["/v1/recipes"]`; `GET /docs` → 200 html. Watch FAIL.
+- [x] **Step 2 (GREEN):** in `app.ts`:
 
 ```ts
 app.doc("/openapi.json", { openapi: "3.0.0", info: { title: "CostWise API", version: "1" } });
