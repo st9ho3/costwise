@@ -1,9 +1,9 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import React from "react";
-import { RecipeService } from "@/app/services/recipeService";
-import { IngredientService } from "@/app/services/ingredientService";
-import { SupplierService } from "@/app/services/suppliersService";
+import { RecipeService } from "@costwise/domain/services/recipeService";
+import { IngredientService } from "@costwise/domain/services/ingredientService";
+import { SupplierService } from "@costwise/domain/services/suppliersService";
 import TodayView from "@/app/components/home/TodayView";
 
 const HomePage = async () => {

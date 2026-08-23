@@ -5,7 +5,7 @@
  * If the account is successfully created, it returns a success response with the new user data.
  * If the data is invalid or an error occurs during the process, it returns an appropriate error response.
  */
-import { AuthService } from "@/app/services/authservice";
+import { AuthService } from "@costwise/domain/services/authservice";
 import { NextRequest } from "next/server";
 import { sendSuccess } from "../../utils/responses";
 import { errorHandler } from "@/app/utils/errorHandler";

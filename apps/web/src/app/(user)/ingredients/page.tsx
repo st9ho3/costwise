@@ -3,11 +3,11 @@ import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import IngredientsTable from '@/app/components/ingredients/ingredientsTable';
 import Pagination from '@/app/components/recipes/pagination';
-import { IngredientService } from '@/app/services/ingredientService';
-import { SupplierService } from '@/app/services/suppliersService';
+import { IngredientService } from '@costwise/domain/services/ingredientService';
+import { SupplierService } from '@costwise/domain/services/suppliersService';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
-import { Metadata } from '@/types/specialTypes';
+import { Metadata } from '@costwise/domain/types/specialTypes';
 import { Button } from '@/app/components/ui/button';
 
 export const dynamic = 'force-dynamic';

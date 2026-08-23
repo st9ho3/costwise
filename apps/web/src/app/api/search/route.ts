@@ -1,8 +1,8 @@
-import { SearchService } from "@/app/services/searchService";
+import { SearchService } from "@costwise/domain/services/searchService";
 import { auth } from "@/auth";
 import { NextRequest } from "next/server";
 import { sendSuccess } from "../utils/responses";
-import { AuthenticationError, ValidationError } from "../../utils/errors";
+import { AuthenticationError, ValidationError } from "@costwise/domain/utils/errors";
 import { errorHandler } from "../../utils/errorHandler";
 
 export const GET = async (req: NextRequest) => {

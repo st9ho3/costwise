@@ -11,7 +11,7 @@
 import { useCallback, useState } from 'react';
 import { UseFormSetValue, UseFormGetValues } from 'react-hook-form';
 import { FormFields } from '@/app/components/recipes/recipeForm/recipeForm';
-import { getTotalPrice, calculateProfitMargin, calculateSellingPrice } from '../utils/pricing';
+import { getTotalPrice, calculateProfitMargin, calculateSellingPrice } from '@costwise/domain/utils/pricing';
 import { RecipeIngredients } from '@costwise/shared/recipe';
 
 

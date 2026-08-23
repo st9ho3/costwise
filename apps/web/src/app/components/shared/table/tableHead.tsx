@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { TableHeadColumn } from '@/types/specialTypes';
+import { TableHeadColumn } from '@costwise/domain/types/specialTypes';
 import SortedLink from '../sortedLink';
 import { cn } from '@/app/utils/cn';
 

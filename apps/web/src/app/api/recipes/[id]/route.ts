@@ -11,11 +11,12 @@
  * - `DELETE` handler: Deletes a recipe by its ID from the URL parameters. It calls the `delete` method of `RecipeService` and returns a success response upon successful deletion.
  */
 import { NextRequest } from "next/server";
-import { RecipeUpdatePayload } from "@/types/context";
+import { revalidatePath } from "next/cache";
+import { RecipeUpdatePayload } from "@costwise/domain/types/context";
 import { sendSuccess } from "../../utils/responses";
-import { RecipeService } from "@/app/services/recipeService";
+import { RecipeService } from "@costwise/domain/services/recipeService";
 import { auth } from "@/auth";
-import { AuthenticationError } from "@/app/utils/errors";
+import { AuthenticationError } from "@costwise/domain/utils/errors";
 import { errorHandler } from "@/app/utils/errorHandler";
 
 export const PATCH = async (
@@ -37,6 +38,7 @@ export const PATCH = async (
       request.removedIngredients,
       request.addedIngredients
     );
+    revalidatePath("/recipes");
     return sendSuccess("Recipe updated succesfully", null, 201);
   } catch (err) {
     return errorHandler(err);
@@ -55,6 +57,7 @@ export const DELETE = async (
     const service = new RecipeService(session.user.id);
     const { id } = await context.params;
     await service.delete(id);
+    revalidatePath("/recipes");
     return sendSuccess("Recipe succesfully deleted", null, 200);
   } catch (err) {
     return errorHandler(err);

@@ -1,6 +1,6 @@
 import React from "react";
 import { PieChart, Utensils } from "lucide-react";
-import { CategoryAnalytics } from "@/types/repositories";
+import { CategoryAnalytics } from "@costwise/domain/types/repositories";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/app/components/ui/card";
 import { Badge } from "@/app/components/ui/badge";
 

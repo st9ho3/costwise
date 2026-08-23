@@ -7,11 +7,11 @@
  */
 import { NextRequest } from "next/server";
 import { sendSuccess } from "../utils/responses";
-import { IngredientService } from "@/app/services/ingredientService";
+import { IngredientService } from "@costwise/domain/services/ingredientService";
 import { Ingredient } from "@costwise/shared/recipe";
 import { auth } from "@/auth";
 import { errorHandler } from "@/app/utils/errorHandler";
-import { AuthenticationError } from "@/app/utils/errors";
+import { AuthenticationError } from "@costwise/domain/utils/errors";
 
 export const POST = async (req: NextRequest) => {
   const session = await auth();

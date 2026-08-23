@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { Layers, ArrowUpRight, Carrot } from "lucide-react";
-import { HighImpactIngredient } from "@/types/repositories";
+import { HighImpactIngredient } from "@costwise/domain/types/repositories";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/app/components/ui/card";
 import { Badge } from "@/app/components/ui/badge";
 

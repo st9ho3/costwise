@@ -31,8 +31,8 @@
 
 ### Task 1: Preflight
 
-- [ ] **Step 1:** `git fetch origin && git merge-base --is-ancestor origin/chore/monorepo-scaffold origin/main && echo OK1; git merge-base --is-ancestor origin/chore/ci-pipeline origin/main && echo OK2` — expect `OK1` and `OK2` (scaffold AND ci merged). Otherwise STOP and report.
-- [ ] **Step 2:** `git status --porcelain | wc -l` → `0` (else STOP); then `git checkout main && git pull origin main && git checkout -b feature/hono-api`.
+- [x] **Step 1:** `git fetch origin && git merge-base --is-ancestor origin/chore/monorepo-scaffold origin/main && echo OK1; git merge-base --is-ancestor origin/chore/ci-pipeline origin/main && echo OK2` — expect `OK1` and `OK2` (scaffold AND ci merged). Otherwise STOP and report.
+- [x] **Step 2:** `git status --porcelain | wc -l` → `0` (else STOP); then `git checkout main && git pull origin main && git checkout -b feature/hono-api`.
 
 ---
 
@@ -49,7 +49,7 @@
 
 **Interfaces produced:** `@costwise/domain/services/<name>`, `@costwise/domain/repositories/<name>`, `@costwise/domain/types/<name>`, `@costwise/domain/utils/<name>` — wildcard exports, filenames unrenamed. Later tasks import e.g. `RecipeService` from `@costwise/domain/services/recipeService`, `AppError`/`ValidationError`/`AuthenticationError` from `@costwise/domain/utils/errors`, `Metadata` from `@costwise/domain/types/specialTypes`.
 
-- [ ] **Step 1:** Create `packages/domain/package.json`:
+- [x] **Step 1:** Create `packages/domain/package.json`:
 
 ```json
 {
@@ -57,7 +57,7 @@
   "version": "0.0.0",
   "private": true,
   "exports": { "./*": "./src/*.ts" },
-  "scripts": { "build": "tsc --noEmit" },
+  "scripts": { "build": "tsc --noEmit", "test": "vitest run" },
   "dependencies": {
     "@costwise/db": "workspace:*",
     "@costwise/shared": "workspace:*",
@@ -72,13 +72,14 @@
 
 and `packages/domain/tsconfig.json` — copy `packages/db/tsconfig.json` exactly, but `"include": ["src"]` and add `"types": ["node"]` if not present.
 
-- [ ] **Step 2:** Perform the moves listed under **Files** with `git mv` (create the target dirs first).
-- [ ] **Step 3:** Fix intra-package imports: within `packages/domain/src`, rewrite `@/types/` → relative `../types/`, `../utils/` stays relative (verify), `@/app/...` aliases → relative paths. Command aid: `grep -rn "@/" packages/domain/src` must end empty.
-- [ ] **Step 4:** Remove the Next coupling: in `packages/domain/src/repositories/recipeRepository.ts` delete the `import { revalidatePath } from "next/cache";` line and the `revalidatePath("/recipes");` call (line ~169). Then add to BOTH `apps/web/src/app/api/recipes/route.ts` and `apps/web/src/app/api/recipes/[id]/route.ts`, after each successful service mutation call and before the success return: `revalidatePath("/recipes");` with `import { revalidatePath } from "next/cache";` at top.
-- [ ] **Step 5:** Wire web: `pnpm --filter web add "@costwise/domain@workspace:*"`; add `"@costwise/domain"` to `transpilePackages` in `apps/web/next.config.ts`. Rewrite web imports of the moved modules — every `@/app/services/X` → `@costwise/domain/services/X` (except `services` itself), `@/app/repositories/X` → `@costwise/domain/repositories/X`, `@/types/X` → `@costwise/domain/types/X` (except `pg`), `@/app/utils/{errors,pricing,transformers}` → `@costwise/domain/utils/...`. Relative-path variants (`../../utils/errors` etc.) too — find with `grep -rn "utils/errors\|utils/pricing\|utils/transformers\|/services/\|/repositories/\|types/specialTypes\|types/repositories\|types/services\|types/context" apps/web/src | grep -v "@costwise" | grep -v "components/"` and iterate until only legitimate hits remain (UI files like `services.ts`, `utils/{cn,formatters,pagination,errorHandler,uiHelpers}` stay web-local).
-- [ ] **Step 6:** Gates: `pnpm install && pnpm build && pnpm test && pnpm lint` all green; `grep -rn "next/" packages/` empty; web dev smoke: recipes/ingredients/suppliers/dashboard pages render, create+delete a recipe works and the list refreshes (revalidatePath relocation proof). Anything failing that Steps 1–5 don't explain: STOP and report.
-- [ ] **Step 7:** Commit: `git add -A && git commit -m "refactor: extract domain layer into @costwise/domain"`.
-- [ ] **Step 8: ⛔ CHECKPOINT — push `feature/hono-api` and stop.** This task rewired the entire web app's imports; it gets reviewed before anything is built on top. Report the gate outputs and wait for Panos/Fable 5 sign-off (external mode) or Fable 5's between-task review (supervised).
+- [x] **Step 2:** Perform the moves listed under **Files** with `git mv` (create the target dirs first).
+- [x] **Step 3:** Fix intra-package imports: within `packages/domain/src`, rewrite `@/types/` → relative `../types/`, `../utils/` stays relative (verify), `@/app/...` aliases → relative paths. Command aid: `grep -rn "@/" packages/domain/src` must end empty.
+- [x] **Step 4:** Remove the Next coupling: in `packages/domain/src/repositories/recipeRepository.ts` delete the `import { revalidatePath } from "next/cache";` line and the `revalidatePath("/recipes");` call (line ~169). Then add to BOTH `apps/web/src/app/api/recipes/route.ts` and `apps/web/src/app/api/recipes/[id]/route.ts`, after each successful service mutation call and before the success return: `revalidatePath("/recipes");` with `import { revalidatePath } from "next/cache";` at top.
+- [x] **Step 5:** Wire web: `pnpm --filter web add "@costwise/domain@workspace:*"`; add `"@costwise/domain"` to `transpilePackages` in `apps/web/next.config.ts`. Rewrite web imports of the moved modules — every `@/app/services/X` → `@costwise/domain/services/X` (except `services` itself), `@/app/repositories/X` → `@costwise/domain/repositories/X`, `@/types/X` → `@costwise/domain/types/X` (except `pg`), `@/app/utils/{errors,pricing,transformers}` → `@costwise/domain/utils/...`. Relative-path variants (`../../utils/errors` etc.) too — find with `grep -rn "utils/errors\|utils/pricing\|utils/transformers\|/services/\|/repositories/\|types/specialTypes\|types/repositories\|types/services\|types/context" apps/web/src | grep -v "@costwise" | grep -v "components/"` and iterate until only legitimate hits remain (UI files like `services.ts`, `utils/{cn,formatters,pagination,errorHandler,uiHelpers}` stay web-local).
+- [x] **Step 6:** Gates: `pnpm install && pnpm build && pnpm test && pnpm lint` all green; `grep -rn "next/" packages/` empty; web dev smoke: recipes/ingredients/suppliers/dashboard pages render, create+delete a recipe works and the list refreshes (revalidatePath relocation proof). Anything failing that Steps 1–5 don't explain: STOP and report.
+- [x] **Step 7:** Commit: `git add -A && git commit -m "refactor: extract domain layer into @costwise/domain"`.
+- [x] **Step 8: ⛔ CHECKPOINT — push `feature/hono-api` and stop.** This task rewired the entire web app's imports; it gets reviewed before anything is built on top. Report the gate outputs and wait for Panos/Fable 5 sign-off (external mode) or Fable 5's between-task review (supervised).
+- [x] **Step 9 (added at checkpoint-1 review, Fable 5):** the original Step 1 package.json gave `@costwise/domain` no test runner, orphaning the 19 tests in `src/utils/helpers.test.ts` (workspace total fell 47→28). Remediation: add `"test": "vitest run"` to `packages/domain/package.json` scripts, add devDependency `"vitest": "^3.1.0"`, create `packages/domain/vitest.config.ts` with `import { defineConfig } from "vitest/config"; export default defineConfig({ test: { environment: "node" } });`, run `pnpm install`, then verify `pnpm test` reports **47 total tests across web+domain**, all green. Commit `fix(domain): run the moved transformer tests under vitest` with the test-count evidence in the body, push, and proceed to Task 3.
 
 ---
 
@@ -88,7 +89,7 @@ and `packages/domain/tsconfig.json` — copy `packages/db/tsconfig.json` exactly
 
 **Interfaces produced:** `createApp(deps: Deps): OpenAPIHono` (all later route tasks register into it); `Deps` type; dev server on `:3001`.
 
-- [ ] **Step 1:** `apps/api/package.json`:
+- [x] **Step 1:** `apps/api/package.json`:
 
 ```json
 {
@@ -121,7 +122,7 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({ test: { environment: "node" } });
 ```
 
-- [ ] **Step 2 (RED):** `apps/api/src/app.test.ts`:
+- [x] **Step 2 (RED):** `apps/api/src/app.test.ts`:
 
 ```ts
 import { describe, it, expect } from "vitest";
@@ -138,7 +139,7 @@ describe("health", () => {
 
 Run `pnpm --filter api test` → expect FAIL: cannot resolve `./app`.
 
-- [ ] **Step 3 (GREEN):** `apps/api/src/app.ts`:
+- [x] **Step 3 (GREEN):** `apps/api/src/app.ts`:
 
 ```ts
 import { OpenAPIHono } from "@hono/zod-openapi";
@@ -163,8 +164,8 @@ serve({ fetch: createApp({}).fetch, port: 3001 }, (i) =>
 );
 ```
 
-- [ ] **Step 4:** `pnpm install`; `pnpm --filter api test` → PASS. `pnpm dev` starts web (3000) AND api (3001); `curl localhost:3001/health` → `{"status":"ok"}`. Stop dev.
-- [ ] **Step 5:** `pnpm build && pnpm test && pnpm lint` green (workspace). Commit `feat(api): scaffold hono app with health route`.
+- [x] **Step 4:** `pnpm install`; `pnpm --filter api test` → PASS. `pnpm dev` starts web (3000) AND api (3001); `curl localhost:3001/health` → `{"status":"ok"}`. Stop dev.
+- [x] **Step 5:** `pnpm build && pnpm test && pnpm lint` green (workspace). Commit `feat(api): scaffold hono app with health route`.
 
 ---
 
@@ -174,7 +175,7 @@ serve({ fetch: createApp({}).fetch, port: 3001 }, (i) =>
 
 **Interfaces produced:** `errorHandler` (registered via `app.onError`); `requireUser` middleware setting `c.var.userId: string`; envelope type `{error:{code:string,message:string,fieldErrors?:Record<string,string>}}`. Error-code mapping: class name → SCREAMING_SNAKE (`ValidationError`→`VALIDATION_ERROR`, unknown→`INTERNAL`).
 
-- [ ] **Step 1 (RED):** `apps/api/src/middleware/errors.test.ts`:
+- [x] **Step 1 (RED):** `apps/api/src/middleware/errors.test.ts`:
 
 ```ts
 import { describe, it, expect } from "vitest";
@@ -214,7 +215,7 @@ describe("errorHandler", () => {
 
 Run → FAIL (`./errors` unresolved). NOTE: open `@costwise/domain/utils/errors.ts` first and mirror the REAL constructor signatures in these tests (e.g. `ValidationError` takes the field array, `NotFoundError(resource, id)`); if they differ from shown, adjust the test calls — the assertions stay.
 
-- [ ] **Step 2 (GREEN):** `apps/api/src/middleware/errors.ts`:
+- [x] **Step 2 (GREEN):** `apps/api/src/middleware/errors.ts`:
 
 ```ts
 import type { Context } from "hono";
@@ -241,7 +242,7 @@ export const errorHandler = (err: Error, c: Context) => {
 
 (Adjust the `ValidationError` field-list property name to the real one after reading the class.) Verify GREEN.
 
-- [ ] **Step 3 (RED):** `apps/api/src/middleware/auth.test.ts`:
+- [x] **Step 3 (RED):** `apps/api/src/middleware/auth.test.ts`:
 
 ```ts
 import { describe, it, expect, afterEach } from "vitest";
@@ -272,7 +273,7 @@ describe("requireUser (interim, pre-Better-Auth)", () => {
 
 Run → FAIL.
 
-- [ ] **Step 4 (GREEN):** `apps/api/src/middleware/auth.ts`:
+- [x] **Step 4 (GREEN):** `apps/api/src/middleware/auth.ts`:
 
 ```ts
 import { createMiddleware } from "hono/factory";
@@ -322,7 +323,7 @@ router.openapi(listRecipes, async (c) => {
 });
 ```
 
-- [ ] **Step 1:** Write `schemas.ts` with, binding response schemas to real types:
+- [x] **Step 1:** Write `schemas.ts` with, binding response schemas to real types:
 
 ```ts
 import { z } from "@hono/zod-openapi";
@@ -352,7 +353,7 @@ export const RecipeListResponse = z.object({ recipes: z.array(RecipeSchema) }).m
 
 If `tsc` rejects a `satisfies` binding, the schema is wrong — fix the schema to match the type, never cast. `RecipeWithQuery` (findById) and mutation responses: read the service return types and bind the same way (`GET /:id` → schema for `RecipeWithQuery`; `POST`/`PATCH` mirror today's web behavior — POST returns 201 with `{message: string}`, PATCH 200 `{message: string}`, DELETE 200 `{id: string}` — confirm against `sendSuccess` usage in the current web routes and the service return types; mirror exactly).
 
-- [ ] **Step 2 (RED):** `apps/api/src/testing/fakes.ts` + `recipes.test.ts`. Fakes: plain objects implementing the `*ServiceLike` picks over an in-memory array keyed by userId; throwing `NotFoundError` where the real service does. Tests — for EVERY recipes endpoint the trio, e.g.:
+- [x] **Step 2 (RED):** `apps/api/src/testing/fakes.ts` + `recipes.test.ts`. Fakes: plain objects implementing the `*ServiceLike` picks over an in-memory array keyed by userId; throwing `NotFoundError` where the real service does. Tests — for EVERY recipes endpoint the trio, e.g.:
 
 ```ts
 import { describe, it, expect } from "vitest";
@@ -383,7 +384,7 @@ describe("/v1/recipes", () => {
 
 Write ALL of them now; run → FAIL (module missing).
 
-- [ ] **Step 3 (GREEN):** `routes/recipes.ts` — `export const recipesRoutes = (deps: Deps) => {...}` returning an `OpenAPIHono` with the five endpoints via the TEMPLATE; mount in `app.ts`:
+- [x] **Step 3 (GREEN):** `routes/recipes.ts` — `export const recipesRoutes = (deps: Deps) => {...}` returning an `OpenAPIHono` with the five endpoints via the TEMPLATE; mount in `app.ts`:
 
 ```ts
 const v1 = new OpenAPIHono<{ Variables: { userId: string } }>();
@@ -394,7 +395,8 @@ app.route("/v1", v1);
 
 `index.ts` wires real services: `makeRecipeService: (userId) => new RecipeService(userId)` (import from `@costwise/domain/services/recipeService`). Verify GREEN; workspace gates green. Commit `feat(api): /v1/recipes endpoints`.
 
-- [ ] **⛔ CHECKPOINT — push and stop.** This task established THE TEMPLATE that Tasks 6–9 mass-produce. A flaw here multiplies by four domains; it gets reviewed before replication.
+- [x] **⛔ CHECKPOINT — push and stop.** This task established THE TEMPLATE that Tasks 6–9 mass-produce. A flaw here multiplies by four domains; it gets reviewed before replication.
+- [x] **Remediation (added at checkpoint-2 review, Fable 5):** `Deps.makeRecipeService` was implemented as optional (`?`) with `!` assertions in every handler — the plan specified it required. Optional deps turn a production wiring omission into a runtime crash instead of a compile error, and the pattern would replicate ×4. Fix now: in `apps/api/src/app.ts` make every `Deps` member required (remove `?`), and remove all `!` assertions in `routes/recipes.ts`. `fakeDeps()` and `index.ts` must satisfy the full interface (they already do). As `Deps` grows in Tasks 6–9, every new member is REQUIRED — same rule. Verify `pnpm build && pnpm --filter api test` green, commit `fix(api): make Deps members required, drop non-null assertions`, push, then proceed to Task 6. **Approved deviation, no action:** PATCH returns 200 (web's old route used a quirky 201 for updates) — the API's 200 is the documented contract going forward; Task 4 rewires the web against it.
 
 ---
 
@@ -414,8 +416,8 @@ Instantiate the Task 5 TEMPLATE with these exact values — everything else iden
 
 `IngredientToDisplaySchema = IngredientSchema.omit({ suppliers: true }).extend({ categoryName: IngredientCategoryNameSchema }) satisfies z.ZodType<IngredientToDisplay>` — list response wraps `{ ingredients: [...] }.merge(CountSchema)`. `IngredientServiceLike = Pick<IngredientService, "findAll"|"findById"|"create"|"update"|"delete">`.
 
-- [ ] **Step 1 (RED):** full test file — the same trio set as recipes (401 / list / 400 query / 404 / POST 201 / POST 400 / PATCH 200 / DELETE 200), fixtures from `IngredientSchema`. Watch FAIL.
-- [ ] **Step 2 (GREEN):** implement, mount, watch PASS; workspace gates. Commit `feat(api): /v1/ingredients endpoints`.
+- [x] **Step 1 (RED):** full test file — the same trio set as recipes (401 / list / 400 query / 404 / POST 201 / POST 400 / PATCH 200 / DELETE 200), fixtures from `IngredientSchema`. Watch FAIL.
+- [x] **Step 2 (GREEN):** implement, mount, watch PASS; workspace gates. Commit `feat(api): /v1/ingredients endpoints`.
 
 ---
 
@@ -446,16 +448,16 @@ RED first for every endpoint (401 + success shape + 400 for search), watch fail 
 
 **Files:** `routes/uploads.ts(+test)`; `Deps` gains `putBlob: (name: string, body: Blob | ArrayBuffer, opts: { access: "public" }) => Promise<{ url: string }>`.
 
-- [ ] **Step 1:** Read `apps/web/src/app/api/upload/route.ts` and mirror its contract exactly (field name of the multipart file, response payload, validation such as file presence/size). 
-- [ ] **Step 2 (RED):** tests: 401 no auth; 400 no file; 201/200 (mirror current status) happy path returns the blob URL — `putBlob` fake returns `{url: "https://blob.test/x"}` and the test asserts it was called with the uploaded filename. Watch FAIL.
-- [ ] **Step 3 (GREEN):** `POST /v1/uploads` (multipart via `c.req.parseBody()`), wired in `index.ts` to `@vercel/blob`'s `put`. Gates. Commit `feat(api): /v1/uploads endpoint`.
+- [x] **Step 1:** Read `apps/web/src/app/api/upload/route.ts` and mirror its contract exactly (field name of the multipart file, response payload, validation such as file presence/size). 
+- [x] **Step 2 (RED):** tests: 401 no auth; 400 no file; 201/200 (mirror current status) happy path returns the blob URL — `putBlob` fake returns `{url: "https://blob.test/x"}` and the test asserts it was called with the uploaded filename. Watch FAIL.
+- [x] **Step 3 (GREEN):** `POST /v1/uploads` (multipart via `c.req.parseBody()`), wired in `index.ts` to `@vercel/blob`'s `put`. Gates. Commit `feat(api): /v1/uploads endpoint`.
 
 ---
 
 ### Task 10: OpenAPI docs at `/docs`
 
-- [ ] **Step 1 (RED):** test in `app.test.ts`: `GET /openapi.json` → 200, body has `openapi` field and `paths["/v1/recipes"]`; `GET /docs` → 200 html. Watch FAIL.
-- [ ] **Step 2 (GREEN):** in `app.ts`:
+- [x] **Step 1 (RED):** test in `app.test.ts`: `GET /openapi.json` → 200, body has `openapi` field and `paths["/v1/recipes"]`; `GET /docs` → 200 html. Watch FAIL.
+- [x] **Step 2 (GREEN):** in `app.ts`:
 
 ```ts
 app.doc("/openapi.json", { openapi: "3.0.0", info: { title: "CostWise API", version: "1" } });
@@ -468,7 +470,7 @@ app.get("/docs", Scalar({ url: "/openapi.json" }));
 
 ### Task 11: Full acceptance gate + report
 
-- [ ] **Step 1:** Workspace gates: `pnpm build && pnpm test && pnpm lint` green.
-- [ ] **Step 2:** Greps: `grep -rn "next/" packages/` → empty; `grep -rn "from \"\.\./services/\|from \"\.\./repositories/" apps/web/src` → empty (module-local UI helpers excepted); every `/v1` path from the spec's Decision 7 appears in `curl -s localhost:3001/openapi.json`.
-- [ ] **Step 3:** Manual: `pnpm dev`; `curl localhost:3001/v1/recipes` → 401; `curl -H "x-user-id: <real user id from your db>" localhost:3001/v1/recipes` → 200 with real data; `/docs` renders in a browser. Web smoke unchanged (spec criterion 5) including a real upload and recipe create/delete with list refresh.
-- [ ] **Step 4:** Push `feature/hono-api`, open PR to `main` (CI must go green), report to Panos: gates, any STOP-and-report items resolved, PR URL, reminder that ClickUp 868kv7taa moves through Panos/Fable 5. Do NOT merge.
+- [x] **Step 1:** Workspace gates: `pnpm build && pnpm test && pnpm lint` green.
+- [x] **Step 2:** Greps: `grep -rn "next/" packages/` → empty; `grep -rn "from \"\.\./services/\|from \"\.\./repositories/" apps/web/src` → empty (module-local UI helpers excepted); every `/v1` path from the spec's Decision 7 appears in `curl -s localhost:3001/openapi.json`.
+- [x] **Step 3:** Manual: `pnpm dev`; `curl localhost:3001/v1/recipes` → 401; `curl -H "x-user-id: <real user id from your db>" localhost:3001/v1/recipes` → 200 with real data; `/docs` renders in a browser. Web smoke unchanged (spec criterion 5) including a real upload and recipe create/delete with list refresh.
+- [x] **Step 4:** Push `feature/hono-api`, open PR to `main` (CI must go green), report to Panos: gates, any STOP-and-report items resolved, PR URL, reminder that ClickUp 868kv7taa moves through Panos/Fable 5. Do NOT merge.

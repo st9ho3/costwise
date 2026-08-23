@@ -1,9 +1,9 @@
 import React from 'react';
-import { IngredientService } from '@/app/services/ingredientService';
-import { SupplierService } from '@/app/services/suppliersService';
+import { IngredientService } from '@costwise/domain/services/ingredientService';
+import { SupplierService } from '@costwise/domain/services/suppliersService';
 import { auth } from '@/auth';
 import { redirect, notFound } from 'next/navigation';
-import { Metadata } from '@/types/specialTypes';
+import { Metadata } from '@costwise/domain/types/specialTypes';
 import IngredientForm from '@/app/components/ingredients/ingredientForm';
 
 export interface Params {

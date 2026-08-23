@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { useNotificationStore } from '@/app/stores/notificationStore';
 import { Toast } from '../ui/toast';
 import { CheckCircle2, AlertCircle, Info } from 'lucide-react';
-import { NotificationType } from '@/types/context';
+import { NotificationType } from '@costwise/domain/types/context';
 
 const Notification = () => {
   const notification = useNotificationStore((state) => state.notification);

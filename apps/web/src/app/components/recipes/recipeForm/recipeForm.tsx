@@ -26,7 +26,7 @@ import { EmptyState } from '../../ui/emptyState';
 import { useFileStore } from '@/app/stores/fileStore';
 import { useNotificationStore } from '@/app/stores/notificationStore';
 import { CategoryThumbnail } from '@/app/utils/uiHelpers';
-import { calculateProfitMargin, calculateSellingPrice, getTotalPrice } from '@/app/utils/pricing';
+import { calculateProfitMargin, calculateSellingPrice, getTotalPrice } from '@costwise/domain/utils/pricing';
 
 export interface RecipeFormProps {
   mode: 'create' | 'edit';

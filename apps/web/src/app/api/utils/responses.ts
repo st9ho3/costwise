@@ -14,7 +14,7 @@
  * - The response body includes `success: false` and an `error` object containing the message.
  * - This helps in providing a clear, structured way to communicate failures to the client.
  */
-import { FieldError } from '@/types/errors';
+import { FieldError } from '@costwise/domain/types/errors';
 import { NextResponse } from 'next/server';
 
 interface APIResponseSuccess<T> {
