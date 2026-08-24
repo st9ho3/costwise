@@ -5,7 +5,7 @@ import React from 'react';
 import { apiServer } from '@/app/lib/apiServer';
 import { Supplier } from '@costwise/shared/recipe';
 
-export interface Params {
+interface Params {
   params: Promise<{
     id: string;
   }>;

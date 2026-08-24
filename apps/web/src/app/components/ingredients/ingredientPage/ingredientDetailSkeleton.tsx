@@ -81,4 +81,3 @@ export function IngredientDetailSkeleton() {
   );
 }
 
-export default IngredientDetailSkeleton;

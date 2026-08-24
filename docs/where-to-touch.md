@@ -68,6 +68,17 @@ Use this as the routing guide before editing code.
 - Start with `src/db/schema.ts`
 - Then inspect the affected repository and service
 
+## Quality Gates
+
+- ESLint — BLOCKING. `pnpm lint`, enforced by the required `ci` job; red blocks merge.
+- Fallow — ADVISORY, never blocks. `pnpm fallow` (local/agents) scans the
+  monorepo for dead code, duplication, circular deps, and complexity.
+  Config: `.fallowrc.json` at repo root — false-positive suppressions go
+  THERE, with a reason, never as scattered inline ignores. CI: the
+  non-required `fallow` job posts findings to the job summary on every PR.
+  Findings triage into cleanup commits or ClickUp tasks (see
+  docs/superpowers/specs/2026-08-23-task4.5-fallow-advisory-design.md).
+
 ## Rule Of Thumb
 
 - If it affects business logic, touch a service first.

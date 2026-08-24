@@ -5,7 +5,7 @@ import { Metadata } from '@costwise/shared/specialTypes';
 import IngredientForm from '@/app/components/ingredients/ingredientForm';
 import { apiServer } from '@/app/lib/apiServer';
 
-export interface Params {
+interface Params {
   params: Promise<{
     id: string;
   }>;

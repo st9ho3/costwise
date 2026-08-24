@@ -9,7 +9,7 @@
  * The browser knows its own origin, so prefer that over configuration it could
  * disagree with; NEXT_PUBLIC_WEB_ORIGIN only covers server-side rendering.
  */
-export const webOrigin = (): string => {
+const webOrigin = (): string => {
   if (typeof window !== "undefined") return window.location.origin;
   return process.env.NEXT_PUBLIC_WEB_ORIGIN ?? "http://localhost:3000";
 };

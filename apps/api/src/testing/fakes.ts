@@ -39,7 +39,7 @@ export interface FakeState {
   uploadedBlobs: Map<string, { name: string; body: any }>;
 }
 
-export const createFakeState = (): FakeState => ({
+const createFakeState = (): FakeState => ({
   recipes: [],
   recipeDetails: new Map(),
   ingredients: [],
