@@ -9,6 +9,8 @@
     "AUTH_GOOGLE_SECRET",
     "NEXT_PUBLIC_API_URL",
     "WEB_ORIGIN",
+    "NEXT_PUBLIC_WEB_ORIGIN",
+    "AUTH_DEBUG",
     "NODE_ENV"
   ],
   "tasks": {
