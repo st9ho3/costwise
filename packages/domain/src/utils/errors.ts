@@ -65,12 +65,6 @@ export class ForbiddenError extends AppError {
     }
 }
 
-export class AuthenticationError extends AppError {
-    constructor(message: string = 'Authentication required') {
-        super(message, 401)
-    }
-}
-
 export class DatabaseError extends AppError {
     public readonly originalError: unknown
     public readonly operation: string

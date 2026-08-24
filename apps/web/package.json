@@ -13,7 +13,6 @@
   "dependencies": {
     "@costwise/api-client": "workspace:*",
     "@costwise/shared": "workspace:*",
-    "@fontsource/jetbrains-mono": "^5.2.8",
     "@hookform/resolvers": "^5.1.1",
     "@radix-ui/react-label": "^2.1.9",
     "@radix-ui/react-select": "^2.3.0",
@@ -29,7 +28,6 @@
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.60.0",
     "tailwind-merge": "^3.6.0",
-    "uid": "^2.0.2",
     "uuid": "^11.1.0",
     "zod": "^3.25.75",
     "zustand": "^5.0.8"

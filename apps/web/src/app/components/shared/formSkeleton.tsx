@@ -62,4 +62,3 @@ export function FormPageSkeleton({
   );
 }
 
-export default FormPageSkeleton;

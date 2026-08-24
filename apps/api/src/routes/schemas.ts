@@ -25,7 +25,7 @@ import type {
   IngredientAnalytics,
 } from "@costwise/domain/types/repositories";
 
-export const ErrorEnvelope = z.object({
+const ErrorEnvelope = z.object({
   error: z.object({
     code: z.string(),
     message: z.string(),
@@ -54,7 +54,7 @@ export const toMetadata = (q: z.infer<typeof MetadataQuery>): Metadata => ({
 
 export const IdParam = z.object({ id: z.string() });
 
-export const CountSchema = z.object({ count: z.object({ count: z.number() }) });
+const CountSchema = z.object({ count: z.object({ count: z.number() }) });
 
 export const RecipeListResponse = z
   .object({ recipes: z.array(RecipeSchema) })
