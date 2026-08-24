@@ -18,8 +18,8 @@ import {
   RawDBSupplier,
   RecipeIngredientFromDB,
 } from "./specialTypes";
-import { normalizePrice } from "./pricing";
-import { z } from "zod";
+import { getDisplayUnit, normalizePrice } from "./pricing";
+import { validateComplexEntity } from "./validation";
 
 export type IngredientFormFields = Ingredient;
 
@@ -169,17 +169,16 @@ export const transformSupplierFromDB = (raw: RawDBSupplier): Supplier => {
   };
 };
 
-export const createIngredientPrototype = (
+/**
+ * Shared body of the create/edit ingredient prototypes — they differ only in
+ * where identity (id, icon, usage) comes from.
+ */
+const buildIngredientPrototype = (
   data: IngredientFormFields,
   confirmedSuppliers: string[],
   userId: string,
+  identity: Pick<Ingredient, "id" | "icon" | "usage">,
 ): Ingredient => {
-  const normalizedUnitPrice = normalizePrice(
-    data.unitPrice,
-    data.unit as Unit,
-    data.quantity,
-  );
-
   const supplierItems = (confirmedSuppliers || []).map((supId) => ({
     suppliersId: supId,
     unit: (data.unit as Unit) || "g",
@@ -188,67 +187,42 @@ export const createIngredientPrototype = (
     isActive: true,
   }));
 
-  const ingredientPrototype: Ingredient = {
-    id: data.id,
-    icon: createIngredientIcon(data.category),
+  return {
+    id: identity.id,
+    icon: identity.icon,
     name: data.name,
-    unit:
-      data.unit === "g" || data.unit === "kg"
-        ? "g"
-        : data.unit === "L" || data.unit === "ml"
-          ? "ml"
-          : "piece",
-    unitPrice: normalizedUnitPrice,
+    unit: getDisplayUnit(data.unit) as Unit,
+    unitPrice: normalizePrice(data.unitPrice, data.unit as Unit, data.quantity),
     quantity: Number(data.quantity) || 1,
-    usage: "0",
+    usage: identity.usage,
     userId: userId,
     category: data.category,
     suppliers: supplierItems,
   };
-  return ingredientPrototype;
 };
+
+export const createIngredientPrototype = (
+  data: IngredientFormFields,
+  confirmedSuppliers: string[],
+  userId: string,
+): Ingredient =>
+  buildIngredientPrototype(data, confirmedSuppliers, userId, {
+    id: data.id,
+    icon: createIngredientIcon(data.category),
+    usage: "0",
+  });
 
 export const createEditIngredientPrototype = (
   data: IngredientFormFields,
   ingredient: Ingredient | IngredientToDisplay,
   confirmedSuppliers: string[],
   userId: string,
-): Ingredient => {
-  const normalizedUnitPrice = normalizePrice(
-    data.unitPrice,
-    data.unit as Unit,
-    data.quantity,
-  );
-
-  const supplierItems = (confirmedSuppliers || []).map((supId) => ({
-    suppliersId: supId,
-    unit: (data.unit as Unit) || "g",
-    quantity: Number(data.quantity) || 1,
-    price: Number(data.unitPrice) || 0,
-    isActive: true,
-  }));
-
-  // Edit mode logic
-  const updatedIngredient: Ingredient = {
+): Ingredient =>
+  buildIngredientPrototype(data, confirmedSuppliers, userId, {
     id: ingredient.id,
     icon: ingredient.icon,
-    name: data.name,
-    unit:
-      data.unit === "g" || data.unit === "kg"
-        ? "g"
-        : data.unit === "L" || data.unit === "ml"
-          ? "ml"
-          : "piece",
-    unitPrice: normalizedUnitPrice,
-    quantity: Number(data.quantity) || 1,
     usage: ingredient.usage || "0",
-    userId: userId,
-    category: data.category,
-    suppliers: supplierItems,
-  };
-
-  return updatedIngredient;
-};
+  });
 
 export const destructureSupplier = (supplier: Supplier) => {
   const dbSupplier: DestructuredSupplier = {
@@ -289,56 +263,6 @@ export const destructureSupplier = (supplier: Supplier) => {
     defaultCurrency: "EUR",
   };
   return { categories, address, financialData, dbSupplier };
-};
-
-export const validateComplexEntity = <T extends object, TArrayItem>(
-  entity: Record<string, unknown>,
-  entitySchema: z.ZodType<T, z.ZodTypeDef, unknown>,
-  arraysSchema: z.ZodType<TArrayItem, z.ZodTypeDef, unknown>,
-  fieldName: string,
-  addedItems: TArrayItem[],
-  removedItems: TArrayItem[]
-) => {
-  if (fieldName in entity && typeof entity[fieldName] === "string") {
-    entity[fieldName] = new Date(entity[fieldName] as string);
-  }
-  const entityResult = entitySchema.safeParse(entity);
-
-  if (!entityResult.success) {
-    throw new Error("Validation failed: " + entityResult.error.message);
-  }
-  const validatedEntity = entityResult.data;
-
-  let validatedAddedItems;
-  let validatedRemovedItems;
-
-  if (addedItems && addedItems.length > 0) {
-    validatedAddedItems = addedItems.map((item: TArrayItem) => {
-      const arrayItem = arraysSchema.safeParse(item);
-
-      if (!arrayItem.success) {
-        throw new Error("Validation failed: " + arrayItem.error.message);
-      }
-      return arrayItem.data;
-    });
-  }
-
-  if (removedItems && removedItems.length > 0) {
-    validatedRemovedItems = removedItems.map((item: TArrayItem) => {
-      const arrayItem = arraysSchema.safeParse(item);
-
-      if (!arrayItem.success) {
-        throw new Error("Validation failed: " + arrayItem.error.message);
-      }
-      return arrayItem.data;
-    });
-  }
-
-  return {
-    validatedEntity,
-    validatedAddedItems,
-    validatedRemovedItems,
-  };
 };
 
 export const prepareSupplierForDB = (
