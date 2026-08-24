@@ -189,13 +189,3 @@ export function CategoryChip({
   );
 }
 
-// Backwards compatibility functions
-export const createIngredientIcon = (category: string | undefined): string => {
-  const cat = getCategoryDefinition(category);
-  return cat.name;
-};
-
-export const getIconColor = (category: string | undefined): string => {
-  const cat = getCategoryDefinition(category);
-  return cat.bg;
-};

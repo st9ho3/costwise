@@ -8,13 +8,22 @@
     "start": "dotenv -c -- turbo run start",
     "lint": "turbo run lint",
     "test": "dotenv -c -- turbo run test",
-    "gen:api": "pnpm --filter api emit-openapi && pnpm --filter @costwise/api-client gen"
+    "gen:api": "pnpm --filter api emit-openapi && pnpm --filter @costwise/api-client gen",
+    "fallow": "fallow",
+    "fallow:ci": "fallow --quiet"
   },
   "devDependencies": {
     "dotenv-cli": "^8.0.0",
+    "fallow": "3.17.0",
     "turbo": "^2.5.0"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["bcrypt", "sharp", "@tailwindcss/oxide", "esbuild", "unrs-resolver"]
+    "onlyBuiltDependencies": [
+      "bcrypt",
+      "sharp",
+      "@tailwindcss/oxide",
+      "esbuild",
+      "unrs-resolver"
+    ]
   }
 }

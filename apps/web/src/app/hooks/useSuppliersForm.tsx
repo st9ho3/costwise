@@ -11,7 +11,7 @@ import { getArrayChanges } from '@costwise/shared/transformers';
 import useHelpers from './useHelpers';
 import { useUIStore } from '../stores/uiStore';
 
-export type FormFields = z.infer<typeof SupplierSchema>;
+type FormFields = z.infer<typeof SupplierSchema>;
 export type FormInput = z.input<typeof SupplierSchema>;
 
 interface UseSuppliersFormProps {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Skeleton } from '../ui/skeleton';
 
-export function RecipesTableSkeleton({ rowCount = 7 }: { rowCount?: number }) {
+function RecipesTableSkeleton({ rowCount = 7 }: { rowCount?: number }) {
   return (
     <div className="w-full">
       {/* Mobile Card Feed Skeleton */}
@@ -103,4 +103,3 @@ export function RecipesPageSkeleton() {
   );
 }
 
-export default RecipesPageSkeleton;
