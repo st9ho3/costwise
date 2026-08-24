@@ -1,7 +1,7 @@
 import React from 'react';
 import { Skeleton } from '../ui/skeleton';
 
-export function IngredientsTableSkeleton({ rowCount = 7 }: { rowCount?: number }) {
+function IngredientsTableSkeleton({ rowCount = 7 }: { rowCount?: number }) {
   return (
     <div className="w-full">
       {/* Mobile Card Feed Skeleton */}
@@ -95,4 +95,3 @@ export function IngredientsPageSkeleton() {
   );
 }
 
-export default IngredientsPageSkeleton;

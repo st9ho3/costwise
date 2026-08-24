@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signInCredentials, signUpCredentials } from "../constants/uathFormdefaultValues";
 import { authClient } from "../lib/authClient";
 
-export interface AuthProps {
+interface AuthProps {
   isSignIn: boolean;
 }
 

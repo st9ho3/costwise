@@ -3,7 +3,6 @@
  * Uses @costwise/api-client (apiBrowser) to communicate with the Backend API.
  */
 
-import { uid } from "uid";
 import { FormFields } from "../components/recipes/recipeForm/recipeForm";
 import {
   Ingredient,
@@ -13,21 +12,6 @@ import {
   Supplier,
 } from "@costwise/shared/recipe";
 import { apiBrowser } from "../lib/api";
-
-export const createMessage = (text: string, user: string) => {
-  const message = {
-    id: uid(),
-    message: text,
-    sender: user,
-    timestamp: new Date().toISOString(),
-  };
-
-  const messages = JSON.parse(localStorage.getItem("messages") || "[]");
-  messages.push(message);
-  localStorage.setItem("messages", JSON.stringify(messages));
-
-  return message;
-};
 
 export const sendRecipe = async (
   data: Recipe,
