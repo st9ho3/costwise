@@ -37,4 +37,18 @@ describe('Google sign-in callbackURL', () => {
     expect(callbackURL).toMatch(/^https?:\/\//)
     expect(callbackURL.startsWith(window.location.origin)).toBe(true)
   })
+
+  // Without errorCallbackURL, a failed OAuth callback redirects to Better
+  // Auth's stock error page on the API origin, stranding the user off-app.
+  it.each([
+    ['SignInForm', SignInForm],
+    ['SignUpForm', SignUpForm],
+  ])('%s sends an errorCallbackURL pointing at the app signin page', (_name, Form) => {
+    render(<Form />)
+    fireEvent.click(screen.getByRole('button', { name: /continue with google/i }))
+
+    const { errorCallbackURL } = social.mock.calls[0][0] as { errorCallbackURL: string }
+    expect(errorCallbackURL).toMatch(/^https?:\/\//)
+    expect(errorCallbackURL).toBe(`${window.location.origin}/signin`)
+  })
 })

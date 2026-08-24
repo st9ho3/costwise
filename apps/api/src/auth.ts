@@ -4,6 +4,8 @@ import bcrypt from "bcrypt";
 import { db } from "@costwise/db/db";
 import { users, sessions, accounts, verifications } from "@costwise/db/schema";
 
+const webOrigin = process.env.WEB_ORIGIN ?? "http://localhost:3000";
+
 export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL ?? "http://localhost:3001",
   basePath: "/v1/auth",
@@ -36,5 +38,11 @@ export const auth = betterAuth({
       clientSecret: process.env.AUTH_GOOGLE_SECRET ?? "test-google-secret",
     },
   },
-  trustedOrigins: [process.env.WEB_ORIGIN ?? "http://localhost:3000"],
+  trustedOrigins: [webOrigin],
+  // Default landing spot for auth failures. Without it Better Auth serves its
+  // own error page from this API's origin, stranding the user off the app with
+  // no way back; per-call errorCallbackURL still takes precedence.
+  onAPIError: {
+    errorURL: `${webOrigin}/signin`,
+  },
 });
