@@ -11,7 +11,7 @@ import {
   Plus,
   Sparkles,
 } from 'lucide-react';
-import { Recipe, RecipeCategory, Ingredient, IngredientToDisplay, RecipeIngredients } from '@costwise/shared/recipe';
+import { RecipeCategory } from '@costwise/shared/recipe';
 import useRecipeForm from '@/app/hooks/useRecipeForm';
 import { Input } from '../../ui/input';
 import { MoneyInput } from '../../ui/moneyInput';
@@ -24,14 +24,7 @@ import { useFileStore } from '@/app/stores/fileStore';
 import { useNotificationStore } from '@/app/stores/notificationStore';
 import { CategoryThumbnail } from '@/app/utils/uiHelpers';
 import { calculateProfitMargin, calculateSellingPrice, formatPrice, getTotalPrice } from '@costwise/shared/pricing';
-
-export interface RecipeFormProps {
-  mode: 'create' | 'edit';
-  ingredients: (Ingredient | IngredientToDisplay)[];
-  recipe?: Recipe;
-  recipeIngredients: RecipeIngredients[];
-  userId: string;
-}
+import { RecipeFormProps } from './types';
 
 export default function RecipeForm({
   ingredients,

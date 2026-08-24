@@ -24,7 +24,7 @@ import { useRouter } from 'next/navigation';
 import { useFileUpload } from './useFileUpload';
 import useHelpers from './useHelpers';
 import { defaultValues } from '../constants/recipeFormDefaultValues';
-import { RecipeFormProps } from '../components/recipes/recipeForm/recipeForm';
+import { RecipeFormProps } from '../components/recipes/recipeForm/types';
 import { useFileStore } from '../stores/fileStore';
 import { useNotificationStore } from '../stores/notificationStore';
 
