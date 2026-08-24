@@ -1,4 +1,3 @@
-import { describe, test, expect } from "@jest/globals";
 import { paginationPages } from "./pagination";
 
 describe("paginationPages", () => {

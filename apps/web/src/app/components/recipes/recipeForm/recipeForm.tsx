@@ -11,11 +11,8 @@ import {
   Plus,
   Sparkles,
 } from 'lucide-react';
-import { Recipe, RecipeCategory, Ingredient, IngredientToDisplay, RecipeIngredients, RecipeSchema } from '@costwise/shared/recipe';
-import { z } from 'zod';
+import { Recipe, RecipeCategory, Ingredient, IngredientToDisplay, RecipeIngredients } from '@costwise/shared/recipe';
 import useRecipeForm from '@/app/hooks/useRecipeForm';
-
-export type FormFields = z.infer<typeof RecipeSchema>;
 import { Input } from '../../ui/input';
 import { MoneyInput } from '../../ui/moneyInput';
 import { Button } from '../../ui/button';
