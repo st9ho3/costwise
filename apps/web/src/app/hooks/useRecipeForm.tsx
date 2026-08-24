@@ -13,10 +13,9 @@
  */
 "use client"
 import { useCallback, useState } from 'react';
-import { RecipeIngredients, RecipeSchema } from '@costwise/shared/recipe';
+import { FormFields, RecipeIngredients, RecipeSchema } from '@costwise/shared/recipe';
 import { v4 as uuidv4 } from "uuid";
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { calculateRecipeData, getTotalPrice } from '@costwise/shared/pricing';
 import { getArrayChanges } from '@costwise/shared/transformers';
@@ -29,7 +28,6 @@ import { RecipeFormProps } from '../components/recipes/recipeForm/recipeForm';
 import { useFileStore } from '../stores/fileStore';
 import { useNotificationStore } from '../stores/notificationStore';
 
-export type FormFields = z.infer<typeof RecipeSchema>;
 
 const useRecipeForm = ({mode, recipe, recipeIngredients, userId}: RecipeFormProps) => {
   const [newId, setNewId] = useState<string>(() => uuidv4());

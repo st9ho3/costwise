@@ -3,7 +3,7 @@
  * Uses @costwise/api-client (apiBrowser) to communicate with the Backend API.
  */
 
-import { FormFields } from "../components/recipes/recipeForm/recipeForm";
+import { FormFields } from "@costwise/shared/recipe";
 import {
   Ingredient,
   IngredientCategory,

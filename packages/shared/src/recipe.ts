@@ -137,6 +137,13 @@ export const RecipeSchema = z.object({
 
 export type Recipe = z.infer<typeof RecipeSchema>;
 
+/**
+ * Recipe form values — the schema-inferred shape react-hook-form binds to.
+ * Canonical home for `FormFields`; the web app and `pricing.ts` import it here
+ * rather than each re-deriving it from `RecipeSchema`.
+ */
+export type FormFields = Recipe;
+
 // Schema for the db recipe object
 export const DBRecipeSchema = z.object({
   id: z.string().uuid(),

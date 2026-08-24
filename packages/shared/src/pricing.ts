@@ -1,6 +1,4 @@
-import { Recipe, RecipeIngredients, Unit } from "./recipe";
-
-export type FormFields = Recipe;
+import { FormFields, Recipe, RecipeIngredients, Unit } from "./recipe";
 
 export const getTotalPrice = (ingredients: RecipeIngredients[]): number => {
   return ingredients.reduce((sum, item) => {

@@ -3,7 +3,7 @@
  * - Matches the `FormFields` type to ensure type safety and consistent form state initialization.
  * - Includes placeholder values for all recipe properties, including metadata, pricing, and image URL.
  */
-import { FormFields } from "../hooks/useRecipeForm"
+import { FormFields } from "@costwise/shared/recipe"
 
 export const defaultValues: FormFields = {
     
